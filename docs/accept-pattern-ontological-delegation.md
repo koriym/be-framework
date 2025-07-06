@@ -45,6 +45,8 @@ final class ValidationAttempt {
 }
 ```
 
+> **Note**: This example shows traditional Ontological Programming before the #[Accept] pattern was introduced. The `readonly` modifier represents the standard approach where objects must make final decisions in their constructors.
+
 **Current limitation**: Objects must always make binary decisions, even when inappropriate.
 
 ## The #[Accept] Solution
