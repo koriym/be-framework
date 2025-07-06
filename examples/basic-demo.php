@@ -90,6 +90,11 @@ class DataProcessor
 #[Be(ValidationAttempt::class)]
 final class RawData
 {
+    /**
+     * Initializes a RawData instance with the provided input value.
+     *
+     * @param string $value The raw input data to be processed.
+     */
     public function __construct(
         #[Input] public readonly string $value
     ) {
@@ -108,6 +113,11 @@ final class RawData
 #[Be([SuccessfulValidation::class, FailedValidation::class])]
 final class ValidationAttempt
 {
+    /**
+     * Constructs a ValidationAttempt by validating input data and determining its outcome.
+     *
+     * Uses the provided validator to check the input data. If valid, sets the `being` property to a Success instance with processed data; otherwise, sets it to a Failure instance with error details.
+     */
     public function __construct(
         #[Input] string $data,
         DataValidator $validator,
