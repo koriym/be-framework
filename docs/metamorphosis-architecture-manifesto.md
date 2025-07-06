@@ -475,7 +475,7 @@ final class ValidationAttempt {
     public readonly Success|Failure $being;
 }
 
-final class SuccessfulValidation {
+final class Success {
     public function __construct(Success $being) {} // Name matches!
 }
 
@@ -632,7 +632,7 @@ class ValidationAttempt {
     public readonly Success|Failure $being;  // 'being' flows forward
 }
     ↓
-class SuccessfulValidation {
+class Success {
     public function __construct(Success $being) {}  // Same name preserves identity
 }
 ```
