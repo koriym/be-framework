@@ -63,8 +63,7 @@ use Ray\Framework\Attribute\Input;
 #[Be([ValidOrder::class, InvalidOrder::class])]
 final class OrderRequest
 {
-    public readonly Valid|Invalid $being;
-    
+    public readonly ValidOrder|InvalidOrder $being;
     public function __construct(
         #[Input] array $orderData,
         OrderValidator $validator,
