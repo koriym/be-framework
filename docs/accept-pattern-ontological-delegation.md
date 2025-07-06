@@ -8,12 +8,12 @@ This document introduces the `#[Accept]` pattern, a natural extension of Ontolog
 
 ## Background: The Problem of Forced Decisions
 
-In Ontological Programming, objects are responsible for determining their own nature. However, real-world scenarios often present situations where an individual entity genuinely cannot make a determination due to:
+In Ontological Programming, objects must determine their own nature. Yet real-world entities sometimes **cannot decide** because of:
 
 - **Insufficient expertise**: The decision requires specialized knowledge
 - **Limited authority**: The entity lacks the necessary permissions
-- **Lack of necessary information**: Critical data is unavailable
-- **Complexity beyond individual capacity**: The problem exceeds individual capabilities
+- **Missing information**: Critical data is unavailable
+- **Excessive complexity**: The problem exceeds individual capacity
 
 This mirrors human social responsibility: we are accountable for decisions within our capability, but we delegate to experts when we reach our limits.
 
@@ -94,9 +94,13 @@ public function __construct(...) {
 #### 2. Social Resolution Phase (Framework)
 
 ```php
-// Framework detects #[Accept] attribute
+// Framework detects #[Accept] attribute and uses specified interface
+$reflection = new ReflectionClass($object);
+$acceptAttr = $reflection->getAttributes(Accept::class)[0] ?? null;
+$expertFqn = $acceptAttr?->getArguments()[0] ?? DecisionInterface::class;
+
 if ($object->being instanceof Undetermined) {
-    $expertDecision = $di->get(DecisionInterface::class);
+    $expertDecision = $di->get($expertFqn);
     $object->being = $expertDecision->resolve($object->being);
 }
 ```
@@ -157,12 +161,22 @@ class ExpertRegistry
     
     public function findExpert(Undetermined $case): ?DecisionInterface
     {
+        $capableExperts = [];
+        
+        // Collect all capable experts
         foreach ($this->experts as $domain => $expert) {
             if ($expert->canHandle($case)) {
-                return $expert;
+                $capableExperts[$domain] = $expert;
             }
         }
-        return null;
+        
+        if (empty($capableExperts)) {
+            return null;
+        }
+        
+        // Return deterministically (sorted by domain for consistency)
+        ksort($capableExperts);
+        return reset($capableExperts);
     }
 }
 ```
@@ -521,4 +535,4 @@ This pattern transforms the impossible choice between forced decisions and syste
 
 ---
 
-*"In programming, as in life, the highest intelligence is knowing when to seek the wisdom of others."*
+> *"In programming, as in life, the highest intelligence is knowing when to seek the wisdom of others."*
