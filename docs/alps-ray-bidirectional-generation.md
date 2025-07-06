@@ -133,7 +133,7 @@ namespace LoanProcessing;
 #[Be([ApprovedLoan::class, RejectedLoan::class, PendingReview::class])]
 final class LoanApplication
 {
-    public readonly Approved|Rejected|PendingReview $being;
+    public readonly ApprovedLoan|RejectedLoan|PendingReview $being;
     
     public function __construct(
         #[Input] string $applicantId,
