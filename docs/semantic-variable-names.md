@@ -8,6 +8,19 @@
 
 This paper introduces Semantic Variable Names, a natural extension of Ontological Programming where variable names themselves carry validation contracts. By establishing a convention where names like `$email` universally represent valid email addresses, we eliminate redundant validation code while maintaining type safety at the boundaries of our systems. This approach, implemented through a simple folder convention, demonstrates how thoughtful naming can reduce complexity while increasing reliability.
 
+## Table of Contents
+
+1. [The Observation](#1-the-observation)
+2. [The Proposition](#2-the-proposition)
+3. [The Implementation](#3-the-implementation)
+4. [The Harmony with Sacred Rule](#4-the-harmony-with-sacred-rule)
+5. [Beyond Simple Types](#5-beyond-simple-types)
+6. [The Philosophy](#6-the-philosophy)
+7. [Practical Considerations](#7-practical-considerations)
+8. [Limitations and Honesty](#8-limitations-and-honesty)
+9. [ALPS: The Single Source of Semantic Truth](#9-alps-the-single-source-of-semantic-truth)
+10. [Conclusion](#10-conclusion)
+
 ---
 
 ## 1. The Observation
@@ -95,8 +108,16 @@ The framework reads the intention:
 ```php
 class ValidatorDiscovery
 {
+    private static ?array $cachedValidators = null;
+    
     public static function discover(): array
     {
+        // Performance optimization: cache validators to avoid 
+        // reflection scanning on every request
+        if (self::$cachedValidators !== null) {
+            return self::$cachedValidators;
+        }
+        
         $validators = [];
         foreach (glob('validates/*.php') as $file) {
             $class = basename($file, '.php');
@@ -106,7 +127,16 @@ class ValidatorDiscovery
             // The parameter name is the rule
             $validators[$param->getName()] = $class;
         }
+        
+        // Cache for subsequent requests
+        self::$cachedValidators = $validators;
         return $validators;
+    }
+    
+    // Clear cache when needed (e.g., in development)
+    public static function clearCache(): void
+    {
+        self::$cachedValidators = null;
     }
 }
 ```
@@ -236,7 +266,7 @@ No configuration files. No annotations. No registration. Just:
 
 The system understands.
 
-### 6.3 Trust Boundaries
+### 6.4 Trust Boundaries
 
 ```
 [External World]  →  [Validation Boundary]  →  [Trusted Interior]
@@ -251,7 +281,9 @@ Once validated, values flow freely. The boundary guards; the interior trusts.
 
 ### 7.1 Performance
 
-Validation occurs once per unique value origin:
+**Validator Discovery Optimization**: The framework uses reflection-based discovery with caching to prevent performance bottlenecks. Validators are scanned once and cached for subsequent requests, avoiding repeated filesystem and reflection operations.
+
+**Validation Frequency**: Validation occurs once per unique value origin:
 
 ```php
 // Validated once
@@ -391,7 +423,7 @@ class SemanticGenerator
 }
 ```
 
-### 9.6 The Law of Semantic Consistency
+### 9.5 The Law of Semantic Consistency
 
 ALPS enables a crucial principle: **one word, one meaning; one meaning, one word**.
 
@@ -477,7 +509,7 @@ foreach (get_declared_classes() as $class) {
 
 This creates a **ubiquitous language** where every term has precise, universal meaning throughout the system.
 
-### 9.7 Real Example: User Profile
+### 9.6 Real Example: User Profile
 
 Without ALPS (repetition everywhere):
 
