@@ -59,7 +59,7 @@ echo $result->processed; // Transformation complete
 
 ## Documentation
 
-### Foundation Documents
+### Core Documents
 
 **[Ontological Programming: A New Paradigm](docs/ontological-programming-paper.md)**  
 The philosophical foundation introducing the "Whether?" paradigm and existence-driven design principles.
@@ -67,48 +67,18 @@ The philosophical foundation introducing the "Whether?" paradigm and existence-d
 **[Ray.Framework Whitepaper](docs/ray-framework-whitepaper.md)**  
 Technical overview showing how Ontological Programming concepts are realized through Metamorphic Programming.
 
-### Implementation Guides
-
 **[Metamorphosis Architecture Manifesto](docs/metamorphosis-architecture-manifesto.md)**  
 Practical patterns, architectural guidelines, and concrete implementation examples.
 
-**[Semantic Variable Names](docs/semantic-variable-names.md)**  
-Convention-based validation where naming eliminates redundant validation through the validates/ folder pattern.
+### Complete Documentation Guide
 
-### Integration and Context
-
-**[ALPS and Ray.Framework: Bidirectional Generation](docs/alps-ray-bidirectional-generation.md)**  
-API specification integration—how Ray.Framework implementations can generate ALPS specifications and vice versa.
-
-**[Architecture as Documentation](docs/architecture-as-documentation.md)**  
-Living documentation through the ray-tree command and semantic analysis.
-
-**[UNIX Pipes vs Ray.Framework](docs/unix-pipes-vs-ray-framework.md)**  
-Historical context: evolution from UNIX pipeline philosophy to typed domain object transformation.
-
-**[FAQ: A Dialogue with the Architect](docs/FAQ-dialogue-with-architect.md)**  
-Common questions addressing practical concerns about existential explosion, immutability, and error handling.
-
-**[Semantic Variable Names](docs/FAQ-semantic-variable-names.md)**  
-Convention-based validation where naming eliminates redundant validation through the validates/ folder pattern.
-
-**[The #[Accept] Pattern: Ontological Delegation](docs/accept-pattern-ontological-delegation.md)**  
-Advanced pattern for handling undetermined states through responsible delegation to appropriate expertise.
-
-### Reading Paths
-
-**For Philosophers:** Ontological Programming → Whitepaper → UNIX Pipes → FAQ  
-**For Implementers:** Whitepaper → Manifesto → Semantic Variables → ALPS → Architecture  
-**For Architects:** Ontological Programming → Whitepaper → Manifesto → Architecture → UNIX Pipes
+**[Complete Documentation Guide](docs/README.md)**  
+Comprehensive reading guide with detailed explanations, implementation guides, FAQ, and structured learning paths in both English and Japanese.
 
 ## Examples
 
 - **[User Registration](examples/user-registration/)**  
   Complete implementation demonstrating Traffic Controller pattern, type-safe factories, and testing strategies
-
-## The Journey
-
-Ray.Framework emerged from recognizing universal patterns in data transformation. What started as a specific solution for HTTP data processing revealed deeper principles about how objects transform through constructor injection. This recognition, built upon years of experience with dependency injection and resource-oriented architectures, crystallized into the Metamorphic Programming paradigm.
 
 ## Key Paradigm Shifts
 
@@ -122,6 +92,12 @@ Ray.Framework represents fundamental shifts in how we think about programs:
 ## Status
 
 Ray.Framework is currently in the conceptual and early implementation phase. The ideas presented here emerged from deep dialogues about the nature of programming and represent a new approach to building applications.
+
+## The Journey
+
+Ray.Framework emerged from recognizing universal patterns in data transformation. What started as a specific solution for HTTP data processing revealed deeper principles about how objects transform through constructor injection. 
+
+These concepts emerged from decades of resource-oriented architecture framework development by Akihito Koriyama, along with extensive experience in OOP, REST, and diverse software engineering disciplines. All core concepts, ideas, and patterns presented here originated from this practical foundation. AI assisted in the evolution of these thoughts and handled all documentation, but the fundamental paradigms and design patterns were conceived through years of hands-on software architecture and development.
 
 ## Contributing
 
