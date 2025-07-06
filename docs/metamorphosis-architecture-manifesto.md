@@ -84,7 +84,7 @@ Instead of external control flow, we have internal self-determination. Objects d
  * The existential question: Who will I become?
  * Answer: I carry my destiny within me.
  */
-#[To([UnverifiedUser::class, UserConflict::class])]
+#[Be([UnverifiedUser::class, UserConflict::class])]
 final class ValidatedRegistration
 {
     public function __construct(
@@ -105,7 +105,7 @@ final class ValidatedRegistration
 
 ### 3.2 How Type-Driven Metamorphosis Works
 
-When an object declares multiple potential metamorphoses through the `#[To]` attribute, the framework examines the type of the being property to determine which path to take:
+When an object declares multiple potential metamorphoses through the `#[Be]` attribute, the framework examines the type of the being property to determine which path to take:
 
 - If `$being instanceof NewUser` → `UnverifiedUser::class`
 - If `$being instanceof ConflictingUser` → `UserConflict::class`
@@ -206,7 +206,7 @@ Some objects have simple, predictable futures:
 
 ```php
 // Simple destiny - linear progression
-#[To([RetiredEmployee::class])]
+#[Be([RetiredEmployee::class])]
 final class SeniorEmployee {
     public readonly Pension $being;  // Single, predictable future
 }
@@ -216,7 +216,7 @@ Others face complex branching realities:
 
 ```php
 // Complex destiny - multiple possibilities
-#[To([Unicorn::class, Acquisition::class, Bankruptcy::class, Pivot::class])]
+#[Be([Unicorn::class, Acquisition::class, Bankruptcy::class, Pivot::class])]
 final class Startup {
     public readonly Success|Buyout|Failure|Transformation $being;
 }
@@ -233,7 +233,7 @@ final class User {
 }
 
 // Ontological: What it MIGHT BECOME
-#[To([ActiveUser::class, SuspendedUser::class, DeletedUser::class])]
+#[Be([ActiveUser::class, SuspendedUser::class, DeletedUser::class])]
 final class UserAccount {
     public readonly Active|Suspended|Deleted $being;
 }
@@ -253,7 +253,7 @@ The following demonstrates type-driven metamorphosis in a real-world e-commerce 
  */
 
 // Initial order can become many things based on its contents
-#[To([DigitalOrder::class, PhysicalOrder::class, SubscriptionOrder::class])]
+#[Be([DigitalOrder::class, PhysicalOrder::class, SubscriptionOrder::class])]
 final class NewOrder
 {
     public function __construct(
@@ -276,7 +276,7 @@ final class NewOrder
  */
 
 // Digital orders have simple, linear progression - single destiny
-#[To([InstantDelivery::class])]
+#[Be([InstantDelivery::class])]
 final class DigitalOrder
 {
     public function __construct(
@@ -294,7 +294,7 @@ final class DigitalOrder
 }
 
 // Physical orders face complex realities - multiple destinies
-#[To([
+#[Be([
     StandardShipping::class,
     ExpressShipping::class,
     InternationalShipping::class,
@@ -326,7 +326,7 @@ final class PhysicalOrder
 }
 
 // Subscriptions have their own unique complexity
-#[To([RecurringBilling::class, TrialPeriod::class])]
+#[Be([RecurringBilling::class, TrialPeriod::class])]
 final class SubscriptionOrder
 {
     public function __construct(
@@ -427,7 +427,7 @@ Type-driven metamorphosis represents the completion of our journey toward pure d
 
 ```php
 // Pure approach - the current state
-#[To([Success::class, Failure::class])]
+#[Be([Success::class, Failure::class])]
 final class ProcessingAttempt {
     public readonly Success|Failure $being;
 }
@@ -602,7 +602,7 @@ This question led to the Type-Driven Metamorphosis pattern:
 
 ```php
 // The breakthrough - pure self-determination
-#[To([UnverifiedUser::class, UserConflict::class])]
+#[Be([UnverifiedUser::class, UserConflict::class])]
 final class ValidatedRegistration {
     public function __construct(
         #[Input] string $email,

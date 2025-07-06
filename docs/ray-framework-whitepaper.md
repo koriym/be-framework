@@ -123,10 +123,10 @@ Ray.Framework's architecture rests on four fundamental principles that reflect i
 
 ### 3.2 The Self-Organizing Pipeline
 
-Ray.Framework introduces an interesting concept: objects that know their own destiny. Through the `#[To]` attribute, each object declares what it will become:
+Ray.Framework introduces an interesting concept: objects that know their own destiny. Through the `#[Be]` attribute, each object declares what it will become:
 
 ```php
-#[To(BlogSaver::class)]
+#[Be(BlogSaver::class)]
 final class BlogInput {
     public function __construct(
         #[Input] public readonly string $title,
@@ -143,7 +143,7 @@ final class BlogInput {
     public readonly bool $publishable;
 }
 
-#[To(JsonResponse::class)]
+#[Be(JsonResponse::class)]
 final class BlogSaver {
     public function __construct(
         #[Input] public readonly string $title,
@@ -237,13 +237,13 @@ This is the foundational pattern, modeling a process of sequential evolution. An
 
 **Use Case:** Processing a form submission through validation, persistence, and formatting stages.
 
-**Mechanism:** A single `#[To]` attribute defines the next deterministic step in the chain.
+**Mechanism:** A single `#[Be]` attribute defines the next deterministic step in the chain.
 
 ```php
-#[To(PersistenceStage::class)]
+#[Be(PersistenceStage::class)]
 final class ValidationStage { /* ... */ }
 
-#[To(ResponseStage::class)]
+#[Be(ResponseStage::class)]
 final class PersistenceStage { /* ... */ }
 ```
 
@@ -274,8 +274,8 @@ The Parallel Assembly is declared intuitively through attributes:
 
 ```php
 // ArticleContext initiates two parallel paths
-#[To(NewsEnricher::class)]
-#[To(WeatherEnricher::class)]
+#[Be(NewsEnricher::class)]
+#[Be(WeatherEnricher::class)]
 final class ArticleContext {
     public function __construct(
         #[Input] public readonly string $location
@@ -288,7 +288,7 @@ final class ArticleContext {
 **The Join:** The target assembly object is declared as the destination for all parallel paths. Its constructor signature defines the required components for the final assembly.
 
 ```php
-#[To(ArticlePage::class)]
+#[Be(ArticlePage::class)]
 final class NewsEnricher {
     public function __construct(
         #[Input] public readonly string $location,
@@ -301,7 +301,7 @@ final class NewsEnricher {
     public readonly array $news;
 }
 
-#[To(ArticlePage::class)]
+#[Be(ArticlePage::class)]
 final class WeatherEnricher {
     public function __construct(
         #[Input] public readonly string $location,
@@ -361,9 +361,9 @@ Consider a real-world dashboard that requires multiple data sources:
 
 ```php
 // The seed of parallel transformations
-#[To(UserProfileFetcher::class)]
-#[To(NotificationsFetcher::class)]
-#[To(AnalyticsFetcher::class)]
+#[Be(UserProfileFetcher::class)]
+#[Be(NotificationsFetcher::class)]
+#[Be(AnalyticsFetcher::class)]
 final class DashboardRequest {
     public function __construct(
         #[Input] public readonly string $userId,
@@ -374,7 +374,7 @@ final class DashboardRequest {
 }
 
 // Three parallel metamorphoses
-#[To(DashboardAssembler::class)]
+#[Be(DashboardAssembler::class)]
 final class UserProfileFetcher {
     public function __construct(
         #[Input] public readonly string $userId,
@@ -386,7 +386,7 @@ final class UserProfileFetcher {
     public readonly UserProfile $profile;
 }
 
-#[To(DashboardAssembler::class)]
+#[Be(DashboardAssembler::class)]
 final class NotificationsFetcher {
     public function __construct(
         #[Input] public readonly string $userId,
@@ -400,7 +400,7 @@ final class NotificationsFetcher {
     public readonly int $count;
 }
 
-#[To(DashboardAssembler::class)]
+#[Be(DashboardAssembler::class)]
 final class AnalyticsFetcher {
     public function __construct(
         #[Input] public readonly string $userId,
@@ -481,10 +481,10 @@ This naming convention is not arbitrary—it represents the continuity of existe
 
 ### How It Works
 
-When an object declares multiple potential metamorphoses through the `#[To]` attribute, the framework uses the Unchanged Name Principle: **the property name becomes the constructor parameter name in the next stage**.
+When an object declares multiple potential metamorphoses through the `#[Be]` attribute, the framework uses the Unchanged Name Principle: **the property name becomes the constructor parameter name in the next stage**.
 
 ```php
-#[To([SuccessfulOperation::class, FailedOperation::class])]
+#[Be([SuccessfulOperation::class, FailedOperation::class])]
 final class ValidationAttempt {
     public function __construct(
         #[Input] string $data,
@@ -510,13 +510,13 @@ The true power emerges when we consider how different paths lead to different le
 
 ```php
 // Simple path
-#[To([RetiredEmployee::class])]
+#[Be([RetiredEmployee::class])]
 final class SeniorEmployee {
     public readonly Pension $being;  // Single, predictable future
 }
 
 // Complex path
-#[To([Unicorn::class, Acquisition::class, Bankruptcy::class, Pivot::class])]
+#[Be([Unicorn::class, Acquisition::class, Bankruptcy::class, Pivot::class])]
 final class Startup {
     public readonly Success|Buyout|Failure|Transformation $being;
 }
@@ -579,7 +579,7 @@ Traditional approaches scatter this logic across controllers with nested if-else
 
 ```php
 // Stage 1: Raw Input (The Egg)
-#[To(ValidatedRegistration::class)]
+#[Be(ValidatedRegistration::class)]
 final class RegistrationInput
 {
     public function __construct(
@@ -592,7 +592,7 @@ final class RegistrationInput
 }
 
 // Stage 2: Validated Input discovers its destiny
-#[To([UnverifiedUser::class, UserConflict::class])]
+#[Be([UnverifiedUser::class, UserConflict::class])]
 final class ValidatedRegistration
 {
     public function __construct(
@@ -618,7 +618,7 @@ final class ValidatedRegistration
 }
 
 // Success Path - Stage 4: The Unverified User
-#[To(VerificationEmailSent::class)]
+#[Be(VerificationEmailSent::class)]
 final class UnverifiedUser
 {
     public readonly string $userId;
@@ -644,7 +644,7 @@ final class UnverifiedUser
 }
 
 // Success Path - Stage 5: Email Sent
-#[To(JsonResponse::class, statusCode: 201)]
+#[Be(JsonResponse::class, statusCode: 201)]
 final class VerificationEmailSent
 {
     public readonly string $message = 'Registration successful. Please check your email.';
@@ -663,7 +663,7 @@ final class VerificationEmailSent
 }
 
 // Conflict Path - Alternative Stage 4
-#[To(JsonResponse::class, statusCode: 409)]
+#[Be(JsonResponse::class, statusCode: 409)]
 final class UserConflict
 {
     public readonly string $error = 'User already exists';
