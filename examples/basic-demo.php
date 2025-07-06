@@ -8,7 +8,7 @@ declare(strict_types=1);
  * This example demonstrates the core concept of Type-Driven Metamorphosis
  * where objects carry their own destiny through typed properties.
  *
- * Key concepts shown:ごかい
+ * Key concepts shown:
  * - Objects that discover their own nature
  * - Union types as destiny maps
  * - Type-driven branching without if-statements
