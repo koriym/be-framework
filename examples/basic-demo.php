@@ -20,7 +20,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Ray\Framework\Ray;
 use Ray\Framework\SimpleInjector;
 use Ray\Framework\Attribute\Input;
-use Ray\Framework\Attribute\To;
+use Ray\Framework\Attribute\Be;
 
 // =============================================================================
 // DESTINY TYPES
@@ -87,7 +87,7 @@ class DataProcessor
 /**
  * Stage 1: Raw input data
  */
-#[To(ValidationAttempt::class)]
+#[Be(ValidationAttempt::class)]
 final class RawData
 {
     public function __construct(
@@ -105,7 +105,7 @@ final class RawData
  * - It uses union types to express possible futures
  * - No external routing needed - the type determines the path
  */
-#[To([SuccessfulValidation::class, FailedValidation::class])]
+#[Be([SuccessfulValidation::class, FailedValidation::class])]
 final class ValidationAttempt
 {
     public function __construct(

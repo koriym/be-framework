@@ -17,7 +17,7 @@ Building upon the philosophical foundations of Ray.Di's dependency injection pat
 Every class in Ray.Framework is a Metamorphosis Class—a self-contained, immutable stage of transformation:
 
 ```php
-#[To(ProcessedData::class)]
+#[Be(ProcessedData::class)]
 final class RawData
 {
     public function __construct(
@@ -55,7 +55,7 @@ echo $result->processed; // Transformation complete
 2. **Immutable State**: All properties are `public readonly`
 3. **Type Transparency**: No hidden state or mystery boxes
 4. **Automatic Streaming**: Handle any data size with constant memory
-5. **Self-Organizing Pipelines**: Objects declare their own destiny with `#[To]`
+5. **Self-Organizing Pipelines**: Objects declare their own destiny with `#[Be]`
 
 ## Documentation
 
