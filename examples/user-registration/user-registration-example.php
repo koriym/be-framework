@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace Example\UserRegistration;
 
 use Ray\Framework\Attribute\Input;
-use Ray\Framework\Attribute\To;
+use Ray\Framework\Attribute\Be;
 
 // =============================================================================
 // DESTINY TYPE CLASSES
@@ -58,7 +58,7 @@ final class ConflictingUser
  * It contains no logic, only data, representing the "egg" stage
  * of the metamorphosis.
  */
-#[To(ValidatedRegistration::class)]
+#[Be(ValidatedRegistration::class)]
 final class RegistrationInput
 {
     public function __construct(
@@ -85,7 +85,7 @@ final class RegistrationInput
  *
  * This demonstrates Type-Driven Metamorphosis - the object carries its own destiny.
  */
-#[To([UnverifiedUser::class, UserConflict::class])]
+#[Be([UnverifiedUser::class, UserConflict::class])]
 final class ValidatedRegistration
 {
     public function __construct(
@@ -137,7 +137,7 @@ final class ValidatedRegistration
  *
  * This is the "pupa" stage - almost ready for final form.
  */
-#[To(VerificationEmailSent::class)]
+#[Be(VerificationEmailSent::class)]
 final class UnverifiedUser
 {
     public readonly string $userId;
@@ -177,7 +177,7 @@ final class UnverifiedUser
  * - Verification email was sent
  * - Registration process completed
  */
-#[To(JsonResponse::class, statusCode: 201)]
+#[Be(JsonResponse::class, statusCode: 201)]
 final class VerificationEmailSent
 {
     public readonly string $message = 'Registration successful. Please check your email to verify your account.';
@@ -213,7 +213,7 @@ final class VerificationEmailSent
  * - Email already exists in system
  * - Appropriate error response needed
  */
-#[To(JsonResponse::class, statusCode: 409)]
+#[Be(JsonResponse::class, statusCode: 409)]
 final class UserConflict
 {
     public readonly string $error = 'User already exists';

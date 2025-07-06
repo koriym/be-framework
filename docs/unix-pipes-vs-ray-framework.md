@@ -264,9 +264,9 @@ EOF
 
 ```php
 // Define the parallel fetching
-#[To(UserDataFetcher::class)]
-#[To(NotificationsFetcher::class)]
-#[To(StatsFetcher::class)]
+#[Be(UserDataFetcher::class)]
+#[Be(NotificationsFetcher::class)]
+#[Be(StatsFetcher::class)]
 final class DashboardRequest {
     public function __construct(
         #[Input] public readonly UserId $userId
