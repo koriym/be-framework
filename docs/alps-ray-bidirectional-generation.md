@@ -49,7 +49,8 @@ This duality enables a bidirectional generation process that maintains perfect c
 
 ### Generated Ray.Framework Implementation
 ```bash
-$ ray-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
+ray-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
+# Generates complete implementation skeleton in src/OrderWorkflow/
 ```
 
 ```php
@@ -133,7 +134,7 @@ namespace LoanProcessing;
 #[Be([ApprovedLoan::class, RejectedLoan::class, PendingReview::class])]
 final class LoanApplication
 {
-    public readonly Approved|Rejected|Pending $being;
+    public readonly Approved|Rejected|PendingReview $being;
     
     public function __construct(
         #[Input] string $applicantId,
@@ -146,7 +147,7 @@ final class LoanApplication
         
         $this->being = match (true) {
             $analysis->isHighRisk() => new Rejected($analysis->getReason()),
-            $analysis->requiresReview() => new Pending($analysis->getReviewNotes()),
+            $analysis->requiresReview() => new PendingReview($analysis->getReviewNotes()),
             default => new Approved($requestedAmount, $analysis->getTerms())
         };
     }

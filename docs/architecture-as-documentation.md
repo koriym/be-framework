@@ -42,11 +42,12 @@ The architecture itself declares:
 
 ## The `ray-tree` Command: Architecture Visualization
 
-Ray.Framework's ontological structure enables automatic architecture documentation through the `ray-tree` command:
+Ray.Framework's ontological structure enables the automatic architecture documentation through the `ray-tree` command:
 
 ### Basic Structure Visualization
 ```bash
-$ ray-tree src/UserRegistration/
+ray-tree src/UserRegistration/
+# Outputs architectural structure visualization
 UserRegistration/
 ├── RegistrationInput (#[Be] → ValidatedRegistration)
 │   ├── 📥 email: string (validates/ValidEmail)
