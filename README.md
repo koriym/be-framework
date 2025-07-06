@@ -59,14 +59,41 @@ echo $result->processed; // Transformation complete
 
 ## Documentation
 
-- **[Ontological Programming: A New Paradigm](docs/ontological-programming-paper.md)**  
-  The philosophical foundation introducing programming by defining existence
+### Foundation Documents
 
-- **[Ray.Framework Whitepaper](docs/ray-framework-whitepaper.md)**  
-  The complete technical and philosophical foundations of the Metamorphic Programming paradigm
+**[Ontological Programming: A New Paradigm](docs/ontological-programming-paper.md)**  
+The philosophical foundation introducing the "Whether?" paradigm and existence-driven design principles.
 
-- **[Metamorphosis Architecture Manifesto](docs/metamorphosis-architecture-manifesto.md)**  
-  Practical implementation patterns including Traffic Controller and testing strategies
+**[Ray.Framework Whitepaper](docs/ray-framework-whitepaper.md)**  
+Technical overview showing how Ontological Programming concepts are realized through Metamorphic Programming.
+
+### Implementation Guides
+
+**[Metamorphosis Architecture Manifesto](docs/metamorphosis-architecture-manifesto.md)**  
+Practical patterns, architectural guidelines, and concrete implementation examples.
+
+**[Semantic Variable Names](docs/semantic-variable-names.md)**  
+Convention-based validation where naming eliminates redundant validation through the validates/ folder pattern.
+
+### Integration and Context
+
+**[ALPS and Ray.Framework: Bidirectional Generation](docs/alps-ray-bidirectional-generation.md)**  
+API specification integration—how Ray.Framework implementations can generate ALPS specifications and vice versa.
+
+**[Architecture as Documentation](docs/architecture-as-documentation.md)**  
+Living documentation through the ray-tree command and semantic analysis.
+
+**[UNIX Pipes vs Ray.Framework](docs/unix-pipes-vs-ray-framework.md)**  
+Historical context: evolution from UNIX pipeline philosophy to typed domain object transformation.
+
+**[FAQ: A Dialogue with the Architect](docs/FAQ.md)**  
+Common questions addressing practical concerns about existential explosion, immutability, and error handling.
+
+### Reading Paths
+
+**For Philosophers:** Ontological Programming → Whitepaper → UNIX Pipes → FAQ  
+**For Implementers:** Whitepaper → Manifesto → Semantic Variables → ALPS → Architecture  
+**For Architects:** Ontological Programming → Whitepaper → Manifesto → Architecture → UNIX Pipes
 
 ## Examples
 

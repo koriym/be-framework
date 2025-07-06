@@ -4,7 +4,11 @@
 
 ## Abstract
 
-Ray.Framework introduces the Metamorphic Programming paradigm, a novel approach that transforms data processing through pure constructor-driven metamorphosis. Building upon the philosophical foundations of Ray.Di's dependency injection pattern, this framework eliminates traditional complexity by treating all data transformations as light passing through prisms—instant, pure, and transformed. More than a technical solution, Ray.Framework represents a fundamental shift in how we conceive programming: not as mechanical assembly, but as organic transformation where each object accepts its inevitable premises and transforms itself into a new, perfect form. Through its radical constructor-only architecture, automatic streaming capabilities, and complete type transparency, Ray.Framework achieves what decades of framework evolution have pursued: making the framework itself disappear into the natural patterns of self-transformation. This paper presents the theoretical foundations, architectural innovations, and philosophical implications of programming as metamorphosis.
+Ray.Framework introduces the Metamorphic Programming paradigm, a novel approach that transforms data processing through pure constructor-driven metamorphosis. Building upon the philosophical foundations of Ray.Di's dependency injection pattern, this framework eliminates traditional complexity by treating all data transformations as light passing through prisms—instant, pure, and transformed. Through its radical constructor-only architecture, automatic streaming capabilities, and complete type transparency, Ray.Framework achieves what decades of framework evolution have pursued: making the framework itself disappear into the natural patterns of self-transformation.
+
+> **Philosophical Foundation:** This whitepaper builds upon Ontological Programming principles. For the complete theoretical framework, see [Ontological Programming: A New Paradigm](ontological-programming-paper.md).
+
+> **Implementation Patterns:** For detailed architectural patterns and testing strategies, see [Metamorphosis Architecture Manifesto](metamorphosis-architecture-manifesto.md).
 
 **Keywords:** Metamorphic Programming, Constructor Injection, Type Transparency, Self-Transformation, Streaming Architecture
 
@@ -449,86 +453,23 @@ echo $dashboard->html;  // All parallel fetches completed and assembled
 
 The most profound innovation in Ray.Framework is the recognition that objects can carry their own destiny through typed properties. Instead of external control flow, we have internal self-determination.
 
-### The Being Property
-
-Every metamorphic object can declare a special property - often named `$being`, `$self`, or `$whoAmI` - that uses PHP's union types to express possible futures:
-
-```php
-public readonly Success|Failure $being;
-public readonly Admin|User|Guest $whoAmI;
-public readonly Approved|Rejected|Pending $self;
-```
-
-### The Unchanged Name Principle
-
-The framework follows a simple but profound rule: **the property name in the current stage becomes the constructor parameter name in the next stage**. This creates a chain of existence where the name carries through each metamorphosis:
-
-```php
-class ValidationAttempt {
-    public readonly Success|Failure $being;  // Property name is 'being'
-}
-    ↓
-class SuccessfulOperation {
-    public function __construct(Success $being) {}  // Parameter name matches!
-}
-    ↓
-class CompletedTask {
-    public readonly Complete|Pending $result;  // The chain continues with 'result'
-}
-```
-
-This naming convention is not arbitrary—it represents the continuity of existence through transformation.
-
-### How It Works
-
-When an object declares multiple potential metamorphoses through the `#[Be]` attribute, the framework uses the Unchanged Name Principle: **the property name becomes the constructor parameter name in the next stage**.
-
 ```php
 #[Be([SuccessfulOperation::class, FailedOperation::class])]
 final class ValidationAttempt {
-    public function __construct(
-        #[Input] string $data,
-        DataProcessor $processor
-    ) {
+    public readonly Success|Failure $being;
+    
+    public function __construct(#[Input] string $data, DataProcessor $processor) {
         // The existential question: Who am I?
         $this->being = $processor->isValid($data)
             ? new Success($data)
             : new Failure($processor->getErrors());
     }
-    
-    public readonly Success|Failure $being;
-}
-
-// The framework matches types:
-// If $being instanceof Success → SuccessfulOperation
-// If $being instanceof Failure → FailedOperation
-```
-
-### Complex Branching Through Types
-
-The true power emerges when we consider how different paths lead to different levels of complexity:
-
-```php
-// Simple path
-#[Be([RetiredEmployee::class])]
-final class SeniorEmployee {
-    public readonly Pension $being;  // Single, predictable future
-}
-
-// Complex path
-#[Be([Unicorn::class, Acquisition::class, Bankruptcy::class, Pivot::class])]
-final class Startup {
-    public readonly Success|Buyout|Failure|Transformation $being;
 }
 ```
 
-### Philosophical Implications
+Objects discover their nature through the `$being` property and union types, eliminating external routing logic.
 
-This pattern represents the purest form of Ontological Programming:
-1. Objects don't execute branching logic; they discover their nature
-2. Types are not categories but destinies
-3. The question "Who am I?" drives transformation
-4. Complexity emerges from existential choices
+> **Complete Implementation Guide:** For detailed Type-Driven Metamorphosis patterns, testing strategies, and the Unchanged Name Principle, see [Metamorphosis Architecture Manifesto](metamorphosis-architecture-manifesto.md#type-driven-metamorphosis).
 
 ---
 
@@ -813,16 +754,9 @@ Ray.Framework suggests a new relationship between programmer and program:
 
 ### 7.4 The AI Era and Existential Programming
 
-As we enter an era where artificial intelligence can generate code, the question of human purpose in programming becomes acute. If AI can optimize algorithms, design patterns, and even architect systems, what remains uniquely human?
+As AI transforms software development, the question of human purpose in programming becomes acute. While AI excels at generating implementations, humans retain the unique role of defining *what should exist*.
 
-The answer lies in the "Whether?" question. AI excels at answering "How?"—it can generate efficient implementations. It increasingly handles "What?"—determining optimal transformations. But "Whether?"—what should exist, what has meaning, what deserves to be—remains the domain of human consciousness.
-
-In an Ontological Programming world:
-- **Humans define existence**: What entities can exist, under what conditions
-- **AI optimizes manifestation**: How these existences are efficiently realized
-- **The partnership**: Human meaning-making meets artificial optimization
-
-This is not a diminishment but an elevation of the programmer's role. We evolve from instruction-writers to existence-definers, from coders to ontologists of digital realms.
+> **Deep Dive:** For comprehensive exploration of AI-era programming and the "Whether?" paradigm, see [Ontological Programming: A New Paradigm](ontological-programming-paper.md#the-ai-era-and-existential-programming).
 
 ### 7.5 The Meta-Ontological Nature of Ideas
 
