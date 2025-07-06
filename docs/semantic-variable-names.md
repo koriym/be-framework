@@ -434,8 +434,11 @@ class SemanticConsistencyValidator
         // Load all ALPS definitions
         foreach (glob('alps/*.json') as $file) {
             $alps = json_decode(file_get_contents($file), true);
-            $this->alpsRegistry[$alps['descriptor'][0]['id']] = $alps;
+-            $this->alpsRegistry[$alps['descriptor'][0]['id']] = $alps;
++            $this->alpsRegistry[$alps['alps']['descriptor'][0]['id']] = $alps;
         }
+    }
+}
     }
     
     public function validateClass(string $className): void
