@@ -607,8 +607,8 @@ class ProcessingAttempt:
     def __init__(self):
         self.being: Union[Success, Failure] = ...
 
-class SuccessfulOperation:
-    def __init__(self, being: Success):  # The name carries forward
+class Success:
+    def __init__(self, being: ProcessingAttempt):  # The name carries forward
         self.result: Union[Complete, Pending] = ...
 
 class CompletedTask:

@@ -454,7 +454,7 @@ echo $dashboard->html;  // All parallel fetches completed and assembled
 The most profound innovation in Ray.Framework is the recognition that objects can carry their own destiny through typed properties. Instead of external control flow, we have internal self-determination.
 
 ```php
-#[Be([SuccessfulOperation::class, FailedOperation::class])]
+#[Be([Success::class, Failure::class])]
 final class ValidationAttempt {
     public readonly Success|Failure $being;
     

@@ -28,14 +28,14 @@ class UserValidator {
 ### Architecture as Documentation  
 ```php
 // Ray.Framework: Architecture explains what exists
-#[Be([SuccessfulValidation::class, FailedValidation::class])]
+#[Be([Success::class, Failure::class])]
 final class ValidationAttempt {
     public readonly Success|Failure $being;
 }
 ```
 
 The architecture itself declares:
-- **What can exist** (`SuccessfulValidation`, `FailedValidation`)
+- **What can exist** (`Success`, `Failure`)
 - **What relationships exist** (`#[Be]` attribute)  
 - **What data flows** (`Success|Failure $being`)
 - **What contracts govern** (union types)
