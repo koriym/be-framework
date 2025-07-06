@@ -15,10 +15,10 @@ We recommend reading the documents in order, as each builds upon the concepts of
 **Start here.** This is the foundational philosophical paper that introduces the core ideas of Ontological Programming. It establishes the "Why?" behind this entire ecosystem.
 
 *   **Read this to understand:**
-    *   The core crisis in traditional programming ("The Crisis of Doing").
-    *   The five fundamental principles of existence-driven design.
-    *   How this paradigm promises to eliminate entire classes of errors.
-    *   The role of the programmer in the age of AI.
+  * The core crisis in traditional programming ("The Crisis of Doing").
+  * The five fundamental principles of existence-driven design.
+  * How this paradigm promises to eliminate entire classes of errors.
+  * The role of the programmer in the age of AI.
 
 ### 2. **[Ray.Framework: Programming as Metamorphosis](./ray-framework-whitepaper.md)**
 
@@ -27,21 +27,21 @@ We recommend reading the documents in order, as each builds upon the concepts of
 This whitepaper details **Ray.Framework**, the concrete PHP implementation of Ontological Programming. It translates the abstract philosophy into a practical, powerful tool.
 
 *   **Read this to understand:**
-    *   How constructors become "workshops" for self-transformation.
-    *   The Metamorphosis Pattern (`Egg → Larva → Pupa → Butterfly`).
-    *   The duality of linear chains and parallel assemblies for data flow.
-    *   How automatic streaming and type transparency are achieved.
+  * How constructors become "workshops" for self-transformation.
+  * The Metamorphosis Pattern (`Egg → Larva → Pupa → Butterfly`).
+  * The duality of linear chains and parallel assemblies for data flow.
+  * How automatic streaming and type transparency are achieved.
 
 ### 3. **[The Metamorphosis Architecture Manifesto](./metamorphosis-architecture-manifesto.md)**
 
-> **(This document is implicitly referenced but would be the next logical step)**
+> **(This document is implicitly referenced, but would be the next logical step)**
 
 This manifesto is the practical "how-to" guide for architects and developers. It provides detailed patterns, testing strategies, and conventions for building systems with Ray.Framework.
 
 *   **Read this to learn:**
-    *   The `Type-Driven Metamorphosis` pattern for handling conditional logic.
-    *   The `Unchanged Name Principle` for maintaining semantic continuity.
-    *   Advanced testing strategies for ontological systems.
+  * The `Type-Driven Metamorphosis` pattern for handling conditional logic.
+  * The `Unchanged Name Principle` for maintaining semantic continuity.
+  * Advanced testing strategies for ontological systems.
 
 ### 4. **[The #[Accept] Pattern: Ontological Delegation](./accept-pattern-ontological-delegation.md)**
 
@@ -50,21 +50,21 @@ This manifesto is the practical "how-to" guide for architects and developers. It
 This document introduces a mature pattern for handling real-world complexity. It addresses the question: "What happens when an object cannot determine its own existence?"
 
 *   **Read this to explore:**
-    *   How to model delegation to experts (`Physician`, `Lawyer`, `Engineer`).
-    *   The `Undetermined` state and the `#[Accept]` attribute.
-    *   How this pattern makes systems more robust and realistic.
+  * How to model delegation to experts (`Physician`, `Lawyer`, `Engineer`).
+  * The `Undetermined` state and the `#[Accept]` attribute.
+  * How this pattern makes systems more robust and realistic.
 
 ### 5. **Supporting Documents: The Ecosystem Tools**
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
 *   **[Architecture as Documentation](./architecture-as-documentation.md)**
-    *   Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
-    *   Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
+  * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
+  * Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
 
 *   **[ALPS and Ray.Framework: Bidirectional Generation](./alps-ray-bidirectional-generation.md)**
-    *   Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
-    *   See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
+  * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
+  * See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
 
 ## The Complete Vision
 

@@ -58,7 +58,7 @@ Are we calling usage constraints “meaning”? Is this semantics or its simulat
 
 For example, what if `$userId` is sometimes an integer and sometimes a UUID?
 
-**Response:** In Semantic Variable Names, the meaning of a name is always enforced by validation. The contract cannot be silently violated—attempts to misuse a variable are surfaced immediately by design. This isn’t a convention; it’s a mechanism. Meaning is not just implied but actively protected.
+**Response:** In Semantic Variable Names, the meaning of a name is always enforced by validation. The contract cannot be silently violated, and attempts to misuse a variable are surfaced immediately by design. This isn’t a convention; it’s a mechanism. Meaning is not just implied but actively protected.
 
 ---
 
