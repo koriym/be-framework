@@ -592,7 +592,7 @@ This pattern served as a crucial bridge:
 - **From scattered logic to centralized decision-making**
 - **From implicit to explicit routing**
 
-Yet it retained the fundamental flaw: **external control over internal destiny**.
+Yet, it retained the fundamental flaw: **external control over internal destiny**.
 
 ### A.3 The Breakthrough: Internal Self-Determination
 
