@@ -208,6 +208,6 @@ echo "4. Framework automatically routes based on types\n";
 echo "5. Each transformation is pure and predictable\n\n";
 
 echo "=== Transformation Paths ===\n";
-echo "RawData -> ProcessingAttempt -> SuccessResponse (if valid)\n";
-echo "RawData -> ProcessingAttempt -> FailureResponse (if invalid)\n";
+echo "RawData -> ValidationAttempt -> SuccessfulValidation (if valid)\n";
+echo "RawData -> ValidationAttempt -> FailedValidation (if invalid)\n";
 echo "\nThe path is determined by existential self-discovery, not external control!\n";
