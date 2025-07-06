@@ -380,48 +380,16 @@ Application-Level Profile Semantics (ALPS) provides a solution:
 
 One definition. Universal understanding.
 
-### 9.3 The Trinity of Separation
+### 9.3 Three-Layer Architecture
 
-```
-alps/
-├── email.json      → What it means (semantic)
-├── age.json        → What it means (semantic)
-└── price.json      → What it means (semantic)
-
-validates/
-├── ValidEmail.php  → What makes it valid (logic)
-├── NonNegativeAge.php
-└── PositivePrice.php
-
-[Your Code]         → What it is (existence)
-```
-
-Each layer has a single responsibility:
-- **ALPS**: Defines meaning
-- **Validates**: Enforces validity
+ALPS creates a clean separation:
+- **ALPS**: Defines semantic meaning
+- **Validates**: Enforces validity rules  
 - **Code**: Manifests existence
 
-### 9.4 Automatic Propagation
+This trinity eliminates scattered definitions and ensures consistency across all representations.
 
-From ALPS definitions, generate everything:
-
-```php
-class SemanticGenerator
-{
-    public function fromAlps(string $alpsFile): array
-    {
-        $alps = json_decode(file_get_contents($alpsFile), true);
-        
-        return [
-            'openapi' => $this->toOpenApi($alps),
-            'jsonschema' => $this->toJsonSchema($alps),
-            'phpdoc' => $this->toPhpDoc($alps),
-            'typescript' => $this->toTypeScript($alps),
-            'graphql' => $this->toGraphQL($alps)
-        ];
-    }
-}
-```
+> **Comprehensive ALPS Integration:** For detailed ALPS patterns, bidirectional generation, and protocol-specific mappings, see [ALPS and Ray.Framework: Bidirectional Generation](alps-ray-bidirectional-generation.md).
 
 ### 9.5 The Law of Semantic Consistency
 

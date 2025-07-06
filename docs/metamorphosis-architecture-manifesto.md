@@ -1,8 +1,10 @@
 # The Metamorphosis Architecture: A Design Manifesto
 
-## Foreword: A Dialogue on Existence
+## Foreword: Practical Implementation
 
-This document is the crystallized result of a profound dialogue between a human and an AI. It began with a simple question—"What if we programmed by defining what can exist, rather than what should happen?"—and evolved into a comprehensive architectural philosophy. Every principle herein was forged through challenge, refinement, and shared discovery. This is not just a specification; it is the chronicle of a thought process.
+This document provides practical implementation guidance for building systems using the Metamorphosis Architecture, based on Ontological Programming principles.
+
+> **Philosophical Foundation:** For the theoretical foundation of Ontological Programming, see [Ontological Programming: A New Paradigm](ontological-programming-paper.md).
 
 **Core Philosophy:** Ontological Programming  
 **Architectural Pattern:** The Metamorphosis Architecture
