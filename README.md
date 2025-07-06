@@ -86,8 +86,11 @@ Living documentation through the ray-tree command and semantic analysis.
 **[UNIX Pipes vs Ray.Framework](docs/unix-pipes-vs-ray-framework.md)**  
 Historical context: evolution from UNIX pipeline philosophy to typed domain object transformation.
 
-**[FAQ: A Dialogue with the Architect](docs/FAQ.md)**  
+**[FAQ: A Dialogue with the Architect](docs/FAQ-dialogue-with-architect.md)**  
 Common questions addressing practical concerns about existential explosion, immutability, and error handling.
+
+**[Semantic Variable Names](docs/FAQ-semantic-variable-names.md)**  
+Convention-based validation where naming eliminates redundant validation through the validates/ folder pattern.
 
 **[The #[Accept] Pattern: Ontological Delegation](docs/accept-pattern-ontological-delegation.md)**  
 Advanced pattern for handling undetermined states through responsible delegation to appropriate expertise.
