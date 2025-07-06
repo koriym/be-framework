@@ -89,6 +89,9 @@ Historical context: evolution from UNIX pipeline philosophy to typed domain obje
 **[FAQ: A Dialogue with the Architect](docs/FAQ.md)**  
 Common questions addressing practical concerns about existential explosion, immutability, and error handling.
 
+**[The #[Accept] Pattern: Ontological Delegation](docs/accept-pattern-ontological-delegation.md)**  
+Advanced pattern for handling undetermined states through responsible delegation to appropriate expertise.
+
 ### Reading Paths
 
 **For Philosophers:** Ontological Programming → Whitepaper → UNIX Pipes → FAQ  
