@@ -61,6 +61,11 @@ final class ConflictingUser
 #[Be(ValidatedRegistration::class)]
 final class RegistrationInput
 {
+    /**
+     * Initializes a new registration input with the provided email, password, and password confirmation.
+     *
+     * This class serves as a pure data container for raw user registration input and performs no validation.
+     */
     public function __construct(
         #[Input] public readonly string $email,
         #[Input] public readonly string $password,
@@ -88,6 +93,15 @@ final class RegistrationInput
 #[Be([UnverifiedUser::class, UserConflict::class])]
 final class ValidatedRegistration
 {
+    /**
+     * Validates registration input and determines the next registration stage.
+     *
+     * Checks email format, password strength, and password confirmation. If all validations pass, sets the next stage to either a new user registration or a conflict state based on whether the email already exists.
+     *
+     * @param string $email The user's email address.
+     * @param string $password The user's chosen password.
+     * @param string $passwordConfirmation The password confirmation input.
+     */
     public function __construct(
         #[Input] public readonly string $email,
         #[Input] public readonly string $password,
