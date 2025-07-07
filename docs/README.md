@@ -64,7 +64,7 @@ This document introduces a mature pattern for handling real-world complexity. It
   * The `Undetermined` state and the `#[Accept]` attribute.
   * How this pattern makes systems more robust and realistic.
 
-### 6あな. **Supporting Documents: The Ecosystem Tools**
+### 6. **Supporting Documents: The Ecosystem Tools**
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
