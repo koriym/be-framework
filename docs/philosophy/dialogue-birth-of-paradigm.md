@@ -1,6 +1,6 @@
 # The Birth of a Paradigm: A Dialogue
 
-*How a question about hypermedia revealed the temporal nature of existence*
+## How a question about hypermedia revealed the temporal nature of existence
 
 ## Prologue
 
