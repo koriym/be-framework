@@ -61,13 +61,13 @@ echo $result->processed; // Transformation complete
 
 ### Core Documents
 
-**[Ontological Programming: A New Paradigm](docs/ontological-programming-paper.md)**  
+**[Ontological Programming: A New Paradigm](docs/philosophy/ontological-programming-paper.md)**  
 The philosophical foundation introducing the "Whether?" paradigm and existence-driven design principles.
 
-**[Ray.Framework Whitepaper](docs/ray-framework-whitepaper.md)**  
+**[Ray.Framework Whitepaper](docs/framework/ray-framework-whitepaper.md)**  
 Technical overview showing how Ontological Programming concepts are realized through Metamorphic Programming.
 
-**[Metamorphosis Architecture Manifesto](docs/metamorphosis-architecture-manifesto.md)**  
+**[Metamorphosis Architecture Manifesto](docs/patterns/metamorphosis-architecture-manifesto.md)**  
 Practical patterns, architectural guidelines, and concrete implementation examples.
 
 ### Complete Documentation Guide

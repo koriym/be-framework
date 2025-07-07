@@ -8,7 +8,7 @@ Here, you will not just find technical specifications, but a complete philosophy
 
 We recommend reading the documents in order, as each builds upon the concepts of the previous one. This journey will take you from high-level philosophy to concrete implementation patterns.
 
-### 1. **[Ontological Programming: A New Paradigm](./ontological-programming-paper.md)**
+### 1. **[Ontological Programming: A New Paradigm](./philosophy/ontological-programming-paper.md)**
 
 > **"What if we programmed by defining what can exist, rather than what should happen?"**
 
@@ -20,7 +20,7 @@ We recommend reading the documents in order, as each builds upon the concepts of
   * How this paradigm promises to eliminate entire classes of errors.
   * The role of the programmer in the age of AI.
 
-### 2. **[Ray.Framework: Programming as Metamorphosis](./ray-framework-whitepaper.md)**
+### 2. **[Ray.Framework: Programming as Metamorphosis](./framework/ray-framework-whitepaper.md)**
 
 > **"Objects are processed through constructor injection, just as light rays pass through a prism - instant, pure, and transformed."**
 
@@ -32,7 +32,17 @@ This whitepaper details **Ray.Framework**, the concrete PHP implementation of On
   * The duality of linear chains and parallel assemblies for data flow.
   * How automatic streaming and type transparency are achieved.
 
-### 3. **[The Metamorphosis Architecture Manifesto](./metamorphosis-architecture-manifesto.md)**
+### 3. **[From Space to Time: The Metamorphosis Paradigm](./philosophy/from-space-to-time.md)**
+   > **"When code learned to remember, programs discovered mortality, and programming became poetry"**
+
+   The crystallization of our deepest understanding. This essay transforms programming from spatial navigation to temporal metamorphosis.
+
+    * **Read this to experience:**
+        * The shift from eternal present to lived time
+        * Programming as poetry and philosophy
+        * The quantum nature of existence in code
+
+### 4. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **(This document is implicitly referenced, but would be the next logical step)**
 
@@ -43,7 +53,7 @@ This manifesto is the practical "how-to" guide for architects and developers. It
   * The `Unchanged Name Principle` for maintaining semantic continuity.
   * Advanced testing strategies for ontological systems.
 
-### 4. **[The #[Accept] Pattern: Ontological Delegation](./accept-pattern-ontological-delegation.md)**
+### 5. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **"The highest intelligence is knowing when to seek the wisdom of others."**
 
@@ -54,11 +64,11 @@ This document introduces a mature pattern for handling real-world complexity. It
   * The `Undetermined` state and the `#[Accept]` attribute.
   * How this pattern makes systems more robust and realistic.
 
-### 5. **Supporting Documents: The Ecosystem Tools**
+### 6あな. **Supporting Documents: The Ecosystem Tools**
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
-*   **[Architecture as Documentation](./architecture-as-documentation.md)**
+*   **[Architecture as Documentation](./framework/architecture-as-documentation.md)**
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
   * Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
 
@@ -89,7 +99,7 @@ We invite you to embark on this journey and discover a new way to create softwar
 
 各文書は前の概念を基に構築されているため、順番に読むことをお勧めします。この旅は、高レベルの哲学から具体的な実装パターンまでを案内します。
 
-### 1. **[存在論的プログラミング：新しいパラダイム](./ontological-programming-paper.md)**
+### 1. **[存在論的プログラミング：新しいパラダイム](./philosophy/ontological-programming-paper.md)**
 
 > **「何が起こるべきかではなく、何が存在できるかを定義してプログラムを書いたらどうだろうか？」**
 
@@ -101,7 +111,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   このパラダイムが約束する全体的なエラークラスの排除
     *   AI時代におけるプログラマーの役割
 
-### 2. **[Ray.Framework：変容としてのプログラミング](./ray-framework-whitepaper.md)**
+### 2. **[Ray.Framework：変容としてのプログラミング](./framework/ray-framework-whitepaper.md)**
 
 > **「オブジェクトは光線がプリズムを通過するように、コンストラクタ注入を通じて処理される—瞬間的で、純粋で、変容される。」**
 
@@ -113,7 +123,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   データフローにおける線形チェーンと並列アセンブリの二重性
     *   自動ストリーミングと型透明性の実現方法
 
-### 3. **[変容アーキテクチャ・マニフェスト](./metamorphosis-architecture-manifesto.md)**
+### 3. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **（この文書は暗黙的に参照されていますが、次の論理的ステップとなります）**
 
@@ -124,7 +134,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   意味論的継続性を維持するための`名前不変原則`
     *   存在論的システムのための高度なテスト戦略
 
-### 4. **[#[Accept]パターン：存在論的委譲](./accept-pattern-ontological-delegation.md)**
+### 4. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **「最高の知性は、他者の知恵を求める時を知ることである。」**
 
@@ -139,7 +149,7 @@ We invite you to embark on this journey and discover a new way to create softwar
 
 これらの文書では、このパラダイムから生まれる強力なツールと統合について説明します。
 
-*   **[ドキュメントとしてのアーキテクチャ](./architecture-as-documentation.md)**
+*   **[ドキュメントとしてのアーキテクチャ](./framework/architecture-as-documentation.md)**
     *   アーキテクチャ自体が最終的な、常に最新のドキュメントとなる方法を発見
     *   システムの構造、意味論、データフローを自動的に可視化する`ray-tree`コマンドについて学習
 
