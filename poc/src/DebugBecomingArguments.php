@@ -107,5 +107,17 @@ final class DebugBecomingArguments implements BecomingArgumentsInterface
                 ),
             );
         }
+
+        if ($hasInput && $hasInject) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Parameter "%s" in %s::%s cannot have both #[Input] and #[Inject] attributes simultaneously. ' .
+                    'These attributes are mutually exclusive to ensure clear and unambiguous parameter semantics.',
+                    $param->getName(),
+                    $param->getDeclaringClass()->getName(),
+                    $param->getDeclaringFunction()->getName(),
+                ),
+            );
+        }
     }
 }
