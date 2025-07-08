@@ -24,21 +24,20 @@ ValidatedRegistration
     │
     ├─ Validates email format
     ├─ Validates password strength
-    └─ Ensures password confirmation matches (The Larva)
-    ↓
-RegistrationRouter (Traffic Controller)
-    │
     ├─ Checks if email already exists
+    └─ Discovers its own destiny through $being property (The Larva)
+    ↓
+Type-Driven Branching (No Router Needed!)
     │
-    ├─ If exists ──→ UserConflict
-    │                    ↓
-    │                JsonResponse (409 Conflict)
+    ├─ If $being instanceof UserInput ──→ UnverifiedUser
+    │                                          ↓
+    │                                    VerificationEmailSent
+    │                                          ↓
+    │                                    JsonResponse (201 Created)
     │
-    └─ If not ────→ UnverifiedUser
-                         ↓
-                    VerificationEmailSent
-                         ↓
-                    JsonResponse (201 Created)
+    └─ If $being instanceof ConflictingUser ──→ UserConflict
+                                                      ↓
+                                                JsonResponse (409 Conflict)
 ```
 
 ## Key Patterns Demonstrated

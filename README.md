@@ -33,7 +33,7 @@ final class ProcessedData
     
     public function __construct(
         #[Input] string $value,
-        DataProcessor $processor
+        #[Inject] DataProcessor $processor
     ) {
         // Transform in constructor
         $this->processed = $processor->process($value);
@@ -78,7 +78,7 @@ Comprehensive reading guide with detailed explanations, implementation guides, F
 ## Examples
 
 - **[User Registration](examples/user-registration/)**  
-  Complete implementation demonstrating Traffic Controller pattern, type-safe factories, and testing strategies
+  Complete implementation demonstrating Type-Driven Metamorphosis and constructor validation
 
 ## Key Paradigm Shifts
 
