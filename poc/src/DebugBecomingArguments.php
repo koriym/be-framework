@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Ray\Framework;
 
 use InvalidArgumentException;
-use Ray\Di\Attribute\Inject;
+use Ray\Di\Di\Inject;
 use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use ReflectionParameter;
