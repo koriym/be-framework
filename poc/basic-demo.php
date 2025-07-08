@@ -71,15 +71,15 @@ final class ErrorResponse
 final class Success
 {
     public function __construct(
-        #[Input] public readonly string $name,
-        #[Input] public readonly string $message
+        public readonly string $name,
+        public readonly string $message
     ) {}
 }
 
 final class Failure
 {
     public function __construct(
-        #[Input] public readonly string $error
+        public readonly string $error
     ) {}
 }
 
