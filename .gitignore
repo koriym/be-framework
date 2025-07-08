@@ -1,0 +1,26 @@
+# Composer
+/vendor/
+composer.lock
+
+# POC specific ignores
+/poc/vendor/
+/poc/composer.lock
+/poc/.phpunit.result.cache
+/poc/build/
+
+# IDE
+/.idea/
+/.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Cache
+/cache/
+/tmp/

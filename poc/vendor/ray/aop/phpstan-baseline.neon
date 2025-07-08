@@ -1,6 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Used function method_intercept not found\\.$#"
-			count: 1
-			path: src/AspectPecl.php
