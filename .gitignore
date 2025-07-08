@@ -4,6 +4,7 @@ composer.lock
 
 # POC specific ignores
 /poc/vendor/
+/poc/vendor-bin/
 /poc/composer.lock
 /poc/.phpunit.result.cache
 /poc/build/
