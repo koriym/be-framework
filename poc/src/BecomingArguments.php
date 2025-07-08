@@ -62,7 +62,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
     /**
      * Resolves #[Input] parameters from the current object's properties
      */
-    private function resolveInputParameter(ReflectionParameter $param, array $properties): mixed
+    protected function resolveInputParameter(ReflectionParameter $param, array $properties): mixed
     {
         $paramName = $param->getName();
 
