@@ -4,120 +4,85 @@ declare(strict_types=1);
 
 namespace Ray\Framework;
 
-use InvalidArgumentException;
 use Ray\Di\Di\Inject;
+use Ray\Di\InjectorInterface;
+use Ray\Framework\Debug\DebugLoggerInterface;
+use Ray\Framework\Debug\EchoDebugLogger;
 use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use ReflectionParameter;
 
 use function get_object_vars;
-use function sprintf;
-use function var_dump;
 
 /**
  * Debug version of BecomingArguments with verbose logging
+ *
+ * Uses composition to wrap BecomingArguments and add debug logging
+ * without modifying the original class or requiring inheritance.
  */
 final class DebugBecomingArguments implements BecomingArgumentsInterface
 {
+    public function __construct(
+        private BecomingArguments $becomingArguments,
+        private DebugLoggerInterface $logger = new EchoDebugLogger(),
+    ) {
+    }
+
     public function __invoke(object $current, string $becoming): array
     {
-        echo "\n=== DebugBecomingArguments ===\n";
-        echo 'Current object: ' . $current::class . "\n";
-        echo 'Becoming: ' . $becoming . "\n";
+        $this->logger->debug("\n=== DebugBecomingArguments ===");
+        $this->logger->debug('Current object: ' . $current::class);
+        $this->logger->debug('Becoming: ' . $becoming);
 
         $properties = get_object_vars($current);
-        echo "Available properties:\n";
-        var_dump($properties);
+        $this->logger->dump('Available properties', $properties);
 
         $targetClass = new ReflectionClass($becoming);
         $constructor = $targetClass->getConstructor();
 
         if ($constructor === null) {
-            echo "No constructor found\n";
+            $this->logger->debug('No constructor found');
 
             return [];
         }
 
-        $args = [];
-        echo "\nProcessing constructor parameters:\n";
+        $this->logger->debug("\nProcessing constructor parameters:");
 
+        // Log parameter details before processing
         foreach ($constructor->getParameters() as $param) {
-            echo '- Parameter: ' . $param->getName() . "\n";
-
-            $inputAttrs = $param->getAttributes(Input::class);
-            $injectAttrs = $param->getAttributes(Inject::class);
-
-            echo '  #[Input]: ' . (empty($inputAttrs) ? 'No' : 'Yes') . "\n";
-            echo '  #[Inject]: ' . (empty($injectAttrs) ? 'No' : 'Yes') . "\n";
-
-            $this->validateParameterAttributes($param);
-
-            if (! empty($inputAttrs)) {
-                $paramName = $param->getName();
-
-                if (isset($properties[$paramName])) {
-                    $value = $properties[$paramName];
-                    echo '  Resolved from properties: ';
-                    var_dump($value);
-                    $args[$paramName] = $value;
-                } elseif ($param->isDefaultValueAvailable()) {
-                    $value = $param->getDefaultValue();
-                    echo '  Using default value: ';
-                    var_dump($value);
-                    $args[$paramName] = $value;
-                } else {
-                    echo "  ERROR: Required parameter missing!\n";
-
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            'Required #[Input] parameter "%s" is missing from object properties in %s::%s',
-                            $paramName,
-                            $becoming,
-                            $constructor->getName(),
-                        ),
-                    );
-                }
-            } else {
-                echo "  Skipping (for DI container)\n";
-            }
+            $this->logParameterDetails($param, $properties);
         }
 
-        echo "\nFinal resolved args:\n";
-        var_dump($args);
-        echo "=== End Debug ===\n\n";
+        // Delegate to the original BecomingArguments for actual processing
+        $args = $this->becomingArguments->__invoke($current, $becoming);
+
+        $this->logger->dump('Final resolved args', $args);
+        $this->logger->debug('=== End Debug ===\n');
 
         return $args;
     }
 
-    private function validateParameterAttributes(ReflectionParameter $param): void
+    private function logParameterDetails(ReflectionParameter $param, array $properties): void
     {
+        $this->logger->debug('- Parameter: ' . $param->getName());
+
         $hasInput = ! empty($param->getAttributes(Input::class));
         $hasInject = ! empty($param->getAttributes(Inject::class));
 
-        if (! $hasInput && ! $hasInject) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Parameter "%s" in %s::%s must have either #[Input] or #[Inject] attribute. ' .
-                    'Ray.Framework requires explicit dependency declaration for safety and clarity. ' .
-                    'Use #[Input] if this should come from the previous object, ' .
-                    'or #[Inject] if this should come from the DI container.',
-                    $param->getName(),
-                    $param->getDeclaringClass()->getName(),
-                    $param->getDeclaringFunction()->getName(),
-                ),
-            );
-        }
+        $this->logger->debug('  #[Input]: ' . ($hasInput ? 'Yes' : 'No'));
+        $this->logger->debug('  #[Inject]: ' . ($hasInject ? 'Yes' : 'No'));
 
-        if ($hasInput && $hasInject) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Parameter "%s" in %s::%s cannot have both #[Input] and #[Inject] attributes simultaneously. ' .
-                    'These attributes are mutually exclusive to ensure clear and unambiguous parameter semantics.',
-                    $param->getName(),
-                    $param->getDeclaringClass()->getName(),
-                    $param->getDeclaringFunction()->getName(),
-                ),
-            );
+        if ($hasInput) {
+            $paramName = $param->getName();
+            if (isset($properties[$paramName])) {
+                $this->logger->dump('  Available in properties', $properties[$paramName]);
+            } elseif ($param->isDefaultValueAvailable()) {
+                $this->logger->dump('  Has default value', $param->getDefaultValue());
+            } else {
+                $this->logger->debug('  ERROR: Required parameter missing!');
+            }
+        } else {
+            $this->logger->debug('  Will be resolved from DI container');
         }
     }
 }
