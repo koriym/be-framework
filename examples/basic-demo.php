@@ -15,12 +15,14 @@ declare(strict_types=1);
  * - The elimination of external control flow
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../poc/vendor/autoload.php';
 
 use Ray\Framework\Ray;
-use Ray\Framework\SimpleInjector;
-use Ray\Framework\Attribute\Input;
-use Ray\Framework\Attribute\Be;
+use Ray\Di\Injector;
+use Ray\Di\AbstractModule;
+use Ray\Di\Di\Inject;
+use Ray\InputQuery\Attribute\Input;
+use Ray\Framework\Be;
 
 // =============================================================================
 // DESTINY TYPES
@@ -119,14 +121,14 @@ final class ValidationAttempt
      * Uses the provided validator to check the input data. If valid, sets the `being` property to a Success instance with processed data; otherwise, sets it to a Failure instance with error details.
      */
     public function __construct(
-        #[Input] string $data,
-        DataValidator $validator,
-        DataProcessor $processor
+        #[Input] string $value,
+        #[Inject] DataValidator $validator,
+        #[Inject] DataProcessor $processor
     ) {
         // The existential question: Who am I?
-        $this->being = $validator->isValid($data)
-            ? new Success($processor->process($data))
-            : new Failure($validator->getErrors($data), $data);
+        $this->being = $validator->isValid($value)
+            ? new Success($processor->process($value))
+            : new Failure($validator->getErrors($value), $value);
     }
 
     // I carry my destiny within me
@@ -142,7 +144,7 @@ final class SuccessfulValidation
     public readonly \DateTimeImmutable $timestamp;
 
     public function __construct(
-        Success $being  // Parameter name matches the property name
+        #[Input] Success $being  // Parameter name matches the property name
     ) {
         $this->message = "Successfully processed: {$being->data}";
         $this->timestamp = new \DateTimeImmutable();
@@ -159,11 +161,24 @@ final class FailedValidation
     public readonly \DateTimeImmutable $timestamp;
 
     public function __construct(
-        Failure $being  // Parameter name matches the property name
+        #[Input] Failure $being  // Parameter name matches the property name
     ) {
         $this->message = "Processing failed: {$being->reason}";
         $this->originalData = $being->originalData;
         $this->timestamp = new \DateTimeImmutable();
+    }
+}
+
+// =============================================================================
+// DEPENDENCY INJECTION MODULE
+// =============================================================================
+
+class DemoModule extends AbstractModule
+{
+    protected function configure(): void
+    {
+        $this->bind(DataValidator::class)->toInstance(new DataValidator());
+        $this->bind(DataProcessor::class)->toInstance(new DataProcessor());
     }
 }
 
@@ -174,9 +189,7 @@ final class FailedValidation
 echo "=== Type-Driven Metamorphosis Demo ===\n\n";
 
 // Set up dependency injection
-$injector = new SimpleInjector();
-$injector->singleton(DataValidator::class, new DataValidator());
-$injector->singleton(DataProcessor::class, new DataProcessor());
+$injector = new Injector(new DemoModule());
 
 // Create Ray executor
 $ray = new Ray($injector);
@@ -186,7 +199,7 @@ echo "Demo 1: Valid Data\n";
 echo "Input: 'hello world'\n";
 
 $result1 = $ray(new RawData('hello world'));
-echo "Status: {$result1->status}\n";
+echo "Result: " . $result1::class . "\n";
 echo "Message: {$result1->message}\n";
 echo "Timestamp: " . $result1->timestamp->format('Y-m-d H:i:s') . "\n\n";
 
@@ -195,9 +208,11 @@ echo "Demo 2: Invalid Data\n";
 echo "Input: 'invalid data'\n";
 
 $result2 = $ray(new RawData('invalid data'));
-echo "Status: {$result2->status}\n";
+echo "Result: " . $result2::class . "\n";
 echo "Message: {$result2->message}\n";
-echo "Original Data: {$result2->originalData}\n";
+if (isset($result2->originalData)) {
+    echo "Original Data: {$result2->originalData}\n";
+}
 echo "Timestamp: " . $result2->timestamp->format('Y-m-d H:i:s') . "\n\n";
 
 // Demo 3: Empty data
@@ -205,9 +220,11 @@ echo "Demo 3: Empty Data\n";
 echo "Input: ''\n";
 
 $result3 = $ray(new RawData(''));
-echo "Status: {$result3->status}\n";
+echo "Result: " . $result3::class . "\n";
 echo "Message: {$result3->message}\n";
-echo "Original Data: '{$result3->originalData}'\n";
+if (isset($result3->originalData)) {
+    echo "Original Data: '{$result3->originalData}'\n";
+}
 echo "Timestamp: " . $result3->timestamp->format('Y-m-d H:i:s') . "\n\n";
 
 echo "=== Key Insights ===\n";
