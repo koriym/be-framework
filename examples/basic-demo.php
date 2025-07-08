@@ -177,8 +177,8 @@ class DemoModule extends AbstractModule
 {
     protected function configure(): void
     {
-        $this->bind(DataValidator::class)->toInstance(new DataValidator());
-        $this->bind(DataProcessor::class)->toInstance(new DataProcessor());
+        $this->bind(DataValidator::class);
+        $this->bind(DataProcessor::class);
     }
 }
 
