@@ -1,4 +1,4 @@
-さっk# Ray.Framework POC アーキテクチャ評価
+k# Ray.Framework POC アーキテクチャ評価
 
 > 実装から得られた技術的洞察とアーキテクチャ分析
 
