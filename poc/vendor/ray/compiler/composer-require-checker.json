@@ -1,0 +1,17 @@
+{
+  "symbol-whitelist": [
+    "null", "true", "false",
+    "static", "self", "parent",
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void", "object",
+    "Attribute", "ReflectionAttribute",
+    "PhpParser",
+    "PhpParser\\BuilderFactory", "PhpParser\\Node", "PhpParser\\NodeAbstract", "PhpParser\\Node\\Arg",
+    "PhpParser\\Node\\Expr", "PhpParser\\Node\\Expr\\ArrayItem", "PhpParser\\Node\\Expr\\Array_",
+    "PhpParser\\Node\\Expr\\Array_", "PhpParser\\Node\\Expr\\Assign", "PhpParser\\Node\\Expr\\ConstFetch",
+    "PhpParser\\Node\\Expr\\FuncCall", "PhpParser\\Node\\Expr\\MethodCall", "PhpParser\\Node\\Expr\\New_",
+    "PhpParser\\Node\\Expr\\PropertyFetch", "PhpParser\\Node\\Expr\\Variable", "PhpParser\\Node\\Name",
+    "PhpParser\\Node\\FullyQualified", "PhpParser\\Node\\Scalar\\DNumber", "PhpParser\\Node\\Scalar\\LNumber",
+    "PhpParser\\Node\\Scalar\\String_", "PhpParser\\Node\\Stmt\\Return_", "PhpParser\\ParserFactory",
+    "PhpParser\\PrettyPrinter\\Standard", "PhpParser\\Node\\Name\\FullyQualified"
+  ]
+}

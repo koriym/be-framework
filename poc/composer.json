@@ -1,0 +1,100 @@
+{
+    "name": "ray/framework",
+    "description": "Ontological Programming framework - objects that exist, transform, and become",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Akihito Koriyama",
+            "email": "akihito.koriyama@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "ray/di": "^2.18"
+    },
+    "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8",
+        "phpunit/phpunit": "^12.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ray\\Framework\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ray\\Framework\\": [
+                "tests",
+                "tests/Fake"
+            ]
+        }
+    },
+    "scripts": {
+        "bin": "echo 'bin not installed'",
+        "test": "phpunit",
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage phpunit --coverage-text --coverage-html=build/coverage",
+        "phpdbg": "phpdbg -qrr phpunit --coverage-text --coverage-html ./build/coverage --coverage-clover=build/coverage.xml",
+        "pcov": "php -dextension=pcov.so -d pcov.enabled=1 phpunit --coverage-text --coverage-html=build/coverage --coverage-clover=build/coverage.xml",
+        "cs": "phpcs",
+        "cs-fix": "phpcbf src tests",
+        "phpstan": "phpstan analyse -c phpstan.neon",
+        "psalm": "psalm --show-info=false",
+        "phpmd": "phpmd text ./phpmd.xml",
+        "baseline": "phpstan analyse -c phpstan.neon --generate-baseline --allow-empty-baseline && psalm --set-baseline=psalm-baseline.xml",
+        "crc": "composer-require-checker check ./composer.json",
+        "metrics": "phpmetrics --report-html=build/metrics --exclude=Exception src",
+        "clean": [
+            "phpstan clear-result-cache",
+            "psalm --clear-cache"
+        ],
+        "sa": [
+            "@phpstan",
+            "@psalm"
+        ],
+        "tests": [
+            "@cs",
+            "@sa",
+            "@test"
+        ],
+        "build": [
+            "@clean",
+            "@cs",
+            "@sa",
+            "@coverage",
+            "@crc",
+            "@metrics"
+        ],
+        "post-install-cmd": "@composer bin all install --ansi",
+        "post-update-cmd": "@composer bin all update --ansi"
+    },
+    "scripts-descriptions": {
+        "bin": "bamarni/composer-bin-plugin command",
+        "test": "Run unit tests",
+        "coverage": "Generate test coverage report",
+        "phpdbg": "Generate test coverage report (phpdbg)",
+        "pcov": "Generate test coverage report (pcov)",
+        "cs": "Check the coding style",
+        "cs-fix": "Fix the coding style",
+        "phpmd": "Analyze PHP code for potential issues",
+        "clean": "Remove temporary files",
+        "psalm": "Analyze code for type safety using Psalm",
+        "phpstan": "Analyze code for errors using PHPStan",
+        "sa": "Run static analysis",
+        "baseline": "Generate baseline for PHPStan and Psalm",
+        "metrics": "Build metrics report",
+        "crc": "Run composer require checker",
+        "tests": "Run tests and quality checks",
+        "build": "Build project"
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
+    },
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": true,
+            "forward-command": true
+        }
+    }
+}

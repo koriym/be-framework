@@ -1,0 +1,70 @@
+{
+    "name": "ray/compiler",
+    "description": "A dependency injection compiler for Ray.Di",
+    "keywords": ["di",
+        "src", "codegen"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Akihito Koriyama",
+            "email": "akihito.koriyama@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "doctrine/cache": "^1.10 || ^2.1",
+        "doctrine/annotations": "^1.8 || ^2.0",
+        "koriym/attributes": "^1.0",
+        "koriym/null-object": "^1.0",
+        "koriym/param-reader": "^1.0",
+        "koriym/printo": "^1.0",
+        "ray/aop": "^2.14",
+        "ray/di": "^2.18"
+    },
+    "require-dev": {
+        "ext-pdo": "*",
+        "bamarni/composer-bin-plugin": "^1.4",
+        "phpunit/phpunit": "^8.5.41 || ^9.5"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Ray\\Compiler\\": ["src", "src-deprecated"]
+        },
+        "files": [
+            "src-function/prototype.php",
+            "src-function/singleton.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ray\\Compiler\\": ["tests", "tests/Fake"],
+            "Ray\\Di\\": "tests/Fake/Assisted"
+        },
+        "files": ["tests/deleteFiles.php"]
+    },
+    "scripts": {
+        "test": "phpunit --log-junit=build/junit.xml",
+        "tests": ["@cs", "@sa", "@test"],
+        "coverage": ["php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage"],
+        "pcov": ["php -dextension=pcov.so -d pcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage  --coverage-clover=coverage.xml"],
+        "cs": ["phpcs --standard=./phpcs.xml src tests"],
+        "cs-fix": ["phpcbf src src-function tests"],
+        "clean": ["phpstan clear-result-cache", "psalm --clear-cache", "rm -rf tests/tmp/*.php"],
+        "sa": ["psalm --show-info=false", "phpstan analyse -c phpstan.neon --no-progress"],
+        "metrics": ["@test", "phpmetrics --report-html=build/metrics --exclude=Exception --log-junit=build/junit.xml --junit=build/junit.xml src"],
+        "phpmd": ["phpmd src text ./phpmd.xml"],
+        "build": ["@cs", "@sa", "@pcov", "@metrics"]
+    },
+    "extra": {
+        "bamarni-bin": {
+            "forward-command": true,
+            "bin-links": true
+        }
+    }
+}

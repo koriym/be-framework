@@ -17,18 +17,19 @@ declare(strict_types=1);
 
 namespace Example\UserRegistration;
 
-use Ray\Framework\Attribute\Input;
-use Ray\Framework\Attribute\Be;
+use Ray\InputQuery\Attribute\Input;
+use Ray\Framework\Be;
+use Ray\Di\Di\Inject;
 
 // =============================================================================
 // DESTINY TYPE CLASSES
 // =============================================================================
 
 /**
- * Represents a new user who can be created.
- * This type embodies the "new user" destiny.
+ * Represents user input ready for registration.
+ * This type embodies the "new user registration" destiny.
  */
-final class NewUser
+final class UserInput
 {
     public function __construct(
         public readonly string $email,
@@ -106,8 +107,8 @@ final class ValidatedRegistration
         #[Input] public readonly string $email,
         #[Input] public readonly string $password,
         #[Input] string $passwordConfirmation,
-        UserValidator $validator,
-        UserRepository $userRepo
+        #[Inject] UserValidator $validator,
+        #[Inject] UserRepository $userRepo
     ) {
         // The constructor IS the validation
         // If any validation fails, this object never exists
@@ -118,11 +119,11 @@ final class ValidatedRegistration
         // The existential question: Who will I become?
         $this->being = $userRepo->existsByEmail($this->email)
             ? new ConflictingUser($this->email)
-            : new NewUser($this->email, $this->password);
+            : new UserInput($this->email, $this->password);
     }
     
     // I carry my destiny within me
-    public readonly NewUser|ConflictingUser $being;
+    public readonly UserInput|ConflictingUser $being;
 }
 
 // =============================================================================
@@ -131,7 +132,7 @@ final class ValidatedRegistration
 
 // Notice: No RegistrationRouter class needed!
 // The framework automatically routes based on the $being property type:
-// - If $being instanceof NewUser → UnverifiedUser::class
+// - If $being instanceof UserInput → UnverifiedUser::class
 // - If $being instanceof ConflictingUser → UserConflict::class
 //
 // This is the power of Type-Driven Metamorphosis:
@@ -158,10 +159,10 @@ final class UnverifiedUser
     public readonly string $verificationToken;
 
     public function __construct(
-        NewUser $being,  // Parameter name matches the property name
-        PasswordHasher $hasher,
-        TokenGenerator $tokenGenerator,
-        UserRepository $userRepo
+        #[Input] UserInput $being,  // From previous object property
+        #[Inject] PasswordHasher $hasher,  // From DI container
+        #[Inject] TokenGenerator $tokenGenerator,
+        #[Inject] UserRepository $userRepo
     ) {
         // Hash the password for secure storage
         $hashedPassword = $hasher->hash($being->password);
@@ -191,17 +192,17 @@ final class UnverifiedUser
  * - Verification email was sent
  * - Registration process completed
  */
-#[Be(JsonResponse::class, statusCode: 201)]
+#[Be(JsonResponse::class)]
 final class VerificationEmailSent
 {
-    public readonly string $message = 'Registration successful. Please check your email to verify your account.';
+    public readonly string $message;
     public readonly string $userId;
 
     public function __construct(
         #[Input] string $userId,
         #[Input] string $verificationToken,
-        UserEmailResolver $emailResolver,
-        MailerInterface $mailer
+        #[Inject] UserEmailResolver $emailResolver,
+        #[Inject] MailerInterface $mailer
     ) {
         // Resolve the user's email from their ID
         $email = $emailResolver->getEmailForUser($userId);
@@ -211,6 +212,7 @@ final class VerificationEmailSent
 
         // Store the user ID for the response
         $this->userId = $userId;
+        $this->message = 'Registration successful. Please check your email to verify your account.';
     }
 }
 
@@ -227,16 +229,17 @@ final class VerificationEmailSent
  * - Email already exists in system
  * - Appropriate error response needed
  */
-#[Be(JsonResponse::class, statusCode: 409)]
+#[Be(JsonResponse::class)]
 final class UserConflict
 {
-    public readonly string $error = 'User already exists';
+    public readonly string $error;
     public readonly string $message;
 
     public function __construct(
-        ConflictingUser $being  // Parameter name matches the property name
+        #[Input] ConflictingUser $being
     ) {
         // Create a user-friendly error message
+        $this->error = 'User already exists';
         $this->message = "The email address '{$being->email}' is already registered.";
     }
 }

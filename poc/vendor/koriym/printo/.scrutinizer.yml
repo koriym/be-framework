@@ -1,0 +1,8 @@
+imports:
+    - javascript
+    - php
+filter:
+    paths: [src/*]
+    excluded_paths: [src/print_o.php]
+tools:
+    external_code_coverage: true

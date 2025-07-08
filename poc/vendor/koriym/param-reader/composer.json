@@ -1,0 +1,85 @@
+{
+    "name": "koriym/param-reader",
+    "description": "An annotation/attribute reader for method parameter",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Akihito Koriyama",
+            "email": "akihito.koriyama@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "doctrine/annotations": "^1.13 || ^2.0"
+    },
+    "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.4",
+        "phpunit/phpunit": "^8.5.24"
+    },
+    "autoload": {
+        "psr-4": {
+            "Koriym\\ParamReader\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Koriym\\ParamReader\\": [
+                "tests",
+                "tests/Fake"
+            ]
+        }
+    },
+    "scripts": {
+        "setup": "php bin/setup.php",
+        "test": "./vendor/bin/phpunit",
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage",
+        "phpdbg": "phpdbg -qrr ./vendor/bin/phpunit --coverage-text --coverage-html ./build/coverage --coverage-clover=coverage.xml",
+        "pcov": "php -dextension=pcov.so -d pcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage  --coverage-clover=coverage.xml",
+        "cs": "./vendor/bin/phpcs",
+        "cs-fix": "./vendor/bin/phpcbf src tests",
+        "metrics": "./vendor/bin/phpmetrics --report-html=build/metrics --exclude=Exception src",
+        "clean": [
+            "./vendor/bin/phpstan clear-result-cache",
+            "./vendor/bin/psalm --clear-cache"
+        ],
+        "sa": [
+            "./vendor/bin/phpstan analyse -c phpstan.neon",
+            "psalm --show-info=true"
+        ],
+        "tests": [
+            "@cs",
+            "@sa",
+            "@test"
+        ],
+        "build": [
+            "@clean",
+            "@cs",
+            "@sa",
+            "@pcov",
+            "@metrics"
+        ],
+        "post-install-cmd": "@composer bin all install --ansi",
+        "post-update-cmd": "@composer bin all update --ansi"
+    },
+    "scripts-descriptions": {
+        "test": "Run unit tests",
+        "coverage": "Generate test coverage report",
+        "phpdbg": "Generate test coverage report (phpdbg)",
+        "pcov": "Generate test coverage report (pcov)",
+        "cs": "Check the coding style",
+        "cs-fix": "Fix the coding style",
+        "clean": "Delete tmp files",
+        "sa": "Run static analysis",
+        "metrics": "Build metrics report",
+        "tests": "Run tests and quality checks",
+        "build": "Build project"
+    },
+    "config": {
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true
+        }
+    },
+    "suggest": {
+        "koriym/attributes": "doctrine/annotation Reader interface in order to read both doctrine/annotation and PHP 8 attributes."
+    }
+}
