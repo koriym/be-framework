@@ -84,6 +84,16 @@ if ($aiScore > 0.9 || $human->intuitionSaysYes($bio)) {
 }
 ```
 
+## Real-World Augmentation in Action
+
+Consider a real scenario: A loan application from a freelance artist with irregular income but strong community ties. The traditional system would reject based on income volatility. But in an augmented system:
+
+- The AI notices patterns: consistent payment history despite irregular income, strong social network indicating stability
+- The human loan officer adds context: recognizes the applicant's work in gentrifying neighborhoods, understanding the social value beyond financial metrics
+- The system combines both insights: approves with modified terms that account for income patterns
+
+Neither AI nor human alone would have made this nuanced decision. The augmentation created a better outcome for both the lender and the borrower.
+
 ## The Open/Closed Principle for an Open Future
 
 The software principle of being "open for extension, closed for modification" takes on new meaning in the age of AI. When we don't know what factors will matter tomorrow, our designs must accommodate unknown future requirements without restructuring.
