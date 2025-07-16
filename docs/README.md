@@ -42,7 +42,19 @@ This whitepaper details **Ray.Framework**, the concrete PHP implementation of On
         * Programming as poetry and philosophy
         * The quantum nature of existence in code
 
-### 4. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
+### 4. **[Ontological Metamorphose vs. DCI: A Comparative Philosophical Reflection](./philosophy/metamorphose-vs-dci.md)**
+
+> **"In DCI, roles are assigned like actors in a play; in Metamorphose, existence evolves like a living being—internalizing meaning to become the next self."**
+
+This comparative analysis explores the fundamental differences between DCI (Data-Context-Interaction) and the Metamorphose paradigm, examining how each approaches change, meaning, and existence in software.
+
+*   **Read this to understand:**
+  * The distinction between external role assignment (DCI) and internal evolution (Metamorphose).
+  * How meaning fragments vs. internalizes in different paradigms.
+  * The philosophical implications of "theater vs. growth" in software design.
+  * Why Metamorphose transcends DCI's partial shift from space to time.
+
+### 5. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **(This document is implicitly referenced, but would be the next logical step)**
 
@@ -53,7 +65,7 @@ This manifesto is the practical "how-to" guide for architects and developers. It
   * The `Unchanged Name Principle` for maintaining semantic continuity.
   * Advanced testing strategies for ontological systems.
 
-### 5. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
+### 6. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **"The highest intelligence is knowing when to seek the wisdom of others."**
 
@@ -64,7 +76,7 @@ This document introduces a mature pattern for handling real-world complexity. It
   * The `Undetermined` state and the `#[Accept]` attribute.
   * How this pattern makes systems more robust and realistic.
 
-### 6. **Supporting Documents: The Ecosystem Tools**
+### 7. **Supporting Documents: The Ecosystem Tools**
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
@@ -72,11 +84,13 @@ These documents describe the powerful tooling and integrations that emerge from 
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
   * Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
 
-*   **[ALPS and Ray.Framework: Bidirectional Generation](./alps-ray-bidirectional-generation.md)**
+*   **[ALPS and Ray.Framework: Bidirectional Generation](./integration/alps-ray-bidirectional-generation.md)**
   * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
   * See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
 
 ## The Complete Vision
+
+Imagine what we can create with new vision — from doing to being, building software that defines existence itself rather than layering instructions.
 
 This collection of documents presents more than just a framework. It offers a complete, cohesive vision for software development where:
 
@@ -123,7 +137,30 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   データフローにおける線形チェーンと並列アセンブリの二重性
     *   自動ストリーミングと型透明性の実現方法
 
-### 3. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
+### 3. **[空間から時間へ：変容パラダイム](./philosophy/from-space-to-time.md)**
+
+> **「空間的ナビゲーションから時間的変容への転換」**
+
+このエッセイは、プログラミングパラダイムの根本的な変化について論じます。従来の空間的アプローチから時間軸を重視したアプローチへの移行を詳しく説明します。
+
+*   **理解すべき内容:**
+    *   静的な構造から動的な変容への移行
+    *   時間軸を考慮したプログラミング手法
+    *   存在論的プログラミングの理論的基盤
+
+### 4. **[存在論的変容 vs. DCI：比較分析](./philosophy/metamorphose-vs-dci.md)**
+
+> **「DCIと変容パラダイムの本質的違いを探る」**
+
+この比較分析では、DCI（Data-Context-Interaction）パターンと変容パラダイムの違いを詳しく検討します。
+
+*   **理解すべき内容:**
+    *   DCIの外部役割割り当てと変容の内部進化の違い
+    *   意味の扱い方における根本的相違
+    *   ソフトウェア設計哲学の比較
+    *   変容パラダイムの優位性
+
+### 5. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **（この文書は暗黙的に参照されていますが、次の論理的ステップとなります）**
 
@@ -134,7 +171,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   意味論的継続性を維持するための`名前不変原則`
     *   存在論的システムのための高度なテスト戦略
 
-### 4. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
+### 6. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **「最高の知性は、他者の知恵を求める時を知ることである。」**
 
@@ -145,7 +182,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   `未決定`状態と`#[Accept]`属性
     *   このパターンがシステムをより堅牢で現実的にする方法
 
-### 5. **サポート文書：エコシステムツール**
+### 7. **サポート文書：エコシステムツール**
 
 これらの文書では、このパラダイムから生まれる強力なツールと統合について説明します。
 
@@ -153,11 +190,13 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   アーキテクチャ自体が最終的な、常に最新のドキュメントとなる方法を発見
     *   システムの構造、意味論、データフローを自動的に可視化する`ray-tree`コマンドについて学習
 
-*   **[ALPSとRay.Framework：双方向生成](./alps-ray-bidirectional-generation.md)**
+*   **[ALPSとRay.Framework：双方向生成](./integration/alps-ray-bidirectional-generation.md)**
     *   設計仕様（ALPS）と実行可能コード間の双方向生成の革命的概念を探求
     *   単一のプロトコル非依存設計がREST、GraphQL、またはgRPC APIを生成する方法を確認
 
 ## 完全なビジョン
+
+Imagine what we can create with new vision — doingからbeingへ、命令を重ねるのではなく存在そのものを定義し構築するソフトウェアへ。
 
 このドキュメント群は単なるフレームワーク以上のものを提示します。ソフトウェア開発のための完全で一貫したビジョンを提供します：
 
