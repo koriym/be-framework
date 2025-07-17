@@ -453,6 +453,12 @@ Everything flows. All things are impermanent. And in this constant becoming, we 
 
 [The references section would include relevant philosophical works from both Eastern and Western traditions, programming paradigm literature, and the Ray.Framework documentation]
 
+### Related Documentation
+
+For a comprehensive overview of how the concepts presented in this paper fit into the broader Being Paradigm framework, see:
+
+- **[Being Paradigm Structure](../framework/being-paradigm-structure.md)** - Complete conceptual map showing the hierarchical relationship between ontological principles and practical implementation patterns
+
 ---
 
 ## Acknowledgments
