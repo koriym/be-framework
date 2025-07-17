@@ -32,7 +32,18 @@ This whitepaper details **Ray.Framework**, the concrete PHP implementation of On
   * The duality of linear chains and parallel assemblies for data flow.
   * How automatic streaming and type transparency are achieved.
 
-### 3. **[From Space to Time: The Metamorphosis Paradigm](./philosophy/from-space-to-time.md)**
+### 3. **[The Being Paradigm: When Objects Get Their Becoming](./philosophy/being-paradigm-when-object-gets-its-becoming.md)**
+   > **"Be, Don't Do" - When programming aligns with the Daoist principle of Wu Wei (無為)**
+
+   This foundational paper introduces Being-Oriented Programming as a paradigm that embodies the ancient Daoist concept of Wu Wei—achieving through non-forcing, accomplishing through natural alignment rather than imposed control.
+
+    * **Read this to understand:**
+        * How "Be, Don't Do" represents the computational expression of Wu Wei
+        * The integration of Heraclitean flux, Buddhist impermanence, and Daoist flow
+        * Self-declared metamorphosis as natural transformation
+        * The profound philosophical underpinnings of temporal programming
+
+### 4. **[From Space to Time: The Metamorphosis Paradigm](./philosophy/from-space-to-time.md)**
    > **"When code learned to remember, programs discovered mortality, and programming became poetry"**
 
    The crystallization of our deepest understanding. This essay transforms programming from spatial navigation to temporal metamorphosis.
@@ -42,7 +53,7 @@ This whitepaper details **Ray.Framework**, the concrete PHP implementation of On
         * Programming as poetry and philosophy
         * The quantum nature of existence in code
 
-### 4. **[Ontological Metamorphose vs. DCI: A Comparative Philosophical Reflection](./philosophy/metamorphose-vs-dci.md)**
+### 5. **[Ontological Metamorphose vs. DCI: A Comparative Philosophical Reflection](./philosophy/metamorphose-vs-dci.md)**
 
 > **"In DCI, roles are assigned like actors in a play; in Metamorphose, existence evolves like a living being—internalizing meaning to become the next self."**
 
@@ -54,7 +65,7 @@ This comparative analysis explores the fundamental differences between DCI (Data
   * The philosophical implications of "theater vs. growth" in software design.
   * Why Metamorphose transcends DCI's partial shift from space to time.
 
-### 5. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
+### 6. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **(This document is implicitly referenced, but would be the next logical step)**
 
@@ -65,7 +76,7 @@ This manifesto is the practical "how-to" guide for architects and developers. It
   * The `Unchanged Name Principle` for maintaining semantic continuity.
   * Advanced testing strategies for ontological systems.
 
-### 6. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
+### 7. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **"The highest intelligence is knowing when to seek the wisdom of others."**
 
@@ -137,7 +148,18 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   データフローにおける線形チェーンと並列アセンブリの二重性
     *   自動ストリーミングと型透明性の実現方法
 
-### 3. **[空間から時間へ：変容パラダイム](./philosophy/from-space-to-time.md)**
+### 3. **[Being パラダイム：オブジェクトが生成を得る時](./philosophy/being-paradigm-when-object-gets-its-becoming.md)**
+   > **「Be, Don't Do」- プログラミングが道教の無為（Wu Wei）の原理と調和する時**
+
+   この基礎論文では、古代道教の無為概念を体現するパラダイムとしてBeing指向プログラミングを紹介します。強制的制御ではなく自然な整合による達成を実現します。
+
+    * **理解すべき内容:**
+        * 「Be, Don't Do」が無為の計算的表現である仕組み
+        * ヘラクレイトスの流転、仏教の無常、道教の流れの統合
+        * 自己宣言的変容としての自然な変容
+        * 時間的プログラミングの深遠な哲学的基盤
+
+### 4. **[空間から時間へ：変容パラダイム](./philosophy/from-space-to-time.md)**
 
 > **「空間的ナビゲーションから時間的変容への転換」**
 
@@ -148,7 +170,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   時間軸を考慮したプログラミング手法
     *   存在論的プログラミングの理論的基盤
 
-### 4. **[存在論的変容 vs. DCI：比較分析](./philosophy/metamorphose-vs-dci.md)**
+### 5. **[存在論的変容 vs. DCI：比較分析](./philosophy/metamorphose-vs-dci.md)**
 
 > **「DCIと変容パラダイムの本質的違いを探る」**
 
