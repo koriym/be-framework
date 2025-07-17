@@ -2,7 +2,7 @@
 
 ## Introduction: Why Ancient Wisdom Matters Now
 
-In 1973, a researcher at Xerox PARC watched a program crash. The error message read: "Stack overflow in process controller." Forty years later, we still struggle with the same fundamental problem: the more we try to control software systems, the more they resist our control.
+In 1973, a researcher at Xerox PARC watched a program crash. The error message read: "Stack overflow in process controller." Over half a century later, we still struggle with the same fundamental problem: the more we try to control software systems, the more they resist our control.
 
 Meanwhile, 2,500 years ago, Lao Tzu observed that water, despite being the softest substance, defeats the hardest rock. This principle—wu wei (無為), often translated as "non-action"—offers profound insights for modern software design. It suggests that effective systems emerge not from forceful control, but from understanding and aligning with natural patterns.
 
@@ -114,14 +114,14 @@ This naming is not accidental. It reflects deep assumptions about how systems sh
 
 The controller's implicit philosophy mirrors Descartes' famous cogito:
 
-```
+```text
 Descartes: "I think, therefore I am"
 Controller: "I control, therefore I am"
 ```
 
 But reality quickly intervenes:
 
-```
+```text
 Controller: "I control, therefore I am"
 Reality: "You control, therefore you fail"
 ```
@@ -132,7 +132,7 @@ This failure is not a matter of poor implementation. It's inherent in the concep
 
 Watch the lifecycle of a typical controller:
 
-**Act 1: The Humble Beginning**
+#### Act 1: The Humble Beginning
 ```php
 class UserController {
     public function show($id) {
@@ -142,7 +142,7 @@ class UserController {
 ```
 Clean, simple, focused. The controller merely connects request to response.
 
-**Act 2: Growing Responsibilities**
+#### Act 2: Growing Responsibilities
 ```php
 class UserController {
     public function show($id) {
@@ -162,7 +162,7 @@ class UserController {
 ```
 The controller accumulates responsibilities: authorization, logging, data loading, transformation.
 
-**Act 3: The God Complex**
+#### Act 3: The God Complex
 ```php
 class UserController extends BaseController {
     use Authorizable, Loggable, Cacheable, Transformable;
@@ -267,7 +267,7 @@ Successful design recognizes and aligns with these patterns rather than imposing
 
 ### Principles of Flow-Based Design
 
-**1. Enable, Don't Control**
+#### Enable, Don't Control
 
 Instead of controlling components, create conditions where they can function naturally:
 
@@ -286,19 +286,22 @@ class OrderController {
 // Flow-based
 #[Be(TaxCalculated::class)]
 class ValidatedOrder {
+    public readonly float $amount;
+    public readonly float $tax;
+
     public function __construct(
         Order $order,
         TaxCalculator $calculator
     ) {
         $this->amount = $order->amount;
-        $this->tax = $calculator->calculate($order);
+        $this->tax     = $calculator->calculate($order);
     }
 }
 ```
 
 The flow-based approach doesn't control the tax calculator—it provides context for natural calculation.
 
-**2. Constraints as Channels**
+#### Constraints as Channels
 
 Like riverbanks that guide water without controlling each molecule, constraints can guide flow without micromanagement:
 
@@ -311,7 +314,7 @@ public readonly Success|Failure $result;
 // No controller decides—the type itself guides
 ```
 
-**3. Composition Over Orchestration**
+#### Composition Over Orchestration
 
 Instead of orchestrating interactions, compose capabilities:
 
@@ -625,9 +628,9 @@ In our context: The system controls nothing, yet everything functions. This isn'
 
 When we stop forcing and start understanding, when we cease controlling and begin enabling, when we abandon doing for being—our systems transform. They become not what we command them to be, but what they naturally are meant to become.
 
-This is the way of water. This is the wisdom of wu wei. This is the future of software design.
+The way of water guides us. Wu wei wisdom illuminates the path. The future of software design flows naturally from these principles.
 
-制御なき調和—harmony without control. Not an absence, but a presence. Not emptiness, but fullness. Not chaos, but the deepest possible order.
+制御なき調和—harmony without control. Not an absence, but a presence. Not emptiness but fullness; nor chaos, but the deepest possible order.
 
 The journey continues, but the direction is clear. Flow with the current, not against it. Enable transformation, don't force it. Understand deeply, control lightly.
 
