@@ -43,7 +43,18 @@ This whitepaper details **Ray.Framework**, the concrete PHP implementation of On
         * Self-declared metamorphosis as natural transformation
         * The profound philosophical underpinnings of temporal programming
 
-### 4. **[From Space to Time: The Metamorphosis Paradigm](./philosophy/from-space-to-time.md)**
+### 4. **[Wu Wei and Software Design: The Art of Natural Transformation](./philosophy/wu-wei-software-design.md)**
+   > **"Water defeats the hardest rock through patient transformation—so too can software systems achieve power through natural flow rather than forceful control"**
+
+   This practical exploration demonstrates how the ancient Daoist principle of Wu Wei (無為) can revolutionize modern software architecture. Moving from control-oriented to flow-oriented design.
+
+    * **Read this to discover:**
+        * How Wu Wei principles solve the "controller problem" in software design
+        * The transformation from spatial control to temporal flow
+        * Practical patterns for implementing "accomplishing through non-forcing"
+        * The deep connection between ancient wisdom and modern programming challenges
+
+### 5. **[From Space to Time: The Metamorphosis Paradigm](./philosophy/from-space-to-time.md)**
    > **"When code learned to remember, programs discovered mortality, and programming became poetry"**
 
    The crystallization of our deepest understanding. This essay transforms programming from spatial navigation to temporal metamorphosis.
@@ -53,7 +64,7 @@ This whitepaper details **Ray.Framework**, the concrete PHP implementation of On
         * Programming as poetry and philosophy
         * The quantum nature of existence in code
 
-### 5. **[Ontological Metamorphose vs. DCI: A Comparative Philosophical Reflection](./philosophy/metamorphose-vs-dci.md)**
+### 6. **[Ontological Metamorphose vs. DCI: A Comparative Philosophical Reflection](./philosophy/metamorphose-vs-dci.md)**
 
 > **"In DCI, roles are assigned like actors in a play; in Metamorphose, existence evolves like a living being—internalizing meaning to become the next self."**
 
@@ -65,7 +76,7 @@ This comparative analysis explores the fundamental differences between DCI (Data
   * The philosophical implications of "theater vs. growth" in software design.
   * Why Metamorphose transcends DCI's partial shift from space to time.
 
-### 6. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
+### 7. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **(This document is implicitly referenced, but would be the next logical step)**
 
@@ -76,7 +87,7 @@ This manifesto is the practical "how-to" guide for architects and developers. It
   * The `Unchanged Name Principle` for maintaining semantic continuity.
   * Advanced testing strategies for ontological systems.
 
-### 7. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
+### 8. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **"The highest intelligence is knowing when to seek the wisdom of others."**
 
@@ -87,7 +98,7 @@ This document introduces a mature pattern for handling real-world complexity. It
   * The `Undetermined` state and the `#[Accept]` attribute.
   * How this pattern makes systems more robust and realistic.
 
-### 7. **Supporting Documents: The Ecosystem Tools**
+### 9. **Supporting Documents: The Ecosystem Tools**
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
@@ -159,7 +170,18 @@ We invite you to embark on this journey and discover a new way to create softwar
         * 自己宣言的変容としての自然な変容
         * 時間的プログラミングの深遠な哲学的基盤
 
-### 4. **[空間から時間へ：変容パラダイム](./philosophy/from-space-to-time.md)**
+### 4. **[Wu Weiとソフトウェア設計：自然変容の技法](./philosophy/wu-wei-software-design.md)**
+   > **「水は忍耐強い変容によって最も硬い岩を打ち負かす—ソフトウェアシステムも強制的制御ではなく自然な流れによって力を実現できる」**
+
+   この実践的探求では、古代道教の無為（Wu Wei）の原理が現代ソフトウェアアーキテクチャをどのように革新できるかを実証します。制御指向から流れ指向設計への移行を示します。
+
+    * **発見すべき内容:**
+        * Wu Wei原理がソフトウェア設計の「コントローラー問題」を解決する方法
+        * 空間的制御から時間的流れへの変容
+        * 「無為而成」（無為にして成る）を実装する実践的パターン
+        * 古代の知恵と現代プログラミング課題の深い結びつき
+
+### 5. **[空間から時間へ：変容パラダイム](./philosophy/from-space-to-time.md)**
 
 > **「空間的ナビゲーションから時間的変容への転換」**
 
@@ -170,7 +192,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   時間軸を考慮したプログラミング手法
     *   存在論的プログラミングの理論的基盤
 
-### 5. **[存在論的変容 vs. DCI：比較分析](./philosophy/metamorphose-vs-dci.md)**
+### 6. **[存在論的変容 vs. DCI：比較分析](./philosophy/metamorphose-vs-dci.md)**
 
 > **「DCIと変容パラダイムの本質的違いを探る」**
 
@@ -182,7 +204,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   ソフトウェア設計哲学の比較
     *   変容パラダイムの優位性
 
-### 5. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
+### 7. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **（この文書は暗黙的に参照されていますが、次の論理的ステップとなります）**
 
@@ -193,7 +215,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   意味論的継続性を維持するための`名前不変原則`
     *   存在論的システムのための高度なテスト戦略
 
-### 6. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
+### 8. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **「最高の知性は、他者の知恵を求める時を知ることである。」**
 
@@ -204,7 +226,7 @@ We invite you to embark on this journey and discover a new way to create softwar
     *   `未決定`状態と`#[Accept]`属性
     *   このパターンがシステムをより堅牢で現実的にする方法
 
-### 7. **サポート文書：エコシステムツール**
+### 9. **サポート文書：エコシステムツール**
 
 これらの文書では、このパラダイムから生まれる強力なツールと統合について説明します。
 
