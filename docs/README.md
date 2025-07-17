@@ -102,6 +102,11 @@ This document introduces a mature pattern for handling real-world complexity. It
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
+*   **[Being Paradigm Structure](./framework/being-paradigm-structure.md)**
+  * Navigate the complete conceptual map of Being-Oriented Programming.
+  * Understand the hierarchical relationship between ontological principles and practical implementation.
+  * Essential reference for grasping the full scope of the paradigm.
+
 *   **[Architecture as Documentation](./framework/architecture-as-documentation.md)**
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
   * Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
@@ -109,6 +114,10 @@ These documents describe the powerful tooling and integrations that emerge from 
 *   **[ALPS and Ray.Framework: Bidirectional Generation](./integration/alps-ray-bidirectional-generation.md)**
   * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
   * See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
+
+*   **[Framework Terminology](./framework/terminology.md)**
+*   Essential glossary of terms used throughout the Ontological Programming paradigm and Ray.Framework.
+*   Defines key concepts like "being," "metamorphosis," and ontological patterns for quick reference.
 
 ## The Complete Vision
 
@@ -120,8 +129,6 @@ This collection of documents presents more than just a framework. It offers a co
 *   **Implementation** (`Ray.Framework`) provides the "How".
 *   **Patterns** (`#[Accept]`, `Metamorphosis`) provide the "What".
 *   **Tooling** (`Architecture as Documentation`, `ALPS Generation`) provides the "With".
-
-We invite you to embark on this journey and discover a new way to create software—not by writing fragile instructions, but by defining robust, beautiful, and correct existences.
 
 ---
 
@@ -230,6 +237,11 @@ We invite you to embark on this journey and discover a new way to create softwar
 
 これらの文書では、このパラダイムから生まれる強力なツールと統合について説明します。
 
+*   **[Being Paradigm構造](./framework/being-paradigm-structure.md)**
+    *   Being指向プログラミングの完全な概念マップをナビゲート
+    *   存在論的原理と実践的実装の階層関係を理解
+    *   パラダイムの全範囲を把握するための必須リファレンス
+
 *   **[ドキュメントとしてのアーキテクチャ](./framework/architecture-as-documentation.md)**
     *   アーキテクチャ自体が最終的な、常に最新のドキュメントとなる方法を発見
     *   システムの構造、意味論、データフローを自動的に可視化する`ray-tree`コマンドについて学習
@@ -237,6 +249,10 @@ We invite you to embark on this journey and discover a new way to create softwar
 *   **[ALPSとRay.Framework：双方向生成](./integration/alps-ray-bidirectional-generation.md)**
     *   設計仕様（ALPS）と実行可能コード間の双方向生成の革命的概念を探求
     *   単一のプロトコル非依存設計がREST、GraphQL、またはgRPC APIを生成する方法を確認
+
+*   **[フレームワーク用語集](./framework/terminology.md)**
+    *   存在論的プログラミング・パラダイムとRay.Framework全体で使用される用語の必須用語集。
+    *   「being」、「metamorphosis」、存在論的パターンなどのキー概念を定義し、クイックリファレンスとして利用可能。
 
 ## 完全なビジョン
 
@@ -248,5 +264,3 @@ Imagine what we can create with new vision — doingからbeingへ、命令を�
 *   **実装**（`Ray.Framework`）が「どのように」を提供
 *   **パターン**（`#[Accept]`、`変容`）が「何を」を提供
 *   **ツール**（`ドキュメントとしてのアーキテクチャ`、`ALPS生成`）が「何によって」を提供
-
-私たちは、この旅に乗り出し、ソフトウェアを作成する新しい方法を発見することをお勧めします—脆弱な指示を書くのではなく、堅牢で美しく、正しい存在を定義することによって。
