@@ -102,6 +102,11 @@ This document introduces a mature pattern for handling real-world complexity. It
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
+*   **[Being Paradigm Structure](./framework/being-paradigm-structure.md)**
+  * Navigate the complete conceptual map of Being-Oriented Programming.
+  * Understand the hierarchical relationship between ontological principles and practical implementation.
+  * Essential reference for grasping the full scope of the paradigm.
+
 *   **[Architecture as Documentation](./framework/architecture-as-documentation.md)**
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
   * Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
@@ -229,6 +234,11 @@ We invite you to embark on this journey and discover a new way to create softwar
 ### 9. **サポート文書：エコシステムツール**
 
 これらの文書では、このパラダイムから生まれる強力なツールと統合について説明します。
+
+*   **[Being Paradigm構造](./framework/being-paradigm-structure.md)**
+    *   Being指向プログラミングの完全な概念マップをナビゲート
+    *   存在論的原理と実践的実装の階層関係を理解
+    *   パラダイムの全範囲を把握するための必須リファレンス
 
 *   **[ドキュメントとしてのアーキテクチャ](./framework/architecture-as-documentation.md)**
     *   アーキテクチャ自体が最終的な、常に最新のドキュメントとなる方法を発見
