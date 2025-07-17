@@ -130,8 +130,6 @@ This collection of documents presents more than just a framework. It offers a co
 *   **Patterns** (`#[Accept]`, `Metamorphosis`) provide the "What".
 *   **Tooling** (`Architecture as Documentation`, `ALPS Generation`) provides the "With".
 
-We invite you to embark on this journey and discover a new way to create software—not by writing fragile instructions, but by defining robust, beautiful, and correct existences.
-
 ---
 
 # 存在論的プログラミング・パラダイムのドキュメント
@@ -266,5 +264,3 @@ Imagine what we can create with new vision — doingからbeingへ、命令を�
 *   **実装**（`Ray.Framework`）が「どのように」を提供
 *   **パターン**（`#[Accept]`、`変容`）が「何を」を提供
 *   **ツール**（`ドキュメントとしてのアーキテクチャ`、`ALPS生成`）が「何によって」を提供
-
-私たちは、この旅に乗り出し、ソフトウェアを作成する新しい方法を発見することをお勧めします—脆弱な指示を書くのではなく、堅牢で美しく、正しい存在を定義することによって。
