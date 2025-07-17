@@ -33,7 +33,7 @@ That feeling of "this is weird" or "why would anyone do this?" is precious. It s
 Nobel laureates Daniel Kahneman and Amos Tversky discovered that humans feel losses twice as intensely as equivalent gains. When evaluating new paradigms, we unconsciously focus on what we might lose (comfort, expertise, familiar tools) rather than what we might gain.
 
 **Example:**
-```
+```text
 Loss of 3 familiar concepts (feels like -6)
 Gain of 10 new capabilities (feels like +10)
 Actual net gain: +7
