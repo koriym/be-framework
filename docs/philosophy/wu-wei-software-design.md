@@ -635,3 +635,11 @@ The way of water guides us. Wu wei wisdom illuminates the path. The future of so
 The journey continues, but the direction is clear. Flow with the current, not against it. Enable transformation, don't force it. Understand deeply, control lightly.
 
 In the end, the most profound systems are those that need no controller, because each part knows its way.
+
+---
+
+## Related Documentation
+
+For a comprehensive overview of how Wu Wei principles fit into the broader Being Paradigm framework, see:
+
+- **[Being Paradigm Structure](../framework/being-paradigm-structure.md)** - Complete conceptual map showing how Wu Wei principles integrate with ontological programming concepts and practical implementation patterns
