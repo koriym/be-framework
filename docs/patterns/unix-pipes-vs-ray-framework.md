@@ -165,26 +165,26 @@ fi
 
 This external control is clear and flexible.
 
-### 5.2 Ray.Framework: Branching as Transformation
+### 5.2 Ray.Framework: Type-Driven Branching
 
-Ray.Framework embeds branching within the flow using the Traffic Controller pattern:
+Ray.Framework embeds branching within the flow using type-driven metamorphosis:
 
 ```php
-final class PaymentRouter {
+#[Be([SuccessfulPayment::class, FailedPayment::class])]
+final class PaymentAttempt {
     public function __construct(
         #[Input] PaymentRequest $request,
-        PaymentGateway $gateway,
-        SuccessfulPaymentFactory $successPath,
-        FailedPaymentFactory $failurePath
+        PaymentGateway $gateway
     ) {
         $result = $gateway->process($request);
         
-        if ($result->isSuccessful()) {
-            $successPath->create($result);
-        } else {
-            $failurePath->create($result->error);
-        }
+        // Objects discover their own nature
+        $this->being = $result->isSuccessful()
+            ? new Success($result)
+            : new Failure($result->error);
     }
+    
+    public readonly Success|Failure $being;
 }
 ```
 
