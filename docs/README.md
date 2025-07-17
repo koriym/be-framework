@@ -115,6 +115,10 @@ These documents describe the powerful tooling and integrations that emerge from 
   * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
   * See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
 
+*   **[Framework Terminology](./framework/terminology.md)**
+*   Essential glossary of terms used throughout the Ontological Programming paradigm and Ray.Framework.
+*   Defines key concepts like "being," "metamorphosis," and ontological patterns for quick reference.
+
 ## The Complete Vision
 
 Imagine what we can create with new vision — from doing to being, building software that defines existence itself rather than layering instructions.
@@ -247,6 +251,10 @@ We invite you to embark on this journey and discover a new way to create softwar
 *   **[ALPSとRay.Framework：双方向生成](./integration/alps-ray-bidirectional-generation.md)**
     *   設計仕様（ALPS）と実行可能コード間の双方向生成の革命的概念を探求
     *   単一のプロトコル非依存設計がREST、GraphQL、またはgRPC APIを生成する方法を確認
+
+*   **[フレームワーク用語集](./framework/terminology.md)**
+    *   存在論的プログラミング・パラダイムとRay.Framework全体で使用される用語の必須用語集。
+    *   「being」、「metamorphosis」、存在論的パターンなどのキー概念を定義し、クイックリファレンスとして利用可能。
 
 ## 完全なビジョン
 
