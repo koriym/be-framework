@@ -1,6 +1,6 @@
 # Outlook is Gold: Programming Paradigms as World Understanding
 
-*A Philosophical Dialogue on the Nature of Computational Reality*
+### A Philosophical Dialogue on the Nature of Computational Reality
 
 > *"The eye sees only what the mind is prepared to comprehend."* — Robertson Davies  
 > *"Outlook is worth 80 IQ points."* — Alan Kay
@@ -360,7 +360,7 @@ But perhaps it's worth infinitely more—for the right outlook opens doors to en
 
 ---
 
-*"We thought we were debating programming techniques. We were actually debating the nature of existence."*
+> *"We thought we were debating programming techniques. We were actually debating the nature of existence."*
 
 ## References
 
