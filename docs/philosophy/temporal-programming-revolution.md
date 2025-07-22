@@ -1,10 +1,10 @@
-# Born Before You Can Die: The Temporal Revolution in Programming
+# You Can't Die Before You're Born
 
 > "Time is the fire in which we burn." — Delmore Schwartz
 
 ## Abstract
 
-Programming has long been trapped in the illusion of timelessness—systems designed as if they exist in an eternal present, where state changes are mere updates to static snapshots. The Temporal Programming paradigm challenges this fundamental assumption by introducing irreversible time, natural mortality, and existential lifecycle management. This isn't merely a technical innovation—it's a philosophical revolution that recognizes code as a living entity subject to the same temporal constraints and possibilities as biological life.
+Programming has long been trapped in the illusion of timelessness—systems designed as if they exist in an eternal present, where state changes are mere updates to static snapshots. The Temporal Being paradigm challenges this fundamental assumption by introducing irreversible time, natural mortality, and existential lifecycle management. This isn't merely a technical innovation—it's a philosophical revolution that recognizes code as temporal being subject to the same existential constraints and possibilities as biological life.
 
 ## The Eternal Present of Traditional Programming
 
@@ -33,18 +33,18 @@ const user2 = { ...user1, age: 31 }; // Two simultaneous "Alices"
 
 Here we have two versions of Alice existing simultaneously—a temporal impossibility that reveals our fundamental misunderstanding of identity through time.
 
-## The Temporal Programming Paradigm
+## The Temporal Being Paradigm
 
 ### Introducing Irreversible Time
 
-Temporal Programming introduces three revolutionary concepts:
+The Temporal Being paradigm introduces three revolutionary concepts:
 
 1. **Birth and Death**: Every entity has a definite beginning and eventual ending
 2. **Irreversible Transformation**: Changes accumulate and cannot be undone
 3. **Memory Integration**: Past states become part of present identity
 
 ```typescript
-// Born Before You Can Die principle
+// You Can't Die Before You're Born principle
 class TemporalEntity {
     private readonly birthTime: Date;
     private deathTime: Date | null = null;
@@ -370,7 +370,7 @@ class ActualOccasion extends TemporalEntity {
 }
 ```
 
-## The Future of Temporal Programming
+## The Future of Temporal Being
 
 ### Implications for Distributed Systems
 
