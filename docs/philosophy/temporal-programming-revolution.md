@@ -48,7 +48,7 @@ The Temporal Being paradigm introduces three revolutionary concepts:
 class TemporalEntity {
     private readonly birthTime: Date;
     private deathTime: Date | null = null;
-    private readonly memories: TransformationEvent[] = [];
+    protected readonly memories: TransformationEvent[] = [];
     
     constructor(initialState: any) {
         this.birthTime = new Date();
@@ -64,7 +64,8 @@ class TemporalEntity {
         this.memories.push(transformation);
         
         // Irreversible change—we are not the same entity
-        return transformation.apply();
+        // The new entity inherits all memories through the transformation
+        return transformation.apply(this.memories);
     }
     
     die(cause: DeathCause): void {
@@ -76,9 +77,9 @@ class TemporalEntity {
         return this.deathTime !== null;
     }
     
-    getAge(): Duration {
-        const endTime = this.deathTime || new Date();
-        return Duration.between(this.birthTime, endTime);
+    getAgeMs(): number {
+        const endTime = this.deathTime ?? new Date();
+        return endTime.getTime() - this.birthTime.getTime();
     }
     
     getLifeStory(): LifeStory {
@@ -285,7 +286,7 @@ describe('Temporal Entity Lifecycle', () => {
 
 ## Philosophical Foundations
 
-### Heraclitian Flux
+### Heraclitean Flux
 
 "No man ever steps in the same river twice" — Heraclitus
 
