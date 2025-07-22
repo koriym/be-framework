@@ -318,6 +318,8 @@ Everything changes, nothing remains static:
 
 ```typescript
 class ImpermanentEntity extends TemporalEntity {
+    private decayTimer?: NodeJS.Timeout;
+    
     constructor(initialState: any) {
         super(initialState);
         
@@ -326,7 +328,7 @@ class ImpermanentEntity extends TemporalEntity {
     }
     
     private startNaturalDecay(): void {
-        setInterval(() => {
+        this.decayTimer = setInterval(() => {
             if (!this.isDead()) {
                 this.naturalDecay();
             }
@@ -339,6 +341,15 @@ class ImpermanentEntity extends TemporalEntity {
         
         if (entropy.exceedsLifeThreshold()) {
             this.die(new NaturalDecayCause());
+        }
+    }
+    
+    die(cause: DeathCause): void {
+        super.die(cause);
+        // Stop the decay process when entity dies
+        if (this.decayTimer) {
+            clearInterval(this.decayTimer);
+            this.decayTimer = undefined;
         }
     }
 }
