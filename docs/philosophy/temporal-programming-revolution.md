@@ -316,7 +316,7 @@ class River extends TemporalEntity {
 Everything changes, nothing remains static:
 
 ```typescript
-class ImprnanentEntity extends TemporalEntity {
+class ImpermanentEntity extends TemporalEntity {
     constructor(initialState: any) {
         super(initialState);
         
