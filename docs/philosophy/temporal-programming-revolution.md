@@ -85,6 +85,15 @@ class TemporalEntity {
     getLifeStory(): LifeStory {
         return new LifeStory(this.memories);
     }
+    
+    getBirthTime(): Date {
+        return this.birthTime;
+    }
+    
+    getInitialState(): any {
+        const birthEvent = this.memories.find(m => m instanceof BirthEvent);
+        return birthEvent ? birthEvent.initialState : null;
+    }
 }
 ```
 
@@ -398,7 +407,9 @@ class DistributedTemporal {
             throw new QuorumDeathError("Insufficient living entities for consensus");
         }
         
-        return this.achieve(consensus(aliveEntities.map(e => e.getCurrentWisdom())));
+        // Achieve consensus through wisdom aggregation
+        const aggregatedWisdom = aliveEntities.map(e => e.getCurrentWisdom());
+        return this.achieveConsensus(aggregatedWisdom);
     }
 }
 ```
