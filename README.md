@@ -1,20 +1,20 @@
-# Ray.Framework Concept
+# Be Framework Concept
 
-> "Just as light rays pass through a prism—instant, pure, and transformed."
+> "Objects undergo metamorphosis through constructor injection - a continuous process of becoming."
 
-Ray.Framework is a PHP framework that implements the Metamorphic Programming paradigm, where data transformation occurs through pure constructor-driven metamorphosis.
+Be Framework is a PHP framework that implements the Metamorphic Programming paradigm, where data transformation occurs through pure constructor-driven metamorphosis.
 
 ## Philosophy
 
-Ray.Framework emerged from a simple yet profound question: What if we programmed by defining what can exist, rather than what should happen?
+Be Framework emerged from a simple yet profound question: What if we programmed by defining what can exist, rather than what should happen?
 
-Building upon the philosophical foundations of Ray.Di's dependency injection pattern, Ray.Framework treats all data transformations as light passing through prisms—instant, pure, and transformed. Each object accepts its inevitable premises and transforms itself into a new, perfect form through constructor injection.
+Building upon the philosophical foundations of Ray.Di's dependency injection pattern, Be Framework treats all data transformations as metamorphosis—continuous becoming through constructor injection. Each object accepts its inevitable premises and transforms itself into a new, perfect form through the process of becoming.
 
 ## Core Concepts
 
 ### Metamorphosis Classes
 
-Every class in Ray.Framework is a Metamorphosis Class—a self-contained, immutable stage of transformation:
+Every class in Be Framework is a Metamorphosis Class—a self-contained, immutable stage of transformation:
 
 ```php
 #[Be(ProcessedData::class)]
@@ -41,12 +41,12 @@ final class ProcessedData
 }
 ```
 
-### The Light Ray Execution
+### The Becoming Execution
 
 ```php
-$ray = new Ray($injector);
-$result = $ray(new RawData('input'));
-echo $result->processed; // Transformation complete
+$becoming = new Becoming($injector);
+$finalObject = $becoming(new RawData('input'));
+echo $finalObject->processed; // Transformation complete
 ```
 
 ## Key Principles
@@ -82,7 +82,7 @@ Comprehensive reading guide with detailed explanations, implementation guides, F
 
 ## Key Paradigm Shifts
 
-Ray.Framework represents fundamental shifts in how we think about programs:
+Be Framework represents fundamental shifts in how we think about programs:
 
 - From **doing** to **being**
 - From **instructions** to **transformations**
@@ -91,11 +91,11 @@ Ray.Framework represents fundamental shifts in how we think about programs:
 
 ## Status
 
-Ray.Framework is currently in the conceptual and early implementation phase. The ideas presented here emerged from deep dialogues about the nature of programming and represent a new approach to building applications.
+Be Framework is currently in the conceptual and early implementation phase. The ideas presented here emerged from deep dialogues about the nature of programming and represent a new approach to building applications.
 
 ## The Journey
 
-Ray.Framework emerged from recognizing universal patterns in data transformation. What started as a specific solution for HTTP data processing revealed deeper principles about how objects transform through constructor injection. 
+Be Framework emerged from recognizing universal patterns in data transformation. What started as a specific solution for HTTP data processing revealed deeper principles about how objects transform through constructor injection. 
 
 These concepts emerged from decades of resource-oriented architecture framework development by Akihito Koriyama, along with extensive experience in OOP, REST, and diverse software engineering disciplines. All core concepts, ideas, and patterns presented here originated from this practical foundation. AI assisted in the evolution of these thoughts and handled all documentation, but the fundamental paradigms and design patterns were conceived through years of hands-on software architecture and development.
 
@@ -110,4 +110,4 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
-*"Like opening a window to let in sunlight, Ray.Framework opens PHP to let data flow naturally, transform completely, and emerge perfectly."*
+*"Be Framework opens PHP to the natural process of becoming—objects that flow, transform, and emerge as their true selves."*

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework\Debug;
+namespace Be\Framework\Debug;
 
 /**
  * Simple logging interface for debug purposes

@@ -2,48 +2,48 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework\Tests;
+namespace Be\Framework\Tests;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Injector;
-use Ray\Framework\BecomingArguments;
-use Ray\Framework\Exception\TypeMatchingFailure;
-use Ray\Framework\FakeActiveUser;
-use Ray\Framework\FakeBranchingInput;
-use Ray\Framework\FakeFailingBranch;
-use Ray\Framework\FakeFinishedProcess;
-use Ray\Framework\FakeInputData;
-use Ray\Framework\FakeInvalidParameter;
-use Ray\Framework\FakeNoMetamorphosis;
-use Ray\Framework\FakePremiumUser;
-use Ray\Framework\FakeRegularUser;
-use Ray\Framework\FakeResult;
-use Ray\Framework\FakeService;
-use Ray\Framework\FakeUserInput;
-use Ray\Framework\FakeValidatedUser;
-use Ray\Framework\FakeWithInject;
-use Ray\Framework\FakeWithNamed;
-use Ray\Framework\Ray;
+use Be\Framework\BecomingArguments;
+use Be\Framework\Exception\TypeMatchingFailure;
+use Be\Framework\FakeActiveUser;
+use Be\Framework\FakeBranchingInput;
+use Be\Framework\FakeFailingBranch;
+use Be\Framework\FakeFinishedProcess;
+use Be\Framework\FakeInputData;
+use Be\Framework\FakeInvalidParameter;
+use Be\Framework\FakeNoMetamorphosis;
+use Be\Framework\FakePremiumUser;
+use Be\Framework\FakeRegularUser;
+use Be\Framework\FakeResult;
+use Be\Framework\FakeService;
+use Be\Framework\FakeUserInput;
+use Be\Framework\FakeValidatedUser;
+use Be\Framework\FakeWithInject;
+use Be\Framework\FakeWithNamed;
+use Be\Framework\Becoming;
 use Throwable;
 
-final class RayTest extends TestCase
+final class BecomingTest extends TestCase
 {
-    private Ray $ray;
+    private Becoming $becoming;
 
     protected function setUp(): void
     {
         $injector = new Injector();
-        $this->ray = new Ray($injector);
+        $this->becoming = new Becoming($injector);
     }
 
     public function testLinearMetamorphosis(): void
     {
         // ValidatedUser -> RegisteredUser -> ActiveUser
         $input = new FakeValidatedUser('John', 'john@example.com', 25);
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakeActiveUser::class, $result);
         $this->assertSame('John', $result->name);
@@ -57,7 +57,7 @@ final class RayTest extends TestCase
     {
         // BranchingInput -> PremiumUser (when isPremium = true)
         $input = new FakeBranchingInput('Premium John', 'premium@example.com', true);
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakePremiumUser::class, $result);
         $this->assertSame('Premium John', $result->name);
@@ -69,7 +69,7 @@ final class RayTest extends TestCase
     {
         // BranchingInput -> RegularUser (when isPremium = false, PremiumUser fails)
         $input = new FakeBranchingInput('Regular John', 'regular@example.com', false);
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakeRegularUser::class, $result);
         $this->assertSame('Regular John', $result->name);
@@ -81,7 +81,7 @@ final class RayTest extends TestCase
     {
         // NoMetamorphosis (no #[Be] attribute)
         $input = new FakeNoMetamorphosis('Hello World');
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakeNoMetamorphosis::class, $result);
         $this->assertSame($input, $result); // Same instance returned
@@ -119,7 +119,7 @@ final class RayTest extends TestCase
     {
         // UserInput has no #[Be] attribute, so no metamorphosis
         $input = new FakeUserInput('Direct User', 'direct@example.com', 30);
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakeUserInput::class, $result);
         $this->assertSame($input, $result); // Same instance returned
@@ -132,7 +132,7 @@ final class RayTest extends TestCase
     {
         // Test that properties are preserved through the metamorphosis chain
         $input = new FakeValidatedUser('Chain Test', 'chain@example.com', 35);
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakeActiveUser::class, $result);
         $this->assertSame('Chain Test', $result->name);
@@ -148,11 +148,11 @@ final class RayTest extends TestCase
     public function testTypeMatchingFailure(): void
     {
         $this->expectException(TypeMatchingFailure::class);
-        $this->expectExceptionMessage('No matching class for becoming in [Ray\Framework\FakeFailingUserA, Ray\Framework\FakeFailingUserB]');
+        $this->expectExceptionMessage('No matching class for becoming in [Be\Framework\FakeFailingUserA, Be\Framework\FakeFailingUserB]');
 
         // This should fail because both FakeFailingUserA and FakeFailingUserB require parameters that are not provided
         $input = new FakeFailingBranch('Test User');
-        ($this->ray)($input);
+        ($this->becoming)($input);
     }
 
     public function testObjectPropertyInheritance(): void
@@ -160,7 +160,7 @@ final class RayTest extends TestCase
         // Test that object properties are passed to next transformation
         // FakeInputData -> FakeProcessingStep -> FakeFinishedProcess
         $input = new FakeInputData('hello world');
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakeFinishedProcess::class, $result);
 
@@ -177,7 +177,7 @@ final class RayTest extends TestCase
     {
         // Test with short input that should result in failure
         $input = new FakeInputData('hi');
-        $result = ($this->ray)($input);
+        $result = ($this->becoming)($input);
 
         $this->assertInstanceOf(FakeFinishedProcess::class, $result);
 

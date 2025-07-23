@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
 /**
  * Class with parameter that has no attributes - should trigger validation error

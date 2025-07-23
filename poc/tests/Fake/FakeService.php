@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
 /**
  * Simple service for DI testing
