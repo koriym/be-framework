@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
 /**
  * Interface for testing Named with object types

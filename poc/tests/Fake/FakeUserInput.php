@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
-use Ray\Framework\Be;
+use Be\Framework\Be;
 use Ray\InputQuery\Attribute\Input;
 
 /**

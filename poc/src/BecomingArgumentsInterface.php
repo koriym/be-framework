@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
 /**
  * Interface for resolving constructor arguments for metamorphosis transformations

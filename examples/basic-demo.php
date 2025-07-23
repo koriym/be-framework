@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Basic Type-Driven Metamorphosis Demo - Ray.Framework
+ * Basic Type-Driven Metamorphosis Demo - Be Framework
  *
  * This example demonstrates the core concept of Type-Driven Metamorphosis
  * where objects carry their own destiny through typed properties.
@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../poc/vendor/autoload.php';
 
-use Ray\Framework\Ray;
+use Be\Framework\Becoming;
 use Ray\Di\Injector;
 use Ray\Di\AbstractModule;
 use Ray\Di\Di\Inject;
@@ -191,41 +191,41 @@ echo "=== Type-Driven Metamorphosis Demo ===\n\n";
 // Set up dependency injection
 $injector = new Injector(new DemoModule());
 
-// Create Ray executor
-$ray = new Ray($injector);
+// Create Becoming executor
+$becoming = new Becoming($injector);
 
 // Demo 1: Successful processing
 echo "Demo 1: Valid Data\n";
 echo "Input: 'hello world'\n";
 
-$result1 = $ray(new RawData('hello world'));
-echo "Result: " . $result1::class . "\n";
-echo "Message: {$result1->message}\n";
-echo "Timestamp: " . $result1->timestamp->format('Y-m-d H:i:s') . "\n\n";
+$finalObject1 = $becoming(new RawData('hello world'));
+echo "Result: " . $finalObject1::class . "\n";
+echo "Message: {$finalObject1->message}\n";
+echo "Timestamp: " . $finalObject1->timestamp->format('Y-m-d H:i:s') . "\n\n";
 
 // Demo 2: Failed processing
 echo "Demo 2: Invalid Data\n";
 echo "Input: 'invalid data'\n";
 
-$result2 = $ray(new RawData('invalid data'));
-echo "Result: " . $result2::class . "\n";
-echo "Message: {$result2->message}\n";
-if (isset($result2->originalData)) {
-    echo "Original Data: {$result2->originalData}\n";
+$finalObject2 = $becoming(new RawData('invalid data'));
+echo "Result: " . $finalObject2::class . "\n";
+echo "Message: {$finalObject2->message}\n";
+if (isset($finalObject2->originalData)) {
+    echo "Original Data: {$finalObject2->originalData}\n";
 }
-echo "Timestamp: " . $result2->timestamp->format('Y-m-d H:i:s') . "\n\n";
+echo "Timestamp: " . $finalObject2->timestamp->format('Y-m-d H:i:s') . "\n\n";
 
 // Demo 3: Empty data
 echo "Demo 3: Empty Data\n";
 echo "Input: ''\n";
 
-$result3 = $ray(new RawData(''));
-echo "Result: " . $result3::class . "\n";
-echo "Message: {$result3->message}\n";
-if (isset($result3->originalData)) {
-    echo "Original Data: '{$result3->originalData}'\n";
+$finalObject3 = $becoming(new RawData(''));
+echo "Result: " . $finalObject3::class . "\n";
+echo "Message: {$finalObject3->message}\n";
+if (isset($finalObject3->originalData)) {
+    echo "Original Data: '{$finalObject3->originalData}'\n";
 }
-echo "Timestamp: " . $result3->timestamp->format('Y-m-d H:i:s') . "\n\n";
+echo "Timestamp: " . $finalObject3->timestamp->format('Y-m-d H:i:s') . "\n\n";
 
 echo "=== Key Insights ===\n";
 echo "1. No if-statements in the flow logic\n";

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
 use Ray\Di\Di\Inject;
 use Ray\Di\InjectorInterface;
-use Ray\Framework\Debug\DebugLoggerInterface;
-use Ray\Framework\Debug\EchoDebugLogger;
+use Be\Framework\Debug\DebugLoggerInterface;
+use Be\Framework\Debug\EchoDebugLogger;
 use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use ReflectionParameter;
