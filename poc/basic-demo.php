@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Ray\Di\AbstractModule;
-use Ray\Framework\Ray;
-use Ray\Framework\Be;
+use Be\Framework\Becoming;
+use Be\Framework\Be;
 use Ray\Di\Injector;
 use Ray\InputQuery\Attribute\Input;
 use Ray\Di\Di\Inject;
@@ -127,14 +127,14 @@ $injector = new Injector(new class extends AbstractModule{
     }
 });
 
-// Create Ray framework instance
-$ray = new Ray($injector);
+// Create Becoming framework instance
+$becoming = new Becoming($injector);
 
 $userNames = ['Alice', 'Bo', ''];
 
 foreach ($userNames as $name) {
     $userInput = new UserInput(name: $name);
-    $maybeUser = $ray($userInput);
+    $maybeUser = $becoming($userInput);
 
     if ($maybeUser instanceof ValidUser) {
         echo "'{$name}' -> ValidUser: {$maybeUser->being->name}\n";
