@@ -1,10 +1,10 @@
-# Ray.Framework: Programming as Metamorphosis
+# Be Framework: Programming as Metamorphosis
 
 > "Open a window, and sunlight streams in. Hold a prism to the light, let it play across that apple. See—the red becomes purple, becomes green, becomes something new. You can see it transforming, can't you?"
 
 ## Abstract
 
-Ray.Framework introduces the Metamorphic Programming paradigm, a novel approach that transforms data processing through pure constructor-driven metamorphosis. Building upon the philosophical foundations of Ray.Di's dependency injection pattern, this framework eliminates traditional complexity by treating all data transformations as light passing through prisms—instant, pure, and transformed. Through its radical constructor-only architecture, automatic streaming capabilities, and complete type transparency, Ray.Framework achieves what decades of framework evolution have pursued: making the framework itself disappear into the natural patterns of self-transformation.
+Be Framework introduces the Metamorphic Programming paradigm, a novel approach that transforms data processing through pure constructor-driven metamorphosis. Building upon the philosophical foundations of Ray.Di's dependency injection pattern, this framework eliminates traditional complexity by treating all data transformations as light passing through prisms—instant, pure, and transformed. Through its radical constructor-only architecture, automatic streaming capabilities, and complete type transparency, Be Framework achieves what decades of framework evolution have pursued: making the framework itself disappear into the natural patterns of self-transformation.
 
 > **Philosophical Foundation:** This whitepaper builds upon Ontological Programming principles. For the complete theoretical framework, see [Ontological Programming: A New Paradigm](ontological-programming-paper.md).
 
@@ -16,21 +16,21 @@ Ray.Framework introduces the Metamorphic Programming paradigm, a novel approach 
 
 ## 1. Introduction: Programming as Self-Transformation
 
-For decades, web frameworks have grown increasingly complex in their attempt to manage the inherent complexity of modern applications. Each generation adds new layers of abstraction, configuration systems, and architectural patterns that developers must learn and maintain. Ray.Framework reframes this evolutionary trajectory with a profound proposition: **What if programming were an act of self-transformation, where each object accepts its unchangeable circumstances and uses its given tools to become a new, better self?**
+For decades, web frameworks have grown increasingly complex in their attempt to manage the inherent complexity of modern applications. Each generation adds new layers of abstraction, configuration systems, and architectural patterns that developers must learn and maintain. Be Framework reframes this evolutionary trajectory with a profound proposition: **What if programming were an act of self-transformation, where each object accepts its unchangeable circumstances and uses its given tools to become a new, better self?**
 
-This paper introduces Ray.Framework, a powerful new approach to application development that emerged from a profound insight: software development mirrors personal growth. Just as individuals transform by accepting their reality and using their skills to evolve, each object in Ray.Framework does the same through pure constructor injection.
+This paper introduces Be Framework, a powerful new approach to application development that emerged from a profound insight: software development mirrors personal growth. Just as individuals transform by accepting their reality and using their skills to evolve, each object in Be Framework does the same through pure constructor injection.
 
 ### 1.1 The Genesis
 
-Ray.Framework began as a solution for transforming HTTP POST data into typed objects. However, this specific solution revealed a universal pattern: any flat data could be transformed into rich, typed objects through constructor injection. This recognition transformed a simple library into a comprehensive programming paradigm.
+Be Framework began as a solution for transforming HTTP POST data into typed objects. However, this specific solution revealed a universal pattern: any flat data could be transformed into rich, typed objects through constructor injection. This recognition transformed a simple library into a comprehensive programming paradigm.
 
 ### 1.2 The Core Philosophy
 
-At its heart, Ray.Framework is built upon a profound metaphor drawn from its predecessor Ray.Di:
+At its heart, Be Framework is built upon a profound metaphor drawn from its predecessor Ray.Di:
 
 > "Objects are injected from the interface, just as sun ray is injected when a window is opened."
 
-Ray.Framework extends this natural metaphor:
+Be Framework extends this natural metaphor:
 
 > "Objects are processed through constructor injection, just as light rays pass through a prism - instant, pure, and transformed."
 
@@ -48,17 +48,17 @@ This chain of self-transformation, where each perfected object becomes the premi
 
 ## 2. Theoretical Foundation: The Three Pillars of Revolution
 
-The Metamorphic Programming paradigm does not arise from a vacuum. It stands on the shoulders of giants, drawing inspiration from decades of software engineering principles such as the constructor-centric validation of Design by Contract, the state-as-types philosophy of functional programming, and the dependency inversion principle core to Ray.Di. However, Ray.Framework synthesizes these established ideas into a new, cohesive whole, bound by the powerful metaphor of metamorphosis, thus offering a fundamentally new perspective on application architecture.
+The Metamorphic Programming paradigm does not arise from a vacuum. It stands on the shoulders of giants, drawing inspiration from decades of software engineering principles such as the constructor-centric validation of Design by Contract, the state-as-types philosophy of functional programming, and the dependency inversion principle core to Ray.Di. However, Be Framework synthesizes these established ideas into a new, cohesive whole, bound by the powerful metaphor of metamorphosis, thus offering a fundamentally new perspective on application architecture.
 
 ### 2.1 The Metamorphosis Pattern
 
-While traditional frameworks employ middleware patterns that decorate and process requests incrementally, Ray.Framework introduces the **Metamorphosis Pattern**. This pattern models data transformation as complete metamorphosis:
+While traditional frameworks employ middleware patterns that decorate and process requests incrementally, Be Framework introduces the **Metamorphosis Pattern**. This pattern models data transformation as complete metamorphosis:
 
 ```
 Traditional Middleware:
 Request → [+auth] → [+validation] → [+headers] → Enhanced Request
 
-Ray.Framework Metamorphosis:
+Be Framework Metamorphosis:
 Egg → Larva → Pupa → Butterfly
 卵  → 幼虫  → 蛹   → 蝶
 ```
@@ -71,7 +71,7 @@ Key principles of metamorphosis:
 
 ### 2.2 Constructor Workshop Theory
 
-Ray.Framework reconceptualizes constructors as complete workshops of transformation:
+Be Framework reconceptualizes constructors as complete workshops of transformation:
 
 ```php
 final class JewelryInput {
@@ -104,11 +104,11 @@ final class JewelryInput {
 
 ### 2.3 The Internal Focus Principle
 
-One interesting aspect of Ray.Framework is its principle of internal focus:
+One interesting aspect of Be Framework is its principle of internal focus:
 
 > "Objects have zero external concern. They focus only on their own perfect completion."
 
-This mirrors the BEAR.Sunday philosophy where ResourceObjects only concern themselves with `$this->code`, `$this->headers`, and `$this->body`. In Ray.Framework, objects care only about their own metamorphosis.
+This mirrors the BEAR.Sunday philosophy where ResourceObjects only concern themselves with `$this->code`, `$this->headers`, and `$this->body`. In Be Framework, objects care only about their own metamorphosis.
 
 **The Liberation**: By freeing objects from external concerns, we enable them to achieve perfection in their limited scope. The system's complexity emerges not from intricate interdependencies, but from the composition of many perfect, simple transformations.
 
@@ -118,7 +118,7 @@ This mirrors the BEAR.Sunday philosophy where ResourceObjects only concern thems
 
 ### 3.1 Core Principles
 
-Ray.Framework's architecture rests on four fundamental principles that reflect its philosophy of self-transformation:
+Be Framework's architecture rests on four fundamental principles that reflect its philosophy of self-transformation:
 
 1. **Constructor-Only Processing**: All logic resides in constructors—the moment of birth and transformation
 2. **Public Readonly Properties**: All output is immutable and visible—the transformed self cannot be altered
@@ -127,7 +127,7 @@ Ray.Framework's architecture rests on four fundamental principles that reflect i
 
 ### 3.2 The Self-Organizing Pipeline
 
-Ray.Framework introduces an interesting concept: objects that know their own destiny. Through the `#[Be]` attribute, each object declares what it will become:
+Be Framework introduces an interesting concept: objects that know their own destiny. Through the `#[Be]` attribute, each object declares what it will become:
 
 ```php
 #[Be(BlogSaver::class)]
@@ -190,8 +190,8 @@ final class JsonResponse {
 **The Beauty**: No external orchestration needed. Each object knows its path. The framework simply enables the journey:
 
 ```php
-$ray = new Ray($injector);
-$response = $ray(new BlogInput($_POST['title'], $_POST['content']));
+$becoming = new Becoming($injector);
+$response = $becoming(new BlogInput($_POST['title'], $_POST['content']));
 echo $response->json;  // The butterfly emerges
 ```
 
@@ -206,10 +206,10 @@ $tenant = $request->getAttribute('tenant');    // Does this even exist?
 $permissions = $request->getAttribute('perms'); // Or was it 'permissions'?
 ```
 
-Ray.Framework ensures complete transparency:
+Be Framework ensures complete transparency:
 
 ```php
-// Ray.Framework: Crystal Clear Contracts
+// Be Framework: Crystal Clear Contracts
 public function __construct(
     #[Input] public readonly User $user,         // I am User
     #[Input] public readonly TenantId $tenant,   // I am TenantId
@@ -229,7 +229,7 @@ public function __construct(
 
 ## 4. The Duality of Metamorphosis: Linear Chains and Parallel Assemblies
 
-The Metamorphosis pattern is not confined to a single, linear path. Its true power is revealed in its inherent duality, accommodating both sequential enrichment and parallel assembly. This duality allows Ray.Framework to model not just simple transformations, but complex, graph-like data-flow architectures, using the same core principles.
+The Metamorphosis pattern is not confined to a single, linear path. Its true power is revealed in its inherent duality, accommodating both sequential enrichment and parallel assembly. This duality allows Be Framework to model not just simple transformations, but complex, graph-like data-flow architectures, using the same core principles.
 
 ### 4.1 Pattern I: The Linear Metamorphic Chain
 
@@ -349,13 +349,13 @@ This pattern's essence lies in how it re-frames the problem:
 
 ### 4.3 The Unifying Philosophy
 
-Both the Linear Chain and the Parallel Assembly adhere to the same foundational laws of Ray.Framework:
+Both the Linear Chain and the Parallel Assembly adhere to the same foundational laws of Be Framework:
 
 - **Constructor-Centricity**: All logic resides in constructors
 - **Immutability**: All objects, once created, are unchangeable
 - **Declarative Dependencies**: An object's needs are explicitly stated in its constructor
 
-This duality demonstrates that Ray.Framework is not merely a tool for linear pipelines. It is a **declarative data-flow orchestration engine**, capable of modeling complex, non-linear dependencies through simple, local, and pure object definitions.
+This duality demonstrates that Be Framework is not merely a tool for linear pipelines. It is a **declarative data-flow orchestration engine**, capable of modeling complex, non-linear dependencies through simple, local, and pure object definitions.
 
 **The developer describes what they want at each stage, and the framework orchestrates how to produce it, whether sequentially or in parallel. This is the true essence of the metamorphic paradigm.**
 
@@ -438,8 +438,8 @@ final class DashboardAssembler {
 }
 
 // Execution
-$ray = new Ray($injector);
-$dashboard = $ray(new DashboardRequest($_SESSION['user_id'], new DateTime()));
+$becoming = new Becoming($injector);
+$dashboard = $becoming(new DashboardRequest($_SESSION['user_id'], new DateTime()));
 echo $dashboard->html;  // All parallel fetches completed and assembled
 ```
 
@@ -451,7 +451,7 @@ echo $dashboard->html;  // All parallel fetches completed and assembled
 
 ### The Existential Question in Code
 
-The most profound innovation in Ray.Framework is the recognition that objects can carry their own destiny through typed properties. Instead of external control flow, we have internal self-determination.
+The most profound innovation in Be Framework is the recognition that objects can carry their own destiny through typed properties. Instead of external control flow, we have internal self-determination.
 
 ```php
 #[Be([Success::class, Failure::class])]
@@ -489,7 +489,7 @@ foreach ($users as $user) {
 
 ### 5.2 The Reality of Infinite Flow
 
-Ray.Framework suggests that limitations were often in our patterns, not the language:
+Be Framework suggests that limitations were often in our patterns, not the language:
 
 ```php
 // The reality: Infinite processing with constant memory
@@ -506,7 +506,7 @@ An interesting aspect is transparency. Developers write simple code thinking abo
 
 ## 6. Practical Implementation: The Registration Flow
 
-To illustrate how Ray.Framework handles real-world complexity, let's examine a complete user registration flow with branching logic.
+To illustrate how Be Framework handles real-world complexity, let's examine a complete user registration flow with branching logic.
 
 ### 6.1 The Challenge: Conditional Paths
 
@@ -514,7 +514,7 @@ User registration involves multiple possible outcomes:
 - **Success Path**: Create user → Send verification email → Return success
 - **Conflict Path**: Email already exists → Return conflict error
 
-Traditional approaches scatter this logic across controllers with nested if-else statements. Ray.Framework transforms this into a clear metamorphosis chain.
+Traditional approaches scatter this logic across controllers with nested if-else statements. Be Framework transforms this into a clear metamorphosis chain.
 
 ### 6.2 The Type-Driven Metamorphosis Chain
 
@@ -719,7 +719,7 @@ The type-driven approach represents a **quantum leap** in code clarity and maint
 
 ### 7.1 The Four Paradigm Shifts
 
-Ray.Framework represents four simultaneous paradigm shifts:
+Be Framework represents four simultaneous paradigm shifts:
 
 1. **From Middleware to Metamorphosis**: Complete transformation vs. incremental decoration
 2. **From Containers to Streams**: Opaque boxes vs. transparent types  
@@ -746,7 +746,7 @@ The metamorphosis pattern transcends its origins:
 
 ### 7.3 The Philosophical Impact
 
-Ray.Framework suggests a new relationship between programmer and program:
+Be Framework suggests a new relationship between programmer and program:
 
 - **Programmer as Gardener**: Not building, but cultivating
 - **Objects as Living Entities**: Not data structures, but beings in transformation
@@ -772,11 +772,11 @@ Like the paradigm it describes, this paper is not a sequence of arguments but a 
 
 ## 8. Conclusion: The Return to Essence
 
-Ray.Framework achieves what many frameworks have pursued: **making complexity disappear into simplicity**. But it does more than simplify—it offers a new perspective on what programming can be.
+Be Framework achieves what many frameworks have pursued: **making complexity disappear into simplicity**. But it does more than simplify—it offers a new perspective on what programming can be.
 
 ### 8.1 The Design Goal
 
-A well-designed framework is one that makes itself unnecessary. Ray.Framework doesn't add features to PHP; it highlights capabilities that were always there. Like opening a window to let in sunlight, it simply allows the natural flow of transformation.
+A well-designed framework is one that makes itself unnecessary. Be Framework doesn't add features to PHP; it highlights capabilities that were always there. Like opening a window to let in sunlight, it simply allows the natural flow of transformation.
 
 ### 8.2 The Journey of Evolution
 
@@ -787,13 +787,13 @@ A well-designed framework is one that makes itself unnecessary. Ray.Framework do
 2020s: The Existence Revolution (Ontological)
 ```
 
-Each evolution builds upon its predecessor. Ray.Framework represents a significant step on a 50-year journey toward programming's essence.
+Each evolution builds upon its predecessor. Be Framework represents a significant step on a 50-year journey toward programming's essence.
 
 ### 8.3 An Invitation to Explore
 
-Ray.Framework offers a different approach—it's one option among many. It invites us to consider programming not just as construction but as transformation, not just as control but as enabling, not just as complexity but as composed simplicity.
+Be Framework offers a different approach—it's one option among many. It invites us to consider programming not just as construction but as transformation, not just as control but as enabling, not just as complexity but as composed simplicity.
 
-**When exploring Ray.Framework, you're not replacing your existing tools. You're adding a new perspective to your programming toolkit.**
+**When exploring Be Framework, you're not replacing your existing tools. You're adding a new perspective to your programming toolkit.**
 
 The progression of programming paradigms reveals an ascending spiral of abstraction:
 - **How?** (Imperative) → Controlling the machine
@@ -809,7 +809,7 @@ This opens new possibilities for how we approach programming challenges. A begin
 
 In a universe where code can be generated but meaning must be created, this approach suggests that defining what should exist remains an essentially human act. We become not just instructors of machines but definers of digital possibilities, creators of computational spaces where only the possible can be.
 
-**Welcome to Programming as Metamorphosis. Welcome to Ray.Framework.**
+**Welcome to Programming as Metamorphosis. Welcome to Be Framework.**
 
 ---
 
@@ -825,8 +825,8 @@ In a universe where code can be generated but meaning must be created, this appr
 
 ## Epilogue: A Reflection
 
-*"Just as an individual transforms by accepting their unchangeable circumstances and using their skills to become a new, better self, each object in Ray.Framework does the same. This framework reflects our own journey of growth and transformation."*
+*"Just as an individual transforms by accepting their unchangeable circumstances and using their skills to become a new, better self, each object in Be Framework does the same. This framework reflects our own journey of growth and transformation."*
 
-In developing Ray.Framework, we found that technical patterns often mirror human experiences. The pattern of accepting what we cannot change, using what we have been given, and emerging transformed is not just an architectural choice—it's a pattern we recognize from life itself.
+In developing Be Framework, we found that technical patterns often mirror human experiences. The pattern of accepting what we cannot change, using what we have been given, and emerging transformed is not just an architectural choice—it's a pattern we recognize from life itself.
 
 May your code, like your life, be a series of beautiful transformations.

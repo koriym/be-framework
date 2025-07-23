@@ -7,7 +7,7 @@ namespace Be\Framework;
 /**
  * Core metamorphosis engine interface
  *
- * This is the fundamental contract of Ray.Framework.
+ * This is the fundamental contract of Be Framework.
  * Objects transform through a chain of metamorphoses until reaching their final form.
  */
 interface MetamorphosisInterface

@@ -2,7 +2,7 @@
 
 ## Introduction: From Recording to Becoming
 
-Traditional logging captures what happened. SchemaLogger captures how things came to be. But when combined with AI analysis and Ray.Framework's metamorphosis patterns, something profound emerges: **objects discovering their own evolutionary potential**.
+Traditional logging captures what happened. SchemaLogger captures how things came to be. But when combined with AI analysis and Be Framework's metamorphosis patterns, something profound emerges: **objects discovering their own evolutionary potential**.
 
 This is the story of how a simple execution log becomes a mirror for self-discovery and transformation.
 
@@ -266,7 +266,7 @@ It's not optimizing—it's **opening doors to new forms of existence**.
 
 ## Conclusion: The Mirror of Possibility
 
-SchemaLogger started as a better way to log. Combined with Ray.Framework's metamorphosis patterns and AI analysis, it becomes something profound: **a mirror in which objects see their own potential**.
+SchemaLogger started as a better way to log. Combined with Be Framework's metamorphosis patterns and AI analysis, it becomes something profound: **a mirror in which objects see their own potential**.
 
 Every execution tells a story. Every story suggests new chapters. Every object contains multitudes.
 

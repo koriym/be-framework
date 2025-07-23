@@ -6,7 +6,7 @@
 
 This paper introduces Ontological Programming, a new programming paradigm that fundamentally shifts the focus from "doing" to "being." Rather than describing sequences of actions or transformations, Ontological Programming defines programs as declarations of existence—what can exist and under what conditions. This paradigm addresses core issues in software reliability, composability, and reasoning by ensuring that if an object exists, it is correct by definition. We present the theoretical foundations and demonstrate how this shift in perspective can eliminate entire classes of errors while simplifying program reasoning.
 
-> **Implementation:** For practical implementation of Ontological Programming principles, see [Ray.Framework Whitepaper](ray-framework-whitepaper.md) and [Metamorphosis Architecture Manifesto](metamorphosis-architecture-manifesto.md).
+> **Implementation:** For practical implementation of Ontological Programming principles, see [Be Framework Whitepaper](be-framework-whitepaper.md) and [Metamorphosis Architecture Manifesto](metamorphosis-architecture-manifesto.md).
 
 **Keywords:** Programming Paradigms, Ontology, Existence-Driven Design, Type Theory, Software Philosophy
 
