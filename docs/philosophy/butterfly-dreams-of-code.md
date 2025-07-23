@@ -55,6 +55,8 @@ Log-Driven Development dissolves these boundaries:
 
 #[Be(SemanticLog::class)]
 final class LivingCode {
+    private SemanticTrace $trace;
+    
     public function __construct(
         #[Input] public readonly string $purpose,
         SemanticLogger $logger
