@@ -162,7 +162,7 @@ These documents describe the powerful tooling and integrations that emerge from 
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
   * Learn about the `be-tree` command for automatically visualizing your system's structure, semantics, and data flows.
 
-*   **[ALPS and Be Framework: Bidirectional Generation](./integration/alps-ray-bidirectional-generation.md)**
+*   **[ALPS and Be Framework: Bidirectional Generation](./integration/alps-be-bidirectional-generation.md)**
   * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
   * See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
 
@@ -199,7 +199,7 @@ These documents describe the powerful tooling and integrations that emerge from 
 *   Explores how objects use structured logs to understand their own potential for transformation.
 *   Shows the connection between execution history and metamorphosis possibilities.
 
-*   **[UNIX Pipes and Be Framework: Evolution of the Pipeline Philosophy](./patterns/unix-pipes-vs-ray-framework.md)**
+*   **[UNIX Pipes and Be Framework: Evolution of the Pipeline Philosophy](./patterns/unix-pipes-vs-be-framework.md)**
 *   Comparative analysis showing how Be Framework extends UNIX's pipeline philosophy.
 *   Explores the evolution from text-based pipes to typed, object-oriented component composition.
 *   Demonstrates how foundational computing concepts translate to modern development paradigms.

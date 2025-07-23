@@ -49,7 +49,7 @@ This duality enables a bidirectional generation process that maintains perfect c
 
 ### Generated Be Framework Implementation
 ```bash
-ray-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
+be-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
 # Generates complete implementation skeleton in src/OrderWorkflow/
 ```
 
@@ -169,7 +169,7 @@ final class ApprovedLoan
 
 ### Generated ALPS Specification
 ```bash
-$ ray-extract --to-alps src/LoanProcessing/ --output loan-processing.alps.json
+$ be-extract --to-alps src/LoanProcessing/ --output loan-processing.alps.json
 ```
 
 ```json
@@ -246,7 +246,7 @@ $ ray-extract --to-alps src/LoanProcessing/ --output loan-processing.alps.json
 
 ### RESTful API Generation
 ```bash
-$ ray-extract --to-openapi src/LoanProcessing/ --output loan-api.openapi.json
+$ be-extract --to-openapi src/LoanProcessing/ --output loan-api.openapi.json
 ```
 
 ```yaml
@@ -284,7 +284,7 @@ paths:
 
 ### GraphQL Schema Generation
 ```bash
-$ ray-extract --to-graphql src/LoanProcessing/ --output loan-schema.graphql
+$ be-extract --to-graphql src/LoanProcessing/ --output loan-schema.graphql
 ```
 
 ```graphql
@@ -327,29 +327,29 @@ union ApprovedLoanResult = FinalizedLoan | LoanCancellation
 ### CLI Commands
 ```bash
 # Bidirectional generation
-ray-generate --from-alps workflow.alps.json --output src/
-ray-extract --to-alps src/ --output generated.alps.json
+be-generate --from-alps workflow.alps.json --output src/
+be-extract --to-alps src/ --output generated.alps.json
 
 # Protocol generation
-ray-extract --to-openapi src/ --output api.openapi.json
-ray-extract --to-graphql src/ --output schema.graphql
-ray-extract --to-grpc src/ --output service.proto
+be-extract --to-openapi src/ --output api.openapi.json
+be-extract --to-graphql src/ --output schema.graphql
+be-extract --to-grpc src/ --output service.proto
 
 # Validation and testing
-ray-validate --alps-compliance src/ workflow.alps.json
-ray-test --contract-testing src/ api-tests/
+be-validate --alps-compliance src/ workflow.alps.json
+be-test --contract-testing src/ api-tests/
 ```
 
 ### IDE Integration
 ```typescript
 // VS Code extension
-ray.generateFromALPS({
+be.generateFromALPS({
   source: './design.alps.json',
   target: './src/generated/',
   namespace: 'App\\Workflow'
 });
 
-ray.extractToALPS({
+be.extractToALPS({
   source: './src/workflow/',
   target: './docs/specification.alps.json',
   includeDocumentation: true
@@ -360,7 +360,7 @@ ray.extractToALPS({
 
 ### Specification Compliance
 ```bash
-$ ray-validate --alps-compliance src/OrderWorkflow/ order-workflow.alps.json
+$ be-validate --alps-compliance src/OrderWorkflow/ order-workflow.alps.json
 ✓ All state transitions match ALPS specification
 ✓ All semantic descriptors are implemented
 ✓ No orphaned states detected
@@ -370,8 +370,8 @@ $ ray-validate --alps-compliance src/OrderWorkflow/ order-workflow.alps.json
 ### Round-trip Validation
 ```bash
 # Test bidirectional generation integrity
-$ ray-extract --to-alps src/ --output extracted.alps.json
-$ ray-generate --from-alps extracted.alps.json --output src-regenerated/
+$ be-extract --to-alps src/ --output extracted.alps.json
+$ be-generate --from-alps extracted.alps.json --output src-regenerated/
 $ diff -r src/ src-regenerated/
 # Should show only business logic differences, not structural changes
 ```
@@ -407,4 +407,4 @@ The result is not just better software development—it's a new way of thinking 
 
 ---
 
-*Next: Explore practical examples of ALPS-Ray bidirectional generation in real-world applications.*
+*Next: Explore practical examples of ALPS-Be bidirectional generation in real-world applications.*

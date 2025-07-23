@@ -150,7 +150,7 @@
     *   アーキテクチャ自体が最終的な、常に最新のドキュメントとなる方法を発見
     *   システムの構造、意味論、データフローを自動的に可視化する`be-tree`コマンドについて学習
 
-*   **[ALPSとBe Framework：双方向生成](./integration/alps-ray-bidirectional-generation.md)**
+*   **[ALPSとBe Framework：双方向生成](./integration/alps-be-bidirectional-generation.md)**
     *   設計仕様（ALPS）と実行可能コード間の双方向生成の革命的概念を探求
     *   単一のプロトコル非依存設計がREST、GraphQL、またはgRPC APIを生成する方法を確認
 
@@ -187,7 +187,7 @@
     *   オブジェクトが構造化ログを使用して変容の可能性を理解する方法を探求。
     *   実行履歴と変容可能性の関連性を示す。
 
-*   **[UNIXパイプとBe Framework：パイプライン哲学の進化](./patterns/unix-pipes-vs-ray-framework.md)**
+*   **[UNIXパイプとBe Framework：パイプライン哲学の進化](./patterns/unix-pipes-vs-be-framework.md)**
     *   Be FrameworkがUNIXのパイプライン哲学をどのように拡張するかの比較分析。
     *   テキストベースのパイプから型付きオブジェクト指向コンポーネント合成への進化を探求。
     *   基礎的なコンピューティング概念が現代開発パラダイムにどのように変換されるかを実証。
