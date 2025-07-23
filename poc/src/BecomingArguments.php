@@ -19,7 +19,7 @@ use function sprintf;
 /**
  * Resolves constructor arguments for metamorphosis transformations
  *
- * Implements Ray.Framework's philosophy of explicit dependency declaration:
+ * Implements Be Framework's philosophy of explicit dependency declaration:
  * - All constructor parameters must have either #[Input] or #[Inject] attributes
  * - #[Input] parameters are resolved from the current object's properties
  * - #[Inject] parameters are resolved from the DI container
@@ -140,7 +140,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
     /**
      * Validates that all constructor parameters have explicit attribute declarations
      *
-     * Enforces Ray.Framework's philosophy: "Describe Yourself (Well)"
+     * Enforces Be Framework's philosophy: "Describe Yourself (Well)"
      * All dependencies must be explicitly declared for clarity and safety.
      */
     private function validateParameterAttributes(ReflectionParameter $param): void
@@ -152,7 +152,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
             throw new InvalidArgumentException(
                 sprintf(
                     'Parameter "%s" in %s::%s must have either #[Input] or #[Inject] attribute. ' .
-                    'Ray.Framework requires explicit dependency declaration for safety and clarity. ' .
+                    'Be Framework requires explicit dependency declaration for safety and clarity. ' .
                     'Use #[Input] if this should come from the previous object, ' .
                     'or #[Inject] if this should come from the DI container.',
                     $param->getName(),

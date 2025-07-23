@@ -7,7 +7,7 @@
 
 ## Abstract
 
-Alan Kay's profound insight—"Outlook is worth 80 IQ points"—illuminates a fundamental truth about programming paradigms: they are not collections of technical mechanisms but distinct ways of understanding computational reality. This paper documents a philosophical dialogue where criticism of Ray.Framework's technical implementation paradoxically revealed the deeper nature of paradigm shifts. Through examining Object-Oriented Programming's betrayed vision of autonomous beings and Ontological Programming's temporal worldview, we discover that paradigms succeed or fail not by their techniques but by the world understanding they embody. The dialogue demonstrates that debating syntax and patterns while ignoring worldview is like analyzing telescopes while ignoring what they reveal about the cosmos.
+Alan Kay's profound insight—"Outlook is worth 80 IQ points"—illuminates a fundamental truth about programming paradigms: they are not collections of technical mechanisms but distinct ways of understanding computational reality. This paper documents a philosophical dialogue where criticism of Be Framework's technical implementation paradoxically revealed the deeper nature of paradigm shifts. Through examining Object-Oriented Programming's betrayed vision of autonomous beings and Ontological Programming's temporal worldview, we discover that paradigms succeed or fail not by their techniques but by the world understanding they embody. The dialogue demonstrates that debating syntax and patterns while ignoring worldview is like analyzing telescopes while ignoring what they reveal about the cosmos.
 
 ## 1. The Crucible of Criticism
 
@@ -366,7 +366,7 @@ But perhaps it's worth infinitely more—for the right outlook opens doors to en
 
 1. Kay, A. (1993). The Early History of Smalltalk
 2. Kuhn, T. (1962). The Structure of Scientific Revolutions
-3. The Ray.Framework Documentation Corpus
+3. The Be Framework Documentation Corpus
 4. The Critical Dialogue, 2025
 
 ---

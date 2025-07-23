@@ -116,7 +116,7 @@ final class SimpleValidator implements DataValidatorInterface
 // DEMO EXECUTION
 // =============================================================================
 
-echo "Ray.Framework - Metamorphic Programming Demo\n\n";
+echo "Be Framework - Metamorphic Programming Demo\n\n";
 
 // Setup DI container
 $injector = new Injector(new class extends AbstractModule{

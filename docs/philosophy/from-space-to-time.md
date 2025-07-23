@@ -330,7 +330,7 @@ class MetamorphosisTest extends TestCase
     public function testIrreversibilityOfTime(): void
     {
         $youth = new Youth($data);
-        $adult = $this->ray($youth);
+        $adult = $this->be($youth);
         
         // We can't go back
         $this->assertNoPathExists($adult, Youth::class);
@@ -347,10 +347,10 @@ class MetamorphosisTest extends TestCase
     {
         $journey = new UserJourney();
         
-        $journey = $this->ray(new Registration($journey));
+        $journey = $this->be(new Registration($journey));
         $this->assertMemoryContains($journey, 'registration');
         
-        $journey = $this->ray(new FirstPurchase($journey));
+        $journey = $this->be(new FirstPurchase($journey));
         $this->assertMemoryContains($journey, ['registration', 'first_purchase']);
         
         // Each stage remembers all previous stages
@@ -959,7 +959,7 @@ That is the deepest validation of the Metamorphosis Paradigm: it describes not j
 5. Berners-Lee, T. (1989). Information Management: A Proposal
 6. Fielding, R. (2000). REST: Architectural Styles
 7. The Metamorphosis Paradigm Documentation (2024)
-8. Ray.Framework Ontological Programming Guide (2024)
+8. Be Framework Ontological Programming Guide (2024)
 
 ## Appendix: Code as Poetry
 

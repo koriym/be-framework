@@ -579,7 +579,7 @@ The butterfly dreams of code. The code dreams of logs. The logs dream of evoluti
 3. Turing, A. (1936). "On Computable Numbers, with an Application to the Entscheidungsproblem."
 4. Escher, M.C. "Drawing Hands" (1948), "Ascending and Descending" (1960), "Waterfall" (1961).
 5. Bach, J.S. "The Art of Fugue" (1750), "Crab Canon" from Musical Offering (1747).
-6. Ray.Framework Documentation. "Semantic Logger and Ontological Evolution."
+6. Be Framework Documentation. "Semantic Logger and Ontological Evolution."
 7. Zhuangzi. "The Butterfly Dream." For the Eastern perspective on self-reference.
 
 ---

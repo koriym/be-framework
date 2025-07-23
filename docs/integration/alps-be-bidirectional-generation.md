@@ -1,21 +1,21 @@
-# ALPS and Ray.Framework: Bidirectional Generation
+# ALPS and Be Framework: Bidirectional Generation
 
 > "The best way to understand a design is to implement it. The best way to implement a design is to understand it fully." — Anonymous
 
 ## Introduction
 
-Ray.Framework represents a unique convergence of ALPS (Application-Level Profile Semantics) philosophy and executable code. This document explores the bidirectional relationship between ALPS specifications and Ray.Framework implementations, demonstrating how each can generate the other while maintaining semantic integrity.
+Be Framework represents a unique convergence of ALPS (Application-Level Profile Semantics) philosophy and executable code. This document explores the bidirectional relationship between ALPS specifications and Be Framework implementations, demonstrating how each can generate the other while maintaining semantic integrity.
 
-## The Dual Nature of Ray.Framework
+## The Dual Nature of Be Framework
 
-Ray.Framework exists simultaneously as:
+Be Framework exists simultaneously as:
 - **Executable implementation** with concrete business logic
 - **Living ALPS specification** with semantic state transitions
 - **Protocol-agnostic design** that can manifest as REST, GraphQL, or message queues
 
 This duality enables a bidirectional generation process that maintains perfect consistency between specification and implementation.
 
-## ALPS to Ray.Framework Generation
+## ALPS to Be Framework Generation
 
 ### Source ALPS Specification
 ```json
@@ -47,9 +47,9 @@ This duality enables a bidirectional generation process that maintains perfect c
 }
 ```
 
-### Generated Ray.Framework Implementation
+### Generated Be Framework Implementation
 ```bash
-ray-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
+be-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
 # Generates complete implementation skeleton in src/OrderWorkflow/
 ```
 
@@ -57,8 +57,8 @@ ray-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
 // Generated from ALPS specification
 namespace OrderWorkflow;
 
-use Ray\Framework\Attribute\Be;
-use Ray\Framework\Attribute\Input;
+use Be\Framework\Attribute\Be;
+use Be\Framework\Attribute\Input;
 
 #[Be([ValidOrder::class, InvalidOrder::class])]
 final class OrderRequest
@@ -124,9 +124,9 @@ final class ProcessedOrder
 - State determination logic structure is provided
 - Implementation details remain for developer specification
 
-## Ray.Framework to ALPS Generation
+## Be Framework to ALPS Generation
 
-### Source Ray.Framework Implementation
+### Source Be Framework Implementation
 ```php
 namespace LoanProcessing;
 
@@ -169,14 +169,14 @@ final class ApprovedLoan
 
 ### Generated ALPS Specification
 ```bash
-$ ray-extract --to-alps src/LoanProcessing/ --output loan-processing.alps.json
+$ be-extract --to-alps src/LoanProcessing/ --output loan-processing.alps.json
 ```
 
 ```json
 {
   "alps": {
     "title": "Loan Processing API",
-    "doc": { "value": "Generated from Ray.Framework implementation" },
+    "doc": { "value": "Generated from Be Framework implementation" },
     "version": "1.0",
     "descriptor": [
       {
@@ -246,7 +246,7 @@ $ ray-extract --to-alps src/LoanProcessing/ --output loan-processing.alps.json
 
 ### RESTful API Generation
 ```bash
-$ ray-extract --to-openapi src/LoanProcessing/ --output loan-api.openapi.json
+$ be-extract --to-openapi src/LoanProcessing/ --output loan-api.openapi.json
 ```
 
 ```yaml
@@ -284,7 +284,7 @@ paths:
 
 ### GraphQL Schema Generation
 ```bash
-$ ray-extract --to-graphql src/LoanProcessing/ --output loan-schema.graphql
+$ be-extract --to-graphql src/LoanProcessing/ --output loan-schema.graphql
 ```
 
 ```graphql
@@ -310,13 +310,13 @@ union ApprovedLoanResult = FinalizedLoan | LoanCancellation
 
 ### Design-First Workflow
 1. **Business Analysis:** Define workflows in ALPS
-2. **Code Generation:** Generate Ray.Framework skeleton
+2. **Code Generation:** Generate Be Framework skeleton
 3. **Implementation:** Add business logic to generated structure
 4. **Validation:** Verify implementation matches ALPS specification
 5. **API Generation:** Automatically generate protocol-specific APIs
 
 ### Implementation-First Workflow  
-1. **Rapid Development:** Implement in Ray.Framework directly
+1. **Rapid Development:** Implement in Be Framework directly
 2. **Specification Extraction:** Generate ALPS from implementation
 3. **Documentation:** Use ALPS as living API documentation
 4. **Client Generation:** Generate client SDKs from ALPS
@@ -327,29 +327,29 @@ union ApprovedLoanResult = FinalizedLoan | LoanCancellation
 ### CLI Commands
 ```bash
 # Bidirectional generation
-ray-generate --from-alps workflow.alps.json --output src/
-ray-extract --to-alps src/ --output generated.alps.json
+be-generate --from-alps workflow.alps.json --output src/
+be-extract --to-alps src/ --output generated.alps.json
 
 # Protocol generation
-ray-extract --to-openapi src/ --output api.openapi.json
-ray-extract --to-graphql src/ --output schema.graphql
-ray-extract --to-grpc src/ --output service.proto
+be-extract --to-openapi src/ --output api.openapi.json
+be-extract --to-graphql src/ --output schema.graphql
+be-extract --to-grpc src/ --output service.proto
 
 # Validation and testing
-ray-validate --alps-compliance src/ workflow.alps.json
-ray-test --contract-testing src/ api-tests/
+be-validate --alps-compliance src/ workflow.alps.json
+be-test --contract-testing src/ api-tests/
 ```
 
 ### IDE Integration
 ```typescript
 // VS Code extension
-ray.generateFromALPS({
+be.generateFromALPS({
   source: './design.alps.json',
   target: './src/generated/',
   namespace: 'App\\Workflow'
 });
 
-ray.extractToALPS({
+be.extractToALPS({
   source: './src/workflow/',
   target: './docs/specification.alps.json',
   includeDocumentation: true
@@ -360,7 +360,7 @@ ray.extractToALPS({
 
 ### Specification Compliance
 ```bash
-$ ray-validate --alps-compliance src/OrderWorkflow/ order-workflow.alps.json
+$ be-validate --alps-compliance src/OrderWorkflow/ order-workflow.alps.json
 ✓ All state transitions match ALPS specification
 ✓ All semantic descriptors are implemented
 ✓ No orphaned states detected
@@ -370,8 +370,8 @@ $ ray-validate --alps-compliance src/OrderWorkflow/ order-workflow.alps.json
 ### Round-trip Validation
 ```bash
 # Test bidirectional generation integrity
-$ ray-extract --to-alps src/ --output extracted.alps.json
-$ ray-generate --from-alps extracted.alps.json --output src-regenerated/
+$ be-extract --to-alps src/ --output extracted.alps.json
+$ be-generate --from-alps extracted.alps.json --output src-regenerated/
 $ diff -r src/ src-regenerated/
 # Should show only business logic differences, not structural changes
 ```
@@ -395,7 +395,7 @@ $ diff -r src/ src-regenerated/
 
 ## Conclusion
 
-The bidirectional relationship between ALPS and Ray.Framework represents a fundamental advancement in specification-driven development. By treating implementations as living specifications and specifications as implementable designs, we achieve perfect alignment between business intent and technical reality.
+The bidirectional relationship between ALPS and Be Framework represents a fundamental advancement in specification-driven development. By treating implementations as living specifications and specifications as implementable designs, we achieve perfect alignment between business intent and technical reality.
 
 This approach eliminates the traditional gap between design and implementation, creating a unified system where:
 - Specifications are always current
@@ -407,4 +407,4 @@ The result is not just better software development—it's a new way of thinking 
 
 ---
 
-*Next: Explore practical examples of ALPS-Ray bidirectional generation in real-world applications.*
+*Next: Explore practical examples of ALPS-Be bidirectional generation in real-world applications.*

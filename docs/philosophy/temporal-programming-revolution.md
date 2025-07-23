@@ -516,7 +516,7 @@ class TemporalProgramming extends TemporalEntity {
 3. Buddhist Texts on Impermanence and Interdependence
 4. Bergson, H. (1896). Matter and Memory
 5. The Metamorphosis Paradigm Documentation (2024)
-6. Ray.Framework Ontological Programming Guide (2024)
+6. Be Framework Ontological Programming Guide (2024)
 7. From Space to Time: The Metamorphosis Paradigm (2024)
 
 ## Appendix: Implementation Guidelines

@@ -1,11 +1,11 @@
 # Architecture as Documentation
 
 > "The code is the documentation." — Martin Fowler  
-> "The architecture **is** the documentation." — Ray.Framework
+> "The architecture **is** the documentation." — Be Framework
 
 ## Introduction
 
-Martin Fowler introduced the concept of "Code as Documentation"—the idea that well-written code should be self-documenting. Ray.Framework takes this concept to its logical conclusion: **Architecture as Documentation**. In an ontological programming system, the architecture doesn't just document itself—it *is* the documentation.
+Martin Fowler introduced the concept of "Code as Documentation"—the idea that well-written code should be self-documenting. Be Framework takes this concept to its logical conclusion: **Architecture as Documentation**. In an ontological programming system, the architecture doesn't just document itself—it *is* the documentation.
 
 ## Beyond Code as Documentation
 
@@ -27,7 +27,7 @@ class UserValidator {
 
 ### Architecture as Documentation  
 ```php
-// Ray.Framework: Architecture explains what exists
+// Be Framework: Architecture explains what exists
 #[Be([Success::class, Failure::class])]
 final class ValidationAttempt {
     public readonly Success|Failure $being;
@@ -40,13 +40,13 @@ The architecture itself declares:
 - **What data flows** (`Success|Failure $being`)
 - **What contracts govern** (union types)
 
-## The `ray-tree` Command: Architecture Visualization
+## The `be-tree` Command: Architecture Visualization
 
-Ray.Framework's ontological structure enables the automatic architecture documentation through the `ray-tree` command:
+Be Framework's ontological structure enables the automatic architecture documentation through the `be-tree` command:
 
 ### Basic Structure Visualization
 ```bash
-ray-tree src/UserRegistration/
+be-tree src/UserRegistration/
 # Outputs architectural structure visualization
 UserRegistration/
 ├── RegistrationInput (#[Be] → ValidatedRegistration)
@@ -65,7 +65,7 @@ UserRegistration/
 
 ### Semantic Analysis Mode
 ```bash
-$ ray-tree --semantic src/
+$ be-tree --semantic src/
 📋 Semantic Variable Registry
 ├── email (validates/ValidEmail.php)
 │   ├── 📖 ALPS: RFC 5322 compliant email address
@@ -81,7 +81,7 @@ $ ray-tree --semantic src/
 
 ### Flow Visualization Mode
 ```bash
-$ ray-tree --flow UserRegistration
+$ be-tree --flow UserRegistration
 🌊 Metamorphosis Flow for UserRegistration
 
 RegistrationInput
@@ -137,10 +137,10 @@ validates/
 
 ## Mermaid Diagram Generation
 
-The `ray-tree` command can generate Mermaid diagrams for complete visual documentation:
+The `be-tree` command can generate Mermaid diagrams for complete visual documentation:
 
 ```bash
-$ ray-tree --mermaid src/UserRegistration/ > registration-flow.md
+$ be-tree --mermaid src/UserRegistration/ > registration-flow.md
 ```
 
 ```mermaid
@@ -170,7 +170,7 @@ flowchart TD
 ## Implementation Concept
 
 ```php
-class RayTreeAnalyzer
+class BeTreeAnalyzer
 {
     public function analyze(string $path): ArchitectureMap
     {
@@ -248,7 +248,7 @@ class RayTreeAnalyzer
 ### IDE Integration
 ```typescript
 // VS Code extension
-ray.framework.generateArchitecture({
+be.framework.generateArchitecture({
     path: './src',
     format: 'mermaid',
     includeSemantics: true
@@ -259,10 +259,10 @@ ray.framework.generateArchitecture({
 ```yaml
 # GitHub Actions
 - name: Generate Architecture Documentation
-  run: ray-tree --mermaid src/ > docs/architecture.md
+  run: be-tree --mermaid src/ > docs/architecture.md
   
 - name: Validate Semantic Consistency  
-  run: ray-tree --validate-semantics src/
+  run: be-tree --validate-semantics src/
 ```
 
 ### Real-time Documentation
@@ -275,7 +275,7 @@ $server->watch('./src')->generateOnChange();
 
 ## Conclusion
 
-Architecture as Documentation represents the natural evolution of self-documenting systems. By embedding architectural intent directly into code structure through attributes, union types, and naming conventions, Ray.Framework creates a system where:
+Architecture as Documentation represents the natural evolution of self-documenting systems. By embedding architectural intent directly into code structure through attributes, union types, and naming conventions, Be Framework creates a system where:
 
 - **The architecture documents itself**
 - **Documentation is always current**  
@@ -289,4 +289,4 @@ This is not just better documentation—it's a fundamental shift in how we think
 
 ---
 
-*Try it yourself: Install Ray.Framework and run `ray-tree src/` to see your architecture come alive.*
+*Try it yourself: Install Be Framework and run `be-tree src/` to see your architecture come alive.*

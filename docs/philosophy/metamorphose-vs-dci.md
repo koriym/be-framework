@@ -98,4 +98,4 @@ Metamorphose internalizes DCI's strengths—role separation—via #[Inject], but
 
 > *"DCI assigns roles; Metamorphose becomes destinies—internalizing meaning to illuminate the path ahead."*
 
-This comparison sharpens both paradigms' essence, inviting further evolution in Ray.Framework.
+This comparison sharpens both paradigms' essence, inviting further evolution in Be Framework.
