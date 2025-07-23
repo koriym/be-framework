@@ -8,7 +8,7 @@ namespace Be\Framework;
  * Interface for resolving constructor arguments for metamorphosis transformations
  *
  * Resolves arguments needed for the destination class constructor from the current object,
- * following Ray.Framework's metamorphic programming paradigm.
+ * following Be Framework's metamorphic programming paradigm.
  */
 interface BecomingArgumentsInterface
 {

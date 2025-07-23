@@ -5,7 +5,7 @@
     bootstrap="vendor/autoload.php"
 >
     <testsuites>
-        <testsuite name="Ray.Framework test suite">
+        <testsuite name="Be Framework test suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
