@@ -248,7 +248,7 @@ class BeTreeAnalyzer
 ### IDE Integration
 ```typescript
 // VS Code extension
-ray.framework.generateArchitecture({
+be.framework.generateArchitecture({
     path: './src',
     format: 'mermaid',
     includeSemantics: true

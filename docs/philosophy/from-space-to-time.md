@@ -330,7 +330,7 @@ class MetamorphosisTest extends TestCase
     public function testIrreversibilityOfTime(): void
     {
         $youth = new Youth($data);
-        $adult = $this->ray($youth);
+        $adult = $this->be($youth);
         
         // We can't go back
         $this->assertNoPathExists($adult, Youth::class);
@@ -347,10 +347,10 @@ class MetamorphosisTest extends TestCase
     {
         $journey = new UserJourney();
         
-        $journey = $this->ray(new Registration($journey));
+        $journey = $this->be(new Registration($journey));
         $this->assertMemoryContains($journey, 'registration');
         
-        $journey = $this->ray(new FirstPurchase($journey));
+        $journey = $this->be(new FirstPurchase($journey));
         $this->assertMemoryContains($journey, ['registration', 'first_purchase']);
         
         // Each stage remembers all previous stages
