@@ -160,7 +160,7 @@ These documents describe the powerful tooling and integrations that emerge from 
 
 *   **[Architecture as Documentation](./framework/architecture-as-documentation.md)**
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
-  * Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
+  * Learn about the `be-tree` command for automatically visualizing your system's structure, semantics, and data flows.
 
 *   **[ALPS and Be Framework: Bidirectional Generation](./integration/alps-ray-bidirectional-generation.md)**
   * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.

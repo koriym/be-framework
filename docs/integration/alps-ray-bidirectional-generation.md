@@ -57,8 +57,8 @@ ray-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
 // Generated from ALPS specification
 namespace OrderWorkflow;
 
-use Ray\Framework\Attribute\Be;
-use Ray\Framework\Attribute\Input;
+use Be\Framework\Attribute\Be;
+use Be\Framework\Attribute\Input;
 
 #[Be([ValidOrder::class, InvalidOrder::class])]
 final class OrderRequest

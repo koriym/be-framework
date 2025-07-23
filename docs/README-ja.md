@@ -148,7 +148,7 @@
 
 *   **[ドキュメントとしてのアーキテクチャ](./framework/architecture-as-documentation.md)**
     *   アーキテクチャ自体が最終的な、常に最新のドキュメントとなる方法を発見
-    *   システムの構造、意味論、データフローを自動的に可視化する`ray-tree`コマンドについて学習
+    *   システムの構造、意味論、データフローを自動的に可視化する`be-tree`コマンドについて学習
 
 *   **[ALPSとBe Framework：双方向生成](./integration/alps-ray-bidirectional-generation.md)**
     *   設計仕様（ALPS）と実行可能コード間の双方向生成の革命的概念を探求
