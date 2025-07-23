@@ -170,7 +170,7 @@ These documents describe the powerful tooling and integrations that emerge from 
 *   Essential glossary of terms used throughout the Ontological Programming paradigm and Ray.Framework.
 *   Defines key concepts like "being," "metamorphosis," and ontological patterns for quick reference.
 
-*   **[Reviewer Guide: Embracing New Programming Paradigms](./reviewer-guide-human.md)**
+*   **[Reviewer Guide: Embracing New Programming Paradigms](./reviewer-guide/human.md)**
 *   A thoughtful guide for approaching revolutionary ideas with openness while maintaining critical thinking.
 *   Learn to cultivate beginner's mind, embrace discomfort as growth, and understand the science of paradigm resistance.
 *   Essential reading for anyone evaluating new programming concepts or methodologies.
@@ -394,7 +394,7 @@ This collection of documents presents more than just a framework. It offers a co
     *   存在論的プログラミング・パラダイムとRay.Framework全体で使用される用語の必須用語集。
     *   「being」、「metamorphosis」、存在論的パターンなどのキー概念を定義し、クイックリファレンスとして利用可能。
 
-*   **[レビューアーガイド：新しいプログラミングパラダイムを受け入れる](./reviewer-guide-human-ja.md)**
+*   **[レビューアーガイド：新しいプログラミングパラダイムを受け入れる](./reviewer-guide/human-ja.md)**
     *   批判的思考を維持しながら革命的なアイデアに開放性を持ってアプローチするための思慮深いガイド。
     *   「まず、カップを空にする」禅の教えから始まり、パラダイム抵抗の心理的メカニズムを理解。
     *   歴史的なプログラミングパラダイムシフトの教訓と新しい概念を評価するための実践的アプローチ。
