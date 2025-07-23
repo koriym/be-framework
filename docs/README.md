@@ -175,6 +175,52 @@ These documents describe the powerful tooling and integrations that emerge from 
 *   Learn to cultivate beginner's mind, embrace discomfort as growth, and understand the science of paradigm resistance.
 *   Essential reading for anyone evaluating new programming concepts or methodologies.
 
+### Frequently Asked Questions
+
+*   **[FAQ: A Dialogue with the Architect](./faq/faq-dialogue-with-architect.md)**
+*   Deep-dive conversations addressing challenging questions about the paradigm's design philosophy.
+*   Explores topics like "existential explosion," perfect metamorphosis, and practical implementation concerns.
+*   Provides architect's insights on balancing precision with development experience.
+
+*   **[Semantic Variable Names: The Attempt to Encode Meaning in Names](./faq/faq-semantic-variable-names.md)**
+*   Examination of the design approach where variable names carry meaning and validation contracts.
+*   Addresses objections about global vocabulary maintenance and semantic ownership.
+*   Reveals the structural foundations and potential of semantic naming philosophy.
+
+### Additional Patterns and Comparisons
+
+*   **[Augmented Decision Making: How Software Design Evolves for AI-Human Collaboration](./patterns/augmented-decision-making.md)**
+*   Explores how decision-making in software evolves beyond simple if-then logic.
+*   Addresses the need for nuanced decisions that combine deterministic rules with AI pattern recognition.
+*   Essential for understanding how modern applications handle complex, context-sensitive choices.
+
+*   **[SchemaLogger and Ontological Evolution: When Objects Discover Their Own Possibilities](./patterns/schemalogger-ontological-evolution.md)**
+*   Documents how SchemaLogger transforms from simple logging to evolutionary self-discovery.
+*   Explores how objects use structured logs to understand their own potential for transformation.
+*   Shows the connection between execution history and metamorphosis possibilities.
+
+*   **[UNIX Pipes and Ray.Framework: Evolution of the Pipeline Philosophy](./patterns/unix-pipes-vs-ray-framework.md)**
+*   Comparative analysis showing how Ray.Framework extends UNIX's pipeline philosophy.
+*   Explores the evolution from text-based pipes to typed, object-oriented component composition.
+*   Demonstrates how foundational computing concepts translate to modern development paradigms.
+
+### Philosophical Extensions
+
+*   **[The Birth of a Paradigm: A Dialogue](./philosophy/dialogue-birth-of-paradigm.md)**
+*   Documents the dialogue where the realization of Ray.Framework as a hypermedia system emerged.
+*   Shows how simple technical observations can lead to profound philosophical insights.
+*   Demonstrates the Metamorphosis Paradigm through the conversation's own transformative nature.
+
+*   **[Outlook is Gold: Programming Paradigms as World Understanding](./philosophy/outlook-is-gold-programming-paradigms-as-world-understanding.md)**
+*   Philosophical exploration of how programming paradigms represent different ways of understanding reality.
+*   Examines Alan Kay's insight that "outlook is worth 80 IQ points" in the context of computational thinking.
+*   Addresses criticism of technical implementation while revealing deeper paradigm philosophy.
+
+*   **[You Can't Die Before You're Born: The Temporal Programming Revolution](./philosophy/temporal-programming-revolution.md)**
+*   Challenges programming's illusion of timelessness by introducing irreversible time and natural mortality.
+*   Explores how the Temporal Being paradigm recognizes code as temporal entities with existential constraints.
+*   Revolutionary approach to lifecycle management and the philosophy of computational existence.
+
 ## The Complete Vision
 
 Imagine what we can create with new vision — from doing to being, building software that defines existence itself rather than layering instructions.
@@ -352,6 +398,52 @@ This collection of documents presents more than just a framework. It offers a co
     *   批判的思考を維持しながら革命的なアイデアに開放性を持ってアプローチするための思慮深いガイド。
     *   初心者の心を育て、成長としての不快感を受け入れ、パラダイム抵抗の科学を理解する方法を学習。
     *   新しいプログラミング概念や方法論を評価する人にとって必須の読み物。
+
+### よくある質問
+
+*   **[FAQ：アーキテクトとの対話](./faq/faq-dialogue-with-architect.md)**
+    *   パラダイムの設計哲学に関する挑戦的な質問に対応する深い議論。
+    *   「存在の爆発」、完璧な変容、実装上の懸念などのトピックを探求。
+    *   精度と開発体験のバランスに関するアーキテクトの洞察を提供。
+
+*   **[セマンティック変数名：名前に意味を込める試み](./faq/faq-semantic-variable-names.md)**
+    *   変数名が意味と検証契約を持つ設計アプローチの検討。
+    *   グローバル語彙の維持と意味的所有権に関する反対意見に対処。
+    *   セマンティックな命名哲学の構造的基盤と可能性を明らかにする。
+
+### 追加のパターンと比較
+
+*   **[拡張意思決定：AI-人間協働のためのソフトウェア設計の進化](./patterns/augmented-decision-making.md)**
+    *   単純なif-then論理を超えたソフトウェアの意思決定の進化を探求。
+    *   決定論的ルールとAIパターン認識を組み合わせた微妙な決定の必要性に対処。
+    *   複雑でコンテキストに敏感な選択を現代アプリケーションが処理する方法を理解するために不可欠。
+
+*   **[SchemaLoggerと存在論的進化：オブジェクトが自らの可能性を発見する時](./patterns/schemalogger-ontological-evolution.md)**
+    *   SchemaLoggerが単純なログから進化的自己発見に変容する過程を記録。
+    *   オブジェクトが構造化ログを使用して変容の可能性を理解する方法を探求。
+    *   実行履歴と変容可能性の関連性を示す。
+
+*   **[UNIXパイプとRay.Framework：パイプライン哲学の進化](./patterns/unix-pipes-vs-ray-framework.md)**
+    *   Ray.FrameworkがUNIXのパイプライン哲学をどのように拡張するかの比較分析。
+    *   テキストベースのパイプから型付きオブジェクト指向コンポーネント合成への進化を探求。
+    *   基礎的なコンピューティング概念が現代開発パラダイムにどのように変換されるかを実証。
+
+### 哲学的拡張
+
+*   **[パラダイムの誕生：対話](./philosophy/dialogue-birth-of-paradigm.md)**
+    *   Ray.Frameworkがハイパーメディアシステムであるという認識が生まれた対話を記録。
+    *   単純な技術的観察が深遠な哲学的洞察につながる様子を示す。
+    *   会話自体の変容的性質を通して変容パラダイムを実証。
+
+*   **[展望は金なり：世界理解としてのプログラミングパラダイム](./philosophy/outlook-is-gold-programming-paradigms-as-world-understanding.md)**
+    *   プログラミングパラダイムが現実を理解する異なる方法を表すという哲学的探求。
+    *   計算思考の文脈におけるアラン・ケイの「展望は80のIQポイントに値する」という洞察を検討。
+    *   技術実装の批判に対処しながら、より深いパラダイム哲学を明らかにする。
+
+*   **[生まれる前に死ぬことはできない：時間的プログラミング革命](./philosophy/temporal-programming-revolution.md)**
+    *   不可逆的時間と自然な死を導入することで、プログラミングの永続性の錯覚に挑戦。
+    *   時間的存在パラダイムがコードを存在的制約を持つ時間的実体として認識する方法を探求。
+    *   ライフサイクル管理と計算存在の哲学への革命的アプローチ。
 
 ## 完全なビジョン
 
