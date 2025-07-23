@@ -4,7 +4,7 @@ This example demonstrates the Metamorphosis Architecture in action through a com
 
 ## Overview
 
-The registration process showcases how Ray.Framework handles:
+The registration process showcases how Be Framework handles:
 - Input validation
 - Business logic branching
 - Success and failure paths
@@ -98,23 +98,23 @@ All properties are `public readonly`, ensuring:
 ## Running the Example
 
 ```php
-use Ray\Framework\Ray;
+use Be\Framework\Becoming;
 use Ray\Di\Injector;
 
 $injector = new Injector(new RegistrationModule());
-$ray = new Ray($injector);
+$becoming = new Becoming($injector);
 
-$response = $ray(new RegistrationInput(
+$finalObject = $becoming(new RegistrationInput(
     'newuser@example.com',
     'SecurePass123!',
     'SecurePass123!'
 ));
 
-header('HTTP/1.1 ' . $response->statusCode);
-foreach ($response->headers as $name => $value) {
+header('HTTP/1.1 ' . $finalObject->statusCode);
+foreach ($finalObject->headers as $name => $value) {
     header("{$name}: {$value}");
 }
-echo $response->json;
+echo $finalObject->json;
 ```
 
 ## Expected Responses
@@ -245,5 +245,5 @@ class SpyUnverifiedUserFactory implements UnverifiedUserFactory
 ## Learn More
 
 - See the [Metamorphosis Architecture Manifesto](../../docs/metamorphosis-architecture-manifesto.md) for detailed patterns
-- Read the [Ray.Framework Whitepaper](../../docs/ray-framework-whitepaper.md) for philosophical foundations
+- Read the [Be Framework Whitepaper](../../docs/be-framework-whitepaper.md) for philosophical foundations
 - Explore [Ontological Programming](../../docs/ontological-programming-paper.md) for the underlying paradigm

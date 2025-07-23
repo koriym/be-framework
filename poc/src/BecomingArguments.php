@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
 use InvalidArgumentException;
 use Ray\Di\Di\Inject;

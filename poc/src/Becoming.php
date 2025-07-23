@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ray\Framework;
+namespace Be\Framework;
 
 use Ray\Di\InjectorInterface;
 use ReflectionClass;
@@ -13,12 +13,12 @@ use function is_string;
 use function sprintf;
 
 /**
- * The Ray Framework - Metamorphic Programming Engine
+ * The Be Framework - Metamorphic Programming Engine
  *
- * "Objects are processed through constructor injection, just as light rays pass through a prism -
- * instant, pure, and transformed."
+ * "Objects undergo metamorphosis through constructor injection - 
+ * a continuous process of becoming."
  */
-final class Ray implements MetamorphosisInterface
+final class Becoming implements MetamorphosisInterface
 {
     private GetClass $getClass;
     private BecomingArgumentsInterface $becomingArguments;

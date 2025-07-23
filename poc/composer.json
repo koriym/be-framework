@@ -1,6 +1,6 @@
 {
-    "name": "ray/framework",
-    "description": "Ontological Programming framework - objects that exist, transform, and become",
+    "name": "being-oriented/framework",
+    "description": "Be Framework - The Ontological Programming Framework for PHP",
     "license": "MIT",
     "authors": [
         {
@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Ray\\Framework\\": "src/"
+            "Be\\Framework\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ray\\Framework\\": [
+            "Be\\Framework\\": [
                 "tests",
                 "tests/Fake"
             ]

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * User Registration Example - Ray.Framework
+ * User Registration Example - Be Framework
  *
  * This example demonstrates the complete implementation of a user registration flow
  * using the Type-Driven Metamorphosis pattern. It showcases:
@@ -337,30 +337,30 @@ interface UserEmailResolver
 // USAGE EXAMPLE
 // =============================================================================
 
-use Ray\Framework\Ray;
+use Be\Framework\Becoming;
 use Ray\Di\Injector;
 
-// Create the Ray executor with dependency injection
+// Create the Becoming executor with dependency injection
 $injector = new Injector(new RegistrationModule());
-$ray = new Ray($injector);
+$becoming = new Becoming($injector);
 
 // Execute the registration flow
-$response = $ray(new RegistrationInput(
+$finalObject = $becoming(new RegistrationInput(
     'newuser@example.com',
     'SecurePass123!',
     'SecurePass123!'
 ));
 
-// The response will be JsonResponse with appropriate status:
+// The finalObject will be JsonResponse with appropriate status:
 // - Success path: 201 Created with userId and success message
 // - Conflict path: 409 Conflict with error message
 // The path is determined by the data and business rules, not by the caller
 
 // Send headers first
-header('HTTP/1.1 ' . $response->statusCode);
-foreach ($response->headers as $name => $value) {
+header('HTTP/1.1 ' . $finalObject->statusCode);
+foreach ($finalObject->headers as $name => $value) {
     header("{$name}: {$value}");
 }
 
 // Then output the body
-echo $response->json;
+echo $finalObject->json;
