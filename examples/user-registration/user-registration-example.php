@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace Example\UserRegistration;
 
 use Ray\InputQuery\Attribute\Input;
-use Ray\Framework\Be;
+use Be\Framework\Be;
 use Ray\Di\Di\Inject;
 
 // =============================================================================

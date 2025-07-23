@@ -22,7 +22,7 @@ use Ray\Di\Injector;
 use Ray\Di\AbstractModule;
 use Ray\Di\Di\Inject;
 use Ray\InputQuery\Attribute\Input;
-use Ray\Framework\Be;
+use Be\Framework\Be;
 
 // =============================================================================
 // DESTINY TYPES
