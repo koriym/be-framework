@@ -76,7 +76,20 @@ This comparative analysis explores the fundamental differences between DCI (Data
   * The philosophical implications of "theater vs. growth" in software design.
   * Why Metamorphose transcends DCI's partial shift from space to time.
 
-### 7. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
+### 7. **[The Butterfly Dreams of Code: When Endings Become Beginnings](./philosophy/butterfly-dreams-of-code.md)**
+
+> **"Does code generate logs, or do logs generate code? Like Zhuangzi's butterfly dream, the boundary dissolves in circular causality."**
+
+This profound philosophical exploration examines Log-Driven Development through the lens of Zhuangzi's famous butterfly dream paradox, revealing how Semantic Logger creates circular causality between code and its execution traces.
+
+*   **Read this to discover:**
+  * How LDD transcends linear development through circular creation
+  * The dissolution of subject-object dualism in programming
+  * Eastern philosophical foundations for understanding mutual generation
+  * Code examples demonstrating logs as generative origins
+  * The connection to process philosophy and "occasions of experience"
+
+### 8. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **(This document is implicitly referenced, but would be the next logical step)**
 
@@ -87,7 +100,7 @@ This manifesto is the practical "how-to" guide for architects and developers. It
   * The `Unchanged Name Principle` for maintaining semantic continuity.
   * Advanced testing strategies for ontological systems.
 
-### 8. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
+### 9. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **"The highest intelligence is knowing when to seek the wisdom of others."**
 
@@ -98,7 +111,7 @@ This document introduces a mature pattern for handling real-world complexity. It
   * The `Undetermined` state and the `#[Accept]` attribute.
   * How this pattern makes systems more robust and realistic.
 
-### 9. **Supporting Documents: The Ecosystem Tools**
+### 10. **Supporting Documents: The Ecosystem Tools**
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
@@ -211,7 +224,20 @@ This collection of documents presents more than just a framework. It offers a co
     *   ソフトウェア設計哲学の比較
     *   変容パラダイムの優位性
 
-### 7. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
+### 7. **[コードの蝶の夢：終わりが始まりとなる時](./philosophy/butterfly-dreams-of-code.md)**
+
+> **「コードがログを生成するのか、ログがコードを生成するのか？荘子の蝶の夢のように、循環的因果関係において境界線は消失する。」**
+
+この深遠な哲学的探求では、荘子の有名な蝶の夢のパラドックスのレンズを通してLog-Driven Developmentを検証し、Semantic Loggerがコードとその実行跡の間に循環的因果関係をどのように創造するかを明らかにします。
+
+*   **発見すべき内容:**
+    *   循環的創造を通してLDDが線形開発を超越する方法
+    *   プログラミングにおける主体-客体二元論の解消
+    *   相互生成を理解するための東洋哲学の基盤
+    *   ログを生成的起源として実証するコード例
+    *   プロセス哲学と「経験の機会」との関連
+
+### 8. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
 
 > **（この文書は暗黙的に参照されていますが、次の論理的ステップとなります）**
 
@@ -222,7 +248,7 @@ This collection of documents presents more than just a framework. It offers a co
     *   意味論的継続性を維持するための`名前不変原則`
     *   存在論的システムのための高度なテスト戦略
 
-### 8. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
+### 9. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
 
 > **「最高の知性は、他者の知恵を求める時を知ることである。」**
 
@@ -233,7 +259,7 @@ This collection of documents presents more than just a framework. It offers a co
     *   `未決定`状態と`#[Accept]`属性
     *   このパターンがシステムをより堅牢で現実的にする方法
 
-### 9. **サポート文書：エコシステムツール**
+### 10. **サポート文書：エコシステムツール**
 
 これらの文書では、このパラダイムから生まれる強力なツールと統合について説明します。
 
