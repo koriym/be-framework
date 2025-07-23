@@ -2,7 +2,7 @@
 
 ## Abstract
 
-For decades, programming has fought against a fundamental truth: everything changes. While philosophers from Heraclitus to Buddha have recognized impermanence as the nature of reality, our programs have modeled a static world of fixed objects performing predetermined behaviors. This paper introduces the Being Paradigm, which aligns programming with the natural order of transformation. Instead of defining objects by what they *do*, we define them by what they *become*. Through Being-Oriented Programming (BOP), exemplified by Ray.Framework, objects declare their own metamorphosis, creating programs that flow like rivers rather than stand like statues. This is not merely a technical innovation but a philosophical realignment—bringing code into harmony with the fundamental nature of existence. When objects get their becoming, they get their time; when they get their time, they get their life.
+For decades, programming has fought against a fundamental truth: everything changes. While philosophers from Heraclitus to Buddha have recognized impermanence as the nature of reality, our programs have modeled a static world of fixed objects performing predetermined behaviors. This paper introduces the Being Paradigm, which aligns programming with the natural order of transformation. Instead of defining objects by what they *do*, we define them by what they *become*. Through Being-Oriented Programming (BOP), exemplified by Be Framework, objects declare their own metamorphosis, creating programs that flow like rivers rather than stand like statues. This is not merely a technical innovation but a philosophical realignment—bringing code into harmony with the fundamental nature of existence. When objects get their becoming, they get their time; when they get their time, they get their life.
 
 *Be, Don't Do.*
 
@@ -139,11 +139,11 @@ The type system becomes the guardian of possibility. Types don't just prevent er
 **Principle 3: Temporal Continuity**
 Information flows through transformations like memory through time. The past informs the present, which shapes the future. Nothing is lost, only transformed—conservation of information mirroring conservation of energy.
 
-## 4. Ray.Framework: Being Made Manifest
+## 4. Be Framework: Being Made Manifest
 
 ### 4.1 The #[Be] Attribute: Declaration of Becoming
 
-Ray.Framework introduces a deceptively simple construct:
+Be Framework introduces a deceptively simple construct:
 
 ```php
 #[Be(ValidationAttempt::class)]
@@ -318,7 +318,7 @@ In Being Programming, we decrease our impulse to control, to orchestrate, to man
 
 ### 4.3 Type as Destiny
 
-In Ray.Framework, the type system transcends its traditional role as guardian against errors to become an oracle of possibility:
+In Be Framework, the type system transcends its traditional role as guardian against errors to become an oracle of possibility:
 
 ```php
 // The type system ensures:
@@ -451,7 +451,7 @@ Everything flows. All things are impermanent. And in this constant becoming, we 
 
 ## References
 
-[The references section would include relevant philosophical works from both Eastern and Western traditions, programming paradigm literature, and the Ray.Framework documentation]
+[The references section would include relevant philosophical works from both Eastern and Western traditions, programming paradigm literature, and the Be Framework documentation]
 
 ### Related Documentation
 

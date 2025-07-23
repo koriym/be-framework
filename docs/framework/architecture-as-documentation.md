@@ -1,11 +1,11 @@
 # Architecture as Documentation
 
 > "The code is the documentation." — Martin Fowler  
-> "The architecture **is** the documentation." — Ray.Framework
+> "The architecture **is** the documentation." — Be Framework
 
 ## Introduction
 
-Martin Fowler introduced the concept of "Code as Documentation"—the idea that well-written code should be self-documenting. Ray.Framework takes this concept to its logical conclusion: **Architecture as Documentation**. In an ontological programming system, the architecture doesn't just document itself—it *is* the documentation.
+Martin Fowler introduced the concept of "Code as Documentation"—the idea that well-written code should be self-documenting. Be Framework takes this concept to its logical conclusion: **Architecture as Documentation**. In an ontological programming system, the architecture doesn't just document itself—it *is* the documentation.
 
 ## Beyond Code as Documentation
 
@@ -27,7 +27,7 @@ class UserValidator {
 
 ### Architecture as Documentation  
 ```php
-// Ray.Framework: Architecture explains what exists
+// Be Framework: Architecture explains what exists
 #[Be([Success::class, Failure::class])]
 final class ValidationAttempt {
     public readonly Success|Failure $being;
@@ -42,7 +42,7 @@ The architecture itself declares:
 
 ## The `ray-tree` Command: Architecture Visualization
 
-Ray.Framework's ontological structure enables the automatic architecture documentation through the `ray-tree` command:
+Be Framework's ontological structure enables the automatic architecture documentation through the `ray-tree` command:
 
 ### Basic Structure Visualization
 ```bash
@@ -170,7 +170,7 @@ flowchart TD
 ## Implementation Concept
 
 ```php
-class RayTreeAnalyzer
+class BeTreeAnalyzer
 {
     public function analyze(string $path): ArchitectureMap
     {
@@ -275,7 +275,7 @@ $server->watch('./src')->generateOnChange();
 
 ## Conclusion
 
-Architecture as Documentation represents the natural evolution of self-documenting systems. By embedding architectural intent directly into code structure through attributes, union types, and naming conventions, Ray.Framework creates a system where:
+Architecture as Documentation represents the natural evolution of self-documenting systems. By embedding architectural intent directly into code structure through attributes, union types, and naming conventions, Be Framework creates a system where:
 
 - **The architecture documents itself**
 - **Documentation is always current**  
@@ -289,4 +289,4 @@ This is not just better documentation—it's a fundamental shift in how we think
 
 ---
 
-*Try it yourself: Install Ray.Framework and run `ray-tree src/` to see your architecture come alive.*
+*Try it yourself: Install Be Framework and run `ray-tree src/` to see your architecture come alive.*

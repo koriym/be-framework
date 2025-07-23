@@ -446,7 +446,7 @@ When logs become origins and code becomes dreams, we have truly entered the age 
 2. Whitehead, A.N. (1929). *Process and Reality*. Cambridge University Press.
 3. Nagarjuna. (c. 150-250 CE). *Mūlamadhyamakakārikā* (Fundamental Verses on the Middle Way).
 4. Lao Tzu. *Dao De Jing*. 6th century BCE.
-5. Ray.Framework Documentation. "Semantic Logger and Ontological Evolution."
+5. Be Framework Documentation. "Semantic Logger and Ontological Evolution."
 6. Nietzsche, F. (1882). *The Gay Science*. On the eternal recurrence.
 7. Hofstadter, D. (1979). *Gödel, Escher, Bach: An Eternal Golden Braid*. On self-referential systems.
 

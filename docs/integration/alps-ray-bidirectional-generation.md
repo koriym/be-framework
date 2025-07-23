@@ -1,21 +1,21 @@
-# ALPS and Ray.Framework: Bidirectional Generation
+# ALPS and Be Framework: Bidirectional Generation
 
 > "The best way to understand a design is to implement it. The best way to implement a design is to understand it fully." — Anonymous
 
 ## Introduction
 
-Ray.Framework represents a unique convergence of ALPS (Application-Level Profile Semantics) philosophy and executable code. This document explores the bidirectional relationship between ALPS specifications and Ray.Framework implementations, demonstrating how each can generate the other while maintaining semantic integrity.
+Be Framework represents a unique convergence of ALPS (Application-Level Profile Semantics) philosophy and executable code. This document explores the bidirectional relationship between ALPS specifications and Be Framework implementations, demonstrating how each can generate the other while maintaining semantic integrity.
 
-## The Dual Nature of Ray.Framework
+## The Dual Nature of Be Framework
 
-Ray.Framework exists simultaneously as:
+Be Framework exists simultaneously as:
 - **Executable implementation** with concrete business logic
 - **Living ALPS specification** with semantic state transitions
 - **Protocol-agnostic design** that can manifest as REST, GraphQL, or message queues
 
 This duality enables a bidirectional generation process that maintains perfect consistency between specification and implementation.
 
-## ALPS to Ray.Framework Generation
+## ALPS to Be Framework Generation
 
 ### Source ALPS Specification
 ```json
@@ -47,7 +47,7 @@ This duality enables a bidirectional generation process that maintains perfect c
 }
 ```
 
-### Generated Ray.Framework Implementation
+### Generated Be Framework Implementation
 ```bash
 ray-generate --from-alps order-workflow.alps.json --output src/OrderWorkflow/
 # Generates complete implementation skeleton in src/OrderWorkflow/
@@ -124,9 +124,9 @@ final class ProcessedOrder
 - State determination logic structure is provided
 - Implementation details remain for developer specification
 
-## Ray.Framework to ALPS Generation
+## Be Framework to ALPS Generation
 
-### Source Ray.Framework Implementation
+### Source Be Framework Implementation
 ```php
 namespace LoanProcessing;
 
@@ -176,7 +176,7 @@ $ ray-extract --to-alps src/LoanProcessing/ --output loan-processing.alps.json
 {
   "alps": {
     "title": "Loan Processing API",
-    "doc": { "value": "Generated from Ray.Framework implementation" },
+    "doc": { "value": "Generated from Be Framework implementation" },
     "version": "1.0",
     "descriptor": [
       {
@@ -310,13 +310,13 @@ union ApprovedLoanResult = FinalizedLoan | LoanCancellation
 
 ### Design-First Workflow
 1. **Business Analysis:** Define workflows in ALPS
-2. **Code Generation:** Generate Ray.Framework skeleton
+2. **Code Generation:** Generate Be Framework skeleton
 3. **Implementation:** Add business logic to generated structure
 4. **Validation:** Verify implementation matches ALPS specification
 5. **API Generation:** Automatically generate protocol-specific APIs
 
 ### Implementation-First Workflow  
-1. **Rapid Development:** Implement in Ray.Framework directly
+1. **Rapid Development:** Implement in Be Framework directly
 2. **Specification Extraction:** Generate ALPS from implementation
 3. **Documentation:** Use ALPS as living API documentation
 4. **Client Generation:** Generate client SDKs from ALPS
@@ -395,7 +395,7 @@ $ diff -r src/ src-regenerated/
 
 ## Conclusion
 
-The bidirectional relationship between ALPS and Ray.Framework represents a fundamental advancement in specification-driven development. By treating implementations as living specifications and specifications as implementable designs, we achieve perfect alignment between business intent and technical reality.
+The bidirectional relationship between ALPS and Be Framework represents a fundamental advancement in specification-driven development. By treating implementations as living specifications and specifications as implementable designs, we achieve perfect alignment between business intent and technical reality.
 
 This approach eliminates the traditional gap between design and implementation, creating a unified system where:
 - Specifications are always current
