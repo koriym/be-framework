@@ -64,7 +64,7 @@ echo $finalObject->processed; // Transformation complete
 **[Ontological Programming: A New Paradigm](docs/philosophy/ontological-programming-paper.md)**  
 The philosophical foundation introducing the "Whether?" paradigm and existence-driven design principles.
 
-**[Ray.Framework Whitepaper](docs/framework/ray-framework-whitepaper.md)**  
+**[Be Framework Whitepaper](docs/framework/ray-framework-whitepaper.md)**  
 Technical overview showing how Ontological Programming concepts are realized through Metamorphic Programming.
 
 **[Metamorphosis Architecture Manifesto](docs/patterns/metamorphosis-architecture-manifesto.md)**  
