@@ -1,8 +1,8 @@
-# UNIX Pipes and Ray.Framework: Evolution of the Pipeline Philosophy
+# UNIX Pipes and Be Framework: Evolution of the Pipeline Philosophy
 
 ## Abstract
 
-Both UNIX pipes and Ray.Framework embrace the philosophy of composing simple components into powerful systems. While UNIX revolutionized computing with its text-based pipelines, Ray.Framework extends this vision into the world of typed, object-oriented systems. This document explores how Ray.Framework builds upon UNIX's foundational insights while introducing new capabilities like dependency injection and type safety, showing how the pipeline concept evolves to meet modern development needs.
+Both UNIX pipes and Be Framework embrace the philosophy of composing simple components into powerful systems. While UNIX revolutionized computing with its text-based pipelines, Be Framework extends this vision into the world of typed, object-oriented systems. This document explores how Be Framework builds upon UNIX's foundational insights while introducing new capabilities like dependency injection and type safety, showing how the pipeline concept evolves to meet modern development needs.
 
 ---
 
@@ -22,13 +22,13 @@ This elegance comes from:
 - **Composability**: Commands combine in countless ways
 - **Simplicity**: No complex configuration needed
 
-### 1.2 Ray.Framework's Continuation
+### 1.2 Be Framework's Continuation
 
-Ray.Framework inherits these principles while extending them to object-oriented systems:
+Be Framework inherits these principles while extending them to object-oriented systems:
 
 ```php
-$ray = new Ray($injector);
-$result = $ray(new UserRegistrationRequest($email, $password));
+$becoming = new Becoming($injector);
+$result = $becoming(new UserRegistrationRequest($email, $password));
 ```
 
 The same philosophy manifests as:
@@ -51,9 +51,9 @@ echo "Hello, World" | tr '[:lower:]' '[:upper:]' | rev
 
 This universality enables incredible flexibility and ad-hoc composition.
 
-### 2.2 Ray.Framework: Rich Domain Objects in Motion
+### 2.2 Be Framework: Rich Domain Objects in Motion
 
-Ray.Framework extends the pipeline concept to rich, typed objects:
+Be Framework extends the pipeline concept to rich, typed objects:
 
 ```php
 UserRegistrationRequest → ValidatedRegistration → SavedUser → WelcomeEmailSent
@@ -81,9 +81,9 @@ grep "pattern" file.txt  # grep has everything it needs built-in
 
 This independence makes commands portable and predictable.
 
-### 3.2 Ray.Framework: Capabilities as Parameters
+### 3.2 Be Framework: Capabilities as Parameters
 
-Ray.Framework introduces a powerful innovation - objects receive both data AND capabilities:
+Be Framework introduces a powerful innovation - objects receive both data AND capabilities:
 
 ```php
 final class EmailValidator {
@@ -121,9 +121,9 @@ ls | grep ".txt"
 
 This flexibility is perfect for exploration and scripting.
 
-### 4.2 Ray.Framework: Types as Documentation
+### 4.2 Be Framework: Types as Documentation
 
-Ray.Framework adds type safety while maintaining flow:
+Be Framework adds type safety while maintaining flow:
 
 ```php
 final class ProcessedOrder {
@@ -165,9 +165,9 @@ fi
 
 This external control is clear and flexible.
 
-### 5.2 Ray.Framework: Type-Driven Branching
+### 5.2 Be Framework: Type-Driven Branching
 
-Ray.Framework embeds branching within the flow using type-driven metamorphosis:
+Be Framework embeds branching within the flow using type-driven metamorphosis:
 
 ```php
 #[Be([SuccessfulPayment::class, FailedPayment::class])]
@@ -208,9 +208,9 @@ cat log | grep "ERROR" | grep "database" | grep "connection"
 
 This independence ensures predictability.
 
-### 6.2 Ray.Framework: Shared Resource Optimization
+### 6.2 Be Framework: Shared Resource Optimization
 
-Ray.Framework's DI container enables efficient resource sharing:
+Be Framework's DI container enables efficient resource sharing:
 
 ```php
 // Container configuration
@@ -260,7 +260,7 @@ Visits: $(cat /tmp/visits)
 EOF
 ```
 
-### 7.2 Ray.Framework Approach
+### 7.2 Be Framework Approach
 
 ```php
 // Define the parallel fetching
@@ -292,10 +292,10 @@ final class DashboardBuilder {
 }
 
 // Execution
-$dashboard = $ray(new DashboardRequest($userId));
+$dashboard = $becoming(new DashboardRequest($userId));
 ```
 
-Ray.Framework adds:
+Be Framework adds:
 - **Type safety**: Each data type is explicit
 - **Parallel execution**: Framework handles concurrency
 - **Testability**: Can mock each fetcher
@@ -311,7 +311,7 @@ Ray.Framework adds:
 - **Exploration**: Ad-hoc data investigation
 - **System integration**: Gluing different tools together
 
-### 8.2 Ray.Framework Excels At:
+### 8.2 Be Framework Excels At:
 - **Domain modeling**: Rich business logic
 - **Type safety**: When correctness is critical
 - **Complex workflows**: Multi-step transformations
@@ -322,14 +322,14 @@ Ray.Framework adds:
 
 ## 9. Conclusion: Evolution, Not Revolution
 
-Ray.Framework is not a rejection of UNIX philosophy but its evolution for modern needs. Both paradigms share the core insight: **complex systems are best built from simple, composable parts**.
+Be Framework is not a rejection of UNIX philosophy but its evolution for modern needs. Both paradigms share the core insight: **complex systems are best built from simple, composable parts**.
 
 UNIX gave us the pipe—a universal way to connect programs.  
-Ray.Framework gives us the typed pipe—a way to connect domain concepts.
+Be Framework gives us the typed pipe—a way to connect domain concepts.
 
 UNIX asks: "How can we connect programs?"  
-Ray.Framework asks: "How can we connect capabilities and transformations?"
+Be Framework asks: "How can we connect capabilities and transformations?"
 
 Together, they represent a continuum of compositional thinking, from the simplicity of text streams to the richness of domain objects in metamorphosis. Each has its place in the developer's toolkit, and understanding both makes us better builders of systems.
 
-The evolution from UNIX pipes to Ray.Framework shows that great ideas don't become obsolete—they inspire new forms that address new challenges while preserving timeless wisdom.
+The evolution from UNIX pipes to Be Framework shows that great ideas don't become obsolete—they inspire new forms that address new challenges while preserving timeless wisdom.

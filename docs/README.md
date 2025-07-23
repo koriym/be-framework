@@ -1,6 +1,6 @@
 # Documentation for the Ontological Programming Paradigm
 
-Welcome to the documentation hub for a new way of thinking about software. This collection of documents outlines **Ontological Programming**, a paradigm that shifts focus from "doing" to "being," and its practical implementation, **Ray.Framework**.
+Welcome to the documentation hub for a new way of thinking about software. This collection of documents outlines **Ontological Programming**, a paradigm that shifts focus from "doing" to "being," and its practical implementation, **Be Framework**.
 
 Here, you will not just find technical specifications, but a complete philosophy for building software that is reliable, understandable, and correct by its very nature.
 
@@ -20,11 +20,11 @@ We recommend reading the documents in order, as each builds upon the concepts of
   * How this paradigm promises to eliminate entire classes of errors.
   * The role of the programmer in the age of AI.
 
-### 2. **[Ray.Framework: Programming as Metamorphosis](./framework/ray-framework-whitepaper.md)**
+### 2. **[Be Framework: Programming as Metamorphosis](./framework/be-framework-whitepaper.md)**
 
 > **"Objects are processed through constructor injection, just as light rays pass through a prism - instant, pure, and transformed."**
 
-This whitepaper details **Ray.Framework**, the concrete PHP implementation of Ontological Programming. It translates the abstract philosophy into a practical, powerful tool.
+This whitepaper details **Be Framework**, the concrete PHP implementation of Ontological Programming. It translates the abstract philosophy into a practical, powerful tool.
 
 *   **Read this to understand:**
   * How constructors become "workshops" for self-transformation.
@@ -93,7 +93,7 @@ This profound philosophical exploration examines Log-Driven Development through 
 
 > **(This document is implicitly referenced, but would be the next logical step)**
 
-This manifesto is the practical "how-to" guide for architects and developers. It provides detailed patterns, testing strategies, and conventions for building systems with Ray.Framework.
+This manifesto is the practical "how-to" guide for architects and developers. It provides detailed patterns, testing strategies, and conventions for building systems with Be Framework.
 
 *   **Read this to learn:**
   * The `Type-Driven Metamorphosis` pattern for handling conditional logic.
@@ -162,12 +162,12 @@ These documents describe the powerful tooling and integrations that emerge from 
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
   * Learn about the `ray-tree` command for automatically visualizing your system's structure, semantics, and data flows.
 
-*   **[ALPS and Ray.Framework: Bidirectional Generation](./integration/alps-ray-bidirectional-generation.md)**
+*   **[ALPS and Be Framework: Bidirectional Generation](./integration/alps-ray-bidirectional-generation.md)**
   * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
   * See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
 
 *   **[Framework Terminology](./framework/terminology.md)**
-*   Essential glossary of terms used throughout the Ontological Programming paradigm and Ray.Framework.
+*   Essential glossary of terms used throughout the Ontological Programming paradigm and Be Framework.
 *   Defines key concepts like "being," "metamorphosis," and ontological patterns for quick reference.
 
 *   **[Reviewer Guide: Embracing New Programming Paradigms](./reviewer-guide/human.md)**
@@ -199,15 +199,15 @@ These documents describe the powerful tooling and integrations that emerge from 
 *   Explores how objects use structured logs to understand their own potential for transformation.
 *   Shows the connection between execution history and metamorphosis possibilities.
 
-*   **[UNIX Pipes and Ray.Framework: Evolution of the Pipeline Philosophy](./patterns/unix-pipes-vs-ray-framework.md)**
-*   Comparative analysis showing how Ray.Framework extends UNIX's pipeline philosophy.
+*   **[UNIX Pipes and Be Framework: Evolution of the Pipeline Philosophy](./patterns/unix-pipes-vs-ray-framework.md)**
+*   Comparative analysis showing how Be Framework extends UNIX's pipeline philosophy.
 *   Explores the evolution from text-based pipes to typed, object-oriented component composition.
 *   Demonstrates how foundational computing concepts translate to modern development paradigms.
 
 ### Philosophical Extensions
 
 *   **[The Birth of a Paradigm: A Dialogue](./philosophy/dialogue-birth-of-paradigm.md)**
-*   Documents the dialogue where the realization of Ray.Framework as a hypermedia system emerged.
+*   Documents the dialogue where the realization of Be Framework as a hypermedia system emerged.
 *   Shows how simple technical observations can lead to profound philosophical insights.
 *   Demonstrates the Metamorphosis Paradigm through the conversation's own transformative nature.
 
@@ -228,7 +228,7 @@ Imagine what we can create with new vision — from doing to being, building sof
 This collection of documents presents more than just a framework. It offers a complete, cohesive vision for software development where:
 
 *   **Philosophy** (`Ontological Programming`) provides the "Why".
-*   **Implementation** (`Ray.Framework`) provides the "How".
+*   **Implementation** (`Be Framework`) provides the "How".
 *   **Patterns** (`#[Accept]`, `Metamorphosis`) provide the "What".
 *   **Tooling** (`Architecture as Documentation`, `ALPS Generation`) provides the "With".
 

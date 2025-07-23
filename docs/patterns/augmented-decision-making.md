@@ -26,7 +26,7 @@ interface HiringDecision {
 
 This interface embodies a dangerous assumption: that years of experience and GPA are the definitive indicators of a candidate's potential. But what about the developer with zero professional experience who contributed to critical open-source projects? What about the dropout who built a successful startup?
 
-The Ray.Framework's approach challenges this assumption:
+The Be Framework's approach challenges this assumption:
 
 ```php
 #[Accept]
@@ -35,13 +35,13 @@ public readonly Accepted|Rejected|Undetermined $decision;
 
 By accepting `Undetermined` as a valid state and passing all available context forward, we acknowledge that **we don't know what we don't know**.
 
-The traditional interface assumes we've identified all relevant factors. But Ray.Framework's approach preserves the entire context:
+The traditional interface assumes we've identified all relevant factors. But Be Framework's approach preserves the entire context:
 
 ```php
 // Traditional: We decide what matters
 $decision = evaluateCandidate($yearsExperience, $gpa);
 
-// Ray.Framework: We preserve everything
+// Be Framework: We preserve everything
 #[Be(InterviewInvite::class)]
 final class CandidateApplication {
     #[Input] public readonly string $name;
@@ -76,7 +76,7 @@ These aren't patterns any human would have programmed into a decision tree. They
 
 Equally important is preserving space for human intuition. The experienced recruiter who says, "I can't explain why, but this candidate feels right" is accessing a form of pattern recognition that transcends explicit rules.
 
-By maintaining rich context through the transformation chain, Ray.Framework allows human judgment to operate on complete information rather than pre-filtered data:
+By maintaining rich context through the transformation chain, Be Framework allows human judgment to operate on complete information rather than pre-filtered data:
 
 ```php
 if ($aiScore > 0.9 || $human->intuitionSaysYes($bio)) {
@@ -111,7 +111,7 @@ This shift demands a fundamental rethinking of how we structure applications:
 
 ## The Living Architecture
 
-Perhaps most remarkably, Ray.Framework embodies the very dynamism it enables. Just as humans transform based on inputs and interactions, objects in this framework undergo metamorphosis:
+Perhaps most remarkably, Be Framework embodies the very dynamism it enables. Just as humans transform based on inputs and interactions, objects in this framework undergo metamorphosis:
 
 ```php
 #[Be(NextVersion::class)]
@@ -128,15 +128,15 @@ final class CurrentVersion {
 
 This isn't merely a technical pattern—it mirrors how we ourselves evolve. The startup founder who wanted to "build a social network" transforms through user feedback into someone who wants to "connect isolated elderly people." The goal itself evolved through the process of pursuit.
 
-In traditional architectures, such fundamental shifts require rewrites. In Ray.Framework, they're natural transformations, part of the system's breathing rhythm.
+In traditional architectures, such fundamental shifts require rewrites. In Be Framework, they're natural transformations, part of the system's breathing rhythm.
 
 ## The Architecture of Transparent Decisions
 
-Ray.Framework's `#[Accept]` pattern does more than enable flexible decision-making—it creates an architecture where decisions become first-class, visible citizens of your codebase.
+Be Framework's `#[Accept]` pattern does more than enable flexible decision-making—it creates an architecture where decisions become first-class, visible citizens of your codebase.
 
 ### Decision Aggregation
 
-Traditional systems scatter decision logic throughout controllers, services, and utility classes. Ray.Framework naturally aggregates them:
+Traditional systems scatter decision logic throughout controllers, services, and utility classes. Be Framework naturally aggregates them:
 
 ```
 determine/
@@ -194,7 +194,7 @@ $approval = new LoanApproval(
 );
 ```
 
-But perhaps the most profound benefit is how this architecture handles the evolution of decision criteria. In traditional systems, adding a new factor to a decision might require changes across multiple classes, methods, and layers. With Ray.Framework, you simply add it to the constructor:
+But perhaps the most profound benefit is how this architecture handles the evolution of decision criteria. In traditional systems, adding a new factor to a decision might require changes across multiple classes, methods, and layers. With Be Framework, you simply add it to the constructor:
 
 ```php
 // Version 1
@@ -220,7 +220,7 @@ This is augmented decision making not just in execution, but in architecture its
 
 How do we measure success when decisions emerge from the interplay of rules, patterns, and intuition? Traditional metrics like precision and recall tell only part of the story.
 
-Ray.Framework suggests new metrics:
+Be Framework suggests new metrics:
 
 - **Decision Transparency**: Can a new team member understand all decision points by exploring the `determine/` folder?
 - **Evolution Velocity**: How quickly can the system incorporate new decision factors?
@@ -246,10 +246,10 @@ The developer with zero PHP experience but a fascinating bio might complement yo
 
 By designing systems that pass rich context forward and embrace indeterminate states, we create space for both AI and human intelligence to discover what truly matters, while maintaining the deterministic rules that keep our systems safe and predictable.
 
-This is the era of augmented decision making, where our code must be as dynamic as the world it serves. In Ray.Framework, we see a path forward: architectures that breathe, decisions that aggregate naturally, and systems that preserve the full richness of context while maintaining the clarity of purpose.
+This is the era of augmented decision making, where our code must be as dynamic as the world it serves. In Be Framework, we see a path forward: architectures that breathe, decisions that aggregate naturally, and systems that preserve the full richness of context while maintaining the clarity of purpose.
 
 The framework shows us that augmented intelligence isn't just about adding AI to existing systems—it's about fundamentally rethinking how we structure decisions, preserve context, and allow for transformation. When our code can evolve as naturally as our understanding, we've achieved true augmentation.
 
 ---
 
-*In Ray.Framework, every `#[Accept]` attribute is an admission that deterministic rules, while necessary, aren't always sufficient. Every `Undetermined` state is an invitation for intelligence—artificial or human—to find patterns that complement our existing logic. This isn't just a technical pattern; it's a framework for navigating a world where certainty and possibility must coexist.*
+*In Be Framework, every `#[Accept]` attribute is an admission that deterministic rules, while necessary, aren't always sufficient. Every `Undetermined` state is an invitation for intelligence—artificial or human—to find patterns that complement our existing logic. This isn't just a technical pattern; it's a framework for navigating a world where certainty and possibility must coexist.*
