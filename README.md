@@ -1,8 +1,8 @@
 # Be Framework Concept
 
-> "Objects undergo metamorphosis through constructor injection - a continuous process of becoming."
+> "Be, Don't Do" — When programming aligns with the principle of Wu Wei (無為)
 
-Be Framework is a PHP framework that implements the Metamorphic Programming paradigm, where data transformation occurs through pure constructor-driven metamorphosis.
+Be Framework is a PHP framework that implements the Ontological Programming paradigm, where data transformation occurs through pure constructor-driven metamorphosis.
 
 ## Philosophy
 
@@ -10,33 +10,38 @@ Be Framework emerged from a simple yet profound question: What if we programmed 
 
 Building upon the philosophical foundations of Ray.Di's dependency injection pattern, Be Framework treats all data transformations as metamorphosis—continuous becoming through constructor injection. Each object accepts its inevitable premises and transforms itself into a new, perfect form through the process of becoming.
 
+In Be Framework, every transformation arises from the interaction of:
+
+**Immanent factors** — what the object already is (its identity)
+
+**Transcendent factors** — what the world provides (context, capability)
+
+This mirrors how beings in the world come into meaningful existence: not by internal properties alone, but by encountering something beyond themselves.
+
 ## Core Concepts
 
-### Metamorphosis Classes
+### Being Classes
 
-Every class in Be Framework is a Metamorphosis Class—a self-contained, immutable stage of transformation:
+Every class in Be Framework is a Being Class—a self-contained, immutable stage of existence and transformation:
 
 ```php
-#[Be(ProcessedData::class)]
-final class RawData
+#[Be(Greeting::class)]  // Metamorphosis destiny
+final class NameInput
 {
     public function __construct(
-        #[Input] public readonly string $value
-    ) {
-        // Pure data, ready for transformation
-    }
+        public readonly string $name  // Immanent
+    ) {}
 }
 
-final class ProcessedData
+final class Greeting
 {
-    public readonly string $processed;
+    public readonly string $message;
     
     public function __construct(
-        #[Input] string $value,
-        #[Inject] DataProcessor $processor
+        #[Input] string $name,                // Immanent
+        #[Inject] WorldGreeting $greeting     // Transcendent
     ) {
-        // Transform in constructor
-        $this->processed = $processor->process($value);
+        $this->message = "{$greeting->text} {$name}";  // New Immanent
     }
 }
 ```
@@ -44,9 +49,11 @@ final class ProcessedData
 ### The Becoming Execution
 
 ```php
+// Execute metamorphosis
 $becoming = new Becoming($injector);
-$finalObject = $becoming(new RawData('input'));
-echo $finalObject->processed; // Transformation complete
+$result = $becoming(new NameInput('world'));
+
+echo $result->message; // hello world
 ```
 
 ## Key Principles
@@ -74,6 +81,9 @@ Practical patterns, architectural guidelines, and concrete implementation exampl
 
 **[Complete Documentation Guide](docs/README.md)**  
 Comprehensive reading guide with detailed explanations, implementation guides, FAQ, and structured learning paths in both English and Japanese.
+
+**[AI-Powered Learning](study/README.md)**  
+Interactive exploration of Be Framework through AI dialogue using complete project context ([日本語](study/README-ja.md))
 
 ## Examples
 
