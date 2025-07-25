@@ -4,7 +4,7 @@
 
 ## Abstract
 
-What happens when the responsibility for proof shifts from external tests to the objects themselves? This paper explores a emerging paradigm where objects carry their own temporal evidence within their structure, transforming testing from external verification to internal exemplification. Through an ancient Chinese dialogue about fish and happiness, we discover that the deepest questions about knowledge and verification have been waiting for us all along, embedded in the very nature of existence itself.
+What happens when the responsibility for proof shifts from external tests to the objects themselves? This paper explores an emerging paradigm where objects carry their own temporal evidence within their structure, transforming testing from external verification to internal exemplification. Through an ancient Chinese dialogue about fish and happiness, we discover that the deepest questions about knowledge and verification have been waiting for us all along, embedded in the very nature of existence itself.
 
 **Keywords**: temporal programming, internal verification, ontological programming, being-oriented development
 
