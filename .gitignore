@@ -1,2 +1,14 @@
 # Claude Code local settings
 .claude/
+
+# Merged files from study script
+merged*.txt*
+
+# Local Claude files
+CLAUDE.local.md
+
+# Vendor bin tools
+poc/vendor-bin/
+
+# Temporary slide files
+docs/slides/

@@ -98,7 +98,7 @@ public function testUserValidation(): void {
 Example-based demonstration:
 ```php
 public function exampleRejectedValidation(): void {
-    $attempt = new ValidationAttempt(
+    $attempt = new BeingData(
         input: $invalidEmail,
         been: new BeenRejected(
             reason: Reason::invalidFormat('email'),

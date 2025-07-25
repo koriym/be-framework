@@ -29,7 +29,7 @@ class UserValidator {
 ```php
 // Be Framework: Architecture explains what exists
 #[Be([Success::class, Failure::class])]
-final class ValidationAttempt {
+final class BeingData {
     public readonly Success|Failure $being;
 }
 ```

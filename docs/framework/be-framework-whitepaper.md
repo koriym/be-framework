@@ -455,7 +455,7 @@ The most profound innovation in Be Framework is the recognition that objects can
 
 ```php
 #[Be([Success::class, Failure::class])]
-final class ValidationAttempt {
+final class BeingData {
     public readonly Success|Failure $being;
     
     public function __construct(#[Input] string $data, DataProcessor $processor) {
