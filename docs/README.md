@@ -149,7 +149,20 @@ This paper examines how LDD manifests Douglas Hofstadter's "strange loops" conce
   * The emergence of consciousness through self-referential loops
   * Strange loops as creative rather than destructive forces
 
-### 12. **Supporting Documents: The Ecosystem Tools**
+### 12. **[When Tests Become Examples](./philosophy/when-tests-become-example.md)**
+
+> **"The fish knows its own joy through being, not through external verification."**
+
+This paper explores an emerging paradigm where objects carry their own temporal evidence within their structure, transforming testing from external verification to internal exemplification. Through an ancient Chinese dialogue about fish and happiness, we discover that the deepest questions about knowledge and verification have been waiting for us all along.
+
+*   **Read this to understand:**
+  * How the `Been` paradigm embodies temporal completion as object property
+  * The transformation from external testing to internal self-evidence
+  * Why traditional testing creates infinite regress problems
+  * How objects become self-evidencing through temporal structure
+  * The philosophical foundations connecting Zhuangzi's wisdom to modern programming
+
+### 13. **Supporting Documents: The Ecosystem Tools**
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
