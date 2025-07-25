@@ -4,8 +4,8 @@
 # This script creates a single text file containing all relevant project files
 # with clear separators and file paths for AI chatbot context
 
-OUTPUT_FILE="merged.txt"
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
+OUTPUT_FILE="$PROJECT_ROOT/merged.txt"
 
 echo "Creating complete Be Framework context file: $OUTPUT_FILE"
 echo "Project root: $PROJECT_ROOT"
