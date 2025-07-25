@@ -46,14 +46,14 @@ A parallel assembly pattern where a single context initiates multiple parallel t
 
 ## I
 
-### Immanent
-What the object already is—its inherent identity and essence that it carries from its previous state. In constructor parameters, represents the continuation of identity through transformation.
-
 ### #[Input] Attribute
 Marks constructor parameters that inherit data from the previous metamorphosis stage.
 
 ### #[Inject] Attribute
 Marks constructor parameters that receive transient capabilities from the dependency injection container.
+
+### Immanent
+What the object already is—its inherent identity and essence that it carries from its previous state. In constructor parameters, represents the continuation of identity through transformation.
 
 ## L
 
