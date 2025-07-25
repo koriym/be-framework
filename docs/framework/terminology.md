@@ -52,6 +52,9 @@ Marks constructor parameters that inherit data from the previous metamorphosis s
 ### #[Inject] Attribute
 Marks constructor parameters that receive transient capabilities from the dependency injection container.
 
+### Immanent
+What the object already is—its inherent identity and essence that it carries from its previous state. In constructor parameters, represents the continuation of identity through transformation.
+
 ## L
 
 ### Linear Metamorphic Chain
@@ -92,6 +95,9 @@ The philosophical principle that in the Being Paradigm, all objects are their ow
 
 ### Temporal Being
 The aspect of Being Classes that exist in time with memory of past and knowledge of potential futures.
+
+### Transcendent
+What the world provides to the object—external context, capabilities, and meaning that enable transformation. In constructor parameters, represents the external forces that interact with immanent identity to create new being.
 
 ### Type-Driven Metamorphosis
 The mechanism where objects use union types and the being property to self-determine their next form, eliminating explicit control flow.
