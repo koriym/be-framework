@@ -451,7 +451,7 @@ Natural transformations don't reverse. A butterfly cannot become a caterpillar a
 
 ```php
 #[Be(ProcessedData::class)]
-final class RawData {
+final class DataInput {
     // This transformation is one-way
     // No need for rollback logic
     // No state management complexity

@@ -168,7 +168,7 @@ public function testValidationBecomesSuccessful(): void
     $mockValidator = $this->createMock(DataValidator::class);
     $mockValidator->method('isValid')->willReturn(true);
     
-    $attempt = new ValidationAttempt('valid-data', $mockValidator);
+    $attempt = new BeingData('valid-data', $mockValidator);
     
     // Assert the TYPE and PROPERTY NAME, not behavior
     $this->assertInstanceOf(Success::class, $attempt->being);
@@ -180,7 +180,7 @@ public function testValidationBecomesFailed(): void
     $mockValidator = $this->createMock(DataValidator::class);
     $mockValidator->method('isValid')->willReturn(false);
     
-    $attempt = new ValidationAttempt('invalid-data', $mockValidator);
+    $attempt = new BeingData('invalid-data', $mockValidator);
     
     // Assert the TYPE - what the object BECAME
     $this->assertInstanceOf(Failure::class, $attempt->being);
@@ -431,7 +431,7 @@ When implementing type-driven metamorphosis:
 **Principle 1: Pure Type-Driven Destiny**
 ```php
 // GOOD: Pure type-driven with Unchanged Name Principle
-final class ValidationAttempt {
+final class BeingData {
     public readonly Success|Failure $being;
 }
 
@@ -558,7 +558,7 @@ As we refined the pattern, we discovered that naming consistency was not just st
 
 ```php
 // The unchanging chain of identity
-class ValidationAttempt {
+class BeingData {
     public readonly Success|Failure $being;  // 'being' flows forward
 }
     ↓

@@ -18,7 +18,7 @@ require_once 'vendor/autoload.php';
 /**
  * User input to be validated
  */
-#[Be(ValidationAttempt::class)]
+#[Be(BeingUser::class)]
 final class UserInput
 {
     public function __construct(
@@ -30,7 +30,7 @@ final class UserInput
  * Validation attempt - determines success or failure
  */
 #[Be([ValidUser::class, ErrorResponse::class])]
-final class ValidationAttempt
+final class BeingUser
 {
     public readonly Success|Failure $being;
 
