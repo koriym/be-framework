@@ -33,7 +33,7 @@ This represents ethical self-awareness and responsible delegation.
 ### The Current Technical Problem
 
 ```php
-final class ValidationAttempt {
+final class BeingData {
     public readonly Success|Failure $being;
     
     public function __construct(string $data, Validator $validator) {
@@ -55,7 +55,7 @@ final class ValidationAttempt {
 
 ```php
 #[Accept(DecisionInterface::class)]
-final class ValidationAttempt {
+final class BeingData {
     public Success|Failure|ThirdPartyDecision|Undetermined $being;
 
     public function __construct(string $data, Validator $validator) {
@@ -427,7 +427,7 @@ public function testObjectRecognizesLimitations(): void
     $complexData = new ComplexDataRequiringExpertise();
     $basicValidator = new BasicValidator();
     
-    $object = new ValidationAttempt($complexData, $basicValidator);
+    $object = new BeingData($complexData, $basicValidator);
     
     $this->assertInstanceOf(Undetermined::class, $object->being);
     $this->assertStringContains('expertise', $object->being->reason);
@@ -457,7 +457,7 @@ public function testFrameworkDelegatesAutomatically(): void
     $di = new DependencyInjector();
     $di->bind(TechnicalExpertInterface::class, new TechnicalExpert());
     
-    $object = new ValidationAttempt($complexData, $basicValidator);
+    $object = new BeingData($complexData, $basicValidator);
     $framework = new AcceptFramework($di);
     
     $framework->resolveUndetermined($object);

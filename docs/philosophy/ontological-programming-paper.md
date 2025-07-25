@@ -222,11 +222,11 @@ The error moves from runtime to construction time—or better yet, to compile ti
 Entities exist in chains, where each link's existence depends on the previous:
 
 ```
-RawData → ValidatedData → ProcessedData → StoredData
+DataInput → ValidatedData → ProcessedData → StoredData
    ↓           ↓              ↓             ↓
 Cannot     Cannot exist   Cannot exist  Cannot exist
 exist      without       without       without
-invalid    RawData       ValidatedData ProcessedData
+invalid    DataInput       ValidatedData ProcessedData
 ```
 
 ### 4.2 The Parallel Existence Pattern

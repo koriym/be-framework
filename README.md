@@ -79,6 +79,9 @@ Practical patterns, architectural guidelines, and concrete implementation exampl
 
 ### Complete Documentation Guide
 
+**[Be Framework Manual](docs/manual/index.md)**  
+Tutorial-level guide covering Input Classes, Being Classes, Final Objects, and philosophical foundations.
+
 **[Complete Documentation Guide](docs/README.md)**  
 Comprehensive reading guide with detailed explanations, implementation guides, FAQ, and structured learning paths in both English and Japanese.
 

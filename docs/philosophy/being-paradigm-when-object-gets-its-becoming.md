@@ -146,7 +146,7 @@ Information flows through transformations like memory through time. The past inf
 Be Framework introduces a deceptively simple construct:
 
 ```php
-#[Be(ValidationAttempt::class)]
+#[Be(BeingData::class)]
 final class UserInput
 {
     public function __construct(
@@ -258,7 +258,7 @@ Objects don't interfere with each other's natural development:
 ```php
 // Each stage minds only its own becoming
 #[Be(ProcessedData::class)]
-final class RawData {
+final class DataInput {
     // No knowledge of what ProcessedData will do
     // No control over the next transformation
 }
