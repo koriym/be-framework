@@ -16,6 +16,11 @@ Final Objects represent the destination of metamorphosis—complete, transformed
 ```php
 final class SuccessfulOrder
 {
+    public readonly string $orderId;
+    public readonly string $confirmationCode;
+    public readonly DateTimeImmutable $timestamp;
+    public readonly string $message;
+    
     public function __construct(
         #[Input] Money $total,                    // Immanent from validation
         #[Input] CreditCard $card,                // Immanent from validation
@@ -34,6 +39,10 @@ final class SuccessfulOrder
 ```php
 final class FailedOrder
 {
+    public readonly string $errorCode;
+    public readonly string $message;
+    public readonly DateTimeImmutable $timestamp;
+    
     public function __construct(
         #[Input] array $errors,                   // Immanent from validation
         #[Inject] Logger $logger,                 // Transcendent
