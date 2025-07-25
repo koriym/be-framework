@@ -28,7 +28,7 @@ Be Framework inherits these principles while extending them to object-oriented s
 
 ```php
 $becoming = new Becoming($injector);
-$result = $becoming(new UserRegistrationRequest($email, $password));
+$finalObject = $becoming(new UserRegistrationRequest($email, $password));
 ```
 
 The same philosophy manifests as:

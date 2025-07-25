@@ -131,12 +131,12 @@ The beauty of these patterns is that they're **self-organizing**. Objects declar
 
 ```php
 // No controllers, no orchestrators—just natural flow
-$result = $becoming(new ApplicationInput($documents));
+$finalObject = $becoming(new ApplicationInput($documents));
 
 // The object has become what it was meant to be
 match (true) {
-    $result->being instanceof ApprovedApplication => $this->sendApprovalEmail($result->being),
-    $result->being instanceof RejectedApplication => $this->sendRejectionEmail($result->being),
+    $finalObject->being instanceof ApprovedApplication => $this->sendApprovalEmail($finalObject->being),
+    $finalObject->being instanceof RejectedApplication => $this->sendRejectionEmail($finalObject->being),
 };
 ```
 

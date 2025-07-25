@@ -51,9 +51,9 @@ final class Greeting
 ```php
 // Execute metamorphosis
 $becoming = new Becoming($injector);
-$result = $becoming(new NameInput('world'));
+$finalObject = $becoming(new NameInput('world'));
 
-echo $result->message; // hello world
+echo $finalObject->message; // hello world
 ```
 
 ## Key Principles

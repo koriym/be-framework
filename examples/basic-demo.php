@@ -113,7 +113,7 @@ final class DataInput
  * - No external routing needed - the type determines the path
  */
 #[Be([SuccessfulValidation::class, FailedValidation::class])]
-final class BeingData
+final class BeingDataこれは
 {
     /**
      * Constructs a BeingData by validating input data and determining its outcome.
