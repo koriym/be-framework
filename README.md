@@ -93,6 +93,11 @@ Interactive exploration of Be Framework through AI dialogue using complete proje
 - **[User Registration](examples/user-registration/)**  
   Complete implementation demonstrating Type-Driven Metamorphosis and constructor validation
 
+## Audio Content
+
+**[Be Framework Podcast Series](podcast/)**  
+AI-generated audio introductions exploring ontological programming concepts and philosophical foundations (English, ~30 minutes each)
+
 ## Key Paradigm Shifts
 
 Be Framework represents fundamental shifts in how we think about programs:
