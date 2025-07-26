@@ -2,6 +2,9 @@
 
 > Understanding existence through transformation
 
+## [0. Overview: A Different Way to Think About Code](00-overview.md)
+First encounter with being-oriented programming
+
 ## [1. Input Classes](01-input-classes.md)
 Starting point of transformation - pure Immanent nature
 
@@ -16,6 +19,9 @@ Simple chains, branching destinies, and complex transformations
 
 ## [5. The Philosophy Behind](05-philosophy-behind.md)
 Wu Wei, Immanent/Transcendent principles, and BE = Be, Everything
+
+## [6. From Doing to Being: The Bigger Picture](99-from-doing-to-being-final.md)
+Understanding the paradigm shift and its place in programming history
 
 ---
 
