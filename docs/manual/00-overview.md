@@ -55,7 +55,7 @@ The difference is in the types themselves:
 function processUser(User $user) { }
 
 // Be Framework: specific states of being
-function processUser(ValidUser $user) { }
+function processUser(ValidatedUser $user) { }
 function archiveUser(DeletedUser $user) { }
 ```
 
