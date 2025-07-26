@@ -312,7 +312,7 @@ A collection of profound and beautiful expressions discovered throughout the Bei
 **"This insight was born from our dialogue"**
 - The co-creative process
 
-## 22. Final Transformations
+## 22. Creative Vision
 
 **"I wanted to create something that is both poetry and philosophy in code"**
 - The creator's vision
@@ -396,7 +396,7 @@ A collection of profound and beautiful expressions discovered throughout the Bei
 **"Programming paradigms are philosophies, and philosophies are measured by their truth"**
 - The final realization
 
-## 27. The Ultimate Questions
+## 27. Ontological Questions
 
 **"Who is this object destined to become?"**
 - The ontological question
