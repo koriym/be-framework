@@ -58,11 +58,11 @@ echo $finalObject->message; // hello world
 
 ## Key Principles
 
-1. **Constructor-Only Logic**: All transformation happens in constructors
-2. **Immutable State**: All properties are `public readonly`
-3. **Declarative Metamorphosis**: Objects declare their destiny with `#[Be]`
-4. **Type-Driven Transformation**: Objects determine their nature through types
-5. **Explicit Dependencies**: Clear separation of Immanent (`#[Input]`) and Transcendent (`#[Inject]`) factors
+1. **"Be, Don't Do"**: Program by defining existence states, not action sequences
+2. **Metamorphosis over Mutation**: Objects transform into new beings rather than changing state
+3. **Being-Oriented Programming**: Domain and time cannot be separated - objects exist temporally
+4. **Temporal Existence**: You can't die before you're born - objects follow natural life cycles
+5. **Immanent + Transcendent = New Immanent**: Every transformation combines internal essence with external capability
 
 ## Documentation
 
