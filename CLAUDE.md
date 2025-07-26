@@ -1,4 +1,4 @@
-# CLAUDE.md
+ちょうcy# CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -14,7 +14,7 @@ All development commands are run from the `poc/php/` directory:
 cd poc/php/
 
 # Testing
-composer test                    # Run unit tests
+composer test                   # Run unit tests
 composer coverage               # Generate test coverage report
 composer phpdbg                 # Generate coverage with phpdbg
 composer pcov                   # Generate coverage with pcov

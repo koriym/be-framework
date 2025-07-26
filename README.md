@@ -66,27 +66,14 @@ echo $finalObject->message; // hello world
 
 ## Documentation
 
-### Core Documents
+### Foundation
+**[Academic Papers](docs/papers/)** - Theoretical and philosophical foundations  
+**[Philosophical Foundation](docs/reference/)** - Influences and insights
 
-**[Ontological Programming: A New Paradigm](docs/papers/philosophy/ontological-programming-paper.md)**  
-The philosophical foundation introducing the "Whether?" paradigm and existence-driven design principles.
-
-**[Be Framework Whitepaper](docs/papers/framework/be-framework-whitepaper.md)**  
-Technical overview showing how Ontological Programming concepts are realized through Metamorphic Programming.
-
-**[Metamorphosis Architecture Manifesto](docs/papers/patterns/metamorphosis-architecture-manifesto.md)**  
-Practical patterns, architectural guidelines, and concrete implementation examples.
-
-### Complete Documentation Guide
-
-**[Be Framework Manual](docs/manual/index.md)**  
-Tutorial-level guide covering Input Classes, Being Classes, Final Objects, and philosophical foundations.
-
-**[Complete Documentation Guide](docs/README.md)**  
-Comprehensive reading guide with detailed explanations, implementation guides, FAQ, and structured learning paths in both English and Japanese.
-
-**[AI-Powered Learning](docs/study/README.md)**  
-Interactive exploration of Be Framework through AI dialogue using complete project context ([日本語](docs/study/README-ja.md))
+### Practical Guides  
+**[Be Framework Manual](docs/manual/index.md)** - Tutorial-level implementation guide  
+**[Complete Documentation Guide](docs/README.md)** - Comprehensive reading paths  
+**[AI-Powered Learning](docs/study/README.md)** - Interactive exploration ([日本語](docs/study/README-ja.md))
 
 ## Examples
 
@@ -117,14 +104,6 @@ Be Framework emerged from recognizing universal patterns in data transformation.
 
 These concepts emerged from decades of resource-oriented architecture framework development by Akihito Koriyama, along with extensive experience in OOP, REST, and diverse software engineering disciplines. All core concepts, ideas, and patterns presented here originated from this practical foundation. AI assisted in the evolution of these thoughts and handled all documentation, but the fundamental paradigms and design patterns were conceived through years of hands-on software architecture and development.
 
-
-## Contributing
-
-We welcome thoughts, discussions, and contributions to this new paradigm. Whether philosophical insights or practical implementations, your perspective helps shape the future of programming as metamorphosis.
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
