@@ -2,7 +2,7 @@
 
 > *"If I have seen further it is by standing on the shoulders of Giants."* — Isaac Newton
 
-This comprehensive list acknowledges all the intellectual traditions, thinkers, and sources that contributed to Be Framework's philosophical foundation. While [influences.md](influences.md) provides deep explorations of key concepts, this serves as a complete reference of our intellectual heritage.
+This comprehensive list acknowledges all the intellectual traditions, thinkers, and sources that contributed to Be Framework's philosophical foundation. While [influences.md](./influences.md) provides deep explorations of key concepts, this serves as a complete reference of our intellectual heritage.
 
 ## Eastern Philosophy and Wisdom Traditions
 
@@ -38,7 +38,7 @@ This comprehensive list acknowledges all the intellectual traditions, thinkers, 
 - **Imperative Programming** (1950s): The foundation we transcend
 - **Object-Oriented Programming** (1980s): Entities and encapsulation, which we evolve beyond
 - **Functional Programming** (2000s): Immutability and transformation, which we incorporate
-x
+
 ### Frameworks and Methodologies
 - **Ray.Di** - Dependency injection patterns that form our technical foundation
 - **BEAR.Sunday** - Resource-oriented architecture that inspires our approach to object transformation
@@ -67,4 +67,4 @@ This source list continues to evolve as Be Framework develops. New insights, dis
 
 ---
 
-*"In the landscape of ideas, Be Framework is both a tributary and a confluence—drawing from many streams of thought while carving its own channel toward new possibilities."*
+> "In the landscape of ideas, Be Framework is both a tributary and a confluence—drawing from many streams of thought while carving its own channel toward new possibilities."
