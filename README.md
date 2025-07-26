@@ -60,9 +60,9 @@ echo $finalObject->message; // hello world
 
 1. **Constructor-Only Logic**: All transformation happens in constructors
 2. **Immutable State**: All properties are `public readonly`
-3. **Type Transparency**: No hidden state or mystery boxes
-4. **Automatic Streaming**: Handle any data size with constant memory
-5. **Self-Organizing Pipelines**: Objects declare their own destiny with `#[Be]`
+3. **Declarative Metamorphosis**: Objects declare their destiny with `#[Be]`
+4. **Type-Driven Transformation**: Objects determine their nature through types
+5. **Explicit Dependencies**: Clear separation of Immanent (`#[Input]`) and Transcendent (`#[Inject]`) factors
 
 ## Documentation
 
