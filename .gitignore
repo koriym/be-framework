@@ -1,14 +1,132 @@
+# ====================
+# Be Framework Project
+# ====================
+
 # Claude Code local settings
 .claude/
-
-# Merged files from study script
-merged*.txt*
-
-# Local Claude files
 CLAUDE.local.md
 
-# Vendor bin tools
-poc/vendor-bin/
+# AI tool artifacts
+.junie/
+.cursor/
+.output.txt
 
-# Temporary slide files
+# ====================
+# Development Artifacts
+# ====================
+
+# Merged files from study/merge script
+merged*.txt*
+docs/study/merged*.txt*
+
+# Temporary and build files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# ====================
+# PHP Development
+# ====================
+
+# Composer
+poc/php/vendor/
+poc/php/vendor-bin/
+poc/php/composer.lock
+v0/php/vendor/
+v0/php/vendor-bin/
+v0/php/composer.lock
+
+# PHP build artifacts
+poc/php/build/
+v0/php/build/
+
+# PHPUnit
+poc/php/.phpunit.result.cache
+v0/php/.phpunit.result.cache
+
+# ====================
+# TypeScript/Node.js
+# ====================
+
+# Node modules
+poc/ts/node_modules/
+v0/ts/node_modules/
+
+# Package locks (keep package.json)
+poc/ts/package-lock.json
+v0/ts/package-lock.json
+
+# TypeScript build
+poc/ts/dist/
+poc/ts/build/
+v0/ts/dist/
+v0/ts/build/
+
+# Test coverage
+poc/ts/coverage/
+v0/ts/coverage/
+
+# Jest cache
+poc/ts/.jest/
+v0/ts/.jest/
+
+# ====================
+# IDE and Editor Files
+# ====================
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Visual Studio Code
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+# Keep .vscode/settings.json if it contains project-specific settings
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ====================
+# Documentation
+# ====================
+
+# Temporary documentation files
 docs/slides/
+docs/temp/
+docs/*.tmp
+
+# ====================
+# Future Development
+# ====================
+
+# v0 development artifacts (when created)
+v0/vendor/
+v0/node_modules/
+v0/build/
+v0/dist/
+v0/.env
+v0/.env.local
+
+# ====================
+# System Files
+# ====================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.nfs*
