@@ -1,6 +1,6 @@
-把握# Be Framework Build Scripts
+# AI-Powered Learning with Be Framework
 
-This directory contains utility scripts for the Be Framework project.
+Interactive exploration of Be Framework through AI dialogue using complete project context. This directory provides tools and guidance for deep learning sessions with AI assistants.
 
 ## Scripts
 
