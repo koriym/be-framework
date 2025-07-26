@@ -234,6 +234,12 @@ These documents describe the powerful tooling and integrations that emerge from 
 *   Explores how the Temporal Being paradigm recognizes code as temporal entities with existential constraints.
 *   Revolutionary approach to lifecycle management and the philosophy of computational existence.
 
+## Philosophical Foundation
+
+### Influences and Inspiration
+- **[Philosophical Influences](reference/influences.md)** - Deep exploration of the philosophical traditions that shaped Be Framework, from Eastern wisdom (Wu Wei, Buddhist dependent origination) to Western philosophy (Spinoza, Whitehead, phenomenology)
+- **[Quotes and Insights](reference/quotes.md)** - Beautiful expressions and profound insights discovered throughout the project's evolution
+
 ## The Complete Vision
 
 Imagine what we can create with new vision — from doing to being, building software that defines existence itself rather than layering instructions.
