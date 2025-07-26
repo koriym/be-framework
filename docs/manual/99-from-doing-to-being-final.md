@@ -2,7 +2,7 @@
 
 > *"The real voyage of discovery consists not in seeking new landscapes, but in having new eyes."* — Marcel Proust
 
-You've written Input Classes. You've created Being Classes. You've seen objects transform rather than mutate.
+You've written Input Classes, created Being Classes, and watched objects transform rather than mutate.
 
 Now, let's understand what you've actually discovered.
 
@@ -10,13 +10,13 @@ Now, let's understand what you've actually discovered.
 
 Look at the history of programming paradigms:
 
-**Imperative (1950s)**
-```
+### Imperative (1950s)
+```text
 DO this, THEN DO that
 ```
 World understanding: Reality is sequences of actions
 
-**Object-Oriented (1980s)**  
+### Object-Oriented (1980s)
 ```java
 object.doSomething();
 user.doValidate();
@@ -24,14 +24,14 @@ user.doValidate();
 World understanding: Reality is entities performing actions
 *Why it won: Closer to how we see the world—things doing things*
 
-**Functional (2000s)**
+### Functional (2000s)
 ```haskell
 doTransform :: Input -> Output
 ```
 World understanding: Reality is mathematical transformations
 *Why it grew: Purity and predictability matter*
 
-**What's Next?**
+### What's Next?
 ```php
 new DeletedUser($activeUser);
 ```
@@ -108,4 +108,4 @@ Welcome to programming where code doesn't just execute—it exists, transforms, 
 
 ---
 
-*"We thought we were learning a framework. We were actually discovering a new way to see."*
+> *"We thought we were learning a framework. We were actually discovering a new way to see."*
