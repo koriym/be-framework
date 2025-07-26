@@ -30,8 +30,8 @@ $user->notify();
 Be Framework focuses on **existence**:
 ```php
 $rawData = new UserInput($_POST);
-$validUser = new ValidatedUser($rawData);
-$savedUser = new SavedUser($validUser);
+$validatedUser = new ValidatedUser($rawData);
+$savedUser = new SavedUser($validatedUser);
 ```
 
 One tells objects what to DO.
@@ -56,6 +56,7 @@ function processUser(User $user) { }
 
 // Be Framework: specific states of being
 function processUser(ValidatedUser $user) { }
+function saveUser(SavedUser $user) { }
 function archiveUser(DeletedUser $user) { }
 ```
 
@@ -68,7 +69,7 @@ This manual will show you how to:
 1. **Define existence** instead of commanding actions
 2. **Make invalid states impossible** instead of checking for them
 3. **Let objects transform naturally** instead of forcing changes
-4. **Trust in existence** instead of defending against errors
+4. **Trust existence** instead of defending against errors
 
 ## Ready?
 
