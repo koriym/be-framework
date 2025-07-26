@@ -87,18 +87,6 @@ $adult = new Adult($teenager);
 // No going back
 ```
 
-## The AI Angle
-
-Why does this matter now?
-
-When AI becomes your implementation partner, clarity of existence becomes everything.
-
-"Make a user management system" → Ambiguous, leads to generic solutions
-
-"These beings can exist: ActiveUser, SuspendedUser, DeletedUser" → Crystal clear, leads to precise systems
-
-**AI understanding is now first-class.** And AI understands existence better than instructions.
-
 ## What You've Discovered
 
 Through practice, you've learned:
