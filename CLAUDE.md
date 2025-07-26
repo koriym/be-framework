@@ -8,13 +8,13 @@ Be Framework is a PHP framework implementing the Ontological Programming paradig
 
 ## Development Commands
 
-All development commands are run from the `poc/` directory:
+All development commands are run from the `poc/php/` directory:
 
 ```bash
-cd poc/
+cd poc/php/
 
 # Testing
-composer test                    # Run unit tests
+composer test                   # Run unit tests
 composer coverage               # Generate test coverage report
 composer phpdbg                 # Generate coverage with phpdbg
 composer pcov                   # Generate coverage with pcov
@@ -60,14 +60,14 @@ composer metrics                # Generate code metrics report
 
 ### Key Files
 
-- `poc/src/Becoming.php` - The metamorphosis engine that executes transformations
-- `poc/src/Be.php` - Attribute for declaring transformation destinations
-- `poc/src/BecomingArguments.php` - Resolves constructor arguments during transformation
-- `poc/src/GetClass.php` - Utility to extract next transformation class from #[Be] attributes
+- `poc/php/src/Becoming.php` - The metamorphosis engine that executes transformations
+- `poc/php/src/Be.php` - Attribute for declaring transformation destinations
+- `poc/php/src/BecomingArguments.php` - Resolves constructor arguments during transformation
+- `poc/php/src/GetClass.php` - Utility to extract next transformation class from #[Be] attributes
 
 ### Naming Conventions
 
-Follow ontological naming patterns from `docs/convention/naming-standards.md`:
+Follow ontological naming patterns from `docs/manual/convention/naming-standards.md`:
 
 **Input Classes**: `{Domain}Input` (e.g., `UserInput`, `OrderInput`)
 **Being Classes**: `Being{Domain}` or `{Domain}Being` (e.g., `BeingUser`, `BeingOrder`)  
@@ -81,24 +81,36 @@ Follow ontological naming patterns from `docs/convention/naming-standards.md`:
 ### Directory Structure
 
 ```
-poc/                           # Main development directory
-├── src/                      # Framework source code
-│   ├── Be.php               # #[Be] attribute for transformation destiny
-│   ├── Becoming.php         # Core metamorphosis engine
-│   ├── BecomingArguments.php # Constructor argument resolution
-│   ├── Debug/               # Debug utilities
-│   └── Exception/           # Framework exceptions
-├── tests/                   # Unit tests
-│   ├── BecomingTest.php     # Core framework tests
-│   └── Fake/                # Test fixtures and mocks
-└── composer.json            # Dependencies and scripts
+poc/                           # Proof of concept (complete)
+├── php/                      # PHP implementation
+│   ├── src/                 # Framework source code
+│   │   ├── Be.php          # #[Be] attribute for transformation destiny
+│   │   ├── Becoming.php    # Core metamorphosis engine
+│   │   ├── BecomingArguments.php # Constructor argument resolution
+│   │   ├── Debug/          # Debug utilities
+│   │   └── Exception/      # Framework exceptions
+│   ├── tests/              # Unit tests
+│   │   ├── BecomingTest.php # Core framework tests
+│   │   └── Fake/           # Test fixtures and mocks
+│   └── composer.json       # Dependencies and scripts
+├── ts/                      # TypeScript implementation (AI-generated)
+│   ├── src/                # Framework source code
+│   ├── tests/              # Unit tests
+│   └── package.json        # Dependencies and scripts
+└── README.md               # POC completion summary
 
 docs/                        # Comprehensive documentation
+├── papers/                  # Academic papers and deep theory
+│   ├── philosophy/         # Ontological programming concepts
+│   ├── framework/          # Technical specifications
+│   └── patterns/           # Implementation patterns
 ├── manual/                  # Tutorial-style manual
-├── convention/              # Naming and coding standards
-├── framework/               # Technical specifications
-├── philosophy/              # Ontological programming concepts
-└── patterns/                # Implementation patterns
+│   ├── convention/         # Naming and coding standards
+│   └── (tutorial chapters)
+├── study/                   # Learning and exploration
+│   ├── podcast/            # Audio learning content
+│   └── (AI dialogue content)
+└── faq/                    # Frequently asked questions
 
 examples/                    # Working examples
 ├── basic-demo.php          # Simple transformation example
@@ -122,16 +134,18 @@ examples/                    # Working examples
 The extensive documentation is organized in `docs/` with key starting points:
 - `docs/README.md` - Complete documentation guide
 - `docs/manual/index.md` - Tutorial-level framework manual
-- `docs/framework/be-framework-whitepaper.md` - Technical overview
-- `docs/philosophy/ontological-programming-paper.md` - Philosophical foundations
+- `docs/papers/framework/be-framework-whitepaper.md` - Technical overview
+- `docs/papers/philosophy/ontological-programming-paper.md` - Philosophical foundations
 
 ## Testing
 
-Tests are located in `poc/tests/` and follow the existing patterns:
+Tests are located in `poc/php/tests/` and follow the existing patterns:
 - Use fake objects in `tests/Fake/` directory for mocking
 - Test metamorphosis chains and transformations
 - Verify proper attribute handling and dependency injection
-- Run tests with `composer test` from the `poc/` directory
+- Run tests with `composer test` from the `poc/php/` directory
+
+TypeScript tests are in `poc/ts/tests/` with Jest framework.
 
 ## Common Patterns
 
