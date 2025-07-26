@@ -68,13 +68,13 @@ echo $finalObject->message; // hello world
 
 ### Core Documents
 
-**[Ontological Programming: A New Paradigm](docs/philosophy/ontological-programming-paper.md)**  
+**[Ontological Programming: A New Paradigm](docs/papers/philosophy/ontological-programming-paper.md)**  
 The philosophical foundation introducing the "Whether?" paradigm and existence-driven design principles.
 
-**[Be Framework Whitepaper](docs/framework/be-framework-whitepaper.md)**  
+**[Be Framework Whitepaper](docs/papers/framework/be-framework-whitepaper.md)**  
 Technical overview showing how Ontological Programming concepts are realized through Metamorphic Programming.
 
-**[Metamorphosis Architecture Manifesto](docs/patterns/metamorphosis-architecture-manifesto.md)**  
+**[Metamorphosis Architecture Manifesto](docs/papers/patterns/metamorphosis-architecture-manifesto.md)**  
 Practical patterns, architectural guidelines, and concrete implementation examples.
 
 ### Complete Documentation Guide
@@ -85,8 +85,8 @@ Tutorial-level guide covering Input Classes, Being Classes, Final Objects, and p
 **[Complete Documentation Guide](docs/README.md)**  
 Comprehensive reading guide with detailed explanations, implementation guides, FAQ, and structured learning paths in both English and Japanese.
 
-**[AI-Powered Learning](study/README.md)**  
-Interactive exploration of Be Framework through AI dialogue using complete project context ([日本語](study/README-ja.md))
+**[AI-Powered Learning](docs/study/README.md)**  
+Interactive exploration of Be Framework through AI dialogue using complete project context ([日本語](docs/study/README-ja.md))
 
 ## Examples
 
@@ -95,7 +95,7 @@ Interactive exploration of Be Framework through AI dialogue using complete proje
 
 ## Audio Content
 
-**[Be Framework Podcast Series](podcast/)**  
+**[Be Framework Podcast Series](docs/study/podcast/)**  
 AI-generated audio introductions exploring ontological programming concepts and philosophical foundations (English, ~30 minutes each)
 
 ## Key Paradigm Shifts
