@@ -4,7 +4,7 @@
 
 This document provides practical implementation guidance for building systems using the Metamorphosis Architecture, based on Ontological Programming principles.
 
-> **Philosophical Foundation:** For the theoretical foundation of Ontological Programming, see [Ontological Programming: A New Paradigm](ontological-programming-paper.md).
+> **Philosophical Foundation:** For the theoretical foundation of Ontological Programming, see [Ontological Programming: A New Paradigm](../philosophy/ontological-programming-paper.md).
 
 **Core Philosophy:** Ontological Programming  
 **Architectural Pattern:** The Metamorphosis Architecture
