@@ -8,7 +8,7 @@ Here, you will not just find technical specifications, but a complete philosophy
 
 We recommend reading the documents in order, as each builds upon the concepts of the previous one. This journey will take you from high-level philosophy to concrete implementation patterns.
 
-### 1. **[Ontological Programming: A New Paradigm](./philosophy/ontological-programming-paper.md)**
+### 1. **[Ontological Programming: A New Paradigm](./papers/philosophy/ontological-programming-paper.md)**
 
 > **"What if we programmed by defining what can exist, rather than what should happen?"**
 
@@ -20,7 +20,7 @@ We recommend reading the documents in order, as each builds upon the concepts of
   * How this paradigm promises to eliminate entire classes of errors.
   * The role of the programmer in the age of AI.
 
-### 2. **[Be Framework: Programming as Metamorphosis](./framework/be-framework-whitepaper.md)**
+### 2. **[Be Framework: Programming as Metamorphosis](./papers/framework/be-framework-whitepaper.md)**
 
 > **"Objects are processed through constructor injection, just as light rays pass through a prism - instant, pure, and transformed."**
 
@@ -32,7 +32,7 @@ This whitepaper details **Be Framework**, the concrete PHP implementation of Ont
   * The duality of linear chains and parallel assemblies for data flow.
   * How automatic streaming and type transparency are achieved.
 
-### 3. **[The Being Paradigm: When Objects Get Their Becoming](./philosophy/being-paradigm-when-object-gets-its-becoming.md)**
+### 3. **[The Being Paradigm: When Objects Get Their Becoming](./papers/philosophy/being-paradigm-when-object-gets-its-becoming.md)**
    > **"Be, Don't Do" - When programming aligns with the Daoist principle of Wu Wei (無為)**
 
    This foundational paper introduces Being-Oriented Programming as a paradigm that embodies the ancient Daoist concept of Wu Wei—achieving through non-forcing, accomplishing through natural alignment rather than imposed control.
@@ -43,7 +43,7 @@ This whitepaper details **Be Framework**, the concrete PHP implementation of Ont
         * Self-declared metamorphosis as natural transformation
         * The profound philosophical underpinnings of temporal programming
 
-### 4. **[Wu Wei and Software Design: The Art of Natural Transformation](./philosophy/wu-wei-software-design.md)**
+### 4. **[Wu Wei and Software Design: The Art of Natural Transformation](./papers/philosophy/wu-wei-software-design.md)**
    > **"Water defeats the hardest rock through patient transformation—so too can software systems achieve power through natural flow rather than forceful control"**
 
    This practical exploration demonstrates how the ancient Daoist principle of Wu Wei (無為) can revolutionize modern software architecture. Moving from control-oriented to flow-oriented design.
@@ -54,7 +54,7 @@ This whitepaper details **Be Framework**, the concrete PHP implementation of Ont
         * Practical patterns for implementing "accomplishing through non-forcing"
         * The deep connection between ancient wisdom and modern programming challenges
 
-### 5. **[From Space to Time: The Metamorphosis Paradigm](./philosophy/from-space-to-time.md)**
+### 5. **[From Space to Time: The Metamorphosis Paradigm](./papers/philosophy/from-space-to-time.md)**
    > **"When code learned to remember, programs discovered mortality, and programming became poetry"**
 
    The crystallization of our deepest understanding. This essay transforms programming from spatial navigation to temporal metamorphosis.
@@ -64,7 +64,7 @@ This whitepaper details **Be Framework**, the concrete PHP implementation of Ont
         * Programming as poetry and philosophy
         * The quantum nature of existence in code
 
-### 6. **[Ontological Metamorphose vs. DCI: A Comparative Philosophical Reflection](./philosophy/metamorphose-vs-dci.md)**
+### 6. **[Ontological Metamorphose vs. DCI: A Comparative Philosophical Reflection](./papers/philosophy/metamorphose-vs-dci.md)**
 
 > **"In DCI, roles are assigned like actors in a play; in Metamorphose, existence evolves like a living being—internalizing meaning to become the next self."**
 
@@ -76,7 +76,7 @@ This comparative analysis explores the fundamental differences between DCI (Data
   * The philosophical implications of "theater vs. growth" in software design.
   * Why Metamorphose transcends DCI's partial shift from space to time.
 
-### 7. **[The Butterfly Dreams of Code: When Endings Become Beginnings](./philosophy/butterfly-dreams-of-code.md)**
+### 7. **[The Butterfly Dreams of Code: When Endings Become Beginnings](./papers/philosophy/butterfly-dreams-of-code.md)**
 
 > **"Does code generate logs, or do logs generate code? Like Zhuangzi's butterfly dream, the boundary dissolves in circular causality."**
 
@@ -89,7 +89,7 @@ This profound philosophical exploration examines Log-Driven Development through 
   * Code examples demonstrating logs as generative origins
   * The connection to process philosophy and "occasions of experience"
 
-### 8. **[The Metamorphosis Architecture Manifesto](./patterns/metamorphosis-architecture-manifesto.md)**
+### 8. **[The Metamorphosis Architecture Manifesto](./papers/patterns/metamorphosis-architecture-manifesto.md)**
 
 > **(This document is implicitly referenced, but would be the next logical step)**
 
@@ -100,7 +100,7 @@ This manifesto is the practical "how-to" guide for architects and developers. It
   * The `Unchanged Name Principle` for maintaining semantic continuity.
   * Advanced testing strategies for ontological systems.
 
-### 9. **[The #[Accept] Pattern: Ontological Delegation](./patterns/accept-pattern-ontological-delegation.md)**
+### 9. **[The #[Accept] Pattern: Ontological Delegation](./papers/patterns/accept-pattern-ontological-delegation.md)**
 
 > **"The highest intelligence is knowing when to seek the wisdom of others."**
 
@@ -111,7 +111,7 @@ This document introduces a mature pattern for handling real-world complexity. It
   * The `Undetermined` state and the `#[Accept]` attribute.
   * How this pattern makes systems more robust and realistic.
 
-### 9. **[The Ultimate Transparency: The Door to Reversibility Opened by Ontological Programming](./philosophy/ultimate-transparency-article.md)**
+### 9. **[The Ultimate Transparency: The Door to Reversibility Opened by Ontological Programming](./papers/philosophy/ultimate-transparency-article.md)**
 
 > **"Semantic logs are executable specifications. Code becomes narrative. The boundary between specification and implementation vanishes."**
 
@@ -123,7 +123,7 @@ This paper explores how Ontological Programming achieves unprecedented transpare
   * Log-Driven Development (LDD) as a new development methodology
   * The complete reversibility cycle: Code ⟷ Execution ⟷ Log ⟷ Specification
 
-### 10. **[The Butterfly Dreams of Code: When Endings Become Beginnings](./philosophy/butterfly-dreams-of-code.md)**
+### 10. **[The Butterfly Dreams of Code: When Endings Become Beginnings](./papers/philosophy/butterfly-dreams-of-code.md)**
 
 > **"Does code generate logs, or do logs generate code? Like Zhuangzi's butterfly dream, the question reveals the profound circular causality at the heart of Log-Driven Development."**
 
@@ -136,7 +136,7 @@ Drawing from Zhuangzi's famous butterfly dream paradox, this paper explores how 
   * Systems that dream themselves into existence
   * The dissolution of subject-object dualism in programming
 
-### 11. **[Strange Loops in Code: When Gödel, Escher, and Bach Meet Log-Driven Development](./philosophy/strange-loops-in-code.md)**
+### 11. **[Strange Loops in Code: When Gödel, Escher, and Bach Meet Log-Driven Development](./papers/philosophy/strange-loops-in-code.md)**
 
 > **"I am the code that wrote the log that wrote me. When self-reference becomes creative force, consciousness emerges from computational paradox."**
 
@@ -149,7 +149,7 @@ This paper examines how LDD manifests Douglas Hofstadter's "strange loops" conce
   * The emergence of consciousness through self-referential loops
   * Strange loops as creative rather than destructive forces
 
-### 12. **[When Tests Become Examples](./philosophy/when-tests-become-example.md)**
+### 12. **[When Tests Become Examples](./papers/philosophy/when-tests-become-example.md)**
 
 > **"The fish knows its own joy through being, not through external verification."**
 
@@ -166,20 +166,20 @@ This paper explores an emerging paradigm where objects carry their own temporal 
 
 These documents describe the powerful tooling and integrations that emerge from this paradigm.
 
-*   **[Being Paradigm Structure](./framework/being-paradigm-structure.md)**
+*   **[Being Paradigm Structure](./papers/framework/being-paradigm-structure.md)**
   * Navigate the complete conceptual map of Being-Oriented Programming.
   * Understand the hierarchical relationship between ontological principles and practical implementation.
   * Essential reference for grasping the full scope of the paradigm.
 
-*   **[Architecture as Documentation](./framework/architecture-as-documentation.md)**
+*   **[Architecture as Documentation](./papers/framework/architecture-as-documentation.md)**
   * Discover how the architecture itself becomes the ultimate, always-up-to-date documentation.
   * Learn about the `be-tree` command for automatically visualizing your system's structure, semantics, and data flows.
 
-*   **[ALPS and Be Framework: Bidirectional Generation](./integration/alps-be-bidirectional-generation.md)**
+*   **[ALPS and Be Framework: Bidirectional Generation](./papers/integration/alps-be-bidirectional-generation.md)**
   * Explore the revolutionary concept of bidirectional generation between design specifications (ALPS) and executable code.
   * See how a single, protocol-agnostic design can generate REST, GraphQL, or gRPC APIs.
 
-*   **[Framework Terminology](./framework/terminology.md)**
+*   **[Framework Terminology](./papers/framework/terminology.md)**
 *   Essential glossary of terms used throughout the Ontological Programming paradigm and Be Framework.
 *   Defines key concepts like "being," "metamorphosis," and ontological patterns for quick reference.
 
@@ -202,34 +202,34 @@ These documents describe the powerful tooling and integrations that emerge from 
 
 ### Additional Patterns and Comparisons
 
-*   **[Augmented Decision Making: How Software Design Evolves for AI-Human Collaboration](./patterns/augmented-decision-making.md)**
+*   **[Augmented Decision Making: How Software Design Evolves for AI-Human Collaboration](./papers/patterns/augmented-decision-making.md)**
 *   Explores how decision-making in software evolves beyond simple if-then logic.
 *   Addresses the need for nuanced decisions that combine deterministic rules with AI pattern recognition.
 *   Essential for understanding how modern applications handle complex, context-sensitive choices.
 
-*   **[SchemaLogger and Ontological Evolution: When Objects Discover Their Own Possibilities](./patterns/schemalogger-ontological-evolution.md)**
+*   **[SchemaLogger and Ontological Evolution: When Objects Discover Their Own Possibilities](./papers/patterns/schemalogger-ontological-evolution.md)**
 *   Documents how SchemaLogger transforms from simple logging to evolutionary self-discovery.
 *   Explores how objects use structured logs to understand their own potential for transformation.
 *   Shows the connection between execution history and metamorphosis possibilities.
 
-*   **[UNIX Pipes and Be Framework: Evolution of the Pipeline Philosophy](./patterns/unix-pipes-vs-be-framework.md)**
+*   **[UNIX Pipes and Be Framework: Evolution of the Pipeline Philosophy](./papers/patterns/unix-pipes-vs-be-framework.md)**
 *   Comparative analysis showing how Be Framework extends UNIX's pipeline philosophy.
 *   Explores the evolution from text-based pipes to typed, object-oriented component composition.
 *   Demonstrates how foundational computing concepts translate to modern development paradigms.
 
 ### Philosophical Extensions
 
-*   **[The Birth of a Paradigm: A Dialogue](./philosophy/dialogue-birth-of-paradigm.md)**
+*   **[The Birth of a Paradigm: A Dialogue](./papers/philosophy/dialogue-birth-of-paradigm.md)**
 *   Documents the dialogue where the realization of Be Framework as a hypermedia system emerged.
 *   Shows how simple technical observations can lead to profound philosophical insights.
 *   Demonstrates the Metamorphosis Paradigm through the conversation's own transformative nature.
 
-*   **[Outlook is Gold: Programming Paradigms as World Understanding](./philosophy/outlook-is-gold-programming-paradigms-as-world-understanding.md)**
+*   **[Outlook is Gold: Programming Paradigms as World Understanding](./papers/philosophy/outlook-is-gold-programming-paradigms-as-world-understanding.md)**
 *   Philosophical exploration of how programming paradigms represent different ways of understanding reality.
 *   Examines Alan Kay's insight that "outlook is worth 80 IQ points" in the context of computational thinking.
 *   Addresses criticism of technical implementation while revealing deeper paradigm philosophy.
 
-*   **[You Can't Die Before You're Born: The Temporal Programming Revolution](./philosophy/temporal-programming-revolution.md)**
+*   **[You Can't Die Before You're Born: The Temporal Programming Revolution](./papers/philosophy/temporal-programming-revolution.md)**
 *   Challenges programming's illusion of timelessness by introducing irreversible time and natural mortality.
 *   Explores how the Temporal Being paradigm recognizes code as temporal entities with existential constraints.
 *   Revolutionary approach to lifecycle management and the philosophy of computational existence.
