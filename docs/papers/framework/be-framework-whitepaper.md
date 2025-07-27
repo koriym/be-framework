@@ -6,9 +6,9 @@
 
 Be Framework introduces the Metamorphic Programming paradigm, a novel approach that transforms data processing through pure constructor-driven metamorphosis. Building upon the philosophical foundations of Ray.Di's dependency injection pattern, this framework eliminates traditional complexity by treating all data transformations as light passing through prisms—instant, pure, and transformed. Through its radical constructor-only architecture, automatic streaming capabilities, and complete type transparency, Be Framework achieves what decades of framework evolution have pursued: making the framework itself disappear into the natural patterns of self-transformation.
 
-> **Philosophical Foundation:** This whitepaper builds upon Ontological Programming principles. For the complete theoretical framework, see [Ontological Programming: A New Paradigm](ontological-programming-paper.md).
+> **Philosophical Foundation:** This whitepaper builds upon Ontological Programming principles. For the complete theoretical framework, see [Ontological Programming: A New Paradigm](../philosophy/ontological-programming-paper.md).
 
-> **Implementation Patterns:** For detailed architectural patterns and testing strategies, see [Metamorphosis Architecture Manifesto](metamorphosis-architecture-manifesto.md).
+> **Implementation Patterns:** For detailed architectural patterns and testing strategies, see [Metamorphosis Architecture Manifesto](../patterns/metamorphosis-architecture-manifesto.md).
 
 **Keywords:** Metamorphic Programming, Constructor Injection, Type Transparency, Self-Transformation, Streaming Architecture
 
@@ -469,7 +469,7 @@ final class BeingData {
 
 Objects discover their nature through the `$being` property and union types, eliminating external routing logic.
 
-> **Complete Implementation Guide:** For detailed Type-Driven Metamorphosis patterns, testing strategies, and the Unchanged Name Principle, see [Metamorphosis Architecture Manifesto](metamorphosis-architecture-manifesto.md#type-driven-metamorphosis).
+> **Complete Implementation Guide:** For detailed Type-Driven Metamorphosis patterns, testing strategies, and the Unchanged Name Principle, see [Metamorphosis Architecture Manifesto](../patterns/metamorphosis-architecture-manifesto.md#type-driven-metamorphosis).
 
 ---
 
@@ -756,7 +756,7 @@ Be Framework suggests a new relationship between programmer and program:
 
 As AI transforms software development, the question of human purpose in programming becomes acute. While AI excels at generating implementations, humans retain the unique role of defining *what should exist*.
 
-> **Deep Dive:** For comprehensive exploration of AI-era programming and the "Whether?" paradigm, see [Ontological Programming: A New Paradigm](ontological-programming-paper.md#the-ai-era-and-existential-programming).
+> **Deep Dive:** For comprehensive exploration of AI-era programming and the "Whether?" paradigm, see [Ontological Programming: A New Paradigm](../philosophy/ontological-programming-paper.md#the-ai-era-and-existential-programming).
 
 ### 7.5 The Meta-Ontological Nature of Ideas
 

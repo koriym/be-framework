@@ -529,7 +529,7 @@ This pattern transforms the impossible choice between forced decisions and syste
 ## References
 
 - Originated from conversation with CodeRabbit AI: [GitHub Issue #4](https://github.com/koriym/Be Framework/issues/4)
-- [Ontological Programming: A New Paradigm](ontological-programming-paper.md)
+- [Ontological Programming: A New Paradigm](../philosophy/ontological-programming-paper.md)
 - [The Metamorphosis Architecture Manifesto](metamorphosis-architecture-manifesto.md)
 - [Type-Driven Metamorphosis patterns](metamorphosis-architecture-manifesto.md#type-driven-metamorphosis)
 
