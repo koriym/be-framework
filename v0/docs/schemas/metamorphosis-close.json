@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.org/schemas/metamorphosis-close.json",
+  "title": "Metamorphosis Close Context",
+  "description": "Schema for transformation completion - object properties AFTER instantiation",
+  "type": "object",
+  "required": ["fromClass", "toClass", "beAttribute", "resultProperties", "success"],
+  "properties": {
+    "fromClass": {
+      "type": "string",
+      "description": "Class that was transformed from",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
+    },
+    "toClass": {
+      "type": "string",
+      "description": "Class that was transformed to",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
+    },
+    "beAttribute": {
+      "type": "string",
+      "description": "The #[Be] attribute that triggered transformation",
+      "examples": ["#[Be(ValidatedUser::class)]", "#[Be([Success::class, Failure::class])]"]
+    },
+    "resultProperties": {
+      "type": "object",
+      "description": "Object properties after construction",
+      "additionalProperties": true
+    },
+    "success": {
+      "type": "boolean",
+      "description": "Whether the transformation succeeded"
+    },
+    "error": {
+      "type": ["string", "null"],
+      "description": "Error message if transformation failed"
+    },
+    "duration": {
+      "type": "number",
+      "description": "Time taken for this transformation in seconds",
+      "minimum": 0
+    },
+    "memoryUsage": {
+      "type": "integer",
+      "description": "Memory used during transformation in bytes",
+      "minimum": 0
+    }
+  },
+  "links": [
+    {
+      "anchor": "#/properties/resultProperties",
+      "rel": "describedby",
+      "href": "https://be-framework.org/docs/being-classes",
+      "title": "Being Classes Documentation"
+    },
+    {
+      "anchor": "#/properties/error",
+      "rel": "related",
+      "href": "https://be-framework.org/docs/error-handling",
+      "title": "Error Handling in Be Framework"
+    }
+  ]
+}
