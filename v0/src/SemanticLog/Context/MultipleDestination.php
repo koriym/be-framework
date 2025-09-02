@@ -13,4 +13,3 @@ final class MultipleDestination
         public readonly array $possibleClasses,  // class-string[]
     ) {}
 }
-}

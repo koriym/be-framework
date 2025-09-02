@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework;
+namespace Be\Framework\Attribute;
 
 use Attribute;
 
