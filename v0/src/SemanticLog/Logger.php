@@ -6,20 +6,17 @@ namespace Be\Framework\SemanticLog;
 
 use Be\Framework\BecomingArgumentsInterface;
 use Be\Framework\BeingClass;
-use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
-use Be\Framework\SemanticLog\Context\{
-    SingleDestination,
-    MultipleDestination, 
-    FinalDestination,
-    DestinationNotFound
-};
+use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
-use ReflectionClass;
+
+use function get_object_vars;
+use function is_object;
+use function is_string;
 
 /**
  * Be Framework Logger
- * 
+ *
  * Handles all semantic logging concerns, keeping Becoming engine clean.
  */
 final class Logger implements LoggerInterface
@@ -39,13 +36,13 @@ final class Logger implements LoggerInterface
     public function open(object $current, string|array $becoming): string
     {
         // Only handle single transformations for now
-        if (!is_string($becoming)) {
+        if (! is_string($becoming)) {
             return ''; // Skip logging for array case
         }
 
         $fromClass = $current::class;
         $beAttribute = "#[Be({$becoming}::class)]";
-        
+
         $args = ($this->becomingArguments)($current, $becoming);
         $immanentSources = $this->extractImmanentSources($current, $args);
         $transcendentSources = $this->extractTranscendentSources($args);
@@ -74,9 +71,10 @@ final class Logger implements LoggerInterface
                 properties: [],
                 be: new DestinationNotFound(
                     error: $error ?? 'Unknown error',
-                    attemptedClasses: []
+                    attemptedClasses: [],
                 ),
             ), $openId);
+
             return;
         }
 
@@ -94,7 +92,7 @@ final class Logger implements LoggerInterface
     {
         $immanentSources = [];
         $properties = get_object_vars($current);
-        
+
         // Map each arg back to its source property
         foreach ($args as $paramName => $value) {
             // Find matching property in current object
@@ -105,41 +103,30 @@ final class Logger implements LoggerInterface
                 }
             }
         }
-        
+
         return $immanentSources;
     }
 
     private function extractTranscendentSources(array $args): array
     {
         $transcendentSources = [];
-        
+
         // For now, detect injected services by checking if value is an object
         // and doesn't match simple scalar types
         foreach ($args as $paramName => $value) {
-            if (is_object($value) && !($value instanceof \stdClass)) {
+            if (is_object($value)) {
                 $transcendentSources[$paramName] = $value::class;
             }
         }
-        
+
         return $transcendentSources;
     }
 
     private function extractProperties(object $result): array
     {
-        // Use get_object_vars for dynamic properties (like stdClass)
-        $properties = get_object_vars($result);
-        
-        // For regular classes, also check declared properties
-        if ($result::class !== 'stdClass') {
-            $reflection = new ReflectionClass($result);
-            foreach ($reflection->getProperties() as $property) {
-                if ($property->isPublic() && !isset($properties[$property->getName()])) {
-                    $properties[$property->getName()] = $property->getValue($result);
-                }
-            }
-        }
-
-        return $properties;
+        // @todo Handle uninitialized properties in Accept pattern objects
+        // For now, get_object_vars() covers all realistic Be Framework objects
+        return get_object_vars($result);
     }
 
     private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination|DestinationNotFound

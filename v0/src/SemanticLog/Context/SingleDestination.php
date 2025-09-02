@@ -11,5 +11,6 @@ final readonly class SingleDestination
 {
     public function __construct(
         public string $nextClass,  // class-string
-    ) {}
+    ) {
+    }
 }

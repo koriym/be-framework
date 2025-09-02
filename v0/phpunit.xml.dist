@@ -9,10 +9,16 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
+    </source>
+    <coverage includeUncoveredFiles="true">
+        <report>
+            <html outputDirectory="build/coverage" lowUpperBound="50" highLowerBound="90"/>
+            <text outputFile="php://stdout"/>
+        </report>
     </coverage>
     <php>
         <ini name="error_reporting" value="-1"/>

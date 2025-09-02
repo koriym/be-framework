@@ -17,7 +17,9 @@
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",
         "phpunit/phpunit": "^12.2",
-        "koriym/xdebug-mcp": "^0.2.1"
+        "koriym/xdebug-mcp": "^0.2.1",
+        "doctrine/coding-standard": "^12.0",
+        "vimeo/psalm": "^6.0@dev"
     },
     "autoload": {
         "psr-4": {
@@ -36,7 +38,7 @@
     "scripts": {
         "bin": "echo 'bin not installed'",
         "test": "phpunit",
-        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage phpunit --coverage-text --coverage-html=build/coverage",
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage",
         "phpdbg": "phpdbg -qrr phpunit --coverage-text --coverage-html ./build/coverage --coverage-clover=build/coverage.xml",
         "pcov": "php -dextension=pcov.so -d pcov.enabled=1 phpunit --coverage-text --coverage-html=build/coverage --coverage-clover=build/coverage.xml",
         "cs": "phpcs",
@@ -92,7 +94,8 @@
     },
     "config": {
         "allow-plugins": {
-            "bamarni/composer-bin-plugin": true
+            "bamarni/composer-bin-plugin": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "extra": {
