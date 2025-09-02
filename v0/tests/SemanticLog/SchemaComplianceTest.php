@@ -11,7 +11,7 @@ use Koriym\SemanticLogger\SemanticLogger;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-#[Be(ProcessedData::class)]
+#[Be(\Be\Framework\FakeProcessedData::class)]
 final class TestInputForSchema
 {
     public function __construct(
@@ -19,12 +19,6 @@ final class TestInputForSchema
     ) {}
 }
 
-final class ProcessedData
-{
-    public function __construct(
-        #[Input] string $data
-    ) {}
-}
 
 final class SchemaComplianceTest extends TestCase
 {
@@ -47,11 +41,11 @@ final class SchemaComplianceTest extends TestCase
     {
         $input = new TestInputForSchema('test data');
         
-        $openId = $this->logger->open($input, ProcessedData::class);
+        $openId = $this->logger->open($input, \Be\Framework\FakeProcessedData::class);
         $this->assertNotEmpty($openId);
         
         // Complete the operation to avoid NoLogSessionException
-        $result = new ProcessedData('test data');
+        $result = new \Be\Framework\FakeProcessedData('test data');
         $this->logger->close($result, $openId);
         
         $logData = $this->semanticLogger->toArray();
@@ -71,7 +65,7 @@ final class SchemaComplianceTest extends TestCase
         
         // Verify expected values
         $this->assertEquals(TestInputForSchema::class, $openContext['fromClass']);
-        $this->assertEquals('#[Be(Be\Framework\SemanticLog\ProcessedData::class)]', $openContext['beAttribute']);
+        $this->assertEquals('#[Be(Be\Framework\FakeProcessedData::class)]', $openContext['beAttribute']);
         $this->assertEquals(['data' => 'Be\Framework\SemanticLog\TestInputForSchema::data'], $openContext['immanentSources']);
         $this->assertEquals([], $openContext['transcendentSources']); // Empty for this test
     }
@@ -79,9 +73,9 @@ final class SchemaComplianceTest extends TestCase
     public function testCloseContextSchemaCompliance(): void
     {
         $input = new TestInputForSchema('test data');
-        $openId = $this->logger->open($input, ProcessedData::class);
+        $openId = $this->logger->open($input, \Be\Framework\FakeProcessedData::class);
         
-        $result = new ProcessedData('test data');
+        $result = new \Be\Framework\FakeProcessedData('test data');
         $this->logger->close($result, $openId);
         
         $logData = $this->semanticLogger->toArray();
@@ -103,9 +97,9 @@ final class SchemaComplianceTest extends TestCase
     public function testJSONSchemaValidation(): void
     {
         $input = new TestInputForSchema('test data');
-        $openId = $this->logger->open($input, ProcessedData::class);
+        $openId = $this->logger->open($input, \Be\Framework\FakeProcessedData::class);
         
-        $result = new ProcessedData('test data');
+        $result = new \Be\Framework\FakeProcessedData('test data');
         $this->logger->close($result, $openId);
         
         $logData = $this->semanticLogger->toArray();
@@ -114,7 +108,7 @@ final class SchemaComplianceTest extends TestCase
         // Prepare open context for JSON schema validation
         $openValidation = [
             'fromClass' => $openContext['fromClass'],
-            'toClass' => 'ProcessedData',
+            'toClass' => 'FakeProcessedData',
             'beAttribute' => $openContext['beAttribute'],
             'immanentSources' => $openContext['immanentSources'],
             'transcendentSources' => (object) $openContext['transcendentSources']
