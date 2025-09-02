@@ -6,10 +6,10 @@ namespace Be\Framework\SemanticLog;
 
 use Be\Framework\BecomingArgumentsInterface;
 use Be\Framework\BeingClass;
-use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
-use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Be\Framework\SemanticLog\Context\DestinationNotFound;
 use Be\Framework\SemanticLog\Context\FinalDestination;
+use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
+use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Be\Framework\SemanticLog\Context\MultipleDestination;
 use Be\Framework\SemanticLog\Context\SingleDestination;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
