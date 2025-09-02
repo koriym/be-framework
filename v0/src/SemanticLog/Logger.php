@@ -8,12 +8,15 @@ use Be\Framework\BecomingArgumentsInterface;
 use Be\Framework\BeingClass;
 use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
 use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
+use Be\Framework\SemanticLog\Context\DestinationNotFound;
+use Be\Framework\SemanticLog\Context\FinalDestination;
+use Be\Framework\SemanticLog\Context\MultipleDestination;
+use Be\Framework\SemanticLog\Context\SingleDestination;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 
 use function get_object_vars;
 use function is_object;
 use function is_string;
-
 /**
  * Be Framework Logger
  *
