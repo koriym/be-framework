@@ -11,7 +11,7 @@ use Koriym\SemanticLogger\SemanticLogger;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
-#[Be(ProcessedData::class)]
+#[Be(\Be\Framework\FakeProcessedData::class)]
 final class TestInput
 {
     public function __construct(
@@ -19,14 +19,6 @@ final class TestInput
     ) {}
 }
 
-final class ProcessedData
-{
-    public function __construct(
-        #[Input] string $data
-    ) {
-        // Valid Be Framework class with proper Input attribute
-    }
-}
 
 final class LoggerTest extends TestCase
 {
@@ -50,7 +42,7 @@ final class LoggerTest extends TestCase
         $input = new TestInput('test data');
         
         // Test open logging
-        $openId = $this->logger->open($input, ProcessedData::class);
+        $openId = $this->logger->open($input, \Be\Framework\FakeProcessedData::class);
         $this->assertNotEmpty($openId);
         
         // Simulate successful transformation result  
@@ -66,7 +58,7 @@ final class LoggerTest extends TestCase
         // Verify open log structure
         $openData = $logData['open'];
         $this->assertEquals(TestInput::class, $openData['context']['fromClass']);
-        $this->assertEquals('#[Be(Be\Framework\SemanticLog\ProcessedData::class)]', $openData['context']['beAttribute']);
+        $this->assertEquals('#[Be(Be\Framework\FakeProcessedData::class)]', $openData['context']['beAttribute']);
         
         // Verify close log structure
         $closeData = $logData['close'];
@@ -89,7 +81,7 @@ final class LoggerTest extends TestCase
     {
         $input = new TestInput('test data');
         
-        $openId = $this->logger->open($input, ProcessedData::class);
+        $openId = $this->logger->open($input, \Be\Framework\FakeProcessedData::class);
         
         // Test error case with null result
         $this->logger->close(null, $openId, 'Test error message');
@@ -104,7 +96,7 @@ final class LoggerTest extends TestCase
     {
         $input = new TestInput('test data');
         
-        $openId = $this->logger->open($input, ProcessedData::class);
+        $openId = $this->logger->open($input, \Be\Framework\FakeProcessedData::class);
         
         // Test error case without error message (triggers 'Unknown error')
         $this->logger->close(null, $openId);
