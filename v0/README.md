@@ -14,30 +14,32 @@ Be Framework implements Ontological Programming - focusing on *what things are* 
 ## Quick Start
 
 ```php
-#[Be(ValidatedUser::class)]
-final class UserInput
+#[Be(ProcessedOrder::class)]
+final class OrderInput
 {
     public function __construct(
-        public readonly string $email,
-        public readonly string $name
+        public readonly string $productId,
+        public readonly int $quantity
     ) {}
 }
 
-final class ValidatedUser
+final class ProcessedOrder
 {
+    public readonly float $total;
+    public readonly string $status;
+    
     public function __construct(
-        #[Input] string $email,
-        #[Input] string $name,
-        #[Inject] ValidatorInterface $validator
+        #[Input] string $productId,      // Immanent
+        #[Input] int $quantity,          // Immanent
+        #[Inject] PriceCalculator $calc  // Transcendent
     ) {
-        // Validation logic here
-        $this->email = $email;
-        $this->name = $name;
+        $this->total = $calc->calculate($productId, $quantity);
+        $this->status = 'processed';
     }
 }
 
 $becoming = new Becoming($injector);
-$result = $becoming(new UserInput('user@example.com', 'John'));
+$result = $becoming(new OrderInput('PROD-123', 2));
 ```
 
 ## Development Commands
