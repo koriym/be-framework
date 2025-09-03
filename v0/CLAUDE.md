@@ -4,148 +4,214 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Be Framework v0 - Production implementation of Ontological Programming paradigm with semantic logging infrastructure.
+Be Framework v0 - Production implementation of Ontological Programming paradigm where data transformations occur through constructor-driven metamorphosis with comprehensive semantic logging.
 
-## Forward Trace Debugging Best Practices
+## Core Architecture
 
-### 🎯 Core Principle: Execute First, Debug Second
+### Metamorphosis Engine
+The `Becoming` class (`src/Becoming.php`) is the central engine that processes objects through continuous transformations:
+- Takes an input object and follows `#[Be]` attributes to determine transformation paths
+- Supports linear transformations (`#[Be(NextClass::class)]`) and branching (`#[Be([ClassA::class, ClassB::class])]`)
+- All transformation logic resides in constructors - no methods for data transformation
+- Properties are `public readonly` ensuring immutability
 
-**CRITICAL: Always verify the command executes successfully before adding xdebug-debug**
+### Key Components
+- **`src/Attribute/Be.php`**: Declares transformation destinations for objects
+- **`src/BecomingArguments.php`**: Resolves constructor arguments during metamorphosis
+- **`src/BeingClass.php`**: Utility to extract next transformation class from attributes
+- **`src/SemanticLog/`**: Comprehensive logging infrastructure capturing transformation lifecycle
 
-### ✅ Correct Forward Trace Workflow
+### Semantic Logging System
+The framework includes sophisticated semantic logging that tracks:
+- **Open Context**: Logs when a transformation begins (immanent/transcendent sources)
+- **Close Context**: Logs transformation completion with resulting properties
+- **Destinations**: SingleDestination, MultipleDestination, FinalDestination, or DestinationNotFound
+- Schema validation via `docs/schemas/` JSON schemas
 
-1. **First: Verify command execution**
+## Development Commands
+
+```bash
+# Testing
+composer test                    # Run all unit tests
+php vendor/bin/phpunit --filter testMethodName   # Run specific test method
+php vendor/bin/phpunit path/to/TestFile.php      # Run specific test file
+
+# Code Quality
+composer cs                      # Check coding style (phpcs)
+composer cs-fix                  # Auto-fix coding style issues
+composer sa                      # Run static analysis (phpstan + psalm)
+composer phpstan                 # Run PHPStan only
+composer psalm                   # Run Psalm only
+
+# Coverage
+composer coverage                # Generate coverage report with xdebug
+composer phpdbg                  # Generate coverage with phpdbg
+composer pcov                    # Generate coverage with pcov
+
+# Comprehensive Checks
+composer tests                   # Run cs + sa + test
+composer build                   # Full build: clean + cs + sa + coverage + crc + metrics
+
+# Utilities
+composer clean                   # Clear analysis caches
+composer baseline                # Generate baselines for PHPStan and Psalm
+composer crc                     # Run composer require checker
+composer metrics                 # Generate code metrics report
+```
+
+## Forward Trace Debugging
+
+### Core Workflow
+1. **Always verify the command works first**:
    ```bash
-   # Step 1: Ensure basic execution works
-   php vendor/bin/phpunit tests/SemanticLog/SchemaComplianceTest.php::testOpenContextSchemaCompliance
+   php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
    ```
 
-2. **Then: Add Forward Trace debugging**
+2. **Then add xdebug-debug for tracing**:
    ```bash
-   # Step 2: Only after confirming execution, add debugging
-   ./vendor/bin/xdebug-debug --context="Debugging class resolution issues" --break="tests/SemanticLog/SchemaComplianceTest.php:48" --exit-on-break --steps=10 --json -- php vendor/bin/phpunit --filter testOpenContextSchemaCompliance tests/SemanticLog/SchemaComplianceTest.php
+   ./vendor/bin/xdebug-debug --context="Debug context" \
+     --break="file.php:lineNumber" \
+     --exit-on-break \
+     --steps=10 \
+     --json \
+     -- php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
    ```
 
-### ❌ Common Forward Trace Mistakes
+### Best Practices
+- Use `--steps=10-20` for optimal signal-to-noise ratio
+- Target specific lines with breakpoints
+- Focus on `"recording_type": "diff"` entries in output
+- Use PHPUnit's `--filter` flag (not `::method` syntax)
 
-**Problem: No output from xdebug-debug**
-- **Cause**: Base command doesn't execute properly
-- **Solution**: Test the PHP command first without xdebug-debug
+## Testing Patterns
 
-**Problem: Wrong command syntax**
-- **Cause**: Incorrect PHPUnit filter syntax (`::method` vs `--filter method`)
-- **Solution**: Verify command syntax independently
-
-**Problem: Breakpoint not hit**
-- **Cause**: File path or line number incorrect
-- **Solution**: Use absolute paths or verify relative paths
-
-### 🔍 Forward Trace Success Patterns
-
-**Effective Step Counts:**
-- **Simple issues**: `--steps=5-10`  
-- **Complex flows**: `--steps=15-25`
-- **Avoid**: `--steps=50+` (too much noise)
-
-**Optimal Breakpoint Strategy:**
+### Running Tests
 ```bash
-# Target specific problem lines
---break="src/SemanticLog/Logger.php:47"  # beAttribute generation
---break="tests/SemanticLog/SchemaComplianceTest.php:48"  # class instantiation
+# Run all tests
+composer test
+
+# Run specific test class
+php vendor/bin/phpunit tests/SemanticLog/LoggerTest.php
+
+# Run specific test method
+php vendor/bin/phpunit --filter testMultipleDestination
+
+# Run tests matching pattern
+php vendor/bin/phpunit --filter "Semantic"
 ```
 
-**Variable Condition Examples:**
-```bash
-# Stop when variable has unexpected value
---break="Logger.php:47:\$becoming!=null"
---break="SchemaComplianceTest.php:48:\$class!=null"
-```
+### Test Organization
+- Unit tests in `tests/` mirror `src/` structure
+- Test fixtures in `tests/Fake/` for mock objects
+- Each test class tests a single production class
+- Schema compliance tests validate semantic log output
 
-### 💡 Forward Trace Analysis Tips
+## Code Style Requirements
 
-**1. Variable State Tracking**
-- Focus on `"recording_type": "diff"` entries
-- Look for unexpected class names in `$class` variables
-- Track namespace resolution in ClassLoader steps
-
-**2. Execution Flow Understanding**
-- Step 1-3: Usually setup/initialization
-- Critical steps: Where business logic executes
-- Look for `ClassLoader->loadClass` calls for namespace issues
-
-**3. Problem Identification**
-- **Expected vs Actual values**: Compare variable contents
-- **Class resolution**: Check `$logicalPathPsr4` for wrong paths  
-- **Missing files**: ClassLoader steps that fail
-
-### 🚀 Forward Trace Power Examples
-
-**Example 1: Namespace Resolution Debugging**
-```bash
-./vendor/bin/xdebug-debug --context="Debugging FakeProcessedData namespace resolution" --break="tests/SemanticLog/SchemaComplianceTest.php:48" --exit-on-break --steps=10 --json -- php vendor/bin/phpunit --filter testOpenContextSchemaCompliance tests/SemanticLog/SchemaComplianceTest.php
-```
-
-**Key Insights from Variables:**
-- `$class = "Be\\Framework\\SemanticLog\\FakeProcessedData"` (wrong namespace)
-- `$logicalPathPsr4 = "Be/Framework/SemanticLog/FakeProcessedData.php"` (wrong path)
-
-**Example 2: Variable Value Tracing**
-Look for variable progression showing the problem:
-```json
-{"$class": "string: Be\\Framework\\SemanticLog\\FakeProcessedData"}
-{"$logicalPathPsr4": "string: Be/Framework/SemanticLog/FakeProcessedData.php"}
-```
-
-### ⚡ Quick Troubleshooting
-
-**No output from xdebug-debug?**
-1. Test base command: `php vendor/bin/phpunit --filter testMethod file.php`
-2. Check phpunit syntax: Use `--filter` not `::`
-3. Verify file paths exist
-
-**Breakpoint not hitting?**
-1. Use absolute file paths
-2. Confirm line number exists
-3. Add `--exit-on-break` flag
-
-**Too much/little information?**
-1. Adjust `--steps` count (10-20 optimal)
-2. Use specific breakpoints
-3. Focus on `"recording_type": "diff"`
-
-### 🎯 Forward Trace vs Traditional Debugging
-
-**Forward Trace Advantages:**
-- ✅ Real runtime variable values
-- ✅ Complete execution flow tracking  
-- ✅ Step-by-step state changes
-- ✅ No code modification needed
-- ✅ Exact problem location identification
-
-**Traditional var_dump Disadvantages:**
-- ❌ Requires code modification
-- ❌ Shows only single point in time
-- ❌ Can be accidentally committed
-- ❌ Doesn't show execution flow
-- ❌ Based on guesswork placement
-
-**Forward Trace transforms debugging from guesswork to intelligence.**
-
-## Development Hooks
-
-### Automatic Code Style Fixing
-
-After modifying any PHP files, always run code style fixes:
-
+**CRITICAL**: After modifying PHP files, always run:
 ```bash
 composer cs-fix
 ```
 
-**IMPORTANT**: Set up your editor or IDE to automatically run `composer cs-fix` after file saves, or manually run it after each modification session.
+This ensures consistent code formatting following Doctrine Coding Standards.
 
-Available code quality commands:
-- `composer cs` - Check coding style  
-- `composer cs-fix` - Fix coding style automatically
-- `composer sa` - Run static analysis (phpstan + psalm)
-- `composer test` - Run unit tests
-- `composer tests` - Run full quality checks (cs + sa + test)
+## Key Directories
+
+```
+src/
+├── Attribute/           # Framework attributes (#[Be], #[Validate], #[Message])
+├── SemanticLog/        # Semantic logging infrastructure
+│   └── Context/        # Log context objects (destinations, metamorphosis)
+├── Becoming.php        # Core metamorphosis engine
+├── BecomingArguments.php # Constructor argument resolution
+└── BeingClass.php      # Attribute extraction utility
+
+tests/
+├── Fake/               # Test fixtures and mock objects
+└── SemanticLog/        # Semantic logging tests
+
+docs/
+└── schemas/            # JSON schemas for log validation
+```
+
+## Common Development Tasks
+
+### Adding a New Transformation Class
+1. Create class with `#[Be]` attribute declaring next transformation
+2. Use `public readonly` properties for immutable state
+3. Put all logic in constructor
+4. Add corresponding test in `tests/`
+
+### Debugging Failed Tests
+1. Run the specific failing test:
+   ```bash
+   php vendor/bin/phpunit --filter testMethodName
+   ```
+2. Use xdebug-debug for detailed trace if needed
+3. Check semantic log output matches expected schema
+
+### Fixing Code Style Issues
+```bash
+composer cs-fix     # Auto-fix issues
+composer cs         # Check without fixing
+```
+
+## Important Notes
+
+- The framework follows "Be, Don't Do" philosophy - objects represent states, not behaviors
+- All business logic happens in constructors during metamorphosis
+- Properties must be `public readonly` for immutability
+- Transformations are irreversible and declarative via `#[Be]` attributes
+- Semantic logging captures complete transformation lifecycle for observability
+
+## Code Style Guidelines
+
+### Control Flow - Early Return Pattern
+**IMPORTANT**: Avoid `else` statements - use early returns for cleaner, more readable code.
+
+**❌ Avoid:**
+```php
+public function process(string $input): string
+{
+    if ($condition) {
+        return $this->handleCondition($input);
+    } else {
+        return $this->handleDefault($input);
+    }
+}
+```
+
+**✅ Prefer:**
+```php
+public function process(string $input): string
+{
+    if ($condition) {
+        return $this->handleCondition($input);
+    }
+    
+    return $this->handleDefault($input);
+}
+```
+
+**Multiple conditions:**
+```php
+public function validate(array $data): bool
+{
+    if (empty($data)) {
+        return false;
+    }
+    
+    if (! $this->hasRequiredFields($data)) {
+        return false;
+    }
+    
+    return $this->performValidation($data);
+}
+```
+
+**Benefits of Early Returns:**
+- Reduces nesting and cognitive load
+- Makes error conditions explicit
+- Eliminates else-related branching complexity
+- Improves readability and maintainability
+- Follows "fail fast" principle
