@@ -30,7 +30,7 @@ final class Becoming
     /**
      * Life as continuous becoming
      *
-     * No river is ever the same - everything flows, everything changes.
+     * No man ever steps in the same river twice - everything flows, everything changes.
      * Each moment births what was always waiting to emerge.
      *
      * @param object $input The initial state of being
