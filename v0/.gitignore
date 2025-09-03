@@ -1,0 +1,30 @@
+# Composer
+/vendor/
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml
+coverage/
+build/
+
+# Code Coverage
+coverage.svg
+*.clover
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Development files
+debug_*.php
+simple_*.php
+test_*.php
+tmp/
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db

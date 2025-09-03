@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.org/schemas/metamorphosis-open.json",
+  "title": "Metamorphosis Open Context",
+  "description": "Schema for transformation start - constructor arguments BEFORE instantiation",
+  "type": "object",
+  "required": ["fromClass", "beAttribute"],
+  "properties": {
+    "fromClass": {
+      "type": "string",
+      "description": "Class being transformed from",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
+    },
+    "beAttribute": {
+      "type": "string",
+      "description": "The #[Be] attribute triggering this transformation",
+      "examples": ["#[Be(ValidatedUser::class)]", "#[Be([Success::class, Failure::class])]"]
+    },
+    "immanentSources": {
+      "type": "object",
+      "description": "#[Input] parameter values from previous object",
+      "additionalProperties": true
+    },
+    "transcendentSources": {
+      "type": "object",
+      "description": "#[Inject] interface/service names from DI container",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "links": [
+    {
+      "anchor": "#/properties/beAttribute",
+      "rel": "describedby",
+      "href": "https://be-framework.org/docs/be-attribute",
+      "title": "Be Attribute Documentation"
+    },
+    {
+      "anchor": "#/properties/immanentSources",
+      "rel": "describedby",
+      "href": "https://be-framework.org/docs/immanent-transcendent",
+      "title": "Immanent and Transcendent Factors"
+    }
+  ]
+}
