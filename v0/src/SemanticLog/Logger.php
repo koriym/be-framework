@@ -160,6 +160,9 @@ final class Logger implements LoggerInterface
     private function extractProperties(object $result): array
     {
         // @todo Handle uninitialized properties in Accept pattern objects
+        // @todo Privacy/Security: Consider extracting shape-only metadata instead of actual values
+        //       For production use, should emit property names + types only, not raw values
+        //       e.g., ['email' => 'string', 'validated' => 'bool'] instead of actual data
         // For now, get_object_vars() covers all realistic Be Framework objects
         return get_object_vars($result);
     }
