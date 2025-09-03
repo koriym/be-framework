@@ -4,16 +4,11 @@
   "title": "Metamorphosis Open Context",
   "description": "Schema for transformation start - constructor arguments BEFORE instantiation",
   "type": "object",
-  "required": ["fromClass", "toClass", "beAttribute"],
+  "required": ["fromClass", "beAttribute"],
   "properties": {
     "fromClass": {
       "type": "string",
       "description": "Class being transformed from",
-      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
-    },
-    "toClass": {
-      "type": "string",
-      "description": "Class being transformed to",
       "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
     },
     "beAttribute": {
