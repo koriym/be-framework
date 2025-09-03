@@ -7,6 +7,7 @@ namespace Be\Framework;
 use Be\Framework\SemanticLog\Logger;
 use Be\Framework\SemanticLog\LoggerInterface;
 use Koriym\SemanticLogger\SemanticLogger;
+use Override;
 use Ray\Di\InjectorInterface;
 
 /**
@@ -37,6 +38,7 @@ final class Becoming implements BecomingInterface
      *
      * @return object The final actualized form
      */
+    #[Override]
     public function __invoke(object $input): object
     {
         $current = $input;

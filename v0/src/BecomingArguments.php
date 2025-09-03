@@ -6,6 +6,7 @@ namespace Be\Framework;
 
 use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
+use Override;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 use Ray\Di\InjectorInterface;
@@ -35,6 +36,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
     ) {
     }
 
+    #[Override]
     public function be(object $current, string $becoming): array
     {
         $properties = get_object_vars($current);
