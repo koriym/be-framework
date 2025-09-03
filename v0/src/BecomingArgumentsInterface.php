@@ -20,5 +20,5 @@ interface BecomingArgumentsInterface
      *
      * @return array<mixed> Associative array of constructor arguments [paramName => value]
      */
-    public function __invoke(object $current, string $becoming): array;
+    public function be(object $current, string $becoming): array;
 }
