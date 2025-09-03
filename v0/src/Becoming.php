@@ -14,7 +14,7 @@ use Ray\Di\InjectorInterface;
  *
  * Objects undergo metamorphosis through constructor injection - a continuous process of becoming.
  */
-final class Becoming
+final class Becoming implements BecomingInterface
 {
     private Being $being;
 
