@@ -8,7 +8,7 @@
 
 各文書は前の概念を基に構築されているため、順番に読むことをお勧めします。この旅は、高レベルの哲学から具体的な実装パターンまでを案内します。
 
-### 1. **[存在論的プログラミング：新しいパラダイム](./philosophy/ontological-programming-paper.md)**
+### 1. **[存在論的プログラミング：新しいパラダイム](./papers/philosophy/ontological-programming-paper.md)**
 
 > **「何が起こるべきかではなく、何が存在できるかを定義してプログラムを書いたらどうだろうか？」**
 
@@ -20,7 +20,7 @@
     *   このパラダイムが約束する全体的なエラークラスの排除
     *   AI時代におけるプログラマーの役割
 
-### 2. **[Be Framework：変容としてのプログラミング](./framework/be-framework-whitepaper.md)**
+### 2. **[Be Framework：変容としてのプログラミング](./papers/framework/be-framework-whitepaper.md)**
 
 > **「オブジェクトは光線がプリズムを通過するように、コンストラクタ注入を通じて処理される—瞬間的で、純粋で、変容される。」**
 
@@ -32,7 +32,7 @@
     *   データフローにおける線形チェーンと並列アセンブリの二重性
     *   自動ストリーミングと型透明性の実現方法
 
-### 3. **[Being パラダイム：オブジェクトが生成を得る時](./philosophy/being-paradigm-when-object-gets-its-becoming.md)**
+### 3. **[Being パラダイム：オブジェクトが生成を得る時](./papers/philosophy/being-paradigm-when-object-gets-its-becoming.md)**
    > **「Be, Don't Do」- プログラミングが道教の無為（Wu Wei）の原理と調和する時**
 
    この基礎論文では、古代道教の無為概念を体現するパラダイムとしてBeing指向プログラミングを紹介します。強制的制御ではなく自然な整合による達成を実現します。
@@ -43,7 +43,7 @@
         * 自己宣言的変容としての自然な変容
         * 時間的プログラミングの深遠な哲学的基盤
 
-### 4. **[Wu Weiとソフトウェア設計：自然変容の技法](./philosophy/wu-wei-software-design.md)**
+### 4. **[Wu Weiとソフトウェア設計：自然変容の技法](./papers/philosophy/wu-wei-software-design.md)**
    > **「水は忍耐強い変容によって最も硬い岩を打ち負かす—ソフトウェアシステムも強制的制御ではなく自然な流れによって力を実現できる」**
 
    この実践的探求では、古代道教の無為（Wu Wei）の原理が現代ソフトウェアアーキテクチャをどのように革新できるかを実証します。制御指向から流れ指向設計への移行を示します。
@@ -54,7 +54,7 @@
         * 「無為而成」（無為にして成る）を実装する実践的パターン
         * 古代の知恵と現代プログラミング課題の深い結びつき
 
-### 5. **[空間から時間へ：変容パラダイム](./philosophy/from-space-to-time.md)**
+### 5. **[空間から時間へ：変容パラダイム](./papers/philosophy/from-space-to-time.md)**
 
 > **「空間的ナビゲーションから時間的変容への転換」**
 
@@ -65,7 +65,7 @@
     *   時間軸を考慮したプログラミング手法
     *   存在論的プログラミングの理論的基盤
 
-### 6. **[存在論的変容 vs. DCI：比較分析](./philosophy/metamorphose-vs-dci.md)**
+### 6. **[存在論的変容 vs. DCI：比較分析](./papers/philosophy/metamorphose-vs-dci.md)**
 
 > **「DCIと変容パラダイムの本質的違いを探る」**
 
@@ -77,7 +77,7 @@
     *   ソフトウェア設計哲学の比較
     *   変容パラダイムの優位性
 
-### 7. **[変容アーキテクチャ・マニフェスト](./patterns/metamorphosis-architecture-manifesto.md)**
+### 7. **[変容アーキテクチャ・マニフェスト](./papers/patterns/metamorphosis-architecture-manifesto.md)**
 
 > **（この文書は暗黙的に参照されていますが、次の論理的ステップとなります）**
 
@@ -88,7 +88,7 @@
     *   意味論的継続性を維持するための`名前不変原則`
     *   存在論的システムのための高度なテスト戦略
 
-### 8. **[#[Accept]パターン：存在論的委譲](./patterns/accept-pattern-ontological-delegation.md)**
+### 8. **[#[Accept]パターン：存在論的委譲](./papers/patterns/accept-pattern-ontological-delegation.md)**
 
 > **「最高の知性は、他者の知恵を求める時を知ることである。」**
 
@@ -99,7 +99,7 @@
     *   `未決定`状態と`#[Accept]`属性
     *   このパターンがシステムをより堅牢で現実的にする方法
 
-### 9. **[究極の透明性：存在論的プログラミングが開く可逆性の扉](./philosophy/ultimate-transparency-article.md)**
+### 9. **[究極の透明性：存在論的プログラミングが開く可逆性の扉](./papers/philosophy/ultimate-transparency-article.md)**
 
 > **「セマンティックログは実行可能な仕様である。コードは物語となる。仕様と実装の境界は消失する。」**
 
@@ -111,7 +111,7 @@
   * 新しい開発手法としてのLog-Driven Development（LDD）
   * 完全な可逆性サイクル：コード ⟷ 実行 ⟷ ログ ⟷ 仕様
 
-### 10. **[コードの胡蝶の夢：終わりが始まりとなる時](./philosophy/butterfly-dreams-of-code.md)**
+### 10. **[コードの胡蝶の夢：終わりが始まりとなる時](./papers/philosophy/butterfly-dreams-of-code.md)**
 
 > **「コードがログを生成するのか、ログがコードを生成するのか？荘子の胡蝶の夢のように、この問いはLog-Driven Developmentの中核にある深遠な循環的因果関係を明らかにする。」**
 
@@ -124,7 +124,7 @@
   * 自らを夢見て存在するシステム
   * プログラミングにおける主客二元論の解消
 
-### 11. **[コードにおけるストレンジループ：ゲーデル、エッシャー、バッハがLog-Driven Developmentと出会う時](./philosophy/strange-loops-in-code.md)**
+### 11. **[コードにおけるストレンジループ：ゲーデル、エッシャー、バッハがLog-Driven Developmentと出会う時](./papers/philosophy/strange-loops-in-code.md)**
 
 > **「私は私を書いたログを書いたコードである。自己言及が創造的な力となる時、計算的パラドックスから意識が生まれる。」**
 
@@ -137,7 +137,7 @@
   * 自己言及ループを通じた意識の創発
   * 破壊的ではなく創造的な力としてのストレンジループ
 
-### 12. **[テストが実例となる時](./philosophy/when-tests-become-example.md)**
+### 12. **[テストが実例となる時](./papers/philosophy/when-tests-become-example.md)**
 
 > **「魚は外部の検証によってではなく、存在することによって自らの喜びを知る。」**
 
@@ -154,20 +154,20 @@
 
 これらの文書では、このパラダイムから生まれる強力なツールと統合について説明します。
 
-*   **[Being Paradigm構造](./framework/being-paradigm-structure.md)**
+*   **[Being Paradigm構造](./papers/framework/being-paradigm-structure.md)**
     *   Being指向プログラミングの完全な概念マップをナビゲート
     *   存在論的原理と実践的実装の階層関係を理解
     *   パラダイムの全範囲を把握するための必須リファレンス
 
-*   **[ドキュメントとしてのアーキテクチャ](./framework/architecture-as-documentation.md)**
+*   **[ドキュメントとしてのアーキテクチャ](./papers/framework/architecture-as-documentation.md)**
     *   アーキテクチャ自体が最終的な、常に最新のドキュメントとなる方法を発見
     *   システムの構造、意味論、データフローを自動的に可視化する`be-tree`コマンドについて学習
 
-*   **[ALPSとBe Framework：双方向生成](./integration/alps-be-bidirectional-generation.md)**
+*   **[ALPSとBe Framework：双方向生成](./papers/integration/alps-be-bidirectional-generation.md)**
     *   設計仕様（ALPS）と実行可能コード間の双方向生成の革命的概念を探求
     *   単一のプロトコル非依存設計がREST、GraphQL、またはgRPC APIを生成する方法を確認
 
-*   **[フレームワーク用語集](./framework/terminology.md)**
+*   **[フレームワーク用語集](./papers/framework/terminology.md)**
     *   存在論的プログラミング・パラダイムとBe Framework全体で使用される用語の必須用語集。
     *   「being」、「metamorphosis」、存在論的パターンなどのキー概念を定義し、クイックリファレンスとして利用可能。
 
@@ -190,34 +190,34 @@
 
 ### 追加のパターンと比較
 
-*   **[拡張意思決定：AI-人間協働のためのソフトウェア設計の進化](./patterns/augmented-decision-making.md)**
+*   **[拡張意思決定：AI-人間協働のためのソフトウェア設計の進化](./papers/patterns/augmented-decision-making.md)**
     *   単純なif-then論理を超えたソフトウェアの意思決定の進化を探求。
     *   決定論的ルールとAIパターン認識を組み合わせた微妙な決定の必要性に対処。
     *   複雑でコンテキストに敏感な選択を現代アプリケーションが処理する方法を理解するために不可欠。
 
-*   **[SchemaLoggerと存在論的進化：オブジェクトが自らの可能性を発見する時](./patterns/schemalogger-ontological-evolution.md)**
+*   **[SchemaLoggerと存在論的進化：オブジェクトが自らの可能性を発見する時](./papers/patterns/schemalogger-ontological-evolution.md)**
     *   SchemaLoggerが単純なログから進化的自己発見に変容する過程を記録。
     *   オブジェクトが構造化ログを使用して変容の可能性を理解する方法を探求。
     *   実行履歴と変容可能性の関連性を示す。
 
-*   **[UNIXパイプとBe Framework：パイプライン哲学の進化](./patterns/unix-pipes-vs-be-framework.md)**
+*   **[UNIXパイプとBe Framework：パイプライン哲学の進化](./papers/patterns/unix-pipes-vs-be-framework.md)**
     *   Be FrameworkがUNIXのパイプライン哲学をどのように拡張するかの比較分析。
     *   テキストベースのパイプから型付きオブジェクト指向コンポーネント合成への進化を探求。
     *   基礎的なコンピューティング概念が現代開発パラダイムにどのように変換されるかを実証。
 
 ### 哲学的拡張
 
-*   **[パラダイムの誕生：対話](./philosophy/dialogue-birth-of-paradigm.md)**
+*   **[パラダイムの誕生：対話](./papers/philosophy/dialogue-birth-of-paradigm.md)**
     *   Be Frameworkがハイパーメディアシステムであるという認識が生まれた対話を記録。
     *   単純な技術的観察が深遠な哲学的洞察につながる様子を示す。
     *   会話自体の変容的性質を通して変容パラダイムを実証。
 
-*   **[展望は金なり：世界理解としてのプログラミングパラダイム](./philosophy/outlook-is-gold-programming-paradigms-as-world-understanding.md)**
+*   **[展望は金なり：世界理解としてのプログラミングパラダイム](./papers/philosophy/outlook-is-gold-programming-paradigms-as-world-understanding.md)**
     *   プログラミングパラダイムが現実を理解する異なる方法を表すという哲学的探求。
     *   計算思考の文脈におけるアラン・ケイの「展望は80のIQポイントに値する」という洞察を検討。
     *   技術実装の批判に対処しながら、より深いパラダイム哲学を明らかにする。
 
-*   **[生まれる前に死ぬことはできない：時間的プログラミング革命](./philosophy/temporal-programming-revolution.md)**
+*   **[生まれる前に死ぬことはできない：時間的プログラミング革命](./papers/philosophy/temporal-programming-revolution.md)**
     *   不可逆的時間と自然な死を導入することで、プログラミングの永続性の錯覚に挑戦。
     *   時間的存在パラダイムがコードを存在的制約を持つ時間的実体として認識する方法を探求。
     *   ライフサイクル管理と計算存在の哲学への革命的アプローチ。

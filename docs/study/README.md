@@ -67,7 +67,7 @@ A professor came to a Zen master seeking teachings. The master began pouring tea
 - **Without intellectual curiosity**: You may remain stuck in superficial criticism, discovering nothing
 
 #### 📖 Understanding Before Judgment
-Before evaluating a new paradigm, please read the [**Reviewer Guide**](../docs/reviewer-guide/human.md). It explains how to approach revolutionary ideas with openness while maintaining critical thinking.
+Before evaluating a new paradigm, please read the [**Reviewer Guide**](../reviewer-guide/human.md). It explains how to approach revolutionary ideas with openness while maintaining critical thinking.
 
 #### 🤖 Recognizing AI Limitations
 AI is a powerful tool, but it can make incorrect interpretations or criticisms about new paradigms. Particularly with innovative concepts, critically examine AI responses and seek multiple perspectives when necessary.
