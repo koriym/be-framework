@@ -6,7 +6,7 @@ namespace Be\Framework\SemanticVariable;
 
 /**
  * Represents the absence of validation errors
- * 
+ *
  * Used to indicate successful validation in a type-safe manner.
  */
 final class NullErrors extends Errors

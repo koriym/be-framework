@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\BecomingArguments;
-use Be\Framework\SemanticVariable\NullErrors;
-use Be\Framework\SemanticVariable\SemanticValidator;
+use DomainException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -96,6 +95,70 @@ final class SemanticValidatorTest extends TestCase
     public function testNonExistentSemanticVariableReturnsNoErrors(): void
     {
         $errors = $this->validator->validate('nonexistent_variable', 'some value');
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testValidateObject(): void
+    {
+        $object = new class {
+            public string $email = 'john@example.com';
+            public int $age = 25;
+        };
+
+        $errors = $this->validator->validateObject($object);
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testValidateObjectWithErrors(): void
+    {
+        $object = new class {
+            public string $email = 'invalid-email';
+            public int $age = -5;
+        };
+
+        $errors = $this->validator->validateObject($object);
+
+        $this->assertTrue($errors->hasErrors());
+        $this->assertGreaterThan(0, $errors->count());
+    }
+
+    public function testValidateAndThrowWithValidData(): void
+    {
+        $this->validator->validateAndThrow('email', 'john@example.com');
+
+        // If no exception is thrown, the test passes
+        $this->assertTrue(true);
+    }
+
+    public function testValidateAndThrowWithInvalidData(): void
+    {
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Validation failed');
+
+        $this->validator->validateAndThrow('email', 'invalid-email');
+    }
+
+    public function testCustomNamespace(): void
+    {
+        $injector = new Injector();
+        $becomingArguments = new BecomingArguments($injector);
+        $validator = new SemanticValidator($becomingArguments, 'NonExistent\\Namespace');
+
+        $errors = $validator->validate('email', 'test@example.com');
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testNoMatchingValidationMethods(): void
+    {
+        // This tests the case where semantic class exists but no validation methods match
+        // The class has validation methods but none match the argument count provided
+        $errors = $this->validator->validate('no_matching_method', 'single_arg');
 
         $this->assertInstanceOf(NullErrors::class, $errors);
         $this->assertFalse($errors->hasErrors());

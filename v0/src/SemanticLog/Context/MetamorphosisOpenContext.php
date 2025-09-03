@@ -6,6 +6,7 @@ namespace Be\Framework\SemanticLog\Context;
 
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
+use stdClass;
 
 /**
  * Context for transformation start (Open context)
@@ -37,8 +38,8 @@ final class MetamorphosisOpenContext extends AbstractContext implements JsonSeri
         return [
             'fromClass' => $this->fromClass,
             'beAttribute' => $this->beAttribute,
-            'immanentSources' => empty($this->immanentSources) ? new \stdClass() : (object) $this->immanentSources,
-            'transcendentSources' => empty($this->transcendentSources) ? new \stdClass() : (object) $this->transcendentSources,
+            'immanentSources' => empty($this->immanentSources) ? new stdClass() : (object) $this->immanentSources,
+            'transcendentSources' => empty($this->transcendentSources) ? new stdClass() : (object) $this->transcendentSources,
         ];
     }
 }

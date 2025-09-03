@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog\Context;
 
-use Be\Framework\SemanticLog\Context\DestinationNotFound;
-use Be\Framework\SemanticLog\Context\FinalDestination;
-use Be\Framework\SemanticLog\Context\MultipleDestination;
-use Be\Framework\SemanticLog\Context\SingleDestination;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
+use stdClass;
 
 /**
  * Context for transformation completion (Close context)
@@ -38,7 +35,7 @@ final class MetamorphosisCloseContext extends AbstractContext implements JsonSer
             'fromClass' => 'Unknown',
             'toClass' => 'Unknown',
             'beAttribute' => 'Unknown',
-            'resultProperties' => empty($this->properties) ? new \stdClass() : (object) $this->properties,
+            'resultProperties' => empty($this->properties) ? new stdClass() : (object) $this->properties,
             'success' => true, // Simplified for now
         ];
     }
