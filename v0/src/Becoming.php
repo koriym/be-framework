@@ -12,8 +12,7 @@ use Ray\Di\InjectorInterface;
 /**
  * The Be Framework - Metamorphic Programming Engine
  *
- * "Objects undergo metamorphosis through constructor injection -
- * a continuous process of becoming."
+ * Objects undergo metamorphosis through constructor injection - a continuous process of becoming.
  */
 final class Becoming
 {
@@ -31,7 +30,7 @@ final class Becoming
     /**
      * Life as continuous becoming
      *
-     * In this flow, each state holds its destiny,
+     * Each state holds its destiny,
      * revealed through willBe(), actualized through metamorphose().
      *
      * @param object $input The initial state of being
@@ -39,13 +38,13 @@ final class Becoming
      */
     public function __invoke(object $input): object
     {
-        $state = $input;
+        $current = $input;
 
-        // Life as continuous becoming: Being reveals its becoming, then becomes it
-        while ($next = $this->being->willBe($state)) {
-            $state = $this->being->metamorphose($state, $next);
+        // Being reveals its becoming, then becomes it
+        while ($nextForm = $this->being->willBe($current)) {
+            $current = $this->being->metamorphose($current, $nextForm);
         }
 
-        return $state;
+        return $current;
     }
 }
