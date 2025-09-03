@@ -32,6 +32,9 @@ final class Becoming
      * Let existence flow:
      * the given state becomes what it already carries within,
      * transforming step by step until it rests (for now).
+     * 
+     * In this flow, each state holds its destiny,
+     * revealed through willBe(), actualized through metamorphose().
      *
      * @param object $input The initial state of being
      * @return object The final actualized form
