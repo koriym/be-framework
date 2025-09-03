@@ -30,9 +30,6 @@ final class Becoming
     /**
      * Life as continuous becoming
      *
-     * Each state holds its destiny,
-     * revealed through willBe(), actualized through metamorphose().
-     *
      * @param object $input The initial state of being
      * @return object The final actualized form
      */
