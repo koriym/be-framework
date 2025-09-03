@@ -10,9 +10,7 @@ use Be\Framework\SemanticLog\LoggerInterface;
 use ReflectionClass;
 use Throwable;
 
-use function implode;
 use function is_string;
-use function sprintf;
 
 /**
  * Gets the next class name in metamorphosis chain
@@ -81,7 +79,7 @@ final class Being
     private function performTypeMatching(object $current, array $becoming): object
     {
         $candidateErrors = [];
-        
+
         foreach ($becoming as $class) {
             try {
                 return $this->performSingleTransformation($current, $class);

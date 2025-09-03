@@ -11,7 +11,9 @@ use Be\Framework\SemanticLog\Context\SingleDestination;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
+use function array_map;
 use function file_get_contents;
 use function json_decode;
 use function json_encode;
@@ -31,11 +33,11 @@ final class JsonSchemaValidationTest extends TestCase
     protected function setUp(): void
     {
         $this->validator = new Validator();
-        
+
         // Load actual JSON schemas from files
         $openSchemaContent = file_get_contents(__DIR__ . '/../../docs/schemas/metamorphosis-open.json');
         $closeSchemaContent = file_get_contents(__DIR__ . '/../../docs/schemas/metamorphosis-close.json');
-        
+
         $this->openSchema = json_decode($openSchemaContent);
         $this->closeSchema = json_decode($closeSchemaContent);
     }
@@ -53,18 +55,19 @@ final class JsonSchemaValidationTest extends TestCase
             transcendentSources: [
                 'validator' => 'ValidatorInterface',
                 'logger' => 'LoggerInterface',
-            ]
+            ],
         );
 
         // Convert context to JSON-compatible format
         $contextData = json_decode(json_encode($context), false);
-        
+
         // Ensure empty arrays are treated as objects for schema validation
         if (empty($contextData->immanentSources)) {
-            $contextData->immanentSources = new \stdClass();
+            $contextData->immanentSources = new stdClass();
         }
+
         if (empty($contextData->transcendentSources)) {
-            $contextData->transcendentSources = new \stdClass();
+            $contextData->transcendentSources = new stdClass();
         }
 
         // Validate against schema
@@ -72,7 +75,7 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'MetamorphosisOpenContext should validate against schema. Errors: ' . json_encode($this->validator->getErrors())
+            'MetamorphosisOpenContext should validate against schema. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
@@ -83,7 +86,7 @@ final class JsonSchemaValidationTest extends TestCase
             fromClass: 'Be\Framework\Test\ProcessingData',
             beAttribute: '#[Be([Success::class, Failure::class])]',
             immanentSources: ['data' => 'ProcessingData::data'],
-            transcendentSources: []
+            transcendentSources: [],
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -91,7 +94,7 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Array Be attribute should validate. Errors: ' . json_encode($this->validator->getErrors())
+            'Array Be attribute should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
@@ -100,7 +103,7 @@ final class JsonSchemaValidationTest extends TestCase
         // Test with only required fields
         $context = new MetamorphosisOpenContext(
             fromClass: 'Be\Framework\Test\SimpleInput',
-            beAttribute: '#[Be(SimpleOutput::class)]'
+            beAttribute: '#[Be(SimpleOutput::class)]',
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -108,7 +111,7 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Minimal context should validate. Errors: ' . json_encode($this->validator->getErrors())
+            'Minimal context should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
@@ -119,7 +122,7 @@ final class JsonSchemaValidationTest extends TestCase
                 'email' => 'user@example.com',
                 'validated' => true,
             ],
-            be: new SingleDestination('NextTransformation')
+            be: new SingleDestination('NextTransformation'),
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -127,7 +130,7 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Close context with SingleDestination should validate. Errors: ' . json_encode($this->validator->getErrors())
+            'Close context with SingleDestination should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
@@ -138,7 +141,7 @@ final class JsonSchemaValidationTest extends TestCase
                 'result' => 'success',
                 'data' => ['key' => 'value'],
             ],
-            be: new FinalDestination('FinalClass')
+            be: new FinalDestination('FinalClass'),
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -146,7 +149,7 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Close context with FinalDestination should validate. Errors: ' . json_encode($this->validator->getErrors())
+            'Close context with FinalDestination should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
@@ -162,18 +165,18 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertFalse(
             $this->validator->isValid(),
-            'Invalid context should fail validation'
+            'Invalid context should fail validation',
         );
 
         $errors = $this->validator->getErrors();
         $this->assertNotEmpty($errors, 'Should have validation errors');
-        
+
         // Check that the error is about missing required field
-        $errorMessages = array_map(fn($error) => $error['message'], $errors);
+        $errorMessages = array_map(static fn ($error) => $error['message'], $errors);
         $this->assertContains(
             'The property fromClass is required',
             $errorMessages,
-            'Should report missing required field'
+            'Should report missing required field',
         );
     }
 
@@ -189,7 +192,7 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertFalse(
             $this->validator->isValid(),
-            'Invalid class name pattern should fail validation'
+            'Invalid class name pattern should fail validation',
         );
     }
 }
