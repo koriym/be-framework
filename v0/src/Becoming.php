@@ -30,13 +30,13 @@ final class Becoming
 
     public function __invoke(object $input): object
     {
-        $current = $input;
+        $state = $input;
 
         // The core metamorphosis loop - life as continuous becoming
-        while ($becoming = $this->being->willBe($current)) {
-            $current = $this->being->metamorphose($current, $becoming);
+        while ($next = $this->being->willBe($state)) {
+            $state = $this->being->metamorphose($state, $next);
         }
 
-        return $current;
+        return $state;
     }
 }
