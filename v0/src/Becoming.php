@@ -29,10 +29,8 @@ final class Becoming
     }
 
     /**
-     * Let existence flow:
-     * the given state becomes what it already carries within,
-     * transforming step by step until it rests (for now).
-     * 
+     * Life as continuous becoming
+     *
      * In this flow, each state holds its destiny,
      * revealed through willBe(), actualized through metamorphose().
      *
