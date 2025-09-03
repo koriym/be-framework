@@ -59,17 +59,17 @@ final class Being
 
     private function performSingleTransformation(object $current, string $becoming): object
     {
-        $openId = $this->logger?->open($current, $becoming);
+        $openId = $this->logger->open($current, $becoming);
 
         try {
             $args = $this->becomingArguments->be($current, $becoming);
             $result = (new ReflectionClass($becoming))->newInstanceArgs($args);
 
-            $this->logger?->close($result, $openId);
+            $this->logger->close($result, $openId);
 
             return $result;
         } catch (Throwable $e) {
-            $this->logger?->close(null, $openId, $e->getMessage());
+            $this->logger->close(null, $openId, $e->getMessage());
 
             throw $e;
         }
@@ -80,16 +80,18 @@ final class Being
      */
     private function performTypeMatching(object $current, array $becoming): object
     {
+        $candidateErrors = [];
+        
         foreach ($becoming as $class) {
             try {
                 return $this->performSingleTransformation($current, $class);
-            } catch (Throwable) {
+            } catch (Throwable $e) {
+                // Capture detailed error information for each candidate
+                $candidateErrors[$class] = $e->getMessage();
                 continue; // Try next class if this one fails
             }
         }
 
-        throw new TypeMatchingFailure(
-            sprintf('No matching class for becoming in [%s]', implode(', ', $becoming)),
-        );
+        throw TypeMatchingFailure::create($becoming, $candidateErrors);
     }
 }
