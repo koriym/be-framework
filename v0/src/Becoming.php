@@ -19,12 +19,12 @@ final class Becoming
     private Being $being;
 
     public function __construct(
-        private InjectorInterface $injector,
+        InjectorInterface $injector,
         LoggerInterface|null $logger = null,
     ) {
-        $becomingArguments = new BecomingArguments($this->injector);
+        $becomingArguments = new BecomingArguments($injector);
         $logger ??= new Logger(new SemanticLogger(), $becomingArguments);
-        $this->being = new Being($logger, new BecomingArguments($this->injector));
+        $this->being = new Being($logger, new BecomingArguments($injector));
     }
 
     /**
@@ -34,6 +34,7 @@ final class Becoming
      * Each moment births what was always waiting to emerge.
      *
      * @param object $input The initial state of being
+     *
      * @return object The final actualized form
      */
     public function __invoke(object $input): object
