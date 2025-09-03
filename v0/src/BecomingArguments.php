@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Be\Framework;
 
-use InvalidArgumentException;
+use Be\Framework\Exception\ConflictingParameterAttributes;
+use Be\Framework\Exception\MissingParameterAttribute;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 use Ray\Di\InjectorInterface;
@@ -14,10 +15,11 @@ use ReflectionNamedType;
 use ReflectionParameter;
 
 use function get_object_vars;
-use function sprintf;
 
 /**
- * Resolves constructor arguments for metamorphosis transformations
+ * Resolves constructor arguments
+ *
+ * for metamorphosis transformations
  *
  * Implements Be Framework's philosophy of explicit dependency declaration:
  * - All constructor parameters must have either #[Input] or #[Inject] attributes
@@ -45,43 +47,14 @@ final class BecomingArguments implements BecomingArgumentsInterface
 
         $args = [];
         foreach ($constructor->getParameters() as $param) {
-            $this->validateParameterAttributes($param);
-
-            if (! empty($param->getAttributes(Input::class))) {
-                // #[Input] - resolve from the current object's properties
-                $args[$param->getName()] = $this->resolveInputParameter($param, $properties);
-            } elseif (! empty($param->getAttributes(Inject::class))) {
-                // #[Inject] - resolve from DI container
-                $args[$param->getName()] = $this->resolveInjectParameter($param);
-            }
+            $paramName = $param->getName();
+            $isInput = $this->isInputParameter($param);
+            $args[$paramName] = $isInput
+                ? $properties[$paramName]                          // #[Input]
+                : $this->getInjectParameter($param);               // #[Inject]
         }
 
         return $args;
-    }
-
-    /**
-     * Resolves #[Input] parameters from the current object's properties
-     */
-    protected function resolveInputParameter(ReflectionParameter $param, array $properties): mixed
-    {
-        $paramName = $param->getName();
-
-        if (isset($properties[$paramName])) {
-            return $properties[$paramName];
-        }
-
-        if ($param->isDefaultValueAvailable()) {
-            return $param->getDefaultValue();
-        }
-
-        throw new InvalidArgumentException(
-            sprintf(
-                'Required #[Input] parameter "%s" is missing from object properties in %s::%s',
-                $paramName,
-                $param->getDeclaringClass()->getName(),
-                $param->getDeclaringFunction()->getName(),
-            ),
-        );
     }
 
     /**
@@ -90,88 +63,40 @@ final class BecomingArguments implements BecomingArgumentsInterface
      * Supports #[Named] attributes for named bindings.
      * Scalar types require #[Named] or default values (Ray.Di historical compatibility).
      */
-    private function resolveInjectParameter(ReflectionParameter $param): mixed
+    private function getInjectParameter(ReflectionParameter $param): mixed
     {
-        $type = $param->getType();
-
-        if (! $type instanceof ReflectionNamedType) {
-            throw new InvalidArgumentException(
-                sprintf('Cannot resolve union/intersection types for parameter "%s"', $param->getName()),
-            );
-        }
-
-        // Check for #[Named] attribute
         $namedAttributes = $param->getAttributes(Named::class);
-        $namedValue = null;
-        if (! empty($namedAttributes)) {
-            $named = $namedAttributes[0]->newInstance();
-            $namedValue = $named->value;
-        }
+        $named = ! empty($namedAttributes) ? $namedAttributes[0]->newInstance()->value : '';
 
-        // Handle scalar types (Ray.Di historical compatibility - PHP 5.4+)
-        if ($type->isBuiltin()) {
-            if ($namedValue !== null) {
-                return $this->injector->getInstance('', $namedValue);
-            }
+        $type = $param->getType();
+        $interface = $type instanceof ReflectionNamedType && ! $type->isBuiltin() ? $type->getName() : '';
 
-            // Scalar type without #[Named] - use default value or throw
-            if ($param->isDefaultValueAvailable()) {
-                return $param->getDefaultValue();
-            }
-
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Scalar parameter "%s" requires #[Named] attribute or default value',
-                    $param->getName(),
-                ),
-            );
-        }
-
-        // Object type
-        $className = $type->getName();
-
-        if ($namedValue !== null) {
-            return $this->injector->getInstance($className, $namedValue);
-        }
-
-        return $this->injector->getInstance($className);
+        return $this->injector->getInstance($interface, $named);
     }
 
     /**
-     * Validates that all constructor parameters have explicit attribute declarations
+     * Returns if parameter is #[Input] (validates attributes as side effect)
      *
+     * Returns true for #[Input], false for #[Inject]
      * Enforces Be Framework's philosophy: "Describe Yourself (Well)"
      * All dependencies must be explicitly declared for clarity and safety.
      */
-    private function validateParameterAttributes(ReflectionParameter $param): void
+    private function isInputParameter(ReflectionParameter $param): bool
     {
-        $hasInput = ! empty($param->getAttributes(Input::class));
-        $hasInject = ! empty($param->getAttributes(Inject::class));
+        $inputAttributes = $param->getAttributes(Input::class);
+        $injectAttributes = $param->getAttributes(Inject::class);
 
-        if (! $hasInput && ! $hasInject) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Parameter "%s" in %s::%s must have either #[Input] or #[Inject] attribute. ' .
-                    'Be Framework requires explicit dependency declaration for safety and clarity. ' .
-                    'Use #[Input] if this should come from the previous object, ' .
-                    'or #[Inject] if this should come from the DI container.',
-                    $param->getName(),
-                    $param->getDeclaringClass()->getName(),
-                    $param->getDeclaringFunction()->getName(),
-                ),
-            );
-        }
+        $hasInput = ! empty($inputAttributes);
+        $hasInject = ! empty($injectAttributes);
 
         if ($hasInput && $hasInject) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Parameter "%s" in %s::%s cannot have both #[Input] and #[Inject] attributes simultaneously. ' .
-                    'These attributes are mutually exclusive to ensure clear and unambiguous parameter semantics.',
-                    $param->getName(),
-                    $param->getDeclaringClass()->getName(),
-                    $param->getDeclaringFunction()->getName(),
-                ),
-            );
+            throw ConflictingParameterAttributes::create($param);
         }
+
+        if (! $hasInput && ! $hasInject) {
+            throw MissingParameterAttribute::create($param);
+        }
+
+        return $hasInput;
     }
 }
