@@ -35,7 +35,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
     ) {
     }
 
-    public function __invoke(object $current, string $becoming): array
+    public function be(object $current, string $becoming): array
     {
         $properties = get_object_vars($current);
         $targetClass = new ReflectionClass($becoming);

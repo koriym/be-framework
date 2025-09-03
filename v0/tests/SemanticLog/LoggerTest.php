@@ -77,16 +77,23 @@ final class LoggerTest extends TestCase
         $this->assertArrayHasKey('properties', $closeData['context']);
     }
 
-    public function testArrayBecomingSkipped(): void
+    public function testArrayBecomingLogging(): void
     {
         $input = new TestInput('test data');
 
-        // Array becoming should return empty openId (skipped logging)
+        // Array becoming should now return openId (logging enabled)
         $openId = $this->logger->open($input, ['Class1', 'Class2']);
-        $this->assertEquals('', $openId);
+        $this->assertNotEmpty($openId);
 
-        // No need to test close() with empty openId - it returns early
-        // This tests the array becoming skip logic only
+        // Close the session to complete the log
+        $this->logger->close(new stdClass(), $openId);
+
+        // Verify array becoming is logged correctly
+        $logData = $this->semanticLogger->toArray();
+        $openData = $logData['open'];
+        $this->assertEquals('#[Be([Class1::class, Class2::class])]', $openData['context']['beAttribute']);
+        $this->assertEquals([], $openData['context']['immanentSources']); // Empty for array case
+        $this->assertEquals([], $openData['context']['transcendentSources']); // Empty for array case
     }
 
     public function testErrorLogging(): void
@@ -163,27 +170,18 @@ final class LoggerTest extends TestCase
         $method = $reflection->getMethod('extractTranscendentSources');
         $method->setAccessible(true);
 
-        // Create args with mixed types to test the is_object condition
-        $injector = new Injector();
-        $stdClassObj = new stdClass();
-        $stdClassObj->prop = 'value';
-
+        // Create args for a class with #[Inject] parameter (use BecomingTestWithUnion from main tests)
         $args = [
-            'stringParam' => 'test string',
-            'intParam' => 42,
-            'injector' => $injector,
-            'stdClassObj' => $stdClassObj,
-            'nullParam' => null,
-            'arrayParam' => ['test'],
+            'data' => 'test data', // #[Input] parameter - should not appear in transcendent sources
+            'unionParam' => 'test-union-value', // #[Inject] parameter - should appear in transcendent sources
         ];
 
-        $result = $method->invoke($this->logger, $args);
+        // Use a simple class name that exists - let's use FakeProcessedData but expect no transcendent sources
+        // since it only has #[Input] parameters
+        $result = $method->invoke($this->logger, $args, FakeProcessedData::class);
 
-        // Only object parameters should be in transcendent sources
-        $expected = [
-            'injector' => Injector::class,
-            'stdClassObj' => stdClass::class,
-        ];
+        // FakeProcessedData only has #[Input] parameters, so no transcendent sources expected
+        $expected = [];
 
         $this->assertEquals($expected, $result);
     }

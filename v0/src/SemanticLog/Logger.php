@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticLog;
 
 use Be\Framework\BecomingArgumentsInterface;
-use Be\Framework\BeingClass;
+use Be\Framework\Being;
 use Be\Framework\SemanticLog\Context\DestinationNotFound;
 use Be\Framework\SemanticLog\Context\FinalDestination;
 use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
@@ -13,10 +13,17 @@ use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Be\Framework\SemanticLog\Context\MultipleDestination;
 use Be\Framework\SemanticLog\Context\SingleDestination;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
+use Ray\Di\Di\Inject;
+use ReflectionClass;
 
+use function array_key_exists;
+use function array_map;
 use function get_object_vars;
+use function gettype;
+use function implode;
 use function is_object;
 use function is_string;
+
 /**
  * Be Framework Logger
  *
@@ -24,13 +31,13 @@ use function is_string;
  */
 final class Logger implements LoggerInterface
 {
-    private BeingClass $getClass;
+    private Being $being;
 
     public function __construct(
         private SemanticLoggerInterface $logger,
         private BecomingArgumentsInterface $becomingArguments,
     ) {
-        $this->getClass = new BeingClass();
+        $this->being = new Being($this, $this->becomingArguments);
     }
 
     /**
@@ -38,23 +45,32 @@ final class Logger implements LoggerInterface
      */
     public function open(object $current, string|array $becoming): string
     {
-        // Only handle single transformations for now
-        if (! is_string($becoming)) {
-            return ''; // Skip logging for array case
+        $fromClass = $current::class;
+
+        if (is_string($becoming)) {
+            // Single transformation case
+            $beAttribute = "#[Be({$becoming}::class)]";
+            $args = $this->becomingArguments->be($current, $becoming);
+            $immanentSources = $this->extractImmanentSources($current, $args);
+            $transcendentSources = $this->extractTranscendentSources($args, $becoming);
+
+            return $this->logger->open(new MetamorphosisOpenContext(
+                fromClass: $fromClass,
+                beAttribute: $beAttribute,
+                immanentSources: $immanentSources,
+                transcendentSources: $transcendentSources,
+            ));
         }
 
-        $fromClass = $current::class;
-        $beAttribute = "#[Be({$becoming}::class)]";
-
-        $args = ($this->becomingArguments)($current, $becoming);
-        $immanentSources = $this->extractImmanentSources($current, $args);
-        $transcendentSources = $this->extractTranscendentSources($args);
+        // Array transformation case - log the attempt with all candidate classes
+        $classNames = implode(', ', array_map(static fn ($class) => $class . '::class', $becoming));
+        $beAttribute = "#[Be([{$classNames}])]";
 
         return $this->logger->open(new MetamorphosisOpenContext(
             fromClass: $fromClass,
             beAttribute: $beAttribute,
-            immanentSources: $immanentSources,
-            transcendentSources: $transcendentSources,
+            immanentSources: [],
+            transcendentSources: [],
         ));
     }
 
@@ -63,7 +79,7 @@ final class Logger implements LoggerInterface
      */
     public function close(object|null $result, string $openId, string|null $error = null): void
     {
-        // Skip if no open ID (array case not logged)
+        // Skip if no open ID
         if ($openId === '') {
             return;
         }
@@ -96,29 +112,45 @@ final class Logger implements LoggerInterface
         $immanentSources = [];
         $properties = get_object_vars($current);
 
-        // Map each arg back to its source property
+        // Use parameter names for reliable mapping (BecomingArguments ensures parameter names match property names for #[Input])
         foreach ($args as $paramName => $value) {
-            // Find matching property in current object
-            foreach ($properties as $propName => $propValue) {
-                if ($propValue === $value) {
-                    $immanentSources[$paramName] = $current::class . '::' . $propName;
-                    break;
-                }
+            if (array_key_exists($paramName, $properties)) {
+                $immanentSources[$paramName] = $current::class . '::' . $paramName;
             }
         }
 
         return $immanentSources;
     }
 
-    private function extractTranscendentSources(array $args): array
+    private function extractTranscendentSources(array $args, string $becoming): array
     {
         $transcendentSources = [];
+        $reflectionClass = new ReflectionClass($becoming);
+        $constructor = $reflectionClass->getConstructor();
 
-        // For now, detect injected services by checking if value is an object
-        // and doesn't match simple scalar types
-        foreach ($args as $paramName => $value) {
-            if (is_object($value)) {
-                $transcendentSources[$paramName] = $value::class;
+        if ($constructor === null) {
+            return $transcendentSources;
+        }
+
+        // Check each parameter for #[Inject] attribute
+        foreach ($constructor->getParameters() as $param) {
+            $paramName = $param->getName();
+
+            if (! array_key_exists($paramName, $args)) {
+                continue;
+            }
+
+            $hasInject = ! empty($param->getAttributes(Inject::class));
+            if ($hasInject) {
+                $value = $args[$paramName];
+
+                // For objects, use their class name; for scalars, use their type/value representation
+                if (is_object($value)) {
+                    $transcendentSources[$paramName] = $value::class;
+                } else {
+                    // For scalar/other types, show the type information
+                    $transcendentSources[$paramName] = gettype($value) . ':' . (string) $value;
+                }
             }
         }
 
@@ -134,7 +166,7 @@ final class Logger implements LoggerInterface
 
     private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination|DestinationNotFound
     {
-        $nextBecoming = ($this->getClass)($result);
+        $nextBecoming = $this->being->willBe($result);
 
         if ($nextBecoming === null) {
             return new FinalDestination($result::class);

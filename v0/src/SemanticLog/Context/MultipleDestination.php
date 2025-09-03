@@ -11,5 +11,6 @@ final class MultipleDestination
 {
     public function __construct(
         public readonly array $possibleClasses,  // class-string[]
-    ) {}
+    ) {
+    }
 }
