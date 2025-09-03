@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog\Context;
 
+use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
 
 /**
@@ -12,7 +13,7 @@ use Koriym\SemanticLogger\AbstractContext;
  * Records constructor arguments BEFORE instantiation.
  * This captures what we intend to pass to the constructor.
  */
-final class MetamorphosisOpenContext extends AbstractContext
+final class MetamorphosisOpenContext extends AbstractContext implements JsonSerializable
 {
     public const TYPE = 'metamorphosis_open';
     public const SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-open.json';
@@ -29,5 +30,15 @@ final class MetamorphosisOpenContext extends AbstractContext
         public readonly array $immanentSources = [],
         public readonly array $transcendentSources = [],
     ) {
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'fromClass' => $this->fromClass,
+            'beAttribute' => $this->beAttribute,
+            'immanentSources' => empty($this->immanentSources) ? new \stdClass() : (object) $this->immanentSources,
+            'transcendentSources' => empty($this->transcendentSources) ? new \stdClass() : (object) $this->transcendentSources,
+        ];
     }
 }
