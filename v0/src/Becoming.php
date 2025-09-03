@@ -28,11 +28,19 @@ final class Becoming
         $this->being = new Being($logger, new BecomingArguments($this->injector));
     }
 
+    /**
+     * Let existence flow:
+     * the given state becomes what it already carries within,
+     * transforming step by step until it rests (for now).
+     *
+     * @param object $input The initial state of being
+     * @return object The final actualized form
+     */
     public function __invoke(object $input): object
     {
         $state = $input;
 
-        // The core metamorphosis loop - life as continuous becoming
+        // Life as continuous becoming: Being reveals its becoming, then becomes it
         while ($next = $this->being->willBe($state)) {
             $state = $this->being->metamorphose($state, $next);
         }
