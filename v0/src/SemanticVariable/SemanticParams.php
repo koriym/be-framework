@@ -18,8 +18,8 @@ final class SemanticParams
     private array $params = [];
 
     public function __construct(
-        private ReflectionMethod $method,
-        private SemanticValidator $validator,
+        ReflectionMethod $method,
+        SemanticValidator $validator,
     ) {
         foreach ($method->getParameters() as $parameter) {
             $this->params[$parameter->getName()] = new SemanticParam($parameter, $validator);
