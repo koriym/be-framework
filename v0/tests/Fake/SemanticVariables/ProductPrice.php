@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
+use Be\Framework\SemanticTag\Premium;
+use Be\Framework\SemanticTag\Budget;
 use DomainException;
 
 final class ProductPrice
@@ -22,7 +24,7 @@ final class ProductPrice
     }
 
     #[Validate]
-    public function validatePremium(float $price): void
+    public function validatePremium(#[Premium] float $price): void
     {
         // Base validation first
         $this->validateProductPrice($price);
@@ -33,7 +35,7 @@ final class ProductPrice
     }
 
     #[Validate]
-    public function validateBudget(float $price): void
+    public function validateBudget(#[Budget] float $price): void
     {
         // Base validation first
         $this->validateProductPrice($price);

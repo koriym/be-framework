@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
+use Be\Framework\SemanticTag\HighScore;
+use Be\Framework\SemanticTag\PersonalBest;
 use DomainException;
 
 final class GameScore
@@ -22,7 +24,7 @@ final class GameScore
     }
 
     #[Validate]
-    public function validateHighScore(int $score): void
+    public function validateHighScore(#[HighScore] int $score): void
     {
         // Base validation first
         $this->validateGameScore($score);
@@ -33,7 +35,7 @@ final class GameScore
     }
 
     #[Validate]
-    public function validatePersonalBest(int $score): void
+    public function validatePersonalBest(#[PersonalBest] int $score): void
     {
         // Base validation first
         $this->validateGameScore($score);

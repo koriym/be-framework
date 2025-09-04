@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
+use Be\Framework\Attribute\SemanticTag;
 use Be\Framework\Attribute\Validate;
 use Be\Framework\BecomingArgumentsInterface;
 use DomainException;
@@ -172,6 +173,39 @@ final class SemanticValidator
         }
 
         return false;
+    }
+
+    /**
+     * Check if a class is marked with SemanticTag attribute
+     */
+    private function isSemanticTagClass(string $className): bool
+    {
+        if (! class_exists($className)) {
+            return false;
+        }
+
+        $reflection = new ReflectionClass($className);
+        return ! empty($reflection->getAttributes(SemanticTag::class));
+    }
+
+    /**
+     * Get SemanticTag description from a class
+     */
+    private function getSemanticTagDescription(string $className): ?string
+    {
+        if (! class_exists($className)) {
+            return null;
+        }
+
+        $reflection = new ReflectionClass($className);
+        $attributes = $reflection->getAttributes(SemanticTag::class);
+
+        if (empty($attributes)) {
+            return null;
+        }
+
+        $semanticTag = $attributes[0]->newInstance();
+        return $semanticTag->description;
     }
 
     /**
