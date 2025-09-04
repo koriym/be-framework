@@ -12,7 +12,7 @@ use ReflectionMethod;
  * Provides unified parameter validation and management for methods
  * with semantic parameter attributes. Completely cacheable and minimal!
  */
-final class SemanticParams
+final class SemanticParams implements SemanticParamsInterface
 {
     /** @var array<string, SemanticParam> */
     private array $params = [];
