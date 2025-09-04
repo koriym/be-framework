@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\BecomingArguments;
+use Be\Framework\Exception\SemanticVariableException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -15,7 +16,8 @@ final class SemanticValidatorTest extends TestCase
     protected function setUp(): void
     {
         $injector = new Injector();
-        $becomingArguments = new BecomingArguments($injector);
+        $nullValidator = new NullValidator();
+        $becomingArguments = new BecomingArguments($injector, $nullValidator);
         $this->validator = new SemanticValidator($becomingArguments);
     }
 
@@ -125,10 +127,42 @@ final class SemanticValidatorTest extends TestCase
         $this->assertGreaterThan(0, $errors->count());
     }
 
+    public function testValidateAndThrowWithValidData(): void
+    {
+        $this->validator->validateAndThrow('email', 'john@example.com');
+
+        // If no exception is thrown, the test passes
+        $this->assertTrue(true);
+    }
+
+    public function testValidateAndThrowWithInvalidData(): void
+    {
+        $this->expectException(SemanticVariableException::class);
+
+        $this->validator->validateAndThrow('email', 'invalid-email');
+    }
+
+    public function testValidateAndThrowPreservesErrorDetails(): void
+    {
+        try {
+            $this->validator->validateAndThrow('email', 'invalid-email');
+            $this->fail('Expected SemanticVariableException to be thrown');
+        } catch (SemanticVariableException $e) {
+            // Verify that the exception preserves the original errors
+            $errors = $e->getErrors();
+            $this->assertTrue($errors->hasErrors());
+            $this->assertGreaterThan(0, $errors->count());
+
+            // Verify the exception message contains validation details
+            $this->assertNotEmpty($e->getMessage());
+        }
+    }
+
     public function testCustomNamespace(): void
     {
         $injector = new Injector();
-        $becomingArguments = new BecomingArguments($injector);
+        $nullValidator = new NullValidator();
+        $becomingArguments = new BecomingArguments($injector, $nullValidator);
         $validator = new SemanticValidator($becomingArguments, 'NonExistent\\Namespace');
 
         $errors = $validator->validate('email', 'test@example.com');
@@ -142,6 +176,36 @@ final class SemanticValidatorTest extends TestCase
         // This tests the case where semantic class exists but no validation methods match
         // The class has validation methods but none match the argument count provided
         $errors = $this->validator->validate('no_matching_method', 'single_arg');
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testValidateWithAttributesNonExistentSemanticTag(): void
+    {
+        // This tests the branch where isSemanticTagClass returns false for non-existent class
+        $errors = $this->validator->validateWithAttributes('email', ['NonExistentTag'], 'test@example.com');
+
+        // Should still validate with base validation since the non-existent tag is ignored
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testIsSemanticTagClassWithNonExistentClass(): void
+    {
+        // Test the branch in isSemanticTagClass where class_exists returns false
+        // This is tested indirectly through validateWithAttributes with non-existent tag
+        $errors = $this->validator->validateWithAttributes('email', ['CompletelyFakeTag'], 'test@example.com');
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testAttributeSpecificMethodWithValidClass(): void
+    {
+        // Test attribute-specific validation with valid class to ensure coverage
+        // This will test the branch where class_exists returns true in isSemanticTagClass
+        $errors = $this->validator->validateWithAttributes('user_age', ['Teen'], 16);
 
         $this->assertInstanceOf(NullErrors::class, $errors);
         $this->assertFalse($errors->hasErrors());

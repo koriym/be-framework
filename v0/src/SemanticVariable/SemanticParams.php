@@ -19,7 +19,7 @@ final class SemanticParams implements SemanticParamsInterface
 
     public function __construct(
         ReflectionMethod $method,
-        SemanticValidator $validator,
+        SemanticValidatorInterface $validator,
     ) {
         foreach ($method->getParameters() as $parameter) {
             $this->params[$parameter->getName()] = new SemanticParam($parameter, $validator);

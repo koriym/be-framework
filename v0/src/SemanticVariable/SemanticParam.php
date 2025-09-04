@@ -16,7 +16,7 @@ final class SemanticParam
 
     public function __construct(
         private ReflectionParameter $parameter,
-        private SemanticValidator $validator,
+        private SemanticValidatorInterface $validator,
     ) {
         $this->name = $parameter->getName();
         $this->attributeNames = $this->extractAttributeNames($parameter);

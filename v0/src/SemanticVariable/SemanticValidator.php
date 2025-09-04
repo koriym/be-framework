@@ -7,6 +7,7 @@ namespace Be\Framework\SemanticVariable;
 use Be\Framework\Attribute\SemanticTag;
 use Be\Framework\Attribute\Validate;
 use Be\Framework\BecomingArgumentsInterface;
+use Be\Framework\Exception\SemanticVariableException;
 use DomainException;
 use Ray\Di\Di\Inject;
 use ReflectionClass;
@@ -29,7 +30,7 @@ use function ucwords;
  * Automatically resolves validation classes from variable names and
  * executes appropriate validation methods based on argument patterns.
  */
-final class SemanticValidator
+final class SemanticValidator implements SemanticValidatorInterface
 {
     public function __construct(
         private BecomingArgumentsInterface $becomingArguments,
@@ -206,21 +207,6 @@ final class SemanticValidator
     }
 
     /**
-     * Resolve attribute class name from attribute name
-     */
-    private function resolveAttributeClassName(string $attributeName): string
-    {
-        // Try Fake SemanticTag classes first (for testing)
-        $fakeClassName = "Be\\Framework\\SemanticTag\\{$attributeName}";
-        if (class_exists($fakeClassName)) {
-            return $fakeClassName;
-        }
-
-        // Fall back to framework SemanticTag classes
-        return "Be\\Framework\\Attribute\\{$attributeName}";
-    }
-
-    /**
      * Check if the method is a base validation method (e.g., validateAge for basic age)
      */
     private function isBaseValidationMethod(ReflectionMethod $method, string $variableName): bool
@@ -263,5 +249,20 @@ final class SemanticValidator
         }
 
         return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+    }
+
+    /**
+     * Validate semantic variables and throw exception if errors found
+     *
+     * Throws SemanticVariableException with detailed error information if validation fails.
+     * This preserves all validation errors and their messages for proper error handling.
+     */
+    public function validateAndThrow(string $variableName, mixed ...$args): void
+    {
+        $errors = $this->validate($variableName, ...$args);
+
+        if ($errors->hasErrors()) {
+            throw new SemanticVariableException($errors);
+        }
     }
 }

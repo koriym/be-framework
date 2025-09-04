@@ -13,6 +13,7 @@ use Be\Framework\SemanticLog\Context\DestinationNotFound;
 use Be\Framework\SemanticLog\Context\FinalDestination;
 use Be\Framework\SemanticLog\Context\MultipleDestination;
 use Be\Framework\SemanticLog\Context\SingleDestination;
+use Be\Framework\SemanticVariable\NullValidator;
 use Be\Framework\TestInputWithDependency;
 use Be\Framework\TestMultipleDestination;
 use Be\Framework\TestSingleDestination;
@@ -43,7 +44,8 @@ final class LoggerTest extends TestCase
     {
         $this->semanticLogger = new SemanticLogger();
         $injector = new Injector();
-        $becomingArguments = new BecomingArguments($injector);
+        $nullValidator = new NullValidator();
+        $becomingArguments = new BecomingArguments($injector, $nullValidator);
 
         $this->logger = new Logger(
             $this->semanticLogger,

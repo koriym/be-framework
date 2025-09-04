@@ -18,7 +18,8 @@ final class SemanticParamsTest extends TestCase
     protected function setUp(): void
     {
         $injector = new Injector();
-        $becomingArguments = new BecomingArguments($injector);
+        $nullValidator = new NullValidator();
+        $becomingArguments = new BecomingArguments($injector, $nullValidator);
         $this->validator = new SemanticValidator($becomingArguments, 'Be\\Framework\\SemanticVariables');
     }
 

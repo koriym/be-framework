@@ -15,7 +15,8 @@ final class HierarchicalSemanticValidationWithFakeTest extends TestCase
     protected function setUp(): void
     {
         $injector = new Injector();
-        $becomingArguments = new BecomingArguments($injector);
+        $nullValidator = new NullValidator();
+        $becomingArguments = new BecomingArguments($injector, $nullValidator);
         // Use Be\Framework\SemanticVariables namespace for Fake classes
         $this->validator = new SemanticValidator($becomingArguments, 'Be\\Framework\\SemanticVariables');
     }

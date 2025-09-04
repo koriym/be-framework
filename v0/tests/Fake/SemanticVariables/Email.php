@@ -10,7 +10,7 @@ use DomainException;
 final class Email
 {
     #[Validate]
-    public function validateFormat(string $email): void
+    public function validateEmail(string $email): void
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new DomainException("Invalid email format: {$email}");

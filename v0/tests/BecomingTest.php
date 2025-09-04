@@ -7,7 +7,10 @@ namespace Be\Framework;
 use Be\Framework\Attribute\Be;
 use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
+use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Exception\TypeMatchingFailure;
+use Be\Framework\SemanticVariable\NullValidator;
+use Be\Framework\SemanticVariable\SemanticValidator;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +27,14 @@ final class BecomingTest extends TestCase
     protected function setUp(): void
     {
         $injector = new Injector(new BecomingTestModule());
-        $this->becoming = new Becoming($injector);
+
+        // BecomingArgumentsには必ずSemanticValidatorを渡す
+        $nullValidator = new NullValidator();
+        $tempBecomingArgs = new BecomingArguments($injector, $nullValidator);
+        $semanticValidator = new SemanticValidator($tempBecomingArgs, 'Be\\Framework\\SemanticVariables');
+        $becomingArguments = new BecomingArguments($injector, $semanticValidator);
+
+        $this->becoming = new Becoming($injector, null, $becomingArguments);
     }
 
     public function testSingleTransformation(): void
@@ -137,6 +147,14 @@ final class BecomingTest extends TestCase
         $this->assertInstanceOf(BecomingTestWithUnion::class, $result);
         $this->assertEquals('test', $result->data);
         $this->assertEquals('test-union-value', $result->unionParam);
+    }
+
+    public function testSemanticValidationFailure(): void
+    {
+        $this->expectException(SemanticVariableException::class);
+
+        $input = new BecomingTestSemanticInvalid('invalid-email');
+        ($this->becoming)($input);
     }
 }
 
@@ -403,5 +421,24 @@ final class BecomingTestModule extends AbstractModule
     protected function configure(): void
     {
         $this->bind('')->annotatedWith('unionValue')->toInstance('test-union-value');
+    }
+}
+
+// Semantic validation test fixtures
+#[Be(BecomingTestSemanticTarget::class)]
+final class BecomingTestSemanticInvalid
+{
+    public function __construct(
+        public readonly string $email,
+    ) {
+    }
+}
+
+final class BecomingTestSemanticTarget
+{
+    public function __construct(
+        #[Input]
+        public readonly string $email,  // This will trigger semantic validation for email
+    ) {
     }
 }

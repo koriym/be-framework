@@ -8,6 +8,7 @@ use Be\Framework\Be;
 use Be\Framework\BecomingArguments;
 use Be\Framework\FakeProcessedData;
 use Be\Framework\SemanticLog\Context\FinalDestination;
+use Be\Framework\SemanticVariable\NullValidator;
 use Koriym\SemanticLogger\SemanticLogger;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -32,7 +33,8 @@ final class SchemaComplianceTest extends TestCase
     {
         $this->semanticLogger = new SemanticLogger();
         $injector = new Injector();
-        $becomingArguments = new BecomingArguments($injector);
+        $nullValidator = new NullValidator();
+        $becomingArguments = new BecomingArguments($injector, $nullValidator);
 
         $this->logger = new Logger(
             $this->semanticLogger,
