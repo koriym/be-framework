@@ -16,7 +16,7 @@ use Attribute;
  * Example:
  *   #[Teen] $age  // Validates as teen age (13-19 years)
  */
-#[SemanticTag(description: "Age constraint for teenagers (13-19 years)")]
+#[SemanticTag(description: 'Age constraint for teenagers (13-19 years)')]
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final class Teen
 {

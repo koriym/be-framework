@@ -14,20 +14,19 @@ use Attribute;
  * as SemanticTags and provides semantic metadata.
  *
  * Pattern: Basic contract (variable name) + SemanticTag constraint = Hierarchical semantics
- * 
+ *
  * Examples:
  *   #[SemanticTag(description: "Age constraint for teenagers")]
  *   final class Teen {}
- *   
- *   #[SemanticTag(description: "Price tier for premium products")]  
+ *
+ *   #[SemanticTag(description: "Price tier for premium products")]
  *   final class Premium {}
  *
  * @todo Add appliesTo domain specification for SemanticTags
- *       - Teen → age domain  
+ *       - Teen → age domain
  *       - Premium → price domain
  *       - Adult/Senior → user/person domain
  *       - Enable automatic applicability checking
- *
  * @todo ALPS descriptor generation from SemanticTag metadata
  *       - name (class name) → ALPS descriptor id
  *       - description → ALPS descriptor doc
@@ -37,7 +36,7 @@ use Attribute;
 final class SemanticTag
 {
     public function __construct(
-        public readonly string $description
+        public readonly string $description,
     ) {
     }
 }

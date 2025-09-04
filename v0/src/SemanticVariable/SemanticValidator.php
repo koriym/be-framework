@@ -191,13 +191,14 @@ final class SemanticValidator
         }
 
         $reflection = new ReflectionClass($className);
+
         return ! empty($reflection->getAttributes(SemanticTag::class));
     }
 
     /**
      * Get SemanticTag description from a class
      */
-    private function getSemanticTagDescription(string $className): ?string
+    private function getSemanticTagDescription(string $className): string|null
     {
         if (! class_exists($className)) {
             return null;
@@ -211,6 +212,7 @@ final class SemanticValidator
         }
 
         $semanticTag = $attributes[0]->newInstance();
+
         return $semanticTag->description;
     }
 
