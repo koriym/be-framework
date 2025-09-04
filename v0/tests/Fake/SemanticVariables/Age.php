@@ -5,19 +5,34 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
-use DomainException;
+use Be\Framework\SemanticTag\Teen;
 
 final class Age
 {
     #[Validate]
-    public function validateRange(int $age): void
+    public function validateAge(int $age): void
     {
         if ($age < 0) {
-            throw new DomainException("Age cannot be negative: {$age}");
+            throw new AgeNegativeException($age);
         }
         
         if ($age > 150) {
-            throw new DomainException("Age cannot exceed 150: {$age}");
+            throw new AgeTooHighException($age);
+        }
+    }
+
+    #[Validate]
+    public function validateTeen(#[Teen] int $age): void
+    {
+        // Base validation first
+        $this->validateAge($age);
+
+        if ($age < 13) {
+            throw new TeenAgeTooYoungException($age);
+        }
+
+        if ($age > 19) {
+            throw new TeenAgeTooOldException($age);
         }
     }
 }

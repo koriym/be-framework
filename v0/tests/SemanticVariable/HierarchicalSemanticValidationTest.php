@@ -23,7 +23,7 @@ final class HierarchicalSemanticValidationTest extends TestCase
     {
         $injector = new Injector();
         $becomingArguments = new BecomingArguments($injector);
-        $this->validator = new SemanticValidator($becomingArguments);
+        $this->validator = new SemanticValidator($becomingArguments, 'Be\\Framework\\SemanticVariables');
     }
 
     public function testBasicAgeValidation(): void
@@ -57,7 +57,7 @@ final class HierarchicalSemanticValidationTest extends TestCase
         $errors = $this->validator->validateWithAttributes('age', ['Teen'], 10);
 
         $this->assertTrue($errors->hasErrors());
-        $this->assertStringContainsString('Teen age must be at least 13 years', $errors->getMessages()[0]);
+        $this->assertStringContainsString('Teen age must be at least 13', $errors->getMessages()[0]);
     }
 
     public function testTeenAgeValidationTooOld(): void
@@ -66,7 +66,7 @@ final class HierarchicalSemanticValidationTest extends TestCase
         $errors = $this->validator->validateWithAttributes('age', ['Teen'], 25);
 
         $this->assertTrue($errors->hasErrors());
-        $this->assertStringContainsString('Teen age must be at most 19 years', $errors->getMessages()[0]);
+        $this->assertStringContainsString('Teen age must be at most 19', $errors->getMessages()[0]);
     }
 
     public function testTeenAgeValidationInvalidAge(): void

@@ -7,17 +7,20 @@ namespace Be\Framework\Attribute;
 use Attribute;
 
 /**
- * Multilingual message attribute for validation exceptions
+ * Attribute for internationalized message definitions
  *
- * Provides default messages in multiple languages for validation failures.
- * Messages support template interpolation using {property} syntax.
+ * Provides multi-language message support for exceptions and other components.
+ * Supports array of translations keyed by language code.
+ *
+ * Examples:
+ *   #[Message(['en' => 'Error message', 'ja' => 'エラーメッセージ'])]
  */
-#[Attribute(Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 final class Message
 {
     /** @param array<string, string> $messages Locale => message template mapping */
     public function __construct(
-        public readonly array $messages = [],
+        public readonly array $messages,
     ) {
     }
 }

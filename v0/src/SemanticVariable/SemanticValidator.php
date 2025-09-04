@@ -12,8 +12,12 @@ use Ray\Di\Di\Inject;
 use ReflectionClass;
 use ReflectionMethod;
 
+use function array_values;
 use function class_exists;
 use function count;
+use function end;
+use function explode;
+use function in_array;
 use function str_replace;
 use function str_starts_with;
 use function strtolower;
@@ -116,22 +120,24 @@ final class SemanticValidator
     private function getMatchingValidationMethods(object $semanticClass, string $variableName, array $parameterAttributes, array $validationArgs): array
     {
         $reflection = new ReflectionClass($semanticClass);
-        $methods = [];
+        $methodsByName = [];
 
-        // First, always add the base validation method if it exists and matches
+        // Collect both base validation methods and attribute-specific methods
         foreach ($reflection->getMethods() as $method) {
             if (! empty($method->getAttributes(Validate::class)) && $this->methodMatchesArguments($method, $validationArgs)) {
                 // Check if this is an attribute-specific method
                 if ($this->isAttributeSpecificMethod($method, $parameterAttributes)) {
-                    $methods[] = $method;
-                } elseif (empty($parameterAttributes) && $this->isBaseValidationMethod($method, $variableName)) {
-                    // Use base validation when no specific attributes are present
-                    $methods[] = $method;
+                    $methodsByName[$method->getName()] = $method;
+                }
+
+                // Check if this is a base validation method
+                if ($this->isBaseValidationMethod($method, $variableName)) {
+                    $methodsByName[$method->getName()] = $method;
                 }
             }
         }
 
-        return $methods;
+        return array_values($methodsByName);
     }
 
     /**
@@ -154,27 +160,31 @@ final class SemanticValidator
     }
 
     /**
-     * Check if the method is attribute-specific (e.g., validateTeen for #[Teen])
+     * Check if the method is attribute-specific (method parameters have matching SemanticTag attributes)
      */
-    private function isAttributeSpecificMethod(ReflectionMethod $method, array $parameterAttributes): bool
+    private function isAttributeSpecificMethod(ReflectionMethod $method, array $inputParameterAttributes): bool
     {
-        if (empty($parameterAttributes)) {
+        if (empty($inputParameterAttributes)) {
             return false;
         }
 
-        $methodName = strtolower($method->getName());
+        // Check if method has parameters with matching SemanticTag attributes
+        foreach ($method->getParameters() as $methodParam) {
+            foreach ($methodParam->getAttributes() as $attr) {
+                // Get the attribute class name (e.g., "Be\Framework\SemanticTag\Adult")
+                $attrClassName = $attr->getName();
 
-        // Check if method name matches any parameter attribute that has SemanticTag
-        foreach ($parameterAttributes as $attributeName) {
-            // Only consider attributes that are marked with SemanticTag
-            $attributeClassName = $this->resolveAttributeClassName($attributeName);
-            if (! $this->isSemanticTagClass($attributeClassName)) {
-                continue; // Skip non-SemanticTag attributes
-            }
+                // Extract tag name from class name (e.g., "Adult")
+                $parts = explode('\\', $attrClassName);
+                $tagName = end($parts);
 
-            $expectedMethodName = 'validate' . strtolower($attributeName);
-            if ($methodName === $expectedMethodName) {
-                return true;
+                // Check if this tag matches input attributes and is a SemanticTag
+                if (
+                    in_array($tagName, $inputParameterAttributes, true) &&
+                    $this->isSemanticTagClass($attrClassName)
+                ) {
+                    return true;
+                }
             }
         }
 
@@ -253,17 +263,5 @@ final class SemanticValidator
         }
 
         return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
-    }
-
-    /**
-     * Validate semantic variables and throw exception if errors found
-     */
-    public function validateAndThrow(string $variableName, mixed ...$args): void
-    {
-        $errors = $this->validate($variableName, ...$args);
-
-        if ($errors->hasErrors()) {
-            throw new DomainException('Validation failed');
-        }
     }
 }

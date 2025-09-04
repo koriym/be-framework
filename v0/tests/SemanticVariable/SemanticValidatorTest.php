@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\BecomingArguments;
-use DomainException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
@@ -124,22 +123,6 @@ final class SemanticValidatorTest extends TestCase
 
         $this->assertTrue($errors->hasErrors());
         $this->assertGreaterThan(0, $errors->count());
-    }
-
-    public function testValidateAndThrowWithValidData(): void
-    {
-        $this->validator->validateAndThrow('email', 'john@example.com');
-
-        // If no exception is thrown, the test passes
-        $this->assertTrue(true);
-    }
-
-    public function testValidateAndThrowWithInvalidData(): void
-    {
-        $this->expectException(DomainException::class);
-        $this->expectExceptionMessage('Validation failed');
-
-        $this->validator->validateAndThrow('email', 'invalid-email');
     }
 
     public function testCustomNamespace(): void
