@@ -46,12 +46,11 @@ final class NegativeAgeException extends DomainException
 
 ### Benefits
 
-- **Type Safety**: `catch (NegativeAgeException $e)` - specific exception handling
-- **Structured Data**: `$e->age` - direct access to error context
-- **Clear Parameters**: Constructor shows exactly what data is needed
-- **Internationalization**: `#[Message]` attribute for multi-language support
-- **Domain Expression**: Business rules clearly expressed in code
-
+- **Type safety**: Handle with `catch (NegativeAgeException $e)`.
+- **Structured data**: Access context via `$e->age`.
+- **Clear parameters**: The constructor shows exactly which data is required.
+- **Internationalization**: Use the `#[Message]` attribute for multiple languages.
+- **Domain expression**: Express business rules clearly in code.
 ### Framework Examples
 
 See `src/Exception/` for consistent patterns:
