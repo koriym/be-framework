@@ -164,8 +164,14 @@ final class SemanticValidator
 
         $methodName = strtolower($method->getName());
 
-        // Check if method name matches any parameter attribute
+        // Check if method name matches any parameter attribute that has SemanticTag
         foreach ($parameterAttributes as $attributeName) {
+            // Only consider attributes that are marked with SemanticTag
+            $attributeClassName = $this->resolveAttributeClassName($attributeName);
+            if (! $this->isSemanticTagClass($attributeClassName)) {
+                continue; // Skip non-SemanticTag attributes
+            }
+
             $expectedMethodName = 'validate' . strtolower($attributeName);
             if ($methodName === $expectedMethodName) {
                 return true;
@@ -206,6 +212,21 @@ final class SemanticValidator
 
         $semanticTag = $attributes[0]->newInstance();
         return $semanticTag->description;
+    }
+
+    /**
+     * Resolve attribute class name from attribute name
+     */
+    private function resolveAttributeClassName(string $attributeName): string
+    {
+        // Try Fake SemanticTag classes first (for testing)
+        $fakeClassName = "Be\\Framework\\SemanticTag\\{$attributeName}";
+        if (class_exists($fakeClassName)) {
+            return $fakeClassName;
+        }
+
+        // Fall back to framework SemanticTag classes
+        return "Be\\Framework\\Attribute\\{$attributeName}";
     }
 
     /**

@@ -220,4 +220,31 @@ final class HierarchicalSemanticValidationWithFakeTest extends TestCase
         $this->assertInstanceOf(NullErrors::class, $errors);
         $this->assertFalse($errors->hasErrors());
     }
+
+    public function testNonSemanticTagAttributesAreIgnored(): void
+    {
+        // FakeTag is not marked with #[SemanticTag] attribute, so should be ignored
+        $errors = $this->validator->validateWithAttributes('user_age', ['FakeTag'], 25);
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testMixedSemanticTagAndNonSemanticTagAttributes(): void
+    {
+        // Adult has #[SemanticTag], FakeTag does not - only Adult should trigger validation
+        $errors = $this->validator->validateWithAttributes('user_age', ['Adult', 'FakeTag'], 25);
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+        $this->assertFalse($errors->hasErrors());
+    }
+
+    public function testMixedSemanticTagAndNonSemanticTagAttributesWithValidationFailure(): void
+    {
+        // Adult has #[SemanticTag], FakeTag does not - only Adult validation should trigger and fail
+        $errors = $this->validator->validateWithAttributes('user_age', ['Adult', 'FakeTag'], 15);
+
+        $this->assertTrue($errors->hasErrors());
+        $this->assertStringContainsString('Adult age must be at least 18: 15', $errors->getMessages()[0]);
+    }
 }
