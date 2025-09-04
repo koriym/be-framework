@@ -22,8 +22,12 @@ coverage.svg
 debug_*.php
 simple_*.php
 test_*.php
+profile_*.php
 tmp/
 *.tmp
+
+# PHP Code Sniffer
+.phpcs-cache
 
 # OS
 .DS_Store

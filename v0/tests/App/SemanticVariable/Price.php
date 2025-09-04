@@ -10,7 +10,7 @@ use DomainException;
 final class Price
 {
     #[Validate]
-    public function validateAmount(float $price): void
+    public function validatePrice(float $price): void
     {
         if ($price < 0) {
             throw new DomainException("Price cannot be negative: {$price}");

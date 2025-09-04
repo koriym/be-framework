@@ -10,7 +10,7 @@ use DomainException;
 final class Dice
 {
     #[Validate]
-    public function validateSides(int $dice): void
+    public function validateDice(int $dice): void
     {
         if ($dice < 1 || $dice > 6) {
             throw new DomainException("Dice value must be between 1 and 6: {$dice}");
