@@ -55,7 +55,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
             $isInput = $this->isInputParameter($param);
             if ($isInput) {
                 /** @var mixed $value */
-                $value = $properties[$paramName];
+                $value = array_key_exists($paramName, $properties) ? $properties[$paramName] : null;
                 /** @psalm-suppress MixedAssignment */
                 $args[$paramName] = $value;      // #[Input]
                 continue;

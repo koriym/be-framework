@@ -31,6 +31,8 @@ use function is_string;
 use function json_encode;
 
 use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_UNICODE;
+use const JSON_INVALID_UTF8_SUBSTITUTE;
 
 /**
  * Be Framework Logger
@@ -180,8 +182,11 @@ final class Logger implements LoggerInterface
                     is_numeric($value) => (string) $value,
                     is_bool($value) => $value ? 'true' : 'false',
                     $value === null => 'null',
-                    is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
-                    default => 'unknown'
+                    is_array($value) => json_encode(
+                        $value,
+                        JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+                    ),
+                    default => get_debug_type($value)
                 };
                 $transcendentSources[$paramName] = gettype($value) . ':' . $stringValue;
             }

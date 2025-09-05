@@ -20,6 +20,8 @@ use function json_encode;
 use function str_replace;
 
 use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_UNICODE;
+use const JSON_INVALID_UTF8_SUBSTITUTE;
 
 /**
  * Handles multilingual message generation for validation exceptions
@@ -85,9 +87,12 @@ final class ValidationMessageHandler
                 is_numeric($value) => (string) $value,
                 is_bool($value) => $value ? 'true' : 'false',
                 $value === null => 'null',
-                is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
+                is_array($value) => json_encode(
+                    $value,
+                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+                ),
                 is_object($value) => $value::class,
-                default => 'unknown'
+                default => get_debug_type($value)
             };
             $template = str_replace($placeholder, $stringValue, $template);
         }
