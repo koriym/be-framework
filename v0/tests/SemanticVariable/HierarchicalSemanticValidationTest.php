@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
-use Be\Framework\BecomingArguments;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\Injector;
 
 /**
  * Test hierarchical semantic validation with parameter attributes
@@ -21,10 +19,7 @@ final class HierarchicalSemanticValidationTest extends TestCase
 
     protected function setUp(): void
     {
-        $injector = new Injector();
-        $nullValidator = new NullValidator();
-        $becomingArguments = new BecomingArguments($injector, $nullValidator);
-        $this->validator = new SemanticValidator($becomingArguments, 'Be\\Framework\\SemanticVariables');
+        $this->validator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
     }
 
     public function testBasicAgeValidation(): void

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
-use Be\Framework\BecomingArguments;
 use Be\Framework\Exception\SemanticVariableException;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\Injector;
 
 final class SemanticValidatorTest extends TestCase
 {
@@ -15,10 +13,7 @@ final class SemanticValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $injector = new Injector();
-        $nullValidator = new NullValidator();
-        $becomingArguments = new BecomingArguments($injector, $nullValidator);
-        $this->validator = new SemanticValidator($becomingArguments);
+        $this->validator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
     }
 
     public function testValidEmailReturnsNoErrors(): void
@@ -160,10 +155,7 @@ final class SemanticValidatorTest extends TestCase
 
     public function testCustomNamespace(): void
     {
-        $injector = new Injector();
-        $nullValidator = new NullValidator();
-        $becomingArguments = new BecomingArguments($injector, $nullValidator);
-        $validator = new SemanticValidator($becomingArguments, 'NonExistent\\Namespace');
+        $validator = new SemanticValidator('NonExistent\\Namespace');
 
         $errors = $validator->validate('email', 'test@example.com');
 

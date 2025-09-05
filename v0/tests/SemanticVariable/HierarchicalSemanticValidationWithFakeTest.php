@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
-use Be\Framework\BecomingArguments;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\Injector;
 
 final class HierarchicalSemanticValidationWithFakeTest extends TestCase
 {
@@ -14,11 +12,8 @@ final class HierarchicalSemanticValidationWithFakeTest extends TestCase
 
     protected function setUp(): void
     {
-        $injector = new Injector();
-        $nullValidator = new NullValidator();
-        $becomingArguments = new BecomingArguments($injector, $nullValidator);
-        // Use Be\Framework\SemanticVariables namespace for Fake classes
-        $this->validator = new SemanticValidator($becomingArguments, 'Be\\Framework\\SemanticVariables');
+        // Use MyVendor\MyApp\SemanticVariables namespace for Fake classes
+        $this->validator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
     }
 
     public function testBasicUserAgeValidationPasses(): void

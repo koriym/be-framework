@@ -9,7 +9,6 @@ use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
 use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Exception\TypeMatchingFailure;
-use Be\Framework\SemanticVariable\NullValidator;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use Exception;
 use InvalidArgumentException;
@@ -29,9 +28,7 @@ final class BecomingTest extends TestCase
         $injector = new Injector(new BecomingTestModule());
 
         // BecomingArgumentsには必ずSemanticValidatorを渡す
-        $nullValidator = new NullValidator();
-        $tempBecomingArgs = new BecomingArguments($injector, $nullValidator);
-        $semanticValidator = new SemanticValidator($tempBecomingArgs, 'Be\\Framework\\SemanticVariables');
+        $semanticValidator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
         $becomingArguments = new BecomingArguments($injector, $semanticValidator);
 
         $this->becoming = new Becoming($injector, null, $becomingArguments);

@@ -6,7 +6,6 @@ namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\Attribute\SemanticTag;
 use Be\Framework\Attribute\Validate;
-use Be\Framework\BecomingArgumentsInterface;
 use Be\Framework\Exception\SemanticVariableException;
 use DomainException;
 use Ray\Di\Di\Inject;
@@ -34,8 +33,7 @@ use function ucwords;
 final class SemanticValidator implements SemanticValidatorInterface
 {
     public function __construct(
-        private BecomingArgumentsInterface $becomingArguments,
-        private string $semanticNamespace = 'Be\\App\\SemanticVariable',
+        private string $semanticNamespace,
     ) {
     }
 
