@@ -25,6 +25,7 @@ final class NullValidator implements SemanticValidatorInterface
 
     /**
      * Always returns no errors for single parameter
+     * @codeCoverageIgnore
      */
     public function validateArg(ReflectionParameter $parameter, mixed $value): Errors
     {
@@ -35,14 +36,6 @@ final class NullValidator implements SemanticValidatorInterface
      * Legacy method: Always returns no errors (for backward compatibility)
      */
     public function validate(string $variableName, mixed ...$args): Errors
-    {
-        return new NullErrors();
-    }
-
-    /**
-     * Legacy method: Always returns no errors
-     */
-    public function validateLegacy(string $variableName, mixed ...$args): Errors
     {
         return new NullErrors();
     }

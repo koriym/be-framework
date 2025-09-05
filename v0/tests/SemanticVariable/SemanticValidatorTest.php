@@ -202,4 +202,21 @@ final class SemanticValidatorTest extends TestCase
         $this->assertInstanceOf(NullErrors::class, $errors);
         $this->assertFalse($errors->hasErrors());
     }
+
+    public function testValidateArgsWithNullValue(): void
+    {
+        // Create a reflection method to test validateArgs with null values
+        $testClass = new class {
+            public function testMethod(string $email): void {}
+        };
+        
+        $reflection = new \ReflectionClass($testClass);
+        $method = $reflection->getMethod('testMethod');
+        
+        // Test that null values are now passed to validation (would previously be skipped with isset)
+        // This should throw a TypeError because null is passed to validateEmail(string $email)
+        $this->expectException(\TypeError::class);
+        $this->validator->validateArgs($method, ['email' => null]);
+    }
+
 }

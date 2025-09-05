@@ -13,6 +13,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
+use function array_key_exists;
 use function array_values;
 use function class_exists;
 use function count;
@@ -56,7 +57,7 @@ final class SemanticValidator implements SemanticValidatorInterface
             }
 
             $name = $parameter->getName();
-            if (isset($args[$name])) {
+            if (array_key_exists($name, $args)) {
                 $errors = $this->validateArg($parameter, $args[$name]);
                 if ($errors->hasErrors()) {
                     $allErrors = [...$allErrors, ...$errors->exceptions];
@@ -134,7 +135,7 @@ final class SemanticValidator implements SemanticValidatorInterface
 
         foreach ($validationMethods as $method) {
             try {
-                $methodArgs = $this->resolveMethodArguments($method, $args);
+                $methodArgs = $this->resolveMethodArguments($args);
                 $method->invoke($semanticClass, ...$methodArgs);
             } catch (DomainException $exception) {
                 $exceptions[] = $exception;
@@ -258,10 +259,6 @@ final class SemanticValidator implements SemanticValidatorInterface
      */
     private function isSemanticTagClass(string $className): bool
     {
-        if (! class_exists($className)) {
-            return false;
-        }
-
         $reflection = new ReflectionClass($className);
 
         return ! empty($reflection->getAttributes(SemanticTag::class));
@@ -283,7 +280,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Resolve method arguments - simply return input args for now
      */
-    private function resolveMethodArguments(ReflectionMethod $method, array $inputArgs): array
+    private function resolveMethodArguments(array $inputArgs): array
     {
         // For now, just return the input arguments as-is
         // TODO: Implement proper argument resolution if needed
