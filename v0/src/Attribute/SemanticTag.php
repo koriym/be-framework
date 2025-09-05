@@ -31,6 +31,7 @@ use Attribute;
  *       - name (class name) → ALPS descriptor id
  *       - description → ALPS descriptor doc
  *       - type → ALPS descriptor type
+ * @psalm-immutable
  */
 #[Attribute(Attribute::TARGET_CLASS)]
 final class SemanticTag

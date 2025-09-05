@@ -15,6 +15,8 @@ use Attribute;
  *
  * When array is used, the actual becoming is determined by the framework
  * based on the object's internal state and type matching.
+ *
+ * @psalm-immutable
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 final class Be
