@@ -14,6 +14,9 @@ use function is_string;
 
 /**
  * Gets the next class name in metamorphosis chain
+ *
+ * @psalm-import-type BecomingClasses from Types
+ * @psalm-import-type CandidateErrors from Types
  */
 final class Being
 {
@@ -26,7 +29,7 @@ final class Being
      *
      * @param object $current Current object in metamorphosis chain
      *
-     * @return string|array<string>|null Next class name(s) or null if transformation is complete
+     * @return string|BecomingClasses|null Next class name(s) or null if transformation is complete
      */
     public function willBe(object $current): string|array|null
     {
@@ -45,7 +48,7 @@ final class Being
     /**
      * The moment of transformation - pure and irreversible
      *
-     * @param string|array<string> $becoming
+     * @param string|BecomingClasses $becoming
      */
     public function metamorphose(object $current, string|array $becoming): object
     {
@@ -79,10 +82,11 @@ final class Being
     /**
      * Perform type matching to select the appropriate class from array of possibilities
      *
-     * @param array<string> $becoming
+     * @param BecomingClasses $becoming
      */
     private function performTypeMatching(object $current, array $becoming): object
     {
+        /** @var CandidateErrors $candidateErrors */
         $candidateErrors = [];
 
         foreach ($becoming as $class) {

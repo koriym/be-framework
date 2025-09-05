@@ -24,12 +24,8 @@ use function get_object_vars;
  *
  * for metamorphosis transformations
  *
- * Implements Be Framework's philosophy of explicit dependency declaration:
- * - All constructor parameters must have either #[Input] or #[Inject] attributes
- * - #[Input] parameters are resolved from the current object's properties
- * - #[Inject] parameters are resolved from the DI container
- * - Object properties are preserved as-is (no flattening)
- * - Supports #[Named] for DI resolution
+ * @psalm-import-type ConstructorArguments from Types
+ * @psalm-import-type ObjectProperties from Types
  */
 final class BecomingArguments implements BecomingArgumentsInterface
 {
@@ -39,6 +35,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
     ) {
     }
 
+    /** @return ConstructorArguments */
     #[Override]
     public function be(object $current, string $becoming): array
     {
@@ -51,7 +48,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
             return [];
         }
 
-        /** @var array<string, mixed> $args */
+        /** @var ConstructorArguments $args */
         $args = [];
         foreach ($constructor->getParameters() as $param) {
             $paramName = $param->getName();

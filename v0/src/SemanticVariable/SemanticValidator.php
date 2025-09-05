@@ -7,6 +7,7 @@ namespace Be\Framework\SemanticVariable;
 use Be\Framework\Attribute\SemanticTag;
 use Be\Framework\Attribute\Validate;
 use Be\Framework\Exception\SemanticVariableException;
+use Be\Framework\Types;
 use DomainException;
 use Override;
 use Ray\Di\Di\Inject;
@@ -31,6 +32,12 @@ use function ucwords;
  *
  * Automatically resolves validation classes from variable names and
  * executes appropriate validation methods based on argument patterns.
+ *
+ * @psalm-import-type ConstructorArguments from Types
+ * @psalm-import-type ParameterAttributes from Types
+ * @psalm-import-type ValidationArguments from Types
+ * @psalm-import-type ReflectionMethods from Types
+ * @psalm-import-type ExceptionCollection from Types
  */
 final class SemanticValidator implements SemanticValidatorInterface
 {
@@ -43,7 +50,7 @@ final class SemanticValidator implements SemanticValidatorInterface
      * Validate all arguments for a method (primary API)
      *
      * @param ReflectionMethod     $method Method containing parameter definitions
-     * @param array<string, mixed> $args   Values to validate (associative array: param_name => value)
+     * @param ConstructorArguments $args   Values to validate (associative array: param_name => value)
      *
      * @return Errors Validation errors (empty if validation passes)
      */
@@ -98,7 +105,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Extract attribute names from ReflectionParameter
      *
-     * @return array<string>
+     * @return ParameterAttributes
      */
     private function extractAttributeNames(ReflectionParameter $parameter): array
     {
@@ -116,9 +123,9 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Validate semantic variable with parameter attributes for hierarchical validation
      *
-     * @param string        $variableName        Variable name for basic semantic validation
-     * @param array<string> $parameterAttributes Parameter attributes for hierarchical validation
-     * @param mixed         ...$args             Arguments to validate
+     * @param string              $variableName        Variable name for basic semantic validation
+     * @param ParameterAttributes $parameterAttributes Parameter attributes for hierarchical validation
+     * @param mixed               ...$args             Arguments to validate
      */
     public function validateWithAttributes(string $variableName, array $parameterAttributes = [], mixed ...$args): Errors
     {
@@ -179,12 +186,12 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Get validation methods that match the given arguments and parameter attributes
      *
-     * @param object        $semanticClass       The semantic validation class
-     * @param string        $variableName        The variable name for base validation
-     * @param array<string> $parameterAttributes Parameter attributes for hierarchical validation
-     * @param array<mixed>  $validationArgs      Arguments to validate
+     * @param object              $semanticClass       The semantic validation class
+     * @param string              $variableName        The variable name for base validation
+     * @param ParameterAttributes $parameterAttributes Parameter attributes for hierarchical validation
+     * @param ValidationArguments $validationArgs      Arguments to validate
      *
-     * @return array<ReflectionMethod>
+     * @return ReflectionMethods
      */
     private function getMatchingValidationMethods(object $semanticClass, string $variableName, array $parameterAttributes, array $validationArgs): array
     {
@@ -212,7 +219,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Check if method signature matches the provided arguments
      *
-     * @param array<mixed> $args
+     * @param ValidationArguments $args
      */
     private function methodMatchesArguments(ReflectionMethod $method, array $args): bool
     {
@@ -233,7 +240,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Check if the method is attribute-specific (method parameters have matching SemanticTag attributes)
      *
-     * @param array<string> $inputParameterAttributes
+     * @param ParameterAttributes $inputParameterAttributes
      */
     private function isAttributeSpecificMethod(ReflectionMethod $method, array $inputParameterAttributes): bool
     {
@@ -294,9 +301,9 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Resolve method arguments - simply return input args for now
      *
-     * @param array<mixed> $inputArgs
+     * @param ValidationArguments $inputArgs
      *
-     * @return array<mixed>
+     * @return ValidationArguments
      */
     private function resolveMethodArguments(ReflectionMethod $method, array $inputArgs): array
     {
