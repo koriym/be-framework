@@ -33,7 +33,8 @@
             "Be\\Framework\\": [
                 "tests",
                 "tests/Fake"
-            ]
+            ],
+            "MyVendor\\MyApp\\": "tests/FakeApp/"
         }
     },
     "scripts": {

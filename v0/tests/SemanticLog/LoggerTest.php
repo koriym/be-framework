@@ -6,11 +6,14 @@ namespace Be\Framework\SemanticLog;
 
 use Be\Framework\Be;
 use Be\Framework\BecomingArguments;
+use Be\Framework\ClassWithInjectObject;
 use Be\Framework\FakeProcessedData;
+use Be\Framework\NoConstructorClass;
 use Be\Framework\SemanticLog\Context\DestinationNotFound;
 use Be\Framework\SemanticLog\Context\FinalDestination;
 use Be\Framework\SemanticLog\Context\MultipleDestination;
 use Be\Framework\SemanticLog\Context\SingleDestination;
+use Be\Framework\SemanticVariable\NullValidator;
 use Be\Framework\TestInputWithDependency;
 use Be\Framework\TestMultipleDestination;
 use Be\Framework\TestSingleDestination;
@@ -41,7 +44,8 @@ final class LoggerTest extends TestCase
     {
         $this->semanticLogger = new SemanticLogger();
         $injector = new Injector();
-        $becomingArguments = new BecomingArguments($injector);
+        $nullValidator = new NullValidator();
+        $becomingArguments = new BecomingArguments($injector, $nullValidator);
 
         $this->logger = new Logger(
             $this->semanticLogger,
@@ -217,5 +221,65 @@ final class LoggerTest extends TestCase
 
         $this->assertInstanceOf(SingleDestination::class, $closeData['context']['be']);
         $this->assertEquals(FakeProcessedData::class, $closeData['context']['be']->nextClass);
+    }
+
+    public function testExtractTranscendentSourcesWithNoConstructor(): void
+    {
+        // Test the case where target class has no constructor
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractTranscendentSources');
+        $method->setAccessible(true);
+
+        $args = ['data' => 'test'];
+
+        // Use NoConstructorClass which has no constructor
+        $result = $method->invoke($this->logger, $args, NoConstructorClass::class);
+
+        // Should return empty array when no constructor exists
+        $this->assertEquals([], $result);
+    }
+
+    public function testExtractPropertiesDirectly(): void
+    {
+        // Test the private extractProperties method directly
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractProperties');
+        $method->setAccessible(true);
+
+        $testObject = new stdClass();
+        $testObject->prop1 = 'value1';
+        $testObject->prop2 = 42;
+
+        $result = $method->invoke($this->logger, $testObject);
+
+        $expected = ['prop1' => 'value1', 'prop2' => 42];
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testExtractTranscendentSourcesWithInjectObject(): void
+    {
+        // Test uncovered lines: continue and object case
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractTranscendentSources');
+        $method->setAccessible(true);
+
+        $injectedObject = new stdClass();
+        $injectedObject->test = 'value';
+
+        // Args with object injection (covers line 149) and missing param (covers line 140)
+        $args = [
+            'data' => 'test data',
+            'injectedObject' => $injectedObject,
+            // 'missingParam' is intentionally missing to trigger continue (line 140)
+        ];
+
+        $result = $method->invoke($this->logger, $args, ClassWithInjectObject::class);
+
+        // Should contain the injected object class name
+        $this->assertArrayHasKey('injectedObject', $result);
+        $this->assertSame('stdClass', $result['injectedObject']);
+
+        // Missing param should not be in result due to continue
+        $this->assertArrayNotHasKey('missingParam', $result);
     }
 }
