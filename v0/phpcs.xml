@@ -44,13 +44,13 @@
     </rule>
     <!-- Allow multiple classes in test files -->
     <rule ref="PSR1.Classes.ClassDeclaration">
-        <exclude-pattern>tests/*</exclude-pattern>
+        <exclude-pattern>tests/**</exclude-pattern>
     </rule>
     <rule ref="Squiz.Classes.ClassFileName">
-        <exclude-pattern>tests/*</exclude-pattern>
+        <exclude-pattern>tests/**</exclude-pattern>
     </rule>
     <rule ref="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed">
-        <exclude-pattern>tests/*</exclude-pattern>
+        <exclude-pattern>tests/**</exclude-pattern>
     </rule>
 
     <!-- Additional Rules -->
