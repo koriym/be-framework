@@ -13,16 +13,25 @@ use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Be\Framework\SemanticLog\Context\MultipleDestination;
 use Be\Framework\SemanticLog\Context\SingleDestination;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
+use Override;
 use Ray\Di\Di\Inject;
 use ReflectionClass;
 
 use function array_key_exists;
+use function array_keys;
 use function array_map;
 use function get_object_vars;
 use function gettype;
 use function implode;
+use function is_array;
+use function is_bool;
+use function is_null;
+use function is_numeric;
 use function is_object;
 use function is_string;
+use function json_encode;
+
+use const JSON_THROW_ON_ERROR;
 
 /**
  * Be Framework Logger
@@ -42,7 +51,10 @@ final class Logger implements LoggerInterface
 
     /**
      * Log transformation start
+     *
+     * @param string|array<string> $becoming
      */
+    #[Override]
     public function open(object $current, string|array $becoming): string
     {
         $fromClass = $current::class;
@@ -77,6 +89,7 @@ final class Logger implements LoggerInterface
     /**
      * Log transformation completion
      */
+    #[Override]
     public function close(object|null $result, string $openId, string|null $error = null): void
     {
         // Skip if no open ID
@@ -107,13 +120,18 @@ final class Logger implements LoggerInterface
         ), $openId);
     }
 
+    /**
+     * @param array<string, mixed> $args
+     *
+     * @return array<string, string>
+     */
     private function extractImmanentSources(object $current, array $args): array
     {
         $immanentSources = [];
         $properties = get_object_vars($current);
 
         // Use parameter names for reliable mapping (BecomingArguments ensures parameter names match property names for #[Input])
-        foreach ($args as $paramName => $value) {
+        foreach (array_keys($args) as $paramName) {
             if (array_key_exists($paramName, $properties)) {
                 $immanentSources[$paramName] = $current::class . '::' . $paramName;
             }
@@ -122,9 +140,15 @@ final class Logger implements LoggerInterface
         return $immanentSources;
     }
 
+    /**
+     * @param array<string, mixed> $args
+     *
+     * @return array<string, string>
+     */
     private function extractTranscendentSources(array $args, string $becoming): array
     {
         $transcendentSources = [];
+        /** @var class-string $becoming */
         $reflectionClass = new ReflectionClass($becoming);
         $constructor = $reflectionClass->getConstructor();
 
@@ -142,6 +166,7 @@ final class Logger implements LoggerInterface
 
             $hasInject = ! empty($param->getAttributes(Inject::class));
             if ($hasInject) {
+                /** @var mixed $value */
                 $value = $args[$paramName];
 
                 // For objects, use their class name; for scalars, use their type/value representation
@@ -149,7 +174,15 @@ final class Logger implements LoggerInterface
                     $transcendentSources[$paramName] = $value::class;
                 } else {
                     // For scalar/other types, show the type information
-                    $transcendentSources[$paramName] = gettype($value) . ':' . (string) $value;
+                    $stringValue = match (true) {
+                        is_string($value) => $value,
+                        is_numeric($value) => (string) $value,
+                        is_bool($value) => $value ? 'true' : 'false',
+                        is_null($value) => 'null',
+                        is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
+                        default => 'unknown'
+                    };
+                    $transcendentSources[$paramName] = gettype($value) . ':' . $stringValue;
                 }
             }
         }
@@ -157,6 +190,7 @@ final class Logger implements LoggerInterface
         return $transcendentSources;
     }
 
+    /** @return array<string, mixed> */
     private function extractProperties(object $result): array
     {
         // @todo Handle uninitialized properties in Accept pattern objects
@@ -167,7 +201,7 @@ final class Logger implements LoggerInterface
         return get_object_vars($result);
     }
 
-    private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination|DestinationNotFound
+    private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination
     {
         $nextBecoming = $this->being->willBe($result);
 
@@ -179,6 +213,7 @@ final class Logger implements LoggerInterface
             return new SingleDestination($nextBecoming);
         }
 
+        /** @var array<class-string> $nextBecoming */
         return new MultipleDestination($nextBecoming);
     }
 }

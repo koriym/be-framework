@@ -26,7 +26,7 @@ final class Being
      *
      * @param object $current Current object in metamorphosis chain
      *
-     * @return string|array|null Next class name(s) or null if transformation is complete
+     * @return string|array<string>|null Next class name(s) or null if transformation is complete
      */
     public function willBe(object $current): string|array|null
     {
@@ -44,6 +44,8 @@ final class Being
 
     /**
      * The moment of transformation - pure and irreversible
+     *
+     * @param string|array<string> $becoming
      */
     public function metamorphose(object $current, string|array $becoming): object
     {
@@ -61,6 +63,7 @@ final class Being
 
         try {
             $args = $this->becomingArguments->be($current, $becoming);
+            /** @var class-string $becoming */
             $result = (new ReflectionClass($becoming))->newInstanceArgs($args);
 
             $this->logger->close($result, $openId);
@@ -75,6 +78,8 @@ final class Being
 
     /**
      * Perform type matching to select the appropriate class from array of possibilities
+     *
+     * @param array<string> $becoming
      */
     private function performTypeMatching(object $current, array $becoming): object
     {

@@ -29,9 +29,9 @@ final class BecomingTest extends TestCase
 
         // BecomingArgumentsには必ずSemanticValidatorを渡す
         $semanticValidator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
-        $becomingArguments = new BecomingArguments($injector, $semanticValidator);
+        $becomingArguments = new BecomingArguments($injector, $semanticValidator, 'MyVendor\\MyApp');
 
-        $this->becoming = new Becoming($injector, null, $becomingArguments);
+        $this->becoming = new Becoming($injector, 'MyVendor\\MyApp', null, $becomingArguments);
     }
 
     public function testSingleTransformation(): void

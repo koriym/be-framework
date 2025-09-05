@@ -13,6 +13,7 @@ use function implode;
  */
 final class TypeMatchingFailure extends RuntimeException
 {
+    /** @param array<string, string> $candidateErrors */
     private function __construct(string $message, private array $candidateErrors = [])
     {
         parent::__construct($message);

@@ -14,8 +14,8 @@ interface LoggerInterface
     /**
      * Log transformation start
      *
-     * @param object       $current  Current object being transformed
-     * @param string|array $becoming Target class(es) for transformation
+     * @param object               $current  Current object being transformed
+     * @param string|array<string> $becoming Target class(es) for transformation
      *
      * @return string Open ID for correlating with close
      */

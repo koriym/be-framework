@@ -6,6 +6,7 @@ namespace Be\Framework\SemanticLog\Context;
 
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
+use Override;
 use stdClass;
 
 /**
@@ -17,6 +18,7 @@ use stdClass;
 final class MetamorphosisOpenContext extends AbstractContext implements JsonSerializable
 {
     public const TYPE = 'metamorphosis_open';
+
     public const SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-open.json';
 
     /**
@@ -33,6 +35,8 @@ final class MetamorphosisOpenContext extends AbstractContext implements JsonSeri
     ) {
     }
 
+    /** @return array<string, mixed> */
+    #[Override]
     public function jsonSerialize(): array
     {
         return [

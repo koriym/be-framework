@@ -9,8 +9,8 @@ use DomainException;
 
 /**
  * Test fixture class for validating the "no matching method" scenario
- * 
- * This class intentionally has validation methods that don't match 
+ *
+ * This class intentionally has validation methods that don't match
  * the single-argument signature used in the test, causing no methods
  * to be selected for validation.
  */

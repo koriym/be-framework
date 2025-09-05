@@ -18,7 +18,7 @@ interface BecomingArgumentsInterface
      * @param object $current  The current object being transformed
      * @param string $becoming The fully qualified class name of the destination class
      *
-     * @return array<mixed> Associative array of constructor arguments [paramName => value]
+     * @return array<string, mixed> Associative array of constructor arguments [paramName => value]
      */
     public function be(object $current, string $becoming): array;
 }

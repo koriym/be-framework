@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
+use Override;
 use ReflectionMethod;
 use ReflectionParameter;
 
@@ -18,6 +19,7 @@ final class NullValidator implements SemanticValidatorInterface
     /**
      * Always returns no errors for method arguments
      */
+    #[Override]
     public function validateArgs(ReflectionMethod $method, array $args): Errors
     {
         return new NullErrors();
@@ -25,8 +27,10 @@ final class NullValidator implements SemanticValidatorInterface
 
     /**
      * Always returns no errors for single parameter
+     *
      * @codeCoverageIgnore
      */
+    #[Override]
     public function validateArg(ReflectionParameter $parameter, mixed $value): Errors
     {
         return new NullErrors();
@@ -42,6 +46,8 @@ final class NullValidator implements SemanticValidatorInterface
 
     /**
      * Legacy method: Always returns no errors regardless of attributes
+     *
+     * @param array<string> $parameterAttributes
      */
     public function validateWithAttributes(string $variableName, array $parameterAttributes = [], mixed ...$args): Errors
     {

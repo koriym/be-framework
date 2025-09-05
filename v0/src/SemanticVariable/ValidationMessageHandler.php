@@ -11,7 +11,16 @@ use Throwable;
 
 use function array_map;
 use function get_object_vars;
+use function is_array;
+use function is_bool;
+use function is_null;
+use function is_numeric;
+use function is_object;
+use function is_string;
+use function json_encode;
 use function str_replace;
+
+use const JSON_THROW_ON_ERROR;
 
 /**
  * Handles multilingual message generation for validation exceptions
@@ -69,9 +78,19 @@ final class ValidationMessageHandler
     {
         $properties = get_object_vars($exception);
 
+        /** @psalm-suppress MixedAssignment */
         foreach ($properties as $key => $value) {
             $placeholder = "{{$key}}";
-            $template = str_replace($placeholder, (string) $value, $template);
+            $stringValue = match (true) {
+                is_string($value) => $value,
+                is_numeric($value) => (string) $value,
+                is_bool($value) => $value ? 'true' : 'false',
+                is_null($value) => 'null',
+                is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
+                is_object($value) => $value::class,
+                default => 'unknown'
+            };
+            $template = str_replace($placeholder, $stringValue, $template);
         }
 
         return $template;

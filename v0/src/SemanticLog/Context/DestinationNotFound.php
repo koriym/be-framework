@@ -9,9 +9,10 @@ namespace Be\Framework\SemanticLog\Context;
  */
 final readonly class DestinationNotFound
 {
+    /** @param array<string> $attemptedClasses */
     public function __construct(
         public string $error,
-        public array $attemptedClasses = [],  // class-string[]
+        public array $attemptedClasses = [],
     ) {
     }
 }

@@ -9,8 +9,9 @@ namespace Be\Framework\SemanticLog\Context;
  */
 final class MultipleDestination
 {
+    /** @param array<class-string> $possibleClasses */
     public function __construct(
-        public readonly array $possibleClasses,  // class-string[]
+        public readonly array $possibleClasses,
     ) {
     }
 }

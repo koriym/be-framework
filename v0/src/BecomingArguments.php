@@ -43,6 +43,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
     public function be(object $current, string $becoming): array
     {
         $properties = get_object_vars($current);
+        /** @var class-string $becoming */
         $targetClass = new ReflectionClass($becoming);
         $constructor = $targetClass->getConstructor();
 
@@ -50,13 +51,22 @@ final class BecomingArguments implements BecomingArgumentsInterface
             return [];
         }
 
+        /** @var array<string, mixed> $args */
         $args = [];
         foreach ($constructor->getParameters() as $param) {
             $paramName = $param->getName();
             $isInput = $this->isInputParameter($param);
-            $args[$paramName] = $isInput
-                ? $properties[$paramName]                          // #[Input]
-                : $this->getInjectParameter($param);               // #[Inject]
+            if ($isInput) {
+                /** @var mixed $value */
+                $value = $properties[$paramName];
+                /** @psalm-suppress MixedAssignment */
+                $args[$paramName] = $value;      // #[Input]
+            } else {
+                /** @var mixed $value */
+                $value = $this->getInjectParameter($param);
+                /** @psalm-suppress MixedAssignment */
+                $args[$paramName] = $value; // #[Inject]
+            }
         }
 
         $errors = $this->semanticValidator->validateArgs($constructor, $args);
@@ -82,6 +92,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
         $type = $param->getType();
         $interface = $type instanceof ReflectionNamedType && ! $type->isBuiltin() ? $type->getName() : '';
 
+        /** @var class-string $interface */
         return $this->injector->getInstance($interface, $named);
     }
 
