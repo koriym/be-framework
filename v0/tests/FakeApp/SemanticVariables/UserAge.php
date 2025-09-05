@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\Fake\MyVendor\MyApp\SemanticVariables;
+namespace MyVendor\MyApp\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
-use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Adult;
-use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Senior;
-use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Teen;
 use DomainException;
+use MyVendor\MyApp\SemanticTag\Adult;
+use MyVendor\MyApp\SemanticTag\Senior;
+use MyVendor\MyApp\SemanticTag\Teen;
 
 final class UserAge
 {
@@ -25,7 +25,8 @@ final class UserAge
     }
 
     #[Validate]
-    public function validateAdult(#[Adult] int $age): void
+    public function validateAdult(#[Adult]
+    int $age,): void
     {
         // Base validation first
         $this->validateUserAge($age);
@@ -36,7 +37,8 @@ final class UserAge
     }
 
     #[Validate]
-    public function validateSenior(#[Senior] int $age): void
+    public function validateSenior(#[Senior]
+    int $age,): void
     {
         // Base validation first
         $this->validateUserAge($age);
@@ -47,7 +49,8 @@ final class UserAge
     }
 
     #[Validate]
-    public function validateTeen(#[Teen] int $age): void
+    public function validateTeen(#[Teen]
+    int $age,): void
     {
         // Base validation first
         $this->validateUserAge($age);

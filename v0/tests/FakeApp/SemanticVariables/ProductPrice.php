@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\Fake\MyVendor\MyApp\SemanticVariables;
+namespace MyVendor\MyApp\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
-use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Budget;
-use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Premium;
 use DomainException;
+use MyVendor\MyApp\SemanticTag\Budget;
+use MyVendor\MyApp\SemanticTag\Premium;
 
 final class ProductPrice
 {
@@ -17,29 +17,31 @@ final class ProductPrice
         if ($price < 0.0) {
             throw new DomainException("Product price cannot be negative: {$price}");
         }
-        
+
         if ($price > 10000.0) {
             throw new DomainException("Product price cannot exceed 10000: {$price}");
         }
     }
 
     #[Validate]
-    public function validatePremium(#[Premium] float $price): void
+    public function validatePremium(#[Premium]
+    float $price,): void
     {
         // Base validation first
         $this->validateProductPrice($price);
-        
+
         if ($price < 100.0) {
             throw new DomainException("Premium price must be at least 100: {$price}");
         }
     }
 
     #[Validate]
-    public function validateBudget(#[Budget] float $price): void
+    public function validateBudget(#[Budget]
+    float $price,): void
     {
         // Base validation first
         $this->validateProductPrice($price);
-        
+
         if ($price > 50.0) {
             throw new DomainException("Budget price must be at most 50: {$price}");
         }
@@ -51,9 +53,9 @@ final class ProductPrice
         // Both prices must be valid
         $this->validateProductPrice($price);
         $this->validateProductPrice($comparisonPrice);
-        
+
         if ($price === $comparisonPrice) {
-            throw new DomainException("Product prices must be different for comparison");
+            throw new DomainException('Product prices must be different for comparison');
         }
     }
 }

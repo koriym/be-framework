@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\Fake\MyVendor\MyApp\SemanticTag;
+namespace MyVendor\MyApp\SemanticTag;
 
 use Attribute;
 use Be\Framework\Attribute\SemanticTag;
@@ -17,7 +17,7 @@ use Be\Framework\Attribute\SemanticTag;
  * Example:
  *   #[Budget] $price  // Validates as budget price (≤50 currency units)
  */
-#[SemanticTag(description: "Price tier for budget products (≤50 currency units)")]
+#[SemanticTag(description: 'Price tier for budget products (≤50 currency units)')]
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final class Budget
 {

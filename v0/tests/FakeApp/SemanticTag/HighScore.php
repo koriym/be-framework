@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\Fake\MyVendor\MyApp\SemanticTag;
+namespace MyVendor\MyApp\SemanticTag;
 
 use Attribute;
 use Be\Framework\Attribute\SemanticTag;
@@ -17,7 +17,7 @@ use Be\Framework\Attribute\SemanticTag;
  * Example:
  *   #[HighScore] $game_score  // Validates as high score (10000+ points)
  */
-#[SemanticTag(description: "High achievement level score (10000+ points)")]
+#[SemanticTag(description: 'High achievement level score (10000+ points)')]
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final class HighScore
 {

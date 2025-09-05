@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\Fake\MyVendor\MyApp\SemanticVariables;
+namespace MyVendor\MyApp\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
-use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\HighScore;
-use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\PersonalBest;
 use DomainException;
+use MyVendor\MyApp\SemanticTag\HighScore;
+use MyVendor\MyApp\SemanticTag\PersonalBest;
 
 final class GameScore
 {
@@ -17,29 +17,31 @@ final class GameScore
         if ($score < 0) {
             throw new DomainException("Game score cannot be negative: {$score}");
         }
-        
+
         if ($score > 1000000) {
             throw new DomainException("Game score cannot exceed 1000000: {$score}");
         }
     }
 
     #[Validate]
-    public function validateHighScore(#[HighScore] int $score): void
+    public function validateHighScore(#[HighScore]
+    int $score,): void
     {
         // Base validation first
         $this->validateGameScore($score);
-        
+
         if ($score < 10000) {
             throw new DomainException("High score must be at least 10000: {$score}");
         }
     }
 
     #[Validate]
-    public function validatePersonalBest(#[PersonalBest] int $score): void
+    public function validatePersonalBest(#[PersonalBest]
+    int $score,): void
     {
         // Base validation first
         $this->validateGameScore($score);
-        
+
         if ($score < 1000) {
             throw new DomainException("Personal best must be at least 1000: {$score}");
         }

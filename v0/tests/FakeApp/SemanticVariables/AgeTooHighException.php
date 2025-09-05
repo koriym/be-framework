@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\Fake\MyVendor\MyApp\SemanticVariables;
+namespace MyVendor\MyApp\SemanticVariables;
 
 use Be\Framework\Attribute\Message;
 use DomainException;

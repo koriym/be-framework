@@ -15,7 +15,7 @@ use DomainException;
 final class NegativeAgeException extends DomainException
 {
     public function __construct(
-        public readonly int $age
+        public readonly int $age,
     ) {
         parent::__construct("Age cannot be negative: {$age} years old");
     }

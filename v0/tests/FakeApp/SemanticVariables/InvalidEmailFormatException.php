@@ -15,7 +15,7 @@ use DomainException;
 final class InvalidEmailFormatException extends DomainException
 {
     public function __construct(
-        public readonly string $email
+        public readonly string $email,
     ) {
         parent::__construct("Invalid email format: {$email}");
     }

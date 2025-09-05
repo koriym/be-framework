@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\Fake\MyVendor\MyApp\SemanticTag;
+namespace MyVendor\MyApp\SemanticTag;
 
 use Attribute;
 use Be\Framework\Attribute\SemanticTag;
@@ -17,7 +17,7 @@ use Be\Framework\Attribute\SemanticTag;
  * Example:
  *   #[Senior] $age  // Validates as senior age (65+ years)
  */
-#[SemanticTag(description: "Age constraint for seniors (65+ years)")]
+#[SemanticTag(description: 'Age constraint for seniors (65+ years)')]
 #[Attribute(Attribute::TARGET_PARAMETER)]
 final class Senior
 {

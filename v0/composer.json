@@ -34,8 +34,7 @@
                 "tests",
                 "tests/Fake"
             ],
-            "Be\\App\\": "tests/App/",
-            "MyVendor\\MyApp\\": "tests/Fake/MyVendor/MyApp/"
+            "MyVendor\\MyApp\\": "tests/FakeApp/"
         }
     },
     "scripts": {
