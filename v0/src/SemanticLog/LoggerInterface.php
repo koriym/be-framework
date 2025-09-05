@@ -8,6 +8,9 @@ namespace Be\Framework\SemanticLog;
  * Interface for logging Be Framework transformations
  *
  * Simple open/close pattern for transformation logging.
+ * 
+ * @psalm-import-type BecomingClasses from \Be\Framework\Types
+ * @psalm-import-type LogContextId from \Be\Framework\Types
  */
 interface LoggerInterface
 {
