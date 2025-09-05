@@ -20,7 +20,7 @@ interface SemanticValidatorInterface
      * Validate all arguments for a method (primary API)
      *
      * @param ReflectionMethod $method Method containing parameter definitions
-     * @param array            $args   Values to validate (indexed array)
+     * @param array            $args   Values to validate (associative array: param_name => value)
      *
      * @return Errors Validation errors (empty if validation passes)
      */

@@ -31,13 +31,6 @@ final class SemanticParams implements SemanticParamsInterface
      */
     public function validate(array $values): Errors
     {
-        // Convert associative array to indexed array for validateArgs
-        $args = [];
-        foreach ($this->method->getParameters() as $parameter) {
-            $name = $parameter->getName();
-            $args[] = $values[$name] ?? null;
-        }
-
-        return $this->validator->validateArgs($this->method, $args);
+        return $this->validator->validateArgs($this->method, $values);
     }
 }

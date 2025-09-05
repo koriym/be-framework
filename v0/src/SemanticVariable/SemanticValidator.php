@@ -43,23 +43,23 @@ final class SemanticValidator implements SemanticValidatorInterface
      * Validate all arguments for a method (primary API)
      *
      * @param ReflectionMethod $method Method containing parameter definitions
-     * @param array            $args   Values to validate (indexed array)
+     * @param array            $args   Values to validate (associative array: param_name => value)
      *
      * @return Errors Validation errors (empty if validation passes)
      */
     public function validateArgs(ReflectionMethod $method, array $args): Errors
     {
         $allErrors = [];
-        $parameters = $method->getParameters();
 
-        foreach ($parameters as $index => $parameter) {
+        foreach ($method->getParameters() as $parameter) {
             // Skip #[Inject] parameters
             if ($this->hasInjectAttribute($parameter)) {
                 continue;
             }
 
-            if (isset($args[$index])) {
-                $errors = $this->validateArg($parameter, $args[$index]);
+            $name = $parameter->getName();
+            if (isset($args[$name])) {
+                $errors = $this->validateArg($parameter, $args[$name]);
                 if ($errors->hasErrors()) {
                     $allErrors = [...$allErrors, ...$errors->exceptions];
                 }

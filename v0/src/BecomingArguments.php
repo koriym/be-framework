@@ -7,7 +7,6 @@ namespace Be\Framework;
 use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
 use Be\Framework\Exception\SemanticVariableException;
-use Be\Framework\SemanticVariable\SemanticParams;
 use Be\Framework\SemanticVariable\SemanticValidatorInterface;
 use Override;
 use Ray\Di\Di\Inject;
@@ -60,8 +59,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
                 : $this->getInjectParameter($param);               // #[Inject]
         }
 
-        $semanticParams = new SemanticParams($constructor, $this->semanticValidator);
-        $errors = $semanticParams->validate($args);
+        $errors = $this->semanticValidator->validateArgs($constructor, $args);
 
         if ($errors->hasErrors()) {
             throw new SemanticVariableException($errors);
