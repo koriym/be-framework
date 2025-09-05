@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\SemanticTag;
+namespace Be\Framework\Fake\MyVendor\MyApp\SemanticTag;
 
 use Attribute;
 use Be\Framework\Attribute\SemanticTag;

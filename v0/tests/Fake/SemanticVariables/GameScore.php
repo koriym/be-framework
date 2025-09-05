@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
-use Be\Framework\SemanticTag\HighScore;
-use Be\Framework\SemanticTag\PersonalBest;
+use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\HighScore;
+use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\PersonalBest;
 use DomainException;
 
 final class GameScore

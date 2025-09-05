@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
-use Be\Framework\SemanticTag\Adult;
-use Be\Framework\SemanticTag\Senior;
-use Be\Framework\SemanticTag\Teen;
+use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Adult;
+use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Senior;
+use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Teen;
 use DomainException;
 
 final class UserAge

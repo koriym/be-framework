@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
-use Be\Framework\SemanticTag\Premium;
-use Be\Framework\SemanticTag\Budget;
+use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Budget;
+use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\Premium;
 use DomainException;
 
 final class ProductPrice
