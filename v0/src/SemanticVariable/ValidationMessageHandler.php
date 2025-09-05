@@ -6,6 +6,7 @@ namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\Attribute\Message;
 use Exception;
+use JsonException;
 use ReflectionClass;
 use Throwable;
 
@@ -22,6 +23,7 @@ use function str_replace;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_UNICODE;
 use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 
 /**
  * Handles multilingual message generation for validation exceptions
@@ -87,10 +89,7 @@ final class ValidationMessageHandler
                 is_numeric($value) => (string) $value,
                 is_bool($value) => $value ? 'true' : 'false',
                 $value === null => 'null',
-                is_array($value) => json_encode(
-                    $value,
-                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
-                ),
+                is_array($value) => $this->safeJsonEncode($value),
                 is_object($value) => $value::class,
                 default => get_debug_type($value)
             };
@@ -113,5 +112,32 @@ final class ValidationMessageHandler
             fn (Throwable $exception) => $this->getMessage($exception, $locale),
             $exceptions,
         );
+    }
+
+    /**
+     * Safely encode array as JSON, falling back to alternatives if encoding fails
+     */
+    private function safeJsonEncode(array $value): string
+    {
+        try {
+            return json_encode(
+                $value,
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+            );
+        } catch (JsonException) {
+            // First fallback: try with partial output on error
+            $fallback = json_encode($value, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            if ($fallback !== false) {
+                return $fallback;
+            }
+            
+            // Second fallback: try var_export
+            try {
+                return var_export($value, true);
+            } catch (Throwable) {
+                // Final fallback: simple description
+                return '[unencodable array]';
+            }
+        }
     }
 }

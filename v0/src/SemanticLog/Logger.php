@@ -12,7 +12,9 @@ use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
 use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Be\Framework\SemanticLog\Context\MultipleDestination;
 use Be\Framework\SemanticLog\Context\SingleDestination;
+use JsonException;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
+use Throwable;
 use Override;
 use Ray\Di\Di\Inject;
 use ReflectionClass;
@@ -33,6 +35,7 @@ use function json_encode;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_UNICODE;
 use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 
 /**
  * Be Framework Logger
@@ -182,10 +185,7 @@ final class Logger implements LoggerInterface
                     is_numeric($value) => (string) $value,
                     is_bool($value) => $value ? 'true' : 'false',
                     $value === null => 'null',
-                    is_array($value) => json_encode(
-                        $value,
-                        JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
-                    ),
+                    is_array($value) => $this->safeJsonEncode($value),
                     default => get_debug_type($value)
                 };
                 $transcendentSources[$paramName] = gettype($value) . ':' . $stringValue;
@@ -220,5 +220,32 @@ final class Logger implements LoggerInterface
 
         /** @var array<class-string> $nextBecoming */
         return new MultipleDestination($nextBecoming);
+    }
+
+    /**
+     * Safely encode array as JSON, falling back to alternatives if encoding fails
+     */
+    private function safeJsonEncode(array $value): string
+    {
+        try {
+            return json_encode(
+                $value,
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+            );
+        } catch (JsonException) {
+            // First fallback: try with partial output on error
+            $fallback = json_encode($value, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            if ($fallback !== false) {
+                return $fallback;
+            }
+            
+            // Second fallback: try var_export
+            try {
+                return var_export($value, true);
+            } catch (Throwable) {
+                // Final fallback: simple description
+                return '[unencodable array]';
+            }
+        }
     }
 }
