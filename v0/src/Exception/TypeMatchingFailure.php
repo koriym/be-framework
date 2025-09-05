@@ -28,6 +28,8 @@ final class TypeMatchingFailure extends RuntimeException
      *
      * @param BecomingClasses $candidates
      * @param CandidateErrors $candidateErrors
+     *
+     * @psalm-mutation-free
      */
     public static function create(array $candidates, array $candidateErrors): self
     {

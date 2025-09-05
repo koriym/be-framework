@@ -16,6 +16,7 @@ use function sprintf;
  */
 final class ConflictingParameterAttributes extends InvalidArgumentException
 {
+    /** @psalm-mutation-free */
     public static function create(ReflectionParameter $param): self
     {
         return new self(sprintf(
