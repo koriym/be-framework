@@ -25,7 +25,6 @@ use function gettype;
 use function implode;
 use function is_array;
 use function is_bool;
-use function is_null;
 use function is_numeric;
 use function is_object;
 use function is_string;
@@ -172,18 +171,19 @@ final class Logger implements LoggerInterface
                 // For objects, use their class name; for scalars, use their type/value representation
                 if (is_object($value)) {
                     $transcendentSources[$paramName] = $value::class;
-                } else {
-                    // For scalar/other types, show the type information
-                    $stringValue = match (true) {
-                        is_string($value) => $value,
-                        is_numeric($value) => (string) $value,
-                        is_bool($value) => $value ? 'true' : 'false',
-                        is_null($value) => 'null',
-                        is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
-                        default => 'unknown'
-                    };
-                    $transcendentSources[$paramName] = gettype($value) . ':' . $stringValue;
+                    continue;
                 }
+
+                // For scalar/other types, show the type information
+                $stringValue = match (true) {
+                    is_string($value) => $value,
+                    is_numeric($value) => (string) $value,
+                    is_bool($value) => $value ? 'true' : 'false',
+                    $value === null => 'null',
+                    is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
+                    default => 'unknown'
+                };
+                $transcendentSources[$paramName] = gettype($value) . ':' . $stringValue;
             }
         }
 

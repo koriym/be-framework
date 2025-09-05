@@ -61,12 +61,13 @@ final class BecomingArguments implements BecomingArgumentsInterface
                 $value = $properties[$paramName];
                 /** @psalm-suppress MixedAssignment */
                 $args[$paramName] = $value;      // #[Input]
-            } else {
-                /** @var mixed $value */
-                $value = $this->getInjectParameter($param);
-                /** @psalm-suppress MixedAssignment */
-                $args[$paramName] = $value; // #[Inject]
+                continue;
             }
+
+            /** @var mixed $value */
+            $value = $this->getInjectParameter($param);
+            /** @psalm-suppress MixedAssignment */
+            $args[$paramName] = $value; // #[Inject]
         }
 
         $errors = $this->semanticValidator->validateArgs($constructor, $args);

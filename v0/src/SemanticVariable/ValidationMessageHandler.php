@@ -13,7 +13,6 @@ use function array_map;
 use function get_object_vars;
 use function is_array;
 use function is_bool;
-use function is_null;
 use function is_numeric;
 use function is_object;
 use function is_string;
@@ -85,7 +84,7 @@ final class ValidationMessageHandler
                 is_string($value) => $value,
                 is_numeric($value) => (string) $value,
                 is_bool($value) => $value ? 'true' : 'false',
-                is_null($value) => 'null',
+                $value === null => 'null',
                 is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
                 is_object($value) => $value::class,
                 default => 'unknown'
