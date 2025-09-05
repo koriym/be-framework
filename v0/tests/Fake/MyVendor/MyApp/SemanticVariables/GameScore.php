@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Be\Framework\SemanticVariables;
+namespace Be\Framework\Fake\MyVendor\MyApp\SemanticVariables;
 
 use Be\Framework\Attribute\Validate;
 use Be\Framework\Fake\MyVendor\MyApp\SemanticTag\HighScore;
