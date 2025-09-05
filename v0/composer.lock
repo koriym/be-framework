@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7cdefe5b2baf10677460d658b30fa39",
+    "content-hash": "ded219e3a0ce0549b46a4665d7cb2c21",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -936,16 +936,16 @@
         },
         {
             "name": "ray/input-query",
-            "version": "v0.2.0",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ray-di/Ray.InputQuery.git",
-                "reference": "74d0fe6fcc8e0558f46d39f73b6fea1090596349"
+                "reference": "9d2954407a861a74e412eb12a5fc44e706ec36a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ray-di/Ray.InputQuery/zipball/74d0fe6fcc8e0558f46d39f73b6fea1090596349",
-                "reference": "74d0fe6fcc8e0558f46d39f73b6fea1090596349",
+                "url": "https://api.github.com/repos/ray-di/Ray.InputQuery/zipball/9d2954407a861a74e412eb12a5fc44e706ec36a9",
+                "reference": "9d2954407a861a74e412eb12a5fc44e706ec36a9",
                 "shasum": ""
             },
             "require": {
@@ -986,9 +986,9 @@
             "description": "Structured input objects from HTTP",
             "support": {
                 "issues": "https://github.com/ray-di/Ray.InputQuery/issues",
-                "source": "https://github.com/ray-di/Ray.InputQuery/tree/v0.2.0"
+                "source": "https://github.com/ray-di/Ray.InputQuery/tree/v1.0.0"
             },
-            "time": "2025-07-07T09:32:03+00:00"
+            "time": "2025-07-16T15:19:01+00:00"
         },
         {
             "name": "symfony/polyfill-php83",
