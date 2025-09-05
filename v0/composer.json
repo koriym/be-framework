@@ -11,7 +11,7 @@
     "require": {
         "php": "^8.4",
         "ray/di": "^2.18",
-        "ray/input-query": "^0.2.0",
+        "ray/input-query": "^v1.0",
         "koriym/semantic-logger": "^0.2.1"
     },
     "require-dev": {
