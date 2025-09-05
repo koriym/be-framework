@@ -24,11 +24,7 @@ final class SemanticParam
 
     public function validate(mixed $value): Errors
     {
-        return $this->validator->validateWithAttributes(
-            $this->name,
-            $this->attributeNames,
-            $value,
-        );
+        return $this->validator->validateArg($this->parameter, $value);
     }
 
     /**

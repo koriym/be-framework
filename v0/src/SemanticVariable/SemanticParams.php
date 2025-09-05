@@ -18,8 +18,8 @@ final class SemanticParams implements SemanticParamsInterface
     private array $params = [];
 
     public function __construct(
-        ReflectionMethod $method,
-        SemanticValidatorInterface $validator,
+        private ReflectionMethod $method,
+        private SemanticValidatorInterface $validator,
     ) {
         foreach ($method->getParameters() as $parameter) {
             $this->params[$parameter->getName()] = new SemanticParam($parameter, $validator);
@@ -31,17 +31,13 @@ final class SemanticParams implements SemanticParamsInterface
      */
     public function validate(array $values): Errors
     {
-        $allErrors = [];
-
-        foreach ($this->params as $name => $param) {
-            if (isset($values[$name])) {
-                $errors = $param->validate($values[$name]);
-                if ($errors->hasErrors()) {
-                    $allErrors = [...$allErrors, ...$errors->exceptions];
-                }
-            }
+        // Convert associative array to indexed array for validateArgs
+        $args = [];
+        foreach ($this->method->getParameters() as $parameter) {
+            $name = $parameter->getName();
+            $args[] = $values[$name] ?? null;
         }
 
-        return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+        return $this->validator->validateArgs($this->method, $args);
     }
 }

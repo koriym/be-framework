@@ -12,6 +12,7 @@ use DomainException;
 use Ray\Di\Di\Inject;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionParameter;
 
 use function array_values;
 use function class_exists;
@@ -39,11 +40,73 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
-     * Validate semantic variable with given arguments
+     * Validate all arguments for a method (primary API)
+     *
+     * @param ReflectionMethod $method Method containing parameter definitions
+     * @param array            $args   Values to validate (indexed array)
+     *
+     * @return Errors Validation errors (empty if validation passes)
      */
-    public function validate(string $variableName, mixed ...$args): Errors
+    public function validateArgs(ReflectionMethod $method, array $args): Errors
     {
-        return $this->validateWithAttributes($variableName, [], ...$args);
+        $allErrors = [];
+        $parameters = $method->getParameters();
+
+        foreach ($parameters as $index => $parameter) {
+            // Skip #[Inject] parameters
+            if ($this->hasInjectAttribute($parameter)) {
+                continue;
+            }
+
+            if (isset($args[$index])) {
+                $errors = $this->validateArg($parameter, $args[$index]);
+                if ($errors->hasErrors()) {
+                    $allErrors = [...$allErrors, ...$errors->exceptions];
+                }
+            }
+        }
+
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+    }
+
+    /**
+     * Validate single parameter (test convenience API)
+     *
+     * @param ReflectionParameter $parameter Parameter containing variable name and attributes
+     * @param mixed               $value     Value to validate
+     *
+     * @return Errors Validation errors (empty if validation passes)
+     */
+    public function validateArg(ReflectionParameter $parameter, mixed $value): Errors
+    {
+        $variableName = $parameter->getName();
+        $attributes = $this->extractAttributeNames($parameter);
+
+        return $this->validateWithAttributes($variableName, $attributes, $value);
+    }
+
+    /**
+     * Check if parameter has #[Inject] attribute
+     */
+    private function hasInjectAttribute(ReflectionParameter $parameter): bool
+    {
+        return ! empty($parameter->getAttributes(Inject::class));
+    }
+
+    /**
+     * Extract attribute names from ReflectionParameter
+     */
+    private function extractAttributeNames(ReflectionParameter $parameter): array
+    {
+        $attributeNames = [];
+
+        foreach ($parameter->getAttributes() as $attribute) {
+            $className = $attribute->getName();
+            $parts = explode('\\', $className);
+            $attributeNames[] = end($parts);
+        }
+
+        return $attributeNames;
     }
 
     /**
@@ -230,7 +293,23 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
-     * Validate all semantic variables in an object
+     * Legacy method: Validate semantic variable with given arguments (for backward compatibility)
+     */
+    public function validate(string $variableName, mixed ...$args): Errors
+    {
+        return $this->validateWithAttributes($variableName, [], ...$args);
+    }
+
+    /**
+     * Legacy method: Validate semantic variable with given arguments
+     */
+    public function validateLegacy(string $variableName, mixed ...$args): Errors
+    {
+        return $this->validateWithAttributes($variableName, [], ...$args);
+    }
+
+    /**
+     * Legacy method: Validate all semantic variables in an object
      */
     public function validateObject(object $object): Errors
     {
@@ -242,7 +321,7 @@ final class SemanticValidator implements SemanticValidatorInterface
             $value = $property->getValue($object);
             $propertyName = $property->getName();
 
-            $errors = $this->validate($propertyName, $value);
+            $errors = $this->validateLegacy($propertyName, $value);
             if ($errors->hasErrors()) {
                 $allErrors = [...$allErrors, ...$errors->exceptions];
             }
@@ -252,14 +331,11 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
-     * Validate semantic variables and throw exception if errors found
-     *
-     * Throws SemanticVariableException with detailed error information if validation fails.
-     * This preserves all validation errors and their messages for proper error handling.
+     * Legacy method: Validate semantic variables and throw exception if errors found
      */
     public function validateAndThrow(string $variableName, mixed ...$args): void
     {
-        $errors = $this->validate($variableName, ...$args);
+        $errors = $this->validateLegacy($variableName, ...$args);
 
         if ($errors->hasErrors()) {
             throw new SemanticVariableException($errors);

@@ -4,38 +4,35 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
+use ReflectionMethod;
+use ReflectionParameter;
+
 /**
  * Interface for semantic variable validation
  *
- * Provides contract for validating semantic variables based on their names
- * and parameter attributes for hierarchical validation.
+ * Provides two distinct APIs:
+ * - validateArgs: Framework usage for method-wide validation
+ * - validateArg: Test usage for individual parameter validation
  */
 interface SemanticValidatorInterface
 {
     /**
-     * Validate semantic variable with given arguments
-     */
-    public function validate(string $variableName, mixed ...$args): Errors;
-
-    /**
-     * Validate semantic variable with parameter attributes for hierarchical validation
+     * Validate all arguments for a method (primary API)
      *
-     * @param string $variableName        Variable name for basic semantic validation
-     * @param array  $parameterAttributes Parameter attributes for hierarchical validation
-     * @param mixed  ...$args             Arguments to validate
-     */
-    public function validateWithAttributes(string $variableName, array $parameterAttributes = [], mixed ...$args): Errors;
-
-    /**
-     * Validate semantic variables and throw exception if errors found
+     * @param ReflectionMethod $method Method containing parameter definitions
+     * @param array            $args   Values to validate (indexed array)
      *
-     * Throws SemanticVariableException with detailed error information if validation fails.
-     * This preserves all validation errors and their messages for proper error handling.
+     * @return Errors Validation errors (empty if validation passes)
      */
-    public function validateAndThrow(string $variableName, mixed ...$args): void;
+    public function validateArgs(ReflectionMethod $method, array $args): Errors;
 
     /**
-     * Validate all semantic variables in an object
+     * Validate single parameter (test convenience API)
+     *
+     * @param ReflectionParameter $parameter Parameter containing variable name and attributes
+     * @param mixed               $value     Value to validate
+     *
+     * @return Errors Validation errors (empty if validation passes)
      */
-    public function validateObject(object $object): Errors;
+    public function validateArg(ReflectionParameter $parameter, mixed $value): Errors;
 }

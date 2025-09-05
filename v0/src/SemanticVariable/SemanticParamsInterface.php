@@ -13,7 +13,7 @@ namespace Be\Framework\SemanticVariable;
  * - `#[Teen] $age` → validates age + teen-specific constraints
  * - `#[Adult] $age` → validates age + adult-specific constraints
  *
- * @link https://koriym.github.io/be-framework/v0/docs/reference/semantic-variables.html
+ * @link koriym.github.io/be-framework/v0/docs/reference/semantic-variables.html
  * @see SemanticValidator For the underlying validation engine
  * @see SemanticTag For attribute-based constraints
  */
