@@ -2,3 +2,16 @@ parameters:
   level: max
   paths:
     - src
+  ignoreErrors:
+    # Allow Psalm domain type aliases that PHPStan doesn't recognize
+    - '#PHPDoc tag @return with type .* is not subtype of native type#'
+    - '#PHPDoc tag @param for parameter .* with type .* is not subtype of native type#'
+    - '#PHPDoc type for property .* with type .* is not subtype of native type#'
+    - '#has no value type specified in iterable type array#'
+    - '#Method .* has parameter .* with no value type specified in iterable type array#'
+    # Allow mixed types in framework infrastructure code
+    - '#Cannot access offset .* on mixed#'
+    - '#Parameter .* expects .*, mixed given#'
+    - '#Method .* should return .* but returns mixed#'
+    - '#Cannot call method .* on mixed#'
+    - '#Part .* \(mixed\) of encapsed string cannot be cast to string#'

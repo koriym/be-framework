@@ -40,10 +40,10 @@ namespace Be\Framework;
  * @psalm-type ParameterAttributes = array<AttributeName>                              Collection of PHP attribute names on parameters
  * @psalm-type LocalizedMessages = array<string, string>                               Locale-to-message mapping for i18n
  * @psalm-type ValidationMessages = array<ErrorMessage>                                Collection of validation error messages
- * @psalm-type ExceptionCollection = array<Exception>                                  Collection of exception instances
+ * @psalm-type ExceptionCollection = array<\Exception>                                 Collection of exception instances
  * @psalm-type CandidateErrors = array<ClassName, ErrorMessage>                        Class-to-error mapping for failed transformations
  * @psalm-type ValidationArguments = array<ValidationArgumentValue>                    Arguments passed to semantic validation
- * @psalm-type ReflectionMethods = array<ReflectionMethod>                             Collection of PHP reflection method objects
+ * @psalm-type ReflectionMethods = array<\ReflectionMethod>                            Collection of PHP reflection method objects
  * @psalm-type AttemptedClasses = array<ClassName>                                     Classes attempted during failed transformations
  */
 final class Types
