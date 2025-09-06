@@ -1,5 +1,6 @@
 parameters:
   level: max
+  phpVersion: 80300
   paths:
     - src
   # Psalm type compatibility: PHPStan has limited support for Psalm's type alias system

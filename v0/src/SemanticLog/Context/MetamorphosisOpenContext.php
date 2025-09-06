@@ -22,9 +22,9 @@ use stdClass;
  */
 final class MetamorphosisOpenContext extends AbstractContext implements JsonSerializable
 {
-    public const TYPE = 'metamorphosis_open';
+    public const string TYPE = 'metamorphosis_open';
 
-    public const SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-open.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-open.json';
 
     /**
      * @param class-string        $fromClass           Class being transformed from

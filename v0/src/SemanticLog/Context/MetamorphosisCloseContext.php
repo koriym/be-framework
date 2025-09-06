@@ -19,9 +19,9 @@ use stdClass;
  */
 final class MetamorphosisCloseContext extends AbstractContext implements JsonSerializable
 {
-    public const TYPE = 'metamorphosis_close';
+    public const string TYPE = 'metamorphosis_close';
 
-    public const SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-close.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-close.json';
 
     /**
      * @param ObjectProperties                                                           $properties Object properties after construction
