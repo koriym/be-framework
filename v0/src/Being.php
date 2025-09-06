@@ -10,6 +10,7 @@ use Be\Framework\SemanticLog\LoggerInterface;
 use ReflectionClass;
 use Throwable;
 
+use function assert;
 use function is_string;
 
 /**
