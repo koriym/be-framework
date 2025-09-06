@@ -192,6 +192,7 @@ final class SemanticValidator implements SemanticValidatorInterface
      * @param ValidationArguments $validationArgs      Arguments to validate
      *
      * @return ReflectionMethods
+     * @phpstan-return array<int, ReflectionMethod>
      */
     private function getMatchingValidationMethods(object $semanticClass, string $variableName, array $parameterAttributes, array $validationArgs): array
     {

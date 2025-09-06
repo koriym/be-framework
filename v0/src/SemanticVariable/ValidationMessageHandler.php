@@ -11,6 +11,7 @@ use ReflectionClass;
 use Throwable;
 
 use function array_map;
+use function get_debug_type;
 use function get_object_vars;
 use function is_array;
 use function is_bool;
@@ -19,11 +20,12 @@ use function is_object;
 use function is_string;
 use function json_encode;
 use function str_replace;
+use function var_export;
 
-use const JSON_THROW_ON_ERROR;
-use const JSON_UNESCAPED_UNICODE;
 use const JSON_INVALID_UTF8_SUBSTITUTE;
 use const JSON_PARTIAL_OUTPUT_ON_ERROR;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_UNICODE;
 
 /**
  * Handles multilingual message generation for validation exceptions
@@ -122,7 +124,7 @@ final class ValidationMessageHandler
         try {
             return json_encode(
                 $value,
-                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE,
             );
         } catch (JsonException) {
             // First fallback: try with partial output on error
@@ -130,7 +132,7 @@ final class ValidationMessageHandler
             if ($fallback !== false) {
                 return $fallback;
             }
-            
+
             // Second fallback: try var_export
             try {
                 return var_export($value, true);

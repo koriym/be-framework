@@ -30,6 +30,7 @@ final class Being
      * @param object $current Current object in metamorphosis chain
      *
      * @return string|BecomingClasses|null Next class name(s) or null if transformation is complete
+     * @phpstan-return class-string|array<class-string>|null
      */
     public function willBe(object $current): string|array|null
     {
@@ -49,6 +50,7 @@ final class Being
      * The moment of transformation - pure and irreversible
      *
      * @param string|BecomingClasses $becoming
+     * @phpstan-param class-string|array<class-string> $becoming
      */
     public function metamorphose(object $current, string|array $becoming): object
     {
@@ -57,17 +59,16 @@ final class Being
         }
 
         // Array case: find the appropriate class based on type matching
-        /** @var array<class-string> $becoming */
         return $this->performTypeMatching($current, $becoming);
     }
 
+    /** @phpstan-param class-string $becoming */
     private function performSingleTransformation(object $current, string $becoming): object
     {
         $openId = $this->logger->open($current, $becoming);
 
         try {
             $args = $this->becomingArguments->be($current, $becoming);
-            /** @var class-string $becoming */
             $result = (new ReflectionClass($becoming))->newInstanceArgs($args);
 
             $this->logger->close($result, $openId);
@@ -89,6 +90,7 @@ final class Being
     private function performTypeMatching(object $current, array $becoming): object
     {
         /** @var CandidateErrors $candidateErrors */
+        /** @phpstan-var array<class-string, string> $candidateErrors */
         $candidateErrors = [];
 
         foreach ($becoming as $class) {
@@ -101,7 +103,6 @@ final class Being
             }
         }
 
-        /** @var array<class-string, string> $candidateErrors */
         throw TypeMatchingFailure::create($becoming, $candidateErrors);
     }
 }

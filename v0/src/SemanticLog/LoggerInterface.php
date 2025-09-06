@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog;
 
+use Be\Framework\Types;
+
 /**
  * Interface for logging Be Framework transformations
  *
  * Simple open/close pattern for transformation logging.
- * 
- * @psalm-import-type BecomingClasses from \Be\Framework\Types
- * @psalm-import-type LogContextId from \Be\Framework\Types
+ *
+ * @psalm-import-type BecomingClasses from Types
+ * @psalm-import-type LogContextId from Types
  */
 interface LoggerInterface
 {

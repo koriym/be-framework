@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.3",
         "ray/di": "^2.18",
         "ray/input-query": "^v1.0",
         "koriym/semantic-logger": "^0.2.1"

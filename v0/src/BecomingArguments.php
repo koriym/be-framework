@@ -17,6 +17,7 @@ use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 
+use function array_key_exists;
 use function get_object_vars;
 
 /**
@@ -35,7 +36,10 @@ final class BecomingArguments implements BecomingArgumentsInterface
     ) {
     }
 
-    /** @return ConstructorArguments */
+    /**
+     * @return ConstructorArguments
+     * @phpstan-return array<string, mixed>
+     */
     #[Override]
     public function be(object $current, string $becoming): array
     {
@@ -49,6 +53,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
         }
 
         /** @var ConstructorArguments $args */
+        /** @phpstan-var array<string, mixed> $args */
         $args = [];
         foreach ($constructor->getParameters() as $param) {
             $paramName = $param->getName();

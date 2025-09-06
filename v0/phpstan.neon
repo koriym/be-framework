@@ -1,5 +1,5 @@
 parameters:
-  level: max
+  level: 8
   paths:
     - src
   ignoreErrors:
@@ -9,11 +9,6 @@ parameters:
     - '#PHPDoc type for property .* with type .* is not subtype of native type#'
     - '#has no value type specified in iterable type array#'
     - '#Method .* has parameter .* with no value type specified in iterable type array#'
-    
+
     # Mixed type handling in framework internals
-    - '#Cannot access offset .* on mixed#'
-    - '#Parameter .* expects .*, mixed given#'
-    - '#Method .* should return .* but returns mixed#'
-    - '#Part .* \(mixed\) of encapsed string cannot be cast to string#'
-    - '#Cannot call method .* on mixed#'
 

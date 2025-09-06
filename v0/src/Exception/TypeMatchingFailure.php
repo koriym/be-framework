@@ -28,6 +28,7 @@ final class TypeMatchingFailure extends RuntimeException
      *
      * @param BecomingClasses $candidates
      * @param CandidateErrors $candidateErrors
+     * @phpstan-param array<class-string, string> $candidateErrors
      *
      * @psalm-mutation-free
      */
