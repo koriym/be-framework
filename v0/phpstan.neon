@@ -1,14 +1,12 @@
 parameters:
-  level: 8
+  level: max
   paths:
     - src
+  # Psalm type compatibility: PHPStan has limited support for Psalm's type alias system
+  # These ignores are necessary due to PHPStan's inability to resolve @psalm-import-type
+  # and complex type alias references, not due to code quality issues
   ignoreErrors:
-    # Allow Psalm domain type aliases that PHPStan doesn't recognize
-    - '#PHPDoc tag @return with type .* is not subtype of native type#'
-    - '#PHPDoc tag @param for parameter .* with type .* is not subtype of native type#'
-    - '#PHPDoc type for property .* with type .* is not subtype of native type#'
-    - '#has no value type specified in iterable type array#'
-    - '#Method .* has parameter .* with no value type specified in iterable type array#'
-
-    # Mixed type handling in framework internals
-
+    - identifier: missingType.iterableValue  # PHPStan cannot resolve imported Psalm type aliases
+    - identifier: property.phpDocType        # PHPStan treats imported Psalm types as 'mixed'
+    - '#PHPDoc tag @param for parameter .* with type mixed is not subtype of native type#'  # Psalm type alias resolution limitation
+    - '#PHPDoc tag @return with type mixed is not subtype of native type#'                  # Psalm type alias resolution limitation
