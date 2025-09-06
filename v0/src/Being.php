@@ -10,7 +10,6 @@ use Be\Framework\SemanticLog\LoggerInterface;
 use ReflectionClass;
 use Throwable;
 
-use function assert;
 use function is_string;
 
 /**
@@ -58,6 +57,7 @@ final class Being
         }
 
         // Array case: find the appropriate class based on type matching
+        /** @var array<class-string> $becoming */
         return $this->performTypeMatching($current, $becoming);
     }
 
@@ -84,6 +84,7 @@ final class Being
      * Perform type matching to select the appropriate class from array of possibilities
      *
      * @param BecomingClasses $becoming
+     * @phpstan-param array<class-string> $becoming
      */
     private function performTypeMatching(object $current, array $becoming): object
     {
@@ -100,6 +101,7 @@ final class Being
             }
         }
 
+        /** @var array<class-string, string> $candidateErrors */
         throw TypeMatchingFailure::create($becoming, $candidateErrors);
     }
 }
