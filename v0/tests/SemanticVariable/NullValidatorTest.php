@@ -38,8 +38,8 @@ final class NullValidatorTest extends TestCase
         $this->validator->validateAndThrow('email', 'completely-invalid');
         $this->validator->validateAndThrow('age', -999);
 
-        // If we reach this line, the test passes
-        $this->assertTrue(true);
+        // If we reach this line without throwing an exception, the test passes
+        $this->expectNotToPerformAssertions();
     }
 
     public function testValidateObjectAlwaysReturnsNullErrors(): void

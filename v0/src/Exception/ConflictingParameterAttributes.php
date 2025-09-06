@@ -16,13 +16,14 @@ use function sprintf;
  */
 final class ConflictingParameterAttributes extends InvalidArgumentException
 {
+    /** @psalm-mutation-free */
     public static function create(ReflectionParameter $param): self
     {
         return new self(sprintf(
             'Parameter "%s" in %s::%s cannot have both #[Input] and #[Inject] attributes simultaneously. ' .
             'These attributes are mutually exclusive to ensure clear and unambiguous parameter semantics.',
             $param->getName(),
-            $param->getDeclaringClass()->getName(),
+            $param->getDeclaringClass()?->getName() ?? 'Unknown',
             $param->getDeclaringFunction()->getName(),
         ));
     }

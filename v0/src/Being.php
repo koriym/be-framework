@@ -14,6 +14,9 @@ use function is_string;
 
 /**
  * Gets the next class name in metamorphosis chain
+ *
+ * @psalm-import-type BecomingClasses from Types
+ * @psalm-import-type CandidateErrors from Types
  */
 final class Being
 {
@@ -26,7 +29,8 @@ final class Being
      *
      * @param object $current Current object in metamorphosis chain
      *
-     * @return string|array|null Next class name(s) or null if transformation is complete
+     * @return string|BecomingClasses|null Next class name(s) or null if transformation is complete
+     * @phpstan-return class-string|array<class-string>|null
      */
     public function willBe(object $current): string|array|null
     {
@@ -44,6 +48,9 @@ final class Being
 
     /**
      * The moment of transformation - pure and irreversible
+     *
+     * @param string|BecomingClasses $becoming
+     * @phpstan-param class-string|array<class-string> $becoming
      */
     public function metamorphose(object $current, string|array $becoming): object
     {
@@ -55,6 +62,7 @@ final class Being
         return $this->performTypeMatching($current, $becoming);
     }
 
+    /** @phpstan-param class-string $becoming */
     private function performSingleTransformation(object $current, string $becoming): object
     {
         $openId = $this->logger->open($current, $becoming);
@@ -75,9 +83,14 @@ final class Being
 
     /**
      * Perform type matching to select the appropriate class from array of possibilities
+     *
+     * @param BecomingClasses $becoming
+     * @phpstan-param array<class-string> $becoming
      */
     private function performTypeMatching(object $current, array $becoming): object
     {
+        /** @var CandidateErrors $candidateErrors */
+        /** @phpstan-var array<class-string, string> $candidateErrors */
         $candidateErrors = [];
 
         foreach ($becoming as $class) {

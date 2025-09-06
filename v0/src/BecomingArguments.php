@@ -17,6 +17,7 @@ use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 
+use function array_key_exists;
 use function get_object_vars;
 
 /**
@@ -24,12 +25,8 @@ use function get_object_vars;
  *
  * for metamorphosis transformations
  *
- * Implements Be Framework's philosophy of explicit dependency declaration:
- * - All constructor parameters must have either #[Input] or #[Inject] attributes
- * - #[Input] parameters are resolved from the current object's properties
- * - #[Inject] parameters are resolved from the DI container
- * - Object properties are preserved as-is (no flattening)
- * - Supports #[Named] for DI resolution
+ * @psalm-import-type ConstructorArguments from Types
+ * @psalm-import-type ObjectProperties from Types
  */
 final class BecomingArguments implements BecomingArgumentsInterface
 {
@@ -39,10 +36,15 @@ final class BecomingArguments implements BecomingArgumentsInterface
     ) {
     }
 
+    /**
+     * @return ConstructorArguments
+     * @phpstan-return array<string, mixed>
+     */
     #[Override]
     public function be(object $current, string $becoming): array
     {
         $properties = get_object_vars($current);
+        /** @var class-string $becoming */
         $targetClass = new ReflectionClass($becoming);
         $constructor = $targetClass->getConstructor();
 
@@ -50,13 +52,24 @@ final class BecomingArguments implements BecomingArgumentsInterface
             return [];
         }
 
+        /** @var ConstructorArguments $args */
+        /** @phpstan-var array<string, mixed> $args */
         $args = [];
         foreach ($constructor->getParameters() as $param) {
             $paramName = $param->getName();
             $isInput = $this->isInputParameter($param);
-            $args[$paramName] = $isInput
-                ? $properties[$paramName]                          // #[Input]
-                : $this->getInjectParameter($param);               // #[Inject]
+            if ($isInput) {
+                /** @var mixed $value */
+                $value = array_key_exists($paramName, $properties) ? $properties[$paramName] : null;
+                /** @psalm-suppress MixedAssignment */
+                $args[$paramName] = $value;      // #[Input]
+                continue;
+            }
+
+            /** @var mixed $value */
+            $value = $this->getInjectParameter($param);
+            /** @psalm-suppress MixedAssignment */
+            $args[$paramName] = $value; // #[Inject]
         }
 
         $errors = $this->semanticValidator->validateArgs($constructor, $args);
@@ -82,6 +95,7 @@ final class BecomingArguments implements BecomingArgumentsInterface
         $type = $param->getType();
         $interface = $type instanceof ReflectionNamedType && ! $type->isBuiltin() ? $type->getName() : '';
 
+        /** @var class-string $interface */
         return $this->injector->getInstance($interface, $named);
     }
 
@@ -91,6 +105,8 @@ final class BecomingArguments implements BecomingArgumentsInterface
      * Returns true for #[Input], false for #[Inject]
      * Enforces Be Framework's philosophy: "Describe Yourself (Well)"
      * All dependencies must be explicitly declared for clarity and safety.
+     *
+     * @psalm-mutation-free
      */
     private function isInputParameter(ReflectionParameter $param): bool
     {

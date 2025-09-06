@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog;
 
-use Be\Framework\Be;
+use Be\Framework\Attribute\Be;
 use Be\Framework\BecomingArguments;
 use Be\Framework\ClassWithInjectObject;
 use Be\Framework\FakeProcessedData;
@@ -23,7 +23,9 @@ use Ray\Di\Injector;
 use ReflectionClass;
 use stdClass;
 
+use function assert;
 use function get_class;
+use function is_array;
 
 #[Be(FakeProcessedData::class)]
 final class TestInput
@@ -73,11 +75,13 @@ final class LoggerTest extends TestCase
 
         // Verify open log structure
         $openData = $logData['open'];
+        assert(is_array($openData) && is_array($openData['context']));
         $this->assertEquals(TestInput::class, $openData['context']['fromClass']);
         $this->assertEquals('#[Be(Be\Framework\FakeProcessedData::class)]', $openData['context']['beAttribute']);
 
         // Verify close log structure
         $closeData = $logData['close'];
+        assert(is_array($closeData) && is_array($closeData['context']));
         $this->assertArrayHasKey('properties', $closeData['context']);
     }
 
@@ -95,6 +99,7 @@ final class LoggerTest extends TestCase
         // Verify array becoming is logged correctly
         $logData = $this->semanticLogger->toArray();
         $openData = $logData['open'];
+        assert(is_array($openData) && is_array($openData['context']));
         $this->assertEquals('#[Be([Class1::class, Class2::class])]', $openData['context']['beAttribute']);
         $this->assertEquals([], $openData['context']['immanentSources']); // Empty for array case
         $this->assertEquals([], $openData['context']['transcendentSources']); // Empty for array case
@@ -111,8 +116,11 @@ final class LoggerTest extends TestCase
 
         $logData = $this->semanticLogger->toArray();
         $closeData = $logData['close'];
+        assert(is_array($closeData) && is_array($closeData['context']));
         $this->assertInstanceOf(DestinationNotFound::class, $closeData['context']['be']);
-        $this->assertEquals('Test error message', $closeData['context']['be']->error);
+        /** @var DestinationNotFound $be */
+        $be = $closeData['context']['be'];
+        $this->assertEquals('Test error message', $be->error);
     }
 
     public function testErrorLoggingWithoutMessage(): void

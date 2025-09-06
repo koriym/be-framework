@@ -36,6 +36,8 @@ class Errors
 
     /**
      * Check if there are any errors
+     *
+     * @psalm-mutation-free
      */
     public function hasErrors(): bool
     {
@@ -44,6 +46,8 @@ class Errors
 
     /**
      * Get the number of errors
+     *
+     * @psalm-mutation-free
      */
     public function count(): int
     {

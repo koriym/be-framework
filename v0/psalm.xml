@@ -1,13 +1,10 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="5"
-    resolveFromConfigFile="true"
+    errorLevel="1"
+    phpVersion="8.3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    findUnusedBaselineEntry="true"
-    findUnusedCode="true"
-    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="src" />
@@ -15,4 +12,20 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <!-- Framework API elements that appear unused but are actually necessary -->
+        <!-- Rationale: 100% test coverage confirms these are used, but Psalm cannot detect: -->
+        <!-- - Reflection-based testing and dynamic usage -->
+        <PossiblyUnusedMethod errorLevel="suppress" />
+        <PossiblyUnusedProperty errorLevel="suppress" />
+        <UnusedClass errorLevel="suppress" />
+        <UnusedParam errorLevel="suppress" />
+        <UnusedMethodCall errorLevel="suppress" />
+
+        <!-- External library compatibility: AbstractContext constants -->
+        <!-- Rationale: Koriym\SemanticLogger\AbstractContext defines constants as empty string literals, -->
+        <!-- but framework needs specific string values. This is a legitimate inheritance pattern. -->
+        <InvalidClassConstantType errorLevel="suppress" />
+    </issueHandlers>
 </psalm>

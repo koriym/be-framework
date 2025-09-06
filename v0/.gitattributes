@@ -1,0 +1,59 @@
+# Git attributes for Be Framework
+
+# Text files
+*.php text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Configuration files
+.editorconfig text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+composer.json text eol=lf
+composer.lock text eol=lf
+phpunit.xml text eol=lf
+phpstan.neon text eol=lf
+psalm.xml text eol=lf
+phpmd.xml text eol=lf
+
+# Documentation
+*.md text eol=lf
+docs/** text eol=lf
+README* text eol=lf
+CHANGELOG* text eol=lf
+LICENSE* text eol=lf
+CLAUDE.md text eol=lf
+
+# Archives (binary files)
+*.zip binary
+*.tar.gz binary
+*.tgz binary
+
+# Images (binary files)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text eol=lf
+
+# Git diff settings
+*.php diff=php
+*.json diff
+*.md diff
+
+# Export ignore (files not included in git archive)
+.gitattributes export-ignore
+.gitignore export-ignore
+.github/ export-ignore
+docs/ export-ignore
+tests/ export-ignore
+phpunit.xml export-ignore
+phpstan.neon export-ignore
+psalm.xml export-ignore
+phpmd.xml export-ignore
+.editorconfig export-ignore

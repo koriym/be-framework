@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Be\Framework\Exception;
 
+use Be\Framework\Types;
 use RuntimeException;
 
 use function implode;
 
 /**
  * Thrown when type matching fails during array-based becoming
+ *
+ * @psalm-import-type BecomingClasses from Types
+ * @psalm-import-type CandidateErrors from Types
  */
 final class TypeMatchingFailure extends RuntimeException
 {
+    /** @param CandidateErrors $candidateErrors */
     private function __construct(string $message, private array $candidateErrors = [])
     {
         parent::__construct($message);
@@ -21,8 +26,11 @@ final class TypeMatchingFailure extends RuntimeException
     /**
      * Create exception with detailed candidate failure information
      *
-     * @param array<string>         $candidates
-     * @param array<string, string> $candidateErrors
+     * @param BecomingClasses $candidates
+     * @param CandidateErrors $candidateErrors
+     * @phpstan-param array<class-string, string> $candidateErrors
+     *
+     * @psalm-mutation-free
      */
     public static function create(array $candidates, array $candidateErrors): self
     {
@@ -44,7 +52,9 @@ final class TypeMatchingFailure extends RuntimeException
     /**
      * Get detailed error information for each candidate class
      *
-     * @return array<string, string>
+     * @return CandidateErrors
+     *
+     * @psalm-mutation-free
      */
     public function getCandidateErrors(): array
     {

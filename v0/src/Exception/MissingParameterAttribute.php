@@ -16,6 +16,7 @@ use function sprintf;
  */
 final class MissingParameterAttribute extends InvalidArgumentException
 {
+    /** @psalm-mutation-free */
     public static function create(ReflectionParameter $param): self
     {
         return new self(sprintf(
@@ -24,7 +25,7 @@ final class MissingParameterAttribute extends InvalidArgumentException
             'Use #[Input] if this should come from the previous object, ' .
             'or #[Inject] if this should come from the DI container.',
             $param->getName(),
-            $param->getDeclaringClass()->getName(),
+            $param->getDeclaringClass()?->getName() ?? 'Unknown',
             $param->getDeclaringFunction()->getName(),
         ));
     }
