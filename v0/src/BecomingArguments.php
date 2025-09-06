@@ -105,6 +105,8 @@ final class BecomingArguments implements BecomingArgumentsInterface
      * Returns true for #[Input], false for #[Inject]
      * Enforces Be Framework's philosophy: "Describe Yourself (Well)"
      * All dependencies must be explicitly declared for clarity and safety.
+     *
+     * @psalm-mutation-free
      */
     private function isInputParameter(ReflectionParameter $param): bool
     {

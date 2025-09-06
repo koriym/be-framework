@@ -53,6 +53,8 @@ final class TypeMatchingFailure extends RuntimeException
      * Get detailed error information for each candidate class
      *
      * @return CandidateErrors
+     *
+     * @psalm-mutation-free
      */
     public function getCandidateErrors(): array
     {
