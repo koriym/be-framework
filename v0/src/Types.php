@@ -32,7 +32,7 @@ namespace Be\Framework;
  *
  * Array domain types
  * @psalm-type ConstructorArguments = array<ParameterName, ConstructorArgumentValue>   Parameter-to-value map for object construction
- * @psalm-type ObjectProperties = array<PropertyName, PropertyValue>                   Property-to-value map of constructed object
+ * @psalm-type ObjectProperties = array<PropertyName, PropertyValue>                   Property-to-value map of object properties (get_object_vars result)
  * @psalm-type BecomingClasses = array<ClassName>                                      Array of class names for metamorphosis
  * @psalm-type QualifiedClasses = array<QualifiedClassName>                            Array of fully qualified class names
  * @psalm-type ImmanentSources = array<ParameterName, PropertyName>                    #[Input] parameter sources from object properties

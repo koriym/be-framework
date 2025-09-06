@@ -62,7 +62,10 @@ final class Being
         return $this->performTypeMatching($current, $becoming);
     }
 
-    /** @phpstan-param class-string $becoming */
+    /**
+     * @param QualifiedClassName $becoming
+     * @phpstan-param class-string $becoming
+     */
     private function performSingleTransformation(object $current, string $becoming): object
     {
         $openId = $this->logger->open($current, $becoming);

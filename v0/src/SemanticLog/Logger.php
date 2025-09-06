@@ -58,7 +58,8 @@ final class Logger implements LoggerInterface
     /**
      * Log transformation start
      *
-     * @param string|array<string> $becoming
+     * @param QualifiedClassName|QualifiedClasses $becoming
+     * @phpstan-param string|array<string> $becoming
      */
     #[Override]
     public function open(object $current, string|array $becoming): string
@@ -127,9 +128,11 @@ final class Logger implements LoggerInterface
     }
 
     /**
-     * @param array<string, mixed> $args
+     * @param ConstructorArguments $args
+     * @phpstan-param array<string, mixed> $args
      *
-     * @return array<string, string>
+     * @return ImmanentSources
+     * @phpstan-return array<string, string>
      */
     private function extractImmanentSources(object $current, array $args): array
     {
@@ -147,9 +150,11 @@ final class Logger implements LoggerInterface
     }
 
     /**
-     * @param array<string, mixed> $args
+     * @param ConstructorArguments $args
+     * @phpstan-param array<string, mixed> $args
      *
-     * @return array<string, string>
+     * @return TranscendentSources
+     * @phpstan-return array<string, string>
      */
     private function extractTranscendentSources(array $args, string $becoming): array
     {
@@ -197,7 +202,10 @@ final class Logger implements LoggerInterface
         return $transcendentSources;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return ObjectProperties
+     * @phpstan-return array<string, mixed>
+     */
     private function extractProperties(object $result): array
     {
         // @todo Handle uninitialized properties in Accept pattern objects
@@ -226,6 +234,8 @@ final class Logger implements LoggerInterface
 
     /**
      * Safely encode array as JSON, falling back to alternatives if encoding fails
+     *
+     * @param array<mixed> $value
      */
     private function safeJsonEncode(array $value): string
     {

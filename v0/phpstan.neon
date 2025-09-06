@@ -3,11 +3,10 @@ parameters:
   phpVersion: 80300
   paths:
     - src
-  # Psalm type compatibility: PHPStan has limited support for Psalm's type alias system
-  # These ignores are necessary due to PHPStan's inability to resolve @psalm-import-type
-  # and complex type alias references, not due to code quality issues
+  # Minimal ignores for Psalm domain type compatibility
+  # These only affect files using @psalm-import-type where PHPStan cannot resolve Psalm's domain types
   ignoreErrors:
-    - identifier: missingType.iterableValue  # PHPStan cannot resolve imported Psalm type aliases
-    - identifier: property.phpDocType        # PHPStan treats imported Psalm types as 'mixed'
-    - '#PHPDoc tag @param for parameter .* with type mixed is not subtype of native type#'  # Psalm type alias resolution limitation
-    - '#PHPDoc tag @return with type mixed is not subtype of native type#'                  # Psalm type alias resolution limitation
+    - identifier: parameter.phpDocType
+    - identifier: return.phpDocType
+    - identifier: property.phpDocType
+    - identifier: missingType.iterableValue

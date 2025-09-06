@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\Attribute\Message;
+use Be\Framework\Types;
 use Exception;
 use JsonException;
 use ReflectionClass;
@@ -29,6 +30,9 @@ use const JSON_UNESCAPED_UNICODE;
 
 /**
  * Handles multilingual message generation for validation exceptions
+ *
+ * @psalm-import-type LocalizedMessages from Types
+ * @psalm-import-type ExceptionCollection from Types
  */
 final class ValidationMessageHandler
 {
@@ -55,7 +59,8 @@ final class ValidationMessageHandler
     /**
      * Get all available messages for exception
      *
-     * @return array<string, string>
+     * @return LocalizedMessages
+     * @phpstan-return array<string, string>
      */
     public function getAllMessages(Throwable $exception): array
     {
@@ -104,9 +109,11 @@ final class ValidationMessageHandler
     /**
      * Get messages for multiple exceptions
      *
-     * @param array<Exception> $exceptions
+     * @param ExceptionCollection $exceptions
+     * @phpstan-param array<Exception> $exceptions
      *
-     * @return array<string>
+     * @return ValidationMessages
+     * @phpstan-return array<string>
      */
     public function getMessagesForExceptions(array $exceptions, string $locale = 'en'): array
     {
@@ -118,6 +125,8 @@ final class ValidationMessageHandler
 
     /**
      * Safely encode array as JSON, falling back to alternatives if encoding fails
+     *
+     * @param array<mixed> $value
      */
     private function safeJsonEncode(array $value): string
     {

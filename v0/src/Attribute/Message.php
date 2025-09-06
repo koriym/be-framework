@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\Attribute;
 
 use Attribute;
+use Be\Framework\Types;
 
 /**
  * Attribute for internationalized message definitions
@@ -14,11 +15,16 @@ use Attribute;
  *
  * Examples:
  *   #[Message(['en' => 'Error message', 'ja' => 'エラーメッセージ'])]
+ *
+ * @psalm-import-type LocalizedMessages from Types
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 final class Message
 {
-    /** @param array<string, string> $messages Locale => message template mapping */
+    /**
+     * @param LocalizedMessages $messages Locale => message template mapping
+     * @phpstan-param array<string, string> $messages
+     */
     public function __construct(
         public readonly array $messages,
     ) {

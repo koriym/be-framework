@@ -12,7 +12,7 @@ use function implode;
 /**
  * Thrown when type matching fails during array-based becoming
  *
- * @psalm-import-type BecomingClasses from Types
+ * @psalm-import-type QualifiedClasses from Types
  * @psalm-import-type CandidateErrors from Types
  */
 final class TypeMatchingFailure extends RuntimeException
@@ -26,8 +26,9 @@ final class TypeMatchingFailure extends RuntimeException
     /**
      * Create exception with detailed candidate failure information
      *
-     * @param BecomingClasses $candidates
-     * @param CandidateErrors $candidateErrors
+     * @param QualifiedClasses $candidates
+     * @param CandidateErrors  $candidateErrors
+     * @phpstan-param array<class-string> $candidates
      * @phpstan-param array<class-string, string> $candidateErrors
      *
      * @psalm-mutation-free

@@ -11,7 +11,8 @@ use Be\Framework\Types;
  *
  * Simple open/close pattern for transformation logging.
  *
- * @psalm-import-type BecomingClasses from Types
+ * @psalm-import-type QualifiedClassName from Types
+ * @psalm-import-type QualifiedClasses from Types
  * @psalm-import-type LogContextId from Types
  */
 interface LoggerInterface
@@ -19,8 +20,9 @@ interface LoggerInterface
     /**
      * Log transformation start
      *
-     * @param object               $current  Current object being transformed
-     * @param string|array<string> $becoming Target class(es) for transformation
+     * @param object                              $current  Current object being transformed
+     * @param QualifiedClassName|QualifiedClasses $becoming Target class(es) for transformation
+     * @phpstan-param string|array<string> $becoming
      *
      * @return string Open ID for correlating with close
      */
