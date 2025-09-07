@@ -11,6 +11,7 @@ use ReflectionType;
 use ReflectionUnionType;
 
 use function array_key_exists;
+use function assert;
 use function get_object_vars;
 use function gettype;
 use function is_object;
@@ -62,19 +63,17 @@ final class BecomingType
      */
     private function isValueCompatibleWithType(mixed $value, ReflectionType $type): bool
     {
-        if ($type instanceof ReflectionUnionType) {
-            return $this->handleUnionType($value, $type);
-        }
-
-        if ($type instanceof ReflectionIntersectionType) {
-            return $this->handleIntersectionType($value, $type);
-        }
-
         if ($type instanceof ReflectionNamedType) {
             return $this->handleNamedType($value, $type);
         }
 
-        return false;
+        if ($type instanceof ReflectionUnionType) {
+            return $this->handleUnionType($value, $type);
+        }
+
+        assert($type instanceof ReflectionIntersectionType, 'Unknown ReflectionType encountered');
+
+        return $this->handleIntersectionType($value, $type);
     }
 
     /**

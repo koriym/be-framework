@@ -102,20 +102,20 @@ final class Being
 
         // First, use BecomingType::match() for fast pre-validation
         foreach ($becoming as $class) {
-            if ($this->becomingType->match($current, $class)) {
-                // Type matches - attempt full transformation
-                try {
-                    return $this->performSingleTransformation($current, $class);
-                } catch (SemanticVariableException $e) {
-                    throw $e; // Do not retry on SemanticVariableException
-                } catch (Throwable $e) {
-                    // If transformation fails after type matching, record the error and continue
-                    $candidateErrors[$class] = $e->getMessage();
-                    continue;
-                }
-            } else {
-                // Type doesn't match - record type mismatch error
+            if (! $this->becomingType->match($current, $class)) {
                 $candidateErrors[$class] = 'Type mismatch: object properties incompatible with constructor parameters';
+                continue;
+            }
+
+            // Type matches - attempt full transformation
+            try {
+                return $this->performSingleTransformation($current, $class);
+            } catch (SemanticVariableException $e) {
+                throw $e; // Do not retry on SemanticVariableException
+            } catch (Throwable $e) {
+                // If transformation fails after type matching, record the error and continue
+                $candidateErrors[$class] = $e->getMessage();
+                continue;
             }
         }
 
