@@ -126,6 +126,11 @@ final class BecomingType
 
         // Handle object types
         if (is_object($value)) {
+            // Special handling for 'object' type hint
+            if ($typeName === 'object') {
+                return true;
+            }
+
             return $value instanceof $typeName;
         }
 

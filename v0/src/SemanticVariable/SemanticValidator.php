@@ -16,7 +16,9 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
+use function array_filter;
 use function array_key_exists;
+use function array_unique;
 use function array_values;
 use function class_exists;
 use function count;
@@ -189,7 +191,7 @@ final class SemanticValidator implements SemanticValidatorInterface
             return new NullErrors();
         }
 
-        $validationMethods = $this->getMatchingValidationMethods($semanticClass, $args);
+        $validationMethods = $this->getMatchingValidationMethods($semanticClass, $parameterAttributes, $args);
 
         if (empty($validationMethods)) {
             // No matching validation methods found
@@ -241,20 +243,64 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Get validation methods with #[Validate] attribute that match the given arguments
      *
-     * @param object              $semanticClass  The semantic validation class
-     * @param ValidationArguments $validationArgs Arguments to validate
+     * @param object              $semanticClass       The semantic validation class
+     * @param ParameterAttributes $parameterAttributes Parameter attributes for filtering
+     * @param ValidationArguments $validationArgs      Arguments to validate
      *
      * @return ReflectionMethods
      * @phpstan-return array<int, ReflectionMethod>
      */
-    private function getMatchingValidationMethods(object $semanticClass, array $validationArgs): array
+    private function getMatchingValidationMethods(object $semanticClass, array $parameterAttributes, array $validationArgs): array
     {
         $reflection = new ReflectionClass($semanticClass);
         $methodsByName = [];
 
-        // Collect all methods with #[Validate] attribute
+        // Simple method matching: check each validation method's parameters
         foreach ($reflection->getMethods() as $method) {
-            if (! empty($method->getAttributes(Validate::class)) && $this->methodMatchesArguments($method, $validationArgs)) {
+            if (empty($method->getAttributes(Validate::class))) {
+                continue;
+            }
+
+            // Check if this method matches our input parameters
+            $methodParameters = $method->getParameters();
+            $matches = true;
+
+            $nonInjectParams = array_filter($methodParameters, static fn ($p) => empty($p->getAttributes(Inject::class)));
+
+            // Check if we have enough arguments for this method
+            if (count($validationArgs) < count($nonInjectParams)) {
+                $matches = false;
+                continue;
+            }
+
+            $paramIndex = 0;
+            foreach ($methodParameters as $methodParam) {
+                if ($methodParam->getAttributes(Inject::class)) {
+                    continue; // Skip injected parameters
+                }
+
+                // Check if parameter attributes match (if method param has semantic attributes)
+                $methodParamAttrs = $this->extractAttributeNames($methodParam);
+                if (! empty($methodParamAttrs)) {
+                    // Method parameter has attributes - input must have matching attributes
+                    $hasMatchingAttr = false;
+                    foreach ($methodParamAttrs as $attr) {
+                        if (in_array($attr, $parameterAttributes, true)) {
+                            $hasMatchingAttr = true;
+                            break;
+                        }
+                    }
+
+                    if (! $hasMatchingAttr) {
+                        $matches = false;
+                        break;
+                    }
+                }
+
+                $paramIndex++;
+            }
+
+            if ($matches) {
                 $methodsByName[$method->getName()] = $method;
             }
         }
@@ -332,6 +378,38 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
+     * Get attributes required by method parameters
+     *
+     * @return array<string> List of required attribute names (e.g., ['Teen', 'Senior'])
+     */
+    private function getMethodRequiredAttributes(ReflectionMethod $method): array
+    {
+        $requiredAttributes = [];
+
+        foreach ($method->getParameters() as $param) {
+            foreach ($param->getAttributes() as $attr) {
+                $attrClassName = $attr->getName();
+
+                // Skip framework attributes
+                if ($attrClassName === Input::class || $attrClassName === Inject::class) {
+                    continue;
+                }
+
+                // Only include SemanticTag attributes
+                if ($this->isSemanticTagClass($attrClassName)) {
+                    $parts = explode('\\', $attrClassName);
+                    $tagName = end($parts);
+                    if ($tagName !== false) {
+                        $requiredAttributes[] = $tagName;
+                    }
+                }
+            }
+        }
+
+        return array_unique($requiredAttributes);
+    }
+
+    /**
      * Check if the method is a base validation method (e.g., validateAge for basic age)
      */
     private function isBaseValidationMethod(ReflectionMethod $method, string $variableName): bool
@@ -345,7 +423,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
-     * Resolve method arguments - simply return input args for now
+     * Resolve method arguments by extracting only the arguments needed for this method
      *
      * @param ValidationArguments $inputArgs
      *
@@ -353,9 +431,24 @@ final class SemanticValidator implements SemanticValidatorInterface
      */
     private function resolveMethodArguments(ReflectionMethod $method, array $inputArgs): array
     {
-        // For now, just return the input arguments as-is
-        // TODO: Implement proper argument resolution if needed
-        return $inputArgs;
+        $resolvedArgs = [];
+        $paramIndex = 0;
+
+        foreach ($method->getParameters() as $param) {
+            // Skip injected parameters - they will be handled by DI
+            if (! empty($param->getAttributes(Inject::class))) {
+                continue;
+            }
+
+            // Take arguments in order for non-injected parameters
+            if ($paramIndex < count($inputArgs)) {
+                $resolvedArgs[] = $inputArgs[$paramIndex];
+            }
+
+            $paramIndex++;
+        }
+
+        return $resolvedArgs;
     }
 
     /**

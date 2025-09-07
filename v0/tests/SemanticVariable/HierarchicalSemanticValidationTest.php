@@ -25,7 +25,7 @@ final class HierarchicalSemanticValidationTest extends TestCase
     public function testBasicAgeValidation(): void
     {
         // Basic age validation without attributes
-        $errors = $this->validator->validate('age', [], 25);
+        $errors = $this->validator->validate('age', 25);
 
         $this->assertFalse($errors->hasErrors(), 'Valid age should pass basic validation');
     }

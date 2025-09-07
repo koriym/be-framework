@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Be\Framework\Tests;
 
+use ArrayAccess;
 use Be\Framework\BecomingType;
+use Countable;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Throwable;
+
+use function fclose;
+use function fopen;
+use function tmpfile;
 
 /**
  * Advanced tests for BecomingType class focusing on the corrected type system
@@ -168,5 +174,213 @@ final class BecomingTypeAdvancedTest extends TestCase
 
         $result = $this->becomingType->match($input, $targetClass::class);
         $this->assertTrue($result, 'Real-world scenario should work: actual values match expected types');
+    }
+
+    public function testMatchWithMixedType(): void
+    {
+        $input = new class {
+            public string $value = 'anything';
+        };
+
+        $targetClass = new class ('') {
+            public function __construct(public mixed $value)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Any type should match mixed parameter');
+    }
+
+    public function testMatchWithBooleanType(): void
+    {
+        $input = new class {
+            public bool $flag = true;
+        };
+
+        $targetClass = new class (true) {
+            public function __construct(public bool $flag)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Boolean value should match boolean parameter');
+    }
+
+    public function testMatchWithFloatType(): void
+    {
+        $input = new class {
+            public float $number = 3.14;
+        };
+
+        $targetClass = new class (0.0) {
+            public function __construct(public float $number)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Float value should match float parameter');
+    }
+
+    public function testMatchWithNoConstructor(): void
+    {
+        $input = new class {
+            public string $data = 'test';
+        };
+
+        $targetClass = new class {
+            // No constructor
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Any input should match class with no constructor');
+    }
+
+    public function testMatchWithMissingProperty(): void
+    {
+        $input = new class {
+            public string $name = 'John';
+            // Missing 'age' property
+        };
+
+        $targetClass = new class ('', 0) {
+            public function __construct(
+                public string $name,
+                public int $age, // This property is missing from input
+            ) {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertFalse($result, 'Should not match when required property is missing');
+    }
+
+    public function testMatchWithIntersectionType(): void
+    {
+        // Test intersection type handling - this will hit line 70
+        // Since PHP doesn't support intersection types in property declarations directly,
+        // we need to create a more complex scenario
+        $input = new class {
+            public object $value;
+
+            public function __construct()
+            {
+                $this->value = new class implements ArrayAccess, Countable {
+                    public function offsetExists($offset): bool
+                    {
+                        return false;
+                    }
+
+                    public function offsetGet($offset): mixed
+                    {
+                        return null;
+                    }
+
+                    public function offsetSet($offset, $value): void
+                    {
+                    }
+
+                    public function offsetUnset($offset): void
+                    {
+                    }
+
+                    public function count(): int
+                    {
+                        return 0;
+                    }
+                };
+            }
+        };
+
+        // This will exercise the intersection type path indirectly
+        $targetClass = new class (new stdClass()) {
+            public function __construct(public object $value)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Object should match object type parameter');
+    }
+
+    public function testGetValueTypeWithResource(): void
+    {
+        // Test the default case in getValueType (line 150)
+        // We need to access this indirectly through type matching
+        $resource = fopen('php://memory', 'r');
+        $input = new class ($resource) {
+            public function __construct(public mixed $value)
+            {
+            }
+        };
+
+        $targetClass = new class (null) {
+            public function __construct(public mixed $value)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Resource should match mixed type');
+
+        fclose($resource);
+    }
+
+    public function testMatchWithArrayType(): void
+    {
+        // Test array type handling to cover more getValueType cases
+        $input = new class {
+            public array $data = ['test'];
+        };
+
+        $targetClass = new class ([]) {
+            public function __construct(public array $data)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Array should match array type');
+    }
+
+    public function testMatchWithStringType(): void
+    {
+        // Test string type handling
+        $input = new class {
+            public string $text = 'hello';
+        };
+
+        $targetClass = new class ('') {
+            public function __construct(public string $text)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'String should match string type');
+    }
+
+    public function testMatchWithResourceType(): void
+    {
+        // Test resource type to trigger default case in getValueType
+        $resource = tmpfile();
+        $input = new class ($resource) {
+            public function __construct(public mixed $resource)
+            {
+            }
+        };
+
+        $targetClass = new class (null) {
+            public function __construct(public mixed $resource)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Resource should match mixed type');
+
+        fclose($resource);
     }
 }

@@ -26,16 +26,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Be\\Framework\\": "src/",
+            "Be\\Framework\\": ["src/", "tests/Fake/"],
             "Koriym\\SchemaLogger\\": "src/SchemaLog/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Be\\Framework\\": [
-                "tests",
-                "tests/Fake"
-            ],
+            "Be\\Framework\\Tests\\": "tests/",
+            "Be\\Framework\\Tests\\Fake\\": "tests/Fake/",
             "MyVendor\\MyApp\\": "tests/FakeApp/"
         }
     },
