@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework;
 
 use Be\Framework\Attribute\Be;
+use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Exception\TypeMatchingFailure;
 use Be\Framework\SemanticLog\LoggerInterface;
 use ReflectionClass;
@@ -20,8 +21,11 @@ use function is_string;
  */
 final class Being
 {
-    public function __construct(private LoggerInterface $logger, private BecomingArgumentsInterface $becomingArguments)
-    {
+    public function __construct(
+        private LoggerInterface $logger,
+        private BecomingArgumentsInterface $becomingArguments,
+        private BecomingType $becomingType,
+    ) {
     }
 
     /**
@@ -96,13 +100,22 @@ final class Being
         /** @phpstan-var array<class-string, string> $candidateErrors */
         $candidateErrors = [];
 
+        // First, use BecomingType::match() for fast pre-validation
         foreach ($becoming as $class) {
-            try {
-                return $this->performSingleTransformation($current, $class);
-            } catch (Throwable $e) {
-                // Capture detailed error information for each candidate
-                $candidateErrors[$class] = $e->getMessage();
-                continue; // Try next class if this one fails
+            if ($this->becomingType->match($current, $class)) {
+                // Type matches - attempt full transformation
+                try {
+                    return $this->performSingleTransformation($current, $class);
+                } catch (SemanticVariableException $e) {
+                    throw $e; // Do not retry on SemanticVariableException
+                } catch (Throwable $e) {
+                    // If transformation fails after type matching, record the error and continue
+                    $candidateErrors[$class] = $e->getMessage();
+                    continue;
+                }
+            } else {
+                // Type doesn't match - record type mismatch error
+                $candidateErrors[$class] = 'Type mismatch: object properties incompatible with constructor parameters';
             }
         }
 

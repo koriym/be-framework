@@ -22,13 +22,13 @@ final class Becoming implements BecomingInterface
 
     public function __construct(
         InjectorInterface $injector,
-        string $namespace,
+        string $ontologyNamespace,
         LoggerInterface|null $logger = null,
         BecomingArgumentsInterface|null $becomingArguments = null,
     ) {
-        $becomingArguments ??= new BecomingArguments($injector, new SemanticValidator($namespace));
+        $becomingArguments ??= new BecomingArguments($injector, new SemanticValidator($ontologyNamespace));
         $logger ??= new Logger(new SemanticLogger(), $becomingArguments);
-        $this->being = new Being($logger, $becomingArguments);
+        $this->being = new Being($logger, $becomingArguments, new BecomingType());
     }
 
     /**

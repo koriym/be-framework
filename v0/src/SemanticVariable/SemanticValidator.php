@@ -11,6 +11,7 @@ use Be\Framework\Types;
 use DomainException;
 use Override;
 use Ray\Di\Di\Inject;
+use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -20,12 +21,16 @@ use function array_values;
 use function class_exists;
 use function count;
 use function end;
+use function error_log;
 use function explode;
+use function get_object_vars;
 use function in_array;
 use function str_replace;
 use function str_starts_with;
 use function strtolower;
 use function ucwords;
+
+use const E_USER_NOTICE;
 
 /**
  * Validates semantic variables based on their names
@@ -42,8 +47,52 @@ use function ucwords;
 final class SemanticValidator implements SemanticValidatorInterface
 {
     public function __construct(
-        private string $semanticNamespace = 'Be\\App\\SemanticVariable',
+        private string $ontlogyNamespace,
     ) {
+    }
+
+    /**
+     * Validate object properties based on constructor parameter names
+     *
+     * For each constructor parameter, validate the corresponding object property
+     * using semantic variable validation. For example, if constructor has $age parameter,
+     * validate $object->age using Age semantic constraint.
+     *
+     * @param ReflectionMethod $constructor Constructor method with parameter definitions
+     * @param object           $object      Object containing properties to validate
+     *
+     * @return Errors Validation errors (empty if validation passes)
+     */
+    public function validateProps(ReflectionMethod $constructor, object $object): Errors
+    {
+        $allErrors = [];
+        $objectProperties = get_object_vars($object);
+
+        foreach ($constructor->getParameters() as $parameter) {
+            // Skip #[Inject] parameters
+            if ($this->hasInjectAttribute($parameter)) {
+                continue;
+            }
+
+            $paramName = $parameter->getName();
+
+            // Skip if object doesn't have corresponding property
+            if (! array_key_exists($paramName, $objectProperties)) {
+                continue;
+            }
+
+            $propertyValue = $objectProperties[$paramName];
+            $parameterAttributes = $this->extractAttributeNames($parameter);
+
+            // Validate property using semantic variable validation
+            $errors = $this->validateWithAttributes($paramName, $parameterAttributes, $propertyValue);
+
+            if ($errors->hasErrors()) {
+                $allErrors = [...$allErrors, ...$errors->exceptions];
+            }
+        }
+
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
     }
 
     /**
@@ -113,6 +162,10 @@ final class SemanticValidator implements SemanticValidatorInterface
 
         foreach ($parameter->getAttributes() as $attribute) {
             $className = $attribute->getName();
+            if ($className === Input::class || $className === Inject::class) {
+                continue; // Skip non-semantic attributes
+            }
+
             $parts = explode('\\', $className);
             $attributeNames[] = end($parts);
         }
@@ -136,7 +189,7 @@ final class SemanticValidator implements SemanticValidatorInterface
             return new NullErrors();
         }
 
-        $validationMethods = $this->getMatchingValidationMethods($semanticClass, $variableName, $parameterAttributes, $args);
+        $validationMethods = $this->getMatchingValidationMethods($semanticClass, $args);
 
         if (empty($validationMethods)) {
             // No matching validation methods found
@@ -163,9 +216,11 @@ final class SemanticValidator implements SemanticValidatorInterface
     private function resolveSemanticClass(string $variableName): object|null
     {
         $className = $this->convertToClassName($variableName);
-        $fullClassName = "{$this->semanticNamespace}\\$className";
+        $fullClassName = "{$this->ontlogyNamespace}\\$className";
 
         if (! class_exists($fullClassName)) {
+            error_log("Semantic variable '{$className}' not registered in ontology namespace {$this->ontlogyNamespace}", E_USER_NOTICE);
+
             return null;
         }
 
@@ -184,33 +239,23 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
-     * Get validation methods that match the given arguments and parameter attributes
+     * Get validation methods with #[Validate] attribute that match the given arguments
      *
-     * @param object              $semanticClass       The semantic validation class
-     * @param string              $variableName        The variable name for base validation
-     * @param ParameterAttributes $parameterAttributes Parameter attributes for hierarchical validation
-     * @param ValidationArguments $validationArgs      Arguments to validate
+     * @param object              $semanticClass  The semantic validation class
+     * @param ValidationArguments $validationArgs Arguments to validate
      *
      * @return ReflectionMethods
      * @phpstan-return array<int, ReflectionMethod>
      */
-    private function getMatchingValidationMethods(object $semanticClass, string $variableName, array $parameterAttributes, array $validationArgs): array
+    private function getMatchingValidationMethods(object $semanticClass, array $validationArgs): array
     {
         $reflection = new ReflectionClass($semanticClass);
         $methodsByName = [];
 
-        // Collect both base validation methods and attribute-specific methods
+        // Collect all methods with #[Validate] attribute
         foreach ($reflection->getMethods() as $method) {
             if (! empty($method->getAttributes(Validate::class)) && $this->methodMatchesArguments($method, $validationArgs)) {
-                // Check if this is an attribute-specific method
-                if ($this->isAttributeSpecificMethod($method, $parameterAttributes)) {
-                    $methodsByName[$method->getName()] = $method;
-                }
-
-                // Check if this is a base validation method
-                if ($this->isBaseValidationMethod($method, $variableName)) {
-                    $methodsByName[$method->getName()] = $method;
-                }
+                $methodsByName[$method->getName()] = $method;
             }
         }
 

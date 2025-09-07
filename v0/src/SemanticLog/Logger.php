@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticLog;
 
 use Be\Framework\BecomingArgumentsInterface;
+use Be\Framework\BecomingType;
 use Be\Framework\Being;
 use Be\Framework\SemanticLog\Context\DestinationNotFound;
 use Be\Framework\SemanticLog\Context\FinalDestination;
@@ -52,7 +53,7 @@ final class Logger implements LoggerInterface
         private SemanticLoggerInterface $logger,
         private BecomingArgumentsInterface $becomingArguments,
     ) {
-        $this->being = new Being($this, $this->becomingArguments);
+        $this->being = new Being($this, $this->becomingArguments, new BecomingType());
     }
 
     /**
