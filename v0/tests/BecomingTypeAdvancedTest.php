@@ -295,14 +295,65 @@ final class BecomingTypeAdvancedTest extends TestCase
         };
 
         // This will exercise the intersection type path indirectly
-        $targetClass = new class (new stdClass()) {
-            public function __construct(public object $value)
+        $targetClass = new class ($input->value) {
+            public function __construct(public ArrayAccess&Countable $value)
             {
             }
         };
 
         $result = $this->becomingType->match($input, $targetClass::class);
-        $this->assertTrue($result, 'Object should match object type parameter');
+        $this->assertTrue($result, 'Object implementing ArrayAccess&Countable should match intersection type parameter');
+    }
+
+    public function testMatchWithIntersectionTypeFailure(): void
+    {
+        // Test intersection type handling - failure case where object doesn't implement all required interfaces
+        $input = new class {
+            public object $value;
+
+            public function __construct()
+            {
+                // Create an object that only implements ArrayAccess but not Countable
+                $this->value = new class implements ArrayAccess {
+                    public function offsetExists($offset): bool
+                    {
+                        return false;
+                    }
+
+                    public function offsetGet($offset): mixed
+                    {
+                        return null;
+                    }
+
+                    public function offsetSet($offset, $value): void
+                    {
+                    }
+
+                    public function offsetUnset($offset): void
+                    {
+                    }
+                };
+            }
+        };
+
+        // Target class requires both ArrayAccess AND Countable
+        // Use a dummy object that implements both interfaces for constructor
+        $dummy = new class implements ArrayAccess, Countable {
+            public function offsetExists($offset): bool { return false; }
+            public function offsetGet($offset): mixed { return null; }
+            public function offsetSet($offset, $value): void { }
+            public function offsetUnset($offset): void { }
+            public function count(): int { return 0; }
+        };
+        
+        $targetClass = new class ($dummy) {
+            public function __construct(public ArrayAccess&Countable $value)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertFalse($result, 'Object implementing only ArrayAccess should not match ArrayAccess&Countable intersection type');
     }
 
     public function testGetValueTypeWithResource(): void
