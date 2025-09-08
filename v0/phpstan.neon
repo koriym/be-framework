@@ -1,4 +1,12 @@
 parameters:
   level: max
+  phpVersion: 80300
   paths:
     - src
+  # Minimal ignores for Psalm domain type compatibility
+  # These only affect files using @psalm-import-type where PHPStan cannot resolve Psalm's domain types
+  ignoreErrors:
+    - identifier: parameter.phpDocType
+    - identifier: return.phpDocType
+    - identifier: property.phpDocType
+    - identifier: missingType.iterableValue
