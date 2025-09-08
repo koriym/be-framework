@@ -36,15 +36,15 @@ example/
 │   ├── BeGreeting.php       # Intermediate transformation state
 │   ├── FormalGreeting.php   # Final formal greeting state
 │   └── CasualGreeting.php   # Final casual greeting state
-├── Semantic/               # Semantic Variables for validation
-│   ├── Name.php           # Name validation logic
-│   ├── Style.php          # Style validation logic
-│   └── Being.php          # Being validation logic
-├── Exception/             # Domain-specific exceptions
+├── Semantic/                # Semantic Variables for validation
+│   ├── Name.php             # Name validation logic
+│   ├── Style.php            # Style validation logic
+│   └── Being.php            # Being validation logic
+├── Exception/               # Domain-specific exceptions
 │   ├── InvalidNameFormatException.php
 │   └── StyleException.php
-├── Tag/                   # Semantic tags for attributes
-└── Reason/                # Ontological existence reasons (Being justification)
+├── Tag/                     # Semantic tags for attributes
+└── Reason/                  # Ontological existence reasons (Being justification)
 ```
 
 ## Key Concepts Demonstrated
