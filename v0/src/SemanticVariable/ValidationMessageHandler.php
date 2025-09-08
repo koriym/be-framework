@@ -6,7 +6,6 @@ namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\Attribute\Message;
 use Be\Framework\Types;
-use Exception;
 use JsonException;
 use ReflectionClass;
 use Throwable;

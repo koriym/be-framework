@@ -339,13 +339,30 @@ final class BecomingTypeAdvancedTest extends TestCase
         // Target class requires both ArrayAccess AND Countable
         // Use a dummy object that implements both interfaces for constructor
         $dummy = new class implements ArrayAccess, Countable {
-            public function offsetExists($offset): bool { return false; }
-            public function offsetGet($offset): mixed { return null; }
-            public function offsetSet($offset, $value): void { }
-            public function offsetUnset($offset): void { }
-            public function count(): int { return 0; }
+            public function offsetExists($offset): bool
+            {
+                return false;
+            }
+
+            public function offsetGet($offset): mixed
+            {
+                return null;
+            }
+
+            public function offsetSet($offset, $value): void
+            {
+            }
+
+            public function offsetUnset($offset): void
+            {
+            }
+
+            public function count(): int
+            {
+                return 0;
+            }
         };
-        
+
         $targetClass = new class ($dummy) {
             public function __construct(public ArrayAccess&Countable $value)
             {

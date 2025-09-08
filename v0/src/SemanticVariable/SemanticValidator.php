@@ -22,12 +22,14 @@ use function array_values;
 use function class_exists;
 use function count;
 use function end;
-use function trigger_error;
 use function explode;
 use function get_object_vars;
 use function in_array;
 use function str_replace;
+use function trigger_error;
 use function ucwords;
+
+use const E_USER_NOTICE;
 
 /**
  * Validates semantic variables based on their names
