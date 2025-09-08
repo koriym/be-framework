@@ -15,7 +15,7 @@ final class Name
     #[Validate]
     public function validateName(string $name): void
     {
-        if (empty(trim($name))) {
+        if (trim($name) === '') {
             throw new DomainException('Name cannot be empty');
         }
     }
