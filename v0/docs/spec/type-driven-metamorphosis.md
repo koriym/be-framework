@@ -130,33 +130,12 @@ final class UserWithProfile
 }
 ```
 
-### Pattern 3: The `$being` Property Pattern (Preferred)
-
-✅ **MOST CORRECT - Explicit type determination in constructor:**
-
-```php
-#[Be([ValidUser::class, InvalidUser::class])]
-final class UserValidation
-{
-    public readonly ValidUser|InvalidUser $being;
-    
-    public function __construct(
-        #[Input] string $email,
-        UserValidator $validator
-    ) {
-        // Explicit type decision in constructor
-        $this->being = $validator->isValid($email)
-            ? new ValidUser($email)
-            : new InvalidUser($email, $validator->getErrors());
-    }
-}
-```
-
 This is the **preferred pattern** because:
 - Type decision is explicit and clear
 - Both classes in array have the same constructor signature (which is fine)
 - The actual type selection happens through the `$being` property
 
+Note: In this pattern, the framework instantiates the host class and determines the final type from `$being`. Candidate constructor signatures are not used for selection; instead, your constructor decides which concrete type to expose.
 ## Common Misconceptions
 
 ### ❌ Misconception 1: "Exceptions determine type selection"
