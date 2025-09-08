@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Be\Framework\Tests;
 
+use ArrayAccess;
 use Be\Framework\BecomingType;
+use Be\Framework\Tests\Fake\ArrayAccessCountable;
+use Be\Framework\Tests\Fake\ArrayAccessOnly;
 use Countable;
 use Iterator;
 use PHPUnit\Framework\TestCase;
@@ -158,5 +161,78 @@ final class BecomingTypeIntersectionTest extends TestCase
         $this->assertTrue($result, 'Resource should match mixed type');
 
         fclose($resource);
+    }
+
+    public function testArrayAccessCountableIntersectionMatch(): void
+    {
+        // Test with object implementing both ArrayAccess and Countable
+        $validObject = new ArrayAccessCountable(['key' => 'value']);
+
+        $input = new class ($validObject) {
+            public function __construct(public ArrayAccess&Countable $data)
+            {
+            }
+        };
+
+        $targetClass = new class (new ArrayAccessCountable()) {
+            public function __construct(public ArrayAccess&Countable $data)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Object implementing ArrayAccess&Countable should match intersection type');
+    }
+
+    public function testArrayAccessOnlyIntersectionMismatch(): void
+    {
+        // Test with object implementing only ArrayAccess (should fail intersection type)
+        $partialObject = new ArrayAccessOnly(['key' => 'value']);
+
+        $input = new class ($partialObject) {
+            public function __construct(public ArrayAccess $data)
+            {
+            }
+        };
+
+        $targetClass = new class (new ArrayAccessCountable()) {
+            public function __construct(public ArrayAccess&Countable $data)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertFalse($result, 'Object implementing only ArrayAccess should not match ArrayAccess&Countable intersection type');
+    }
+
+    public function testIntersectionTypeWithMultipleInterfaces(): void
+    {
+        // Test intersection type with Iterator&Countable
+        $iteratorCountable = new class implements Iterator, Countable {
+            private array $data = ['a', 'b', 'c'];
+            private int $position = 0;
+
+            public function current(): mixed { return $this->data[$this->position] ?? null; }
+            public function key(): mixed { return $this->position; }
+            public function next(): void { ++$this->position; }
+            public function rewind(): void { $this->position = 0; }
+            public function valid(): bool { return isset($this->data[$this->position]); }
+            public function count(): int { return count($this->data); }
+        };
+
+        $input = new class ($iteratorCountable) {
+            public function __construct(public Iterator&Countable $collection)
+            {
+            }
+        };
+
+        $targetClass = new class ($iteratorCountable) {
+            public function __construct(public Iterator&Countable $collection)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Object implementing Iterator&Countable should match intersection type');
     }
 }
