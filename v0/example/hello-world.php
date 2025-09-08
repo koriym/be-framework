@@ -2,76 +2,44 @@
 
 declare(strict_types=1);
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+namespace Be\Example;
 
-use Be\Framework\Attribute\Be;
+$loader = require dirname(__DIR__) . '/vendor/autoload.php';
+$loader->addPsr4('Be\\Example\\', __DIR__);
+
 use Be\Framework\Becoming;
+use Be\Framework\Exception\SemanticVariableException;
+use Be\Example\Input\GreetingInput;
 use Ray\Di\Injector;
-use Ray\InputQuery\Attribute\Input;
+use function get_class;
+use function var_dump;
 
-// Step 1: Raw greeting input
-#[Be([FormalGreeting::class, CasualGreeting::class])]
-final class GreetingInput
-{
-    public function __construct(
-        public readonly string $name,
-        public readonly string $style  // 'formal' or 'casual'
-    ) {}
-}
+// Execute metamorphosis with new structure
+$becoming = new Becoming(new Injector(), __NAMESPACE__ . '\\Ontology');
 
-// Path A: Formal greeting for business context
-final class FormalGreeting
-{
-    public function __construct(
-        #[Input] string $name,
-        #[Input] string $style
-    ) {
-        if ($style !== 'formal') {
-            throw new InvalidArgumentException('Not a formal context');
-        }
-        $this->greeting = "Good day, Mr./Ms. {$name}. How may I assist you today?";
-        $this->type = 'formal';
-    }
-
-    public readonly string $greeting;
-    public readonly string $type;
-}
-
-// Path B: Casual greeting for friendly context
-final class CasualGreeting
-{
-    public function __construct(
-        #[Input] string $name,
-        #[Input] string $style
-    ) {
-        if ($style !== 'casual') {
-            throw new InvalidArgumentException('Not a casual context');
-        }
-        $this->greeting = "Hey {$name}! What's up?";
-        $this->type = 'casual';
-    }
-
-    public readonly string $greeting;
-    public readonly string $type;
-}
-
-// Execute the metamorphosis
-$becoming = new Becoming(new Injector());
-
-echo "=== Be Framework: Hello World with Branching ===\n\n";
-
-// Example 1: Formal greeting
-echo "Example 1: Formal Context\n";
 $formalInput = new GreetingInput('Smith', 'formal');
-$result1 = $becoming($formalInput);
-echo "Type: " . $result1->type . PHP_EOL;
-echo "Greeting: " . $result1->greeting . PHP_EOL;
-echo "Final class: " . $result1::class . PHP_EOL . PHP_EOL;
+$formalGreeting = $becoming($formalInput);
+echo "✅ Formal existence:\n" . json_encode($formalGreeting, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n\n";
 
-// Example 2: Casual greeting
-echo "Example 2: Casual Context\n";
 $casualInput = new GreetingInput('Alice', 'casual');
-$result2 = $becoming($casualInput);
-echo "Type: " . $result2->type . PHP_EOL;
-echo "Greeting: " . $result2->greeting . PHP_EOL;
-echo "Final class: " . $result2::class . PHP_EOL;
+$casualGreeting = $becoming($casualInput);
+echo "✅ Casual existence:\n" . json_encode($casualGreeting, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n";
+
+$input = new GreetingInput('', 'casual');
+try {
+    $becoming($input);
+} catch (SemanticVariableException $e) {
+    $exceptionType = get_class($e->getErrors()->exceptions[0]);
+    $errorMessages = $e->getErrors()->getMessages('ja');
+    echo "✅ $exceptionType: {$errorMessages[0]}\n";
+}
+
+$input = new GreetingInput('郡山 昭仁', 'casual');
+try {
+    $becoming($input);
+} catch (SemanticVariableException $e) {
+    $exceptionType = get_class($e->getErrors()->exceptions[0]);
+    $errorMessages = $e->getErrors()->getMessages('ja');
+    echo "✅ $exceptionType: {$errorMessages[0]}\n";
+}
+
