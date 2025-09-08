@@ -5,25 +5,34 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\Attribute\Message;
-use Exception;
+use Be\Framework\Types;
+use JsonException;
 use ReflectionClass;
 use Throwable;
 
 use function array_map;
+use function get_debug_type;
 use function get_object_vars;
 use function is_array;
 use function is_bool;
-use function is_null;
 use function is_numeric;
 use function is_object;
 use function is_string;
 use function json_encode;
 use function str_replace;
+use function var_export;
 
+use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_UNICODE;
 
 /**
  * Handles multilingual message generation for validation exceptions
+ *
+ * @psalm-import-type LocalizedMessages from Types
+ * @psalm-import-type ExceptionCollection from Types
+ * @psalm-import-type ValidationMessages from Types
  */
 final class ValidationMessageHandler
 {
@@ -50,7 +59,8 @@ final class ValidationMessageHandler
     /**
      * Get all available messages for exception
      *
-     * @return array<string, string>
+     * @return LocalizedMessages
+     * @phpstan-return array<string, string>
      */
     public function getAllMessages(Throwable $exception): array
     {
@@ -85,10 +95,10 @@ final class ValidationMessageHandler
                 is_string($value) => $value,
                 is_numeric($value) => (string) $value,
                 is_bool($value) => $value ? 'true' : 'false',
-                is_null($value) => 'null',
-                is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
+                $value === null => 'null',
+                is_array($value) => $this->safeJsonEncode($value),
                 is_object($value) => $value::class,
-                default => 'unknown'
+                default => get_debug_type($value)
             };
             $template = str_replace($placeholder, $stringValue, $template);
         }
@@ -99,9 +109,11 @@ final class ValidationMessageHandler
     /**
      * Get messages for multiple exceptions
      *
-     * @param array<Exception> $exceptions
+     * @param ExceptionCollection $exceptions
+     * @phpstan-param array<Throwable> $exceptions
      *
-     * @return array<string>
+     * @return ValidationMessages
+     * @phpstan-return array<string>
      */
     public function getMessagesForExceptions(array $exceptions, string $locale = 'en'): array
     {
@@ -109,5 +121,34 @@ final class ValidationMessageHandler
             fn (Throwable $exception) => $this->getMessage($exception, $locale),
             $exceptions,
         );
+    }
+
+    /**
+     * Safely encode array as JSON, falling back to alternatives if encoding fails
+     *
+     * @param array<mixed> $value
+     */
+    private function safeJsonEncode(array $value): string
+    {
+        try {
+            return json_encode(
+                $value,
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE,
+            );
+        } catch (JsonException) {
+            // First fallback: try with partial output on error
+            $fallback = json_encode($value, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            if ($fallback !== false) {
+                return $fallback;
+            }
+
+            // Second fallback: try var_export
+            try {
+                return var_export($value, true);
+            } catch (Throwable) {
+                // Final fallback: simple description
+                return '[unencodable array]';
+            }
+        }
     }
 }

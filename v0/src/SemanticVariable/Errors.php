@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
+use Be\Framework\Types;
 use Exception;
 
 use function count;
@@ -13,10 +14,16 @@ use function count;
  *
  * Immutable container for multiple validation exceptions with
  * multilingual message support.
+ *
+ * @psalm-import-type ExceptionCollection from Types
+ * @psalm-import-type ValidationMessages from Types
  */
 class Errors
 {
-    /** @param array<Exception> $exceptions */
+    /**
+     * @param ExceptionCollection $exceptions
+     * @phpstan-param array<Exception> $exceptions
+     */
     public function __construct(
         public readonly array $exceptions,
     ) {
@@ -25,7 +32,8 @@ class Errors
     /**
      * Get error messages in specified locale
      *
-     * @return array<string>
+     * @return ValidationMessages
+     * @phpstan-return array<string>
      */
     public function getMessages(string $locale = 'en'): array
     {
@@ -36,6 +44,8 @@ class Errors
 
     /**
      * Check if there are any errors
+     *
+     * @psalm-mutation-free
      */
     public function hasErrors(): bool
     {
@@ -44,6 +54,8 @@ class Errors
 
     /**
      * Get the number of errors
+     *
+     * @psalm-mutation-free
      */
     public function count(): int
     {
