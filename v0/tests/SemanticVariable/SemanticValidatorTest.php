@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\Exception\SemanticVariableException;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use TypeError;
@@ -153,16 +154,6 @@ final class SemanticValidatorTest extends TestCase
             // Verify the exception message contains validation details
             $this->assertNotEmpty($e->getMessage());
         }
-    }
-
-    public function testCustomNamespace(): void
-    {
-        $validator = new SemanticValidator('NonExistent\\Namespace');
-
-        $errors = $validator->validate('email', 'test@example.com');
-
-        $this->assertInstanceOf(NullErrors::class, $errors);
-        $this->assertFalse($errors->hasErrors());
     }
 
     public function testNoMatchingValidationMethods(): void

@@ -451,4 +451,24 @@ final class BecomingTypeAdvancedTest extends TestCase
 
         fclose($resource);
     }
+
+    public function testMatchWithGenericObjectType(): void
+    {
+        // Test generic 'object' type hint - this should hit line 131 in BecomingType
+        $someObject = new stdClass();
+        $input = new class ($someObject) {
+            public function __construct(public object $value)
+            {
+            }
+        };
+
+        $targetClass = new class (new stdClass()) {
+            public function __construct(public object $value)
+            {
+            }
+        };
+
+        $result = $this->becomingType->match($input, $targetClass::class);
+        $this->assertTrue($result, 'Any object should match generic object type');
+    }
 }

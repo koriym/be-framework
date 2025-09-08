@@ -212,12 +212,35 @@ final class BecomingTypeIntersectionTest extends TestCase
             private array $data = ['a', 'b', 'c'];
             private int $position = 0;
 
-            public function current(): mixed { return $this->data[$this->position] ?? null; }
-            public function key(): mixed { return $this->position; }
-            public function next(): void { ++$this->position; }
-            public function rewind(): void { $this->position = 0; }
-            public function valid(): bool { return isset($this->data[$this->position]); }
-            public function count(): int { return count($this->data); }
+            public function current(): mixed
+            {
+                return $this->data[$this->position] ?? null;
+            }
+
+            public function key(): mixed
+            {
+                return $this->position;
+            }
+
+            public function next(): void
+            {
+                ++$this->position;
+            }
+
+            public function rewind(): void
+            {
+                $this->position = 0;
+            }
+
+            public function valid(): bool
+            {
+                return isset($this->data[$this->position]);
+            }
+
+            public function count(): int
+            {
+                return count($this->data);
+            }
         };
 
         $input = new class ($iteratorCountable) {
