@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog\Context;
 
+use Be\Framework\Types;
 use JsonSerializable;
 use Koriym\SemanticLogger\AbstractContext;
 use Override;
@@ -14,18 +15,22 @@ use stdClass;
  *
  * Records constructor arguments BEFORE instantiation.
  * This captures what we intend to pass to the constructor.
+ *
+ * @psalm-import-type ImmanentSources from Types
+ * @psalm-import-type TranscendentSources from Types
+ * @psalm-import-type ObjectProperties from Types
  */
 final class MetamorphosisOpenContext extends AbstractContext implements JsonSerializable
 {
-    public const TYPE = 'metamorphosis_open';
+    public const string TYPE = 'metamorphosis_open';
 
-    public const SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-open.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-open.json';
 
     /**
-     * @param class-string          $fromClass           Class being transformed from
-     * @param string                $beAttribute         The #[Be] attribute triggering transformation
-     * @param array<string, mixed>  $immanentSources     #[Input] parameter values from previous object
-     * @param array<string, string> $transcendentSources #[Inject] interface/service names from DI container
+     * @param class-string        $fromClass           Class being transformed from
+     * @param string              $beAttribute         The #[Be] attribute triggering transformation
+     * @param ImmanentSources     $immanentSources     #[Input] parameter values from previous object
+     * @param TranscendentSources $transcendentSources #[Inject] interface/service names from DI container
      */
     public function __construct(
         public readonly string $fromClass,
@@ -35,7 +40,7 @@ final class MetamorphosisOpenContext extends AbstractContext implements JsonSeri
     ) {
     }
 
-    /** @return array<string, mixed> */
+    /** @return ObjectProperties */
     #[Override]
     public function jsonSerialize(): array
     {

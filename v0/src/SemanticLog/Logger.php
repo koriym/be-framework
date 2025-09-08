@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticLog;
 
 use Be\Framework\BecomingArgumentsInterface;
+use Be\Framework\BecomingType;
 use Be\Framework\Being;
 use Be\Framework\SemanticLog\Context\DestinationNotFound;
 use Be\Framework\SemanticLog\Context\FinalDestination;
@@ -12,26 +13,32 @@ use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
 use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
 use Be\Framework\SemanticLog\Context\MultipleDestination;
 use Be\Framework\SemanticLog\Context\SingleDestination;
+use JsonException;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
 use Ray\Di\Di\Inject;
 use ReflectionClass;
+use Throwable;
 
 use function array_key_exists;
 use function array_keys;
 use function array_map;
+use function get_debug_type;
 use function get_object_vars;
 use function gettype;
 use function implode;
 use function is_array;
 use function is_bool;
-use function is_null;
 use function is_numeric;
 use function is_object;
 use function is_string;
 use function json_encode;
+use function var_export;
 
+use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_UNICODE;
 
 /**
  * Be Framework Logger
@@ -46,13 +53,14 @@ final class Logger implements LoggerInterface
         private SemanticLoggerInterface $logger,
         private BecomingArgumentsInterface $becomingArguments,
     ) {
-        $this->being = new Being($this, $this->becomingArguments);
+        $this->being = new Being($this, $this->becomingArguments, new BecomingType());
     }
 
     /**
      * Log transformation start
      *
-     * @param string|array<string> $becoming
+     * @param QualifiedClassName|QualifiedClasses $becoming
+     * @phpstan-param string|array<string> $becoming
      */
     #[Override]
     public function open(object $current, string|array $becoming): string
@@ -121,9 +129,11 @@ final class Logger implements LoggerInterface
     }
 
     /**
-     * @param array<string, mixed> $args
+     * @param ConstructorArguments $args
+     * @phpstan-param array<string, mixed> $args
      *
-     * @return array<string, string>
+     * @return ImmanentSources
+     * @phpstan-return array<string, string>
      */
     private function extractImmanentSources(object $current, array $args): array
     {
@@ -141,9 +151,11 @@ final class Logger implements LoggerInterface
     }
 
     /**
-     * @param array<string, mixed> $args
+     * @param ConstructorArguments $args
+     * @phpstan-param array<string, mixed> $args
      *
-     * @return array<string, string>
+     * @return TranscendentSources
+     * @phpstan-return array<string, string>
      */
     private function extractTranscendentSources(array $args, string $becoming): array
     {
@@ -172,25 +184,29 @@ final class Logger implements LoggerInterface
                 // For objects, use their class name; for scalars, use their type/value representation
                 if (is_object($value)) {
                     $transcendentSources[$paramName] = $value::class;
-                } else {
-                    // For scalar/other types, show the type information
-                    $stringValue = match (true) {
-                        is_string($value) => $value,
-                        is_numeric($value) => (string) $value,
-                        is_bool($value) => $value ? 'true' : 'false',
-                        is_null($value) => 'null',
-                        is_array($value) => json_encode($value, JSON_THROW_ON_ERROR),
-                        default => 'unknown'
-                    };
-                    $transcendentSources[$paramName] = gettype($value) . ':' . $stringValue;
+                    continue;
                 }
+
+                // For scalar/other types, show the type information
+                $stringValue = match (true) {
+                    is_string($value) => $value,
+                    is_numeric($value) => (string) $value,
+                    is_bool($value) => $value ? 'true' : 'false',
+                    $value === null => 'null',
+                    is_array($value) => $this->safeJsonEncode($value),
+                    default => get_debug_type($value)
+                };
+                $transcendentSources[$paramName] = gettype($value) . ':' . $stringValue;
             }
         }
 
         return $transcendentSources;
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * @return ObjectProperties
+     * @phpstan-return array<string, mixed>
+     */
     private function extractProperties(object $result): array
     {
         // @todo Handle uninitialized properties in Accept pattern objects
@@ -215,5 +231,34 @@ final class Logger implements LoggerInterface
 
         /** @var array<class-string> $nextBecoming */
         return new MultipleDestination($nextBecoming);
+    }
+
+    /**
+     * Safely encode array as JSON, falling back to alternatives if encoding fails
+     *
+     * @param array<mixed> $value
+     */
+    private function safeJsonEncode(array $value): string
+    {
+        try {
+            return json_encode(
+                $value,
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE,
+            );
+        } catch (JsonException) {
+            // First fallback: try with partial output on error
+            $fallback = json_encode($value, JSON_PARTIAL_OUTPUT_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            if ($fallback !== false) {
+                return $fallback;
+            }
+
+            // Second fallback: try var_export
+            try {
+                return var_export($value, true);
+            } catch (Throwable) {
+                // Final fallback: simple description
+                return '[unencodable array]';
+            }
+        }
     }
 }
