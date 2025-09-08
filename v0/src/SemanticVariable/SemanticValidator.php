@@ -22,7 +22,7 @@ use function array_values;
 use function class_exists;
 use function count;
 use function end;
-use function error_log;
+use function trigger_error;
 use function explode;
 use function get_object_vars;
 use function in_array;
@@ -217,7 +217,7 @@ final class SemanticValidator implements SemanticValidatorInterface
         $fullClassName = "{$this->ontlogyNamespace}\\$className";
 
         if (! class_exists($fullClassName)) {
-            error_log("Semantic variable '{$className}' not registered in ontology namespace {$this->ontlogyNamespace}");
+            trigger_error("Semantic variable '{$className}' not registered in ontology namespace {$this->ontlogyNamespace}", E_USER_NOTICE);
 
             return null;
         }

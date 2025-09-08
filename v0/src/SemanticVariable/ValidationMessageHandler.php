@@ -33,6 +33,7 @@ use const JSON_UNESCAPED_UNICODE;
  *
  * @psalm-import-type LocalizedMessages from Types
  * @psalm-import-type ExceptionCollection from Types
+ * @psalm-import-type ValidationMessages from Types
  */
 final class ValidationMessageHandler
 {
@@ -110,7 +111,7 @@ final class ValidationMessageHandler
      * Get messages for multiple exceptions
      *
      * @param ExceptionCollection $exceptions
-     * @phpstan-param array<Exception> $exceptions
+     * @phpstan-param array<Throwable> $exceptions
      *
      * @return ValidationMessages
      * @phpstan-return array<string>
