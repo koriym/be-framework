@@ -196,6 +196,8 @@ When `#[Be([ClassA::class, ClassB::class, ClassC::class])]` is specified:
 3. **This continues until a class succeeds** or all classes are exhausted
 4. **If all classes fail**, a `TypeMatchingFailure` exception is thrown with detailed error information
 
+Fallback is triggered specifically during the instantiation phase when a selected constructor throws any exception during object creation, and this exception-driven fallback behavior is enabled by default unless explicitly disabled by configuration.
+
 ```php
 // Current behavior - Exception-Driven Fallback enabled
 #[Be([PremiumUser::class, RegularUser::class, GuestUser::class])]
