@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Be\Framework;
 
 use Be\Framework\Attribute\Be;
+use Be\Framework\Exception\BeMatchException;
 use Be\Framework\Exception\SemanticVariableException;
-use Be\Framework\Exception\TypeMatchingFailure;
+use Be\Framework\Exception\Unmatch;
+use Be\Framework\Exception\UnmatchReason;
 use Be\Framework\SemanticLog\LoggerInterface;
 use ReflectionClass;
 use Throwable;
@@ -96,14 +98,13 @@ final class Being
      */
     private function performTypeMatching(object $current, array $becoming): object
     {
-        /** @var CandidateErrors $candidateErrors */
-        /** @phpstan-var array<class-string, string> $candidateErrors */
-        $candidateErrors = [];
+        /** @var Unmatch[] $unmatches */
+        $unmatches = [];
 
         // First, use BecomingType::match() for fast pre-validation
         foreach ($becoming as $class) {
             if (! $this->becomingType->match($current, $class)) {
-                $candidateErrors[$class] = 'Type mismatch: object properties incompatible with constructor parameters';
+                $unmatches[] = new Unmatch($class, UnmatchReason::TypeMismatch);
                 continue;
             }
 
@@ -114,11 +115,11 @@ final class Being
                 throw $e; // Do not retry on SemanticVariableException
             } catch (Throwable $e) {
                 // If transformation fails after type matching, record the error and continue
-                $candidateErrors[$class] = $e->getMessage();
+                $unmatches[] = new Unmatch($class, UnmatchReason::Constructor, $e->getMessage());
                 continue;
             }
         }
 
-        throw TypeMatchingFailure::create($becoming, $candidateErrors);
+        throw new BeMatchException($becoming, $unmatches);
     }
 }

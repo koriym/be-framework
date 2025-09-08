@@ -18,7 +18,6 @@ use ReflectionParameter;
 
 use function array_filter;
 use function array_key_exists;
-use function array_unique;
 use function array_values;
 use function class_exists;
 use function count;
@@ -28,11 +27,7 @@ use function explode;
 use function get_object_vars;
 use function in_array;
 use function str_replace;
-use function str_starts_with;
-use function strtolower;
 use function ucwords;
-
-use const E_USER_NOTICE;
 
 /**
  * Validates semantic variables based on their names
@@ -83,6 +78,7 @@ final class SemanticValidator implements SemanticValidatorInterface
                 continue;
             }
 
+            /** @psalm-suppress MixedAssignment */
             $propertyValue = $objectProperties[$paramName];
             $parameterAttributes = $this->extractAttributeNames($parameter);
 
@@ -221,7 +217,7 @@ final class SemanticValidator implements SemanticValidatorInterface
         $fullClassName = "{$this->ontlogyNamespace}\\$className";
 
         if (! class_exists($fullClassName)) {
-            error_log("Semantic variable '{$className}' not registered in ontology namespace {$this->ontlogyNamespace}", E_USER_NOTICE);
+            error_log("Semantic variable '{$className}' not registered in ontology namespace {$this->ontlogyNamespace}");
 
             return null;
         }
@@ -269,11 +265,9 @@ final class SemanticValidator implements SemanticValidatorInterface
 
             // Check if we have enough arguments for this method
             if (count($validationArgs) < count($nonInjectParams)) {
-                $matches = false;
                 continue;
             }
 
-            $paramIndex = 0;
             foreach ($methodParameters as $methodParam) {
                 if ($methodParam->getAttributes(Inject::class)) {
                     continue; // Skip injected parameters
@@ -296,8 +290,6 @@ final class SemanticValidator implements SemanticValidatorInterface
                         break;
                     }
                 }
-
-                $paramIndex++;
             }
 
             if ($matches) {
@@ -309,62 +301,9 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
-     * Check if method signature matches the provided arguments
-     *
-     * @param ValidationArguments $args
-     */
-    private function methodMatchesArguments(ReflectionMethod $method, array $args): bool
-    {
-        $parameters = $method->getParameters();
-        $inputArgCount = count($args);
-        $methodArgCount = 0;
-
-        // Count non-injected parameters
-        foreach ($parameters as $param) {
-            if (empty($param->getAttributes(Inject::class))) {
-                $methodArgCount++;
-            }
-        }
-
-        return $methodArgCount === $inputArgCount;
-    }
-
-    /**
-     * Check if the method is attribute-specific (method parameters have matching SemanticTag attributes)
-     *
-     * @param ParameterAttributes $inputParameterAttributes
-     */
-    private function isAttributeSpecificMethod(ReflectionMethod $method, array $inputParameterAttributes): bool
-    {
-        if (empty($inputParameterAttributes)) {
-            return false;
-        }
-
-        // Check if method has parameters with matching SemanticTag attributes
-        foreach ($method->getParameters() as $methodParam) {
-            foreach ($methodParam->getAttributes() as $attr) {
-                // Get the attribute class name (e.g., "Be\Framework\SemanticTag\Adult")
-                $attrClassName = $attr->getName();
-
-                // Extract tag name from class name (e.g., "Adult")
-                $parts = explode('\\', $attrClassName);
-                $tagName = end($parts);
-
-                // Check if this tag matches input attributes and is a SemanticTag
-                if (
-                    in_array($tagName, $inputParameterAttributes, true) &&
-                    $this->isSemanticTagClass($attrClassName)
-                ) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Check if a class is marked with SemanticTag attribute
+     *
+     * @phpstan-ignore method.unused
      */
     private function isSemanticTagClass(string $className): bool
     {
@@ -375,51 +314,6 @@ final class SemanticValidator implements SemanticValidatorInterface
         $reflection = new ReflectionClass($className);
 
         return ! empty($reflection->getAttributes(SemanticTag::class));
-    }
-
-    /**
-     * Get attributes required by method parameters
-     *
-     * @return array<string> List of required attribute names (e.g., ['Teen', 'Senior'])
-     */
-    private function getMethodRequiredAttributes(ReflectionMethod $method): array
-    {
-        $requiredAttributes = [];
-
-        foreach ($method->getParameters() as $param) {
-            foreach ($param->getAttributes() as $attr) {
-                $attrClassName = $attr->getName();
-
-                // Skip framework attributes
-                if ($attrClassName === Input::class || $attrClassName === Inject::class) {
-                    continue;
-                }
-
-                // Only include SemanticTag attributes
-                if ($this->isSemanticTagClass($attrClassName)) {
-                    $parts = explode('\\', $attrClassName);
-                    $tagName = end($parts);
-                    if ($tagName !== false) {
-                        $requiredAttributes[] = $tagName;
-                    }
-                }
-            }
-        }
-
-        return array_unique($requiredAttributes);
-    }
-
-    /**
-     * Check if the method is a base validation method (e.g., validateAge for basic age)
-     */
-    private function isBaseValidationMethod(ReflectionMethod $method, string $variableName): bool
-    {
-        $methodName = strtolower($method->getName());
-        $className = strtolower($this->convertToClassName($variableName));
-
-        // Base methods follow pattern: validate + VariableName (e.g., validateAge)
-        // or validate + VariableName + additional descriptors (e.g., validateEmailConfirmation)
-        return str_starts_with($methodName, 'validate' . $className);
     }
 
     /**
@@ -442,6 +336,7 @@ final class SemanticValidator implements SemanticValidatorInterface
 
             // Take arguments in order for non-injected parameters
             if ($paramIndex < count($inputArgs)) {
+                /** @psalm-suppress MixedAssignment */
                 $resolvedArgs[] = $inputArgs[$paramIndex];
             }
 

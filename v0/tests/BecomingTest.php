@@ -6,10 +6,10 @@ namespace Be\Framework;
 
 use Be\Framework\Attribute\Be;
 use Be\Framework\Attribute\Validate;
+use Be\Framework\Exception\BeMatchException;
 use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
 use Be\Framework\Exception\SemanticVariableException;
-use Be\Framework\Exception\TypeMatchingFailure;
 use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use Exception;
@@ -91,7 +91,7 @@ final class BecomingTest extends TestCase
 
     public function testArrayTransformationWithNoMatch(): void
     {
-        $this->expectException(TypeMatchingFailure::class);
+        $this->expectException(BeMatchException::class);
         $this->expectExceptionMessage('No matching class for becoming in [Be\Framework\BecomingTestImpossible1, Be\Framework\BecomingTestImpossible2]');
 
         $input = new BecomingTestNoMatch('test');

@@ -48,6 +48,7 @@ final class BecomingType
             }
 
             $paramType = $param->getType();
+            /** @psalm-suppress  MixedAssignment */
             $actualValue = $currentProperties[$paramName];
 
             if ($paramType !== null && ! $this->isValueCompatibleWithType($actualValue, $paramType)) {
