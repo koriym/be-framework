@@ -175,7 +175,7 @@ public function testUserValidationBecomesValidUser(): void
 
 ## Summary
 
-Type-Driven Metamorphosis is a **compile-time type matching system**, not a **runtime exception-handling system**. Success depends on:
+Type-Driven Metamorphosis is a **runtime, reflection-based type matching system** guided by static types (Psalm/native). It is not a **runtime exception-handling system** for selection. Success depends on:
 
 1. **Distinct constructor signatures** for each class in the array
 2. **Proper type design** using value objects, union types, or the `$being` property pattern  
