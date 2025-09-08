@@ -63,7 +63,8 @@ use Be\Framework\Attribute\Input;
 #[Be([ValidOrder::class, InvalidOrder::class])]
 final class OrderRequest
 {
-    public readonly ValidOrder|InvalidOrder $being;
+    public readonly Valid|Invalid $being;
+
     public function __construct(
         #[Input] array $orderData,
         OrderValidator $validator,
@@ -76,7 +77,6 @@ final class OrderRequest
             : new Invalid($validator->getErrors());
     }
 }
-
 #[Be([ProcessedOrder::class, CancelledOrder::class])]
 final class ValidOrder
 {
