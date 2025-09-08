@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Be\Framework;
 
 use Be\Framework\Attribute\Be;
+use Be\Framework\Attribute\Validate;
+use Be\Framework\Exception\BeMatchException;
 use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
 use Be\Framework\Exception\SemanticVariableException;
-use Be\Framework\Exception\TypeMatchingFailure;
+use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use Exception;
 use InvalidArgumentException;
@@ -18,6 +20,11 @@ use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
 use Ray\Di\Injector;
 use Ray\InputQuery\Attribute\Input;
+use RuntimeException;
+
+use function filter_var;
+
+use const FILTER_VALIDATE_EMAIL;
 
 final class BecomingTest extends TestCase
 {
@@ -31,7 +38,7 @@ final class BecomingTest extends TestCase
         $semanticValidator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
         $becomingArguments = new BecomingArguments($injector, $semanticValidator);
 
-        $this->becoming = new Becoming($injector, null, $becomingArguments);
+        $this->becoming = new Becoming($injector, 'MyVendor\\MyApp', null, $becomingArguments);
     }
 
     public function testSingleTransformation(): void
@@ -84,7 +91,7 @@ final class BecomingTest extends TestCase
 
     public function testArrayTransformationWithNoMatch(): void
     {
-        $this->expectException(TypeMatchingFailure::class);
+        $this->expectException(BeMatchException::class);
         $this->expectExceptionMessage('No matching class for becoming in [Be\Framework\BecomingTestImpossible1, Be\Framework\BecomingTestImpossible2]');
 
         $input = new BecomingTestNoMatch('test');
@@ -146,6 +153,28 @@ final class BecomingTest extends TestCase
         $this->assertEquals('test-union-value', $result->unionParam);
     }
 
+    public function testArrayTransformationWithTypeMatchAndConstructorFailure(): void
+    {
+        // Test the case where type matching succeeds but constructor fails
+        // This should hit lines 106-107 in Being.php (candidateErrors recording)
+
+        $input = new BecomingTestFailureInput('test');
+        $result = ($this->becoming)($input);
+
+        // Should successfully transform using the fallback target class
+        $this->assertInstanceOf(BecomingTestSuccessfulFallback::class, $result);
+        $this->assertEquals('test-processed', $result->processedValue);
+    }
+
+    public function testSemanticVariableExceptionIsNotRetried(): void
+    {
+        // Test line 113 in Being.php - SemanticVariableException should be re-thrown immediately
+        $this->expectException(SemanticVariableException::class);
+
+        $input = new BecomingTestSemanticFailureInput('invalid-email');
+        ($this->becoming)($input);
+    }
+
     public function testSemanticValidationFailure(): void
     {
         $this->expectException(SemanticVariableException::class);
@@ -153,9 +182,132 @@ final class BecomingTest extends TestCase
         $input = new BecomingTestSemanticInvalid('invalid-email');
         ($this->becoming)($input);
     }
+
+    public function testTypeMatchingFailureWithFallback(): void
+    {
+        // This test covers lines 106-107 in Being.php performTypeMatching
+        // First candidate will fail type matching, second will succeed
+        $input = new BecomingTestTypeMismatchInput('test-string', 42);
+        $result = ($this->becoming)($input);
+
+        // Should succeed with the compatible target class
+        $this->assertInstanceOf(BecomingTestTypeCompatible::class, $result);
+        $this->assertEquals('test-string', $result->stringValue);
+        $this->assertEquals(42, $result->intValue);
+    }
 }
 
-// Test fixtures
+// Test fixtures for coverage testing
+
+// Classes for testing failure scenarios
+#[Be([BecomingTestFailingTarget::class, BecomingTestSuccessfulFallback::class])]
+final class BecomingTestFailureInput
+{
+    public function __construct(
+        public readonly string $value,
+    ) {
+    }
+}
+
+// This class will fail during construction when value = 'test'
+final class BecomingTestFailingTarget
+{
+    public function __construct(
+        #[Input]
+        string $value,
+    ) {
+        if ($value === 'test') {
+            throw new RuntimeException('Intentional constructor failure for coverage test');
+        }
+
+        $this->processedValue = $value;
+    }
+
+    public readonly string $processedValue;
+}
+
+// This class should succeed as fallback
+final class BecomingTestSuccessfulFallback
+{
+    public function __construct(
+        #[Input]
+        string $value,
+    ) {
+        $this->processedValue = $value . '-processed';
+    }
+
+    public readonly string $processedValue;
+}
+
+// Class for testing SemanticVariableException re-throw
+#[Be([BecomingTestSemanticFailingTarget::class])]
+final class BecomingTestSemanticFailureInput
+{
+    public function __construct(
+        public readonly string $email,
+    ) {
+    }
+}
+
+final class BecomingTestSemanticFailingTarget
+{
+    public function __construct(
+        #[Input]
+        string $email,
+    ) {
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors = new Errors([
+                'Invalid email format',
+            ]);
+
+            throw new SemanticVariableException($errors);
+        }
+
+        $this->processedEmail = $email;
+    }
+
+    public readonly string $processedEmail;
+}
+
+// Type mismatch test fixtures - for covering lines 106-107 in Being.php
+#[Be([BecomingTestTypeIncompatible::class, BecomingTestTypeCompatible::class])]
+final class BecomingTestTypeMismatchInput
+{
+    public function __construct(
+        public readonly string $stringValue,
+        public readonly int $intValue,
+    ) {
+    }
+}
+
+// This class expects int for stringValue - will cause type mismatch
+final class BecomingTestTypeIncompatible
+{
+    public function __construct(
+        #[Input]
+        int $stringValue,  // Type mismatch: expects int but gets string
+        #[Input]
+        int $intValue,
+    ) {
+        $this->processedValue = $stringValue + $intValue;
+    }
+
+    public readonly int $processedValue;
+}
+
+// This class has compatible types - will succeed after first fails
+final class BecomingTestTypeCompatible
+{
+    public function __construct(
+        #[Input]
+        public readonly string $stringValue,  // Compatible: expects string, gets string
+        #[Input]
+        public readonly int $intValue,        // Compatible: expects int, gets int
+    ) {
+    }
+}
+
+// Original test fixtures
 
 #[Be(BecomingTestProcessed::class)]
 final class BecomingTestInput
@@ -435,6 +587,7 @@ final class BecomingTestSemanticTarget
 {
     public function __construct(
         #[Input]
+        #[Validate('Email')]
         public readonly string $email,  // This will trigger semantic validation for email
     ) {
     }

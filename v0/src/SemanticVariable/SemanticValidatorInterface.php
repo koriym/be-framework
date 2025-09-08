@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
+use Be\Framework\Types;
 use ReflectionMethod;
 use ReflectionParameter;
 
@@ -13,14 +14,17 @@ use ReflectionParameter;
  * Provides two distinct APIs:
  * - validateArgs: Framework usage for method-wide validation
  * - validateArg: Test usage for individual parameter validation
+ *
+ * @psalm-import-type ConstructorArguments from Types
  */
 interface SemanticValidatorInterface
 {
     /**
      * Validate all arguments for a method (primary API)
      *
-     * @param ReflectionMethod $method Method containing parameter definitions
-     * @param array            $args   Values to validate (associative array: param_name => value)
+     * @param ReflectionMethod     $method Method containing parameter definitions
+     * @param ConstructorArguments $args   Values to validate (associative array: param_name => value)
+     * @phpstan-param array<string, mixed> $args
      *
      * @return Errors Validation errors (empty if validation passes)
      */

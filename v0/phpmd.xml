@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Be Framework PHPMD Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>PHPMD rules for Be Framework - Ontological Programming paradigm</description>
+
+    <!--codesize-->
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity"/>
+    <rule ref="rulesets/codesize.xml/NPathComplexity"/>
+    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity"/>
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength"/>
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength"/>
+    <rule ref="rulesets/codesize.xml/ExcessiveParameterList"/>
+    <rule ref="rulesets/codesize.xml/ExcessivePublicCount"/>
+    <rule ref="rulesets/codesize.xml/TooManyFields"/>
+    <!-- Framework classes may have many methods for comprehensive API -->
+    <!-- <rule ref="rulesets/codesize.xml/TooManyMethods"/> -->
+
+    <!--design-->
+    <rule ref="rulesets/design.xml/EvalExpression"/>
+    <rule ref="rulesets/design.xml/ExitExpression"/>
+    <rule ref="rulesets/design.xml/GotoStatement" />
+    <rule ref="rulesets/design.xml/NumberOfChildren"/>
+    <rule ref="rulesets/design.xml/DepthOfInheritance"/>
+    <!-- Framework requires complex object relationships -->
+    <!-- <rule ref="rulesets/design.xml/CouplingBetweenObjects" /> -->
+
+    <!--naming-->
+    <rule ref="rulesets/naming.xml/ConstantNamingConventions"/>
+    <rule ref="rulesets/naming.xml/BooleanGetMethodName"/>
+    <!-- Allow short names for domain-specific classes like "Be" -->
+    <!-- <rule ref="rulesets/naming.xml/ShortClassName"/> -->
+
+    <!--unusedcode-->
+    <!-- <rule ref="rulesets/unusedcode.xml/UnusedFormalParameter"/> -->
+    <!-- Null Object pattern implementations legitimately have unused parameters -->
+    <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable"/>
+    <!-- Framework fields may be used via reflection or public readonly access -->
+    <!-- <rule ref="rulesets/unusedcode.xml/UnusedPrivateField"/> -->
+    <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod"/>
+
+    <!--controversial-->
+    <rule ref="rulesets/controversial.xml/CamelCaseClassName"/>
+    <rule ref="rulesets/controversial.xml/CamelCasePropertyName"/>
+    <rule ref="rulesets/controversial.xml/CamelCaseMethodName"/>
+
+    <!--cleancode-->
+    <!-- Framework allows boolean parameters for configuration -->
+    <!-- <rule ref="rulesets/cleancode.xml/BooleanArgumentFlag"/> -->
+    <!-- Early returns are preferred over else -->
+    <rule ref="rulesets/cleancode.xml/ElseExpression" />
+</ruleset>

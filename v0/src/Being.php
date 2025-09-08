@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Be\Framework;
 
 use Be\Framework\Attribute\Be;
-use Be\Framework\Exception\TypeMatchingFailure;
+use Be\Framework\Exception\BeMatchException;
+use Be\Framework\Exception\SemanticVariableException;
+use Be\Framework\Exception\Unmatch;
+use Be\Framework\Exception\UnmatchReason;
 use Be\Framework\SemanticLog\LoggerInterface;
 use ReflectionClass;
 use Throwable;
@@ -14,11 +17,17 @@ use function is_string;
 
 /**
  * Gets the next class name in metamorphosis chain
+ *
+ * @psalm-import-type BecomingClasses from Types
+ * @psalm-import-type CandidateErrors from Types
  */
 final class Being
 {
-    public function __construct(private LoggerInterface $logger, private BecomingArgumentsInterface $becomingArguments)
-    {
+    public function __construct(
+        private LoggerInterface $logger,
+        private BecomingArgumentsInterface $becomingArguments,
+        private BecomingType $becomingType,
+    ) {
     }
 
     /**
@@ -26,7 +35,8 @@ final class Being
      *
      * @param object $current Current object in metamorphosis chain
      *
-     * @return string|array|null Next class name(s) or null if transformation is complete
+     * @return string|BecomingClasses|null Next class name(s) or null if transformation is complete
+     * @phpstan-return class-string|array<class-string>|null
      */
     public function willBe(object $current): string|array|null
     {
@@ -44,6 +54,9 @@ final class Being
 
     /**
      * The moment of transformation - pure and irreversible
+     *
+     * @param string|BecomingClasses $becoming
+     * @phpstan-param class-string|array<class-string> $becoming
      */
     public function metamorphose(object $current, string|array $becoming): object
     {
@@ -55,6 +68,10 @@ final class Being
         return $this->performTypeMatching($current, $becoming);
     }
 
+    /**
+     * @param QualifiedClassName $becoming
+     * @phpstan-param class-string $becoming
+     */
     private function performSingleTransformation(object $current, string $becoming): object
     {
         $openId = $this->logger->open($current, $becoming);
@@ -75,21 +92,34 @@ final class Being
 
     /**
      * Perform type matching to select the appropriate class from array of possibilities
+     *
+     * @param BecomingClasses $becoming
+     * @phpstan-param array<class-string> $becoming
      */
     private function performTypeMatching(object $current, array $becoming): object
     {
-        $candidateErrors = [];
+        /** @var Unmatch[] $unmatches */
+        $unmatches = [];
 
+        // First, use BecomingType::match() for fast pre-validation
         foreach ($becoming as $class) {
+            if (! $this->becomingType->match($current, $class)) {
+                $unmatches[] = new Unmatch($class, UnmatchReason::TypeMismatch);
+                continue;
+            }
+
+            // Type matches - attempt full transformation
             try {
                 return $this->performSingleTransformation($current, $class);
+            } catch (SemanticVariableException $e) {
+                throw $e; // Do not retry on SemanticVariableException
             } catch (Throwable $e) {
-                // Capture detailed error information for each candidate
-                $candidateErrors[$class] = $e->getMessage();
-                continue; // Try next class if this one fails
+                // If transformation fails after type matching, record the error and continue
+                $unmatches[] = new Unmatch($class, UnmatchReason::Constructor, $e->getMessage());
+                continue;
             }
         }
 
-        throw TypeMatchingFailure::create($becoming, $candidateErrors);
+        throw new BeMatchException($becoming, $unmatches);
     }
 }

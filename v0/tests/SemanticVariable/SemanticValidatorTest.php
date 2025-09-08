@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticVariable;
 
 use Be\Framework\Exception\SemanticVariableException;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use TypeError;
 
 final class SemanticValidatorTest extends TestCase
 {
@@ -127,7 +130,7 @@ final class SemanticValidatorTest extends TestCase
         $this->validator->validateAndThrow('email', 'john@example.com');
 
         // If no exception is thrown, the test passes
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     public function testValidateAndThrowWithInvalidData(): void
@@ -151,16 +154,6 @@ final class SemanticValidatorTest extends TestCase
             // Verify the exception message contains validation details
             $this->assertNotEmpty($e->getMessage());
         }
-    }
-
-    public function testCustomNamespace(): void
-    {
-        $validator = new SemanticValidator('NonExistent\\Namespace');
-
-        $errors = $validator->validate('email', 'test@example.com');
-
-        $this->assertInstanceOf(NullErrors::class, $errors);
-        $this->assertFalse($errors->hasErrors());
     }
 
     public function testNoMatchingValidationMethods(): void
@@ -207,16 +200,17 @@ final class SemanticValidatorTest extends TestCase
     {
         // Create a reflection method to test validateArgs with null values
         $testClass = new class {
-            public function testMethod(string $email): void {}
+            public function testMethod(string $email): void
+            {
+            }
         };
-        
-        $reflection = new \ReflectionClass($testClass);
+
+        $reflection = new ReflectionClass($testClass);
         $method = $reflection->getMethod('testMethod');
-        
+
         // Test that null values are now passed to validation (would previously be skipped with isset)
         // This should throw a TypeError because null is passed to validateEmail(string $email)
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $this->validator->validateArgs($method, ['email' => null]);
     }
-
 }

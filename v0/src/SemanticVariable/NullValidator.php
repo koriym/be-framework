@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
+use Be\Framework\Types;
+use Override;
 use ReflectionMethod;
 use ReflectionParameter;
 
@@ -12,12 +14,15 @@ use ReflectionParameter;
  *
  * Performs no validation and always returns no errors.
  * Used when semantic validation is not needed or disabled.
+ *
+ * @psalm-import-type ParameterAttributes from Types
  */
 final class NullValidator implements SemanticValidatorInterface
 {
     /**
      * Always returns no errors for method arguments
      */
+    #[Override]
     public function validateArgs(ReflectionMethod $method, array $args): Errors
     {
         return new NullErrors();
@@ -25,8 +30,10 @@ final class NullValidator implements SemanticValidatorInterface
 
     /**
      * Always returns no errors for single parameter
+     *
      * @codeCoverageIgnore
      */
+    #[Override]
     public function validateArg(ReflectionParameter $parameter, mixed $value): Errors
     {
         return new NullErrors();
@@ -42,6 +49,9 @@ final class NullValidator implements SemanticValidatorInterface
 
     /**
      * Legacy method: Always returns no errors regardless of attributes
+     *
+     * @param ParameterAttributes $parameterAttributes
+     * @phpstan-param array<string> $parameterAttributes
      */
     public function validateWithAttributes(string $variableName, array $parameterAttributes = [], mixed ...$args): Errors
     {

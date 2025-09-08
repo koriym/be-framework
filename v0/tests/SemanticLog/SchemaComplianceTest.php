@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog;
 
-use Be\Framework\Be;
+use Be\Framework\Attribute\Be;
 use Be\Framework\BecomingArguments;
 use Be\Framework\FakeProcessedData;
 use Be\Framework\SemanticLog\Context\FinalDestination;
@@ -13,6 +13,9 @@ use Koriym\SemanticLogger\SemanticLogger;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use stdClass;
+
+use function assert;
+use function is_array;
 
 #[Be(FakeProcessedData::class)]
 final class TestInputForSchema
@@ -54,6 +57,7 @@ final class SchemaComplianceTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
+        assert(is_array($logData['open']) && is_array($logData['open']['context']));
         $openContext = $logData['open']['context'];
 
         // Verify all required fields are present for schema
@@ -84,6 +88,7 @@ final class SchemaComplianceTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
+        assert(is_array($logData['close']) && is_array($logData['close']['context']));
         $closeContext = $logData['close']['context'];
 
         // Verify required fields are present
