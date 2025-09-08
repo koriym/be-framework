@@ -44,7 +44,7 @@ use function ucwords;
 final class SemanticValidator implements SemanticValidatorInterface
 {
     public function __construct(
-        private string $ontlogyNamespace,
+        private readonly string $semanticNamespace,
     ) {
     }
 
@@ -214,10 +214,10 @@ final class SemanticValidator implements SemanticValidatorInterface
     private function resolveSemanticClass(string $variableName): object|null
     {
         $className = $this->convertToClassName($variableName);
-        $fullClassName = "{$this->ontlogyNamespace}\\$className";
+        $fullClassName = "{$this->semanticNamespace}\\$className";
 
         if (! class_exists($fullClassName)) {
-            trigger_error("Semantic variable '{$className}' not registered in ontology namespace {$this->ontlogyNamespace}", E_USER_NOTICE);
+            trigger_error("Semantic variable '{$className}' not registered in ontology namespace {$this->semanticNamespace}", E_USER_NOTICE);
 
             return null;
         }
