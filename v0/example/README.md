@@ -44,7 +44,7 @@ example/
 │   ├── InvalidNameFormatException.php
 │   └── StyleException.php
 ├── Tag/                   # Semantic tags for attributes
-└── Reason/               # Validation failure reasons
+└── Reason/                # Ontological existence reasons (Being justification)
 ```
 
 ## Key Concepts Demonstrated

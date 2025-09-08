@@ -15,7 +15,7 @@ use function get_class;
 use function var_dump;
 
 // Execute metamorphosis with new structure
-$becoming = new Becoming(new Injector(), __NAMESPACE__ . '\\Ontology');
+$becoming = new Becoming(new Injector(), __NAMESPACE__ . '\\Semantic');
 
 $formalInput = new GreetingInput('Smith', 'formal');
 $formalGreeting = $becoming($formalInput);

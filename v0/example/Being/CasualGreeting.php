@@ -25,6 +25,6 @@ final readonly class CasualGreeting
         #[Input] public CasualStyle $being
     ) {
         $this->greeting = $being->casualGreeting($name);
-        $this->emoji = ['🎉', '😎', '🚀', '✨'][array_rand(['🎉', '😎', '🚀', '✨'])];  // 自己実現
+        $this->emoji = $being->casualEmoji();
     }
 }
