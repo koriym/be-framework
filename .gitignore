@@ -130,3 +130,5 @@ Desktop.ini
 # Linux
 *~
 .nfs*
+/vendor/
+/.phpunit.result.cache
