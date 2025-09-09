@@ -17,7 +17,7 @@ use Ray\Di\Scope;
 
 final class BeModule extends AbstractModule
 {
-    public function __construct(private string $namespace = 'Be\App\Semantic', AbstractModule $module = null)
+    public function __construct(private string $namespace = 'Be\App\Semantic', AbstractModule|null $module = null)
     {
         parent::__construct($module);
     }
