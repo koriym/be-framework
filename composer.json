@@ -33,7 +33,6 @@
     "autoload-dev": {
         "psr-4": {
             "Be\\Framework\\Tests\\": "tests/",
-            "Be\\Framework\\Tests\\Fake\\": "tests/Fake/",
             "MyVendor\\MyApp\\": "tests/FakeApp/"
         }
     },

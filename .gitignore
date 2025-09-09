@@ -132,3 +132,4 @@ Desktop.ini
 .nfs*
 /vendor/
 /.phpunit.result.cache
+/composer.lock
