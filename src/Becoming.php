@@ -9,6 +9,7 @@ use Be\Framework\SemanticLog\LoggerInterface;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use Koriym\SemanticLogger\SemanticLogger;
 use Override;
+use Ray\Di\Di\Named;
 use Ray\Di\InjectorInterface;
 
 /**
@@ -22,11 +23,12 @@ final class Becoming implements BecomingInterface
 
     public function __construct(
         InjectorInterface $injector,
-        string $ontologyNamespace,
+        #[Named('semantic_namespace')]
+        string $semanticNamespace = 'Be\App\Semantic',
         LoggerInterface|null $logger = null,
         BecomingArgumentsInterface|null $becomingArguments = null,
     ) {
-        $becomingArguments ??= new BecomingArguments($injector, new SemanticValidator($ontologyNamespace));
+        $becomingArguments ??= new BecomingArguments($injector, new SemanticValidator($semanticNamespace));
         $logger ??= new Logger(new SemanticLogger(), $becomingArguments);
         $this->being = new Being($logger, $becomingArguments, new BecomingType());
     }

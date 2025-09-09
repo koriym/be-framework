@@ -11,6 +11,7 @@ use Be\Framework\Types;
 use DomainException;
 use Override;
 use Ray\Di\Di\Inject;
+use Ray\Di\Di\Named;
 use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use ReflectionMethod;
@@ -46,6 +47,7 @@ use const E_USER_NOTICE;
 final class SemanticValidator implements SemanticValidatorInterface
 {
     public function __construct(
+        #[Named('semantic_namespace')]
         private readonly string $semanticNamespace,
     ) {
     }
