@@ -97,7 +97,9 @@ final class BecomingType
             }
 
             if (! array_key_exists($paramName, $currentProperties)) {
-                $reasons[$paramName] = 'Property missing from source object';
+                if (! $param->isDefaultValueAvailable() && ! $param->isOptional()) {
+                    $reasons[$paramName] = 'Property missing from source object';
+                }
                 continue;
             }
 

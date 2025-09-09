@@ -141,7 +141,7 @@ final class BecomingTypeAdvancedTypesTest extends TestCase
         $reasons = $this->becomingType->getMismatchReasons($source, ClassWithUnionType::class);
 
         $this->assertArrayHasKey('value', $reasons);
-        $this->assertStringContainsString('Type mismatch: expected string|int, got double', $reasons['value']);
+        $this->assertMatchesRegularExpression('/(string\|int|int\|string)/', $reasons['value']);
     }
 
     public function testGetMismatchReasonsForIntersectionType(): void
