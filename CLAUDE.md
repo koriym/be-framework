@@ -4,186 +4,223 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Be Framework is a PHP framework implementing the Ontological Programming paradigm, where data transformation occurs through pure constructor-driven metamorphosis. The framework treats all data transformations as "becoming" - continuous metamorphosis through constructor injection.
-
-## Development Commands
-
-All development commands are run from the `poc/php/` directory:
-
-```bash
-cd poc/php/
-
-# Testing
-composer test                   # Run unit tests
-composer coverage               # Generate test coverage report
-composer phpdbg                 # Generate coverage with phpdbg
-composer pcov                   # Generate coverage with pcov
-
-# Code Quality
-composer cs                     # Check coding style with phpcs
-composer cs-fix                 # Fix coding style with phpcbf
-composer phpstan                # Static analysis with PHPStan
-composer psalm                  # Type checking with Psalm
-composer phpmd                  # Code analysis with PHPMD
-composer sa                     # Run both phpstan and psalm
-
-# Comprehensive Quality Checks
-composer tests                  # Run cs + sa + test
-composer build                  # Full build: clean + cs + sa + coverage + crc + metrics
-
-# Utilities
-composer clean                  # Clear analysis caches
-composer baseline               # Generate baselines for PHPStan and Psalm
-composer crc                    # Run composer require checker
-composer metrics                # Generate code metrics report
-```
+Be Framework v0 - Production implementation of Ontological Programming paradigm where data transformations occur through constructor-driven metamorphosis with comprehensive semantic logging.
 
 ## Core Architecture
 
-### Central Concepts
+### Metamorphosis Engine
+The `Becoming` class (`src/Becoming.php`) is the central engine that processes objects through continuous transformations:
+- Takes an input object and follows `#[Be]` attributes to determine transformation paths
+- Supports linear transformations (`#[Be(NextClass::class)]`) and branching (`#[Be([ClassA::class, ClassB::class])]`)
+- All transformation logic resides in constructors - no methods for data transformation
+- Properties are `public readonly` ensuring immutability
 
-**Being Classes**: Every class represents a stage of existence/transformation with these characteristics:
-- All properties are `public readonly` (immutable state)
-- All transformation logic happens in constructors only
-- Use `#[Be(NextClass::class)]` attribute to declare transformation destiny
-- Support branching with `#[Be([SuccessClass::class, FailureClass::class])]`
+### Key Components
+- **`src/Attribute/Be.php`**: Declares transformation destinations for objects
+- **`src/BecomingArguments.php`**: Resolves constructor arguments during metamorphosis
+- **`src/Being.php`**: Utility to extract next transformation class from attributes
+- **`src/BecomingType.php`**: Type matching and branching logic for transformations
+- **`src/SemanticLog/`**: Comprehensive logging infrastructure capturing transformation lifecycle
+- **`src/SemanticVariable/`**: Semantic validation system for constructor parameters
 
-**Metamorphosis Engine**: The `Becoming` class executes transformations:
-- Takes an input object and processes it through continuous transformations
-- Follows `#[Be]` attributes to determine next transformation stage
-- Continues until no further transformation is possible
+### Semantic Logging System
+The framework includes sophisticated semantic logging that tracks:
+- **Open Context**: Logs when a transformation begins (immanent/transcendent sources)
+- **Close Context**: Logs transformation completion with resulting properties
+- **Destinations**: SingleDestination, MultipleDestination, FinalDestination, or DestinationNotFound
+- Schema validation via `docs/schemas/` JSON schemas
 
-**Dependency Declaration**: All constructor parameters must be explicitly attributed:
-- `#[Input]` - Values from the previous object's properties (Immanent factors)
-- `#[Inject]` - Dependencies from DI container (Transcendent factors)
-- Both attributes are mutually exclusive and required for all parameters
+## Development Commands
 
-### Key Files
+```bash
+# Testing
+composer test                    # Run all unit tests
+php vendor/bin/phpunit --filter testMethodName   # Run specific test method
+php vendor/bin/phpunit path/to/TestFile.php      # Run specific test file
 
-- `poc/php/src/Becoming.php` - The metamorphosis engine that executes transformations
-- `poc/php/src/Be.php` - Attribute for declaring transformation destinations
-- `poc/php/src/BecomingArguments.php` - Resolves constructor arguments during transformation
-- `poc/php/src/GetClass.php` - Utility to extract next transformation class from #[Be] attributes
+# Code Quality
+composer cs                      # Check coding style (phpcs)
+composer cs-fix                  # Auto-fix coding style issues
+composer sa                      # Run static analysis (phpstan + psalm)
+composer phpstan                 # Run PHPStan only
+composer psalm                   # Run Psalm only
+composer phpmd                   # Analyze PHP code for potential issues
 
-### Naming Conventions
+# Coverage
+composer coverage                # Generate coverage report with xdebug
+composer phpdbg                  # Generate coverage with phpdbg
+composer pcov                    # Generate coverage with pcov
 
-Follow ontological naming patterns from `docs/manual/convention/naming-standards.md`:
+# Comprehensive Checks
+composer tests                   # Run cs + sa + phpmd + test
+composer build                   # Full build: clean + cs + sa + phpmd + coverage + crc
 
-**Input Classes**: `{Domain}Input` (e.g., `UserInput`, `OrderInput`)
-**Being Classes**: `Being{Domain}` or `{Domain}Being` (e.g., `BeingUser`, `BeingOrder`)  
-**Final Objects**: Domain-specific result names (e.g., `ValidatedUser`, `ProcessedOrder`, `Success`, `Failure`)
-
-**Properties**:
-- Use `$being` for union type properties carrying transformation results
-- Name properties to reflect what the object *is*, not what it *does*
-- Always comment constructor parameters as `// Immanent` or `// Transcendent`
-
-### Directory Structure
-
-```
-poc/                           # Proof of concept (complete)
-├── php/                      # PHP implementation
-│   ├── src/                 # Framework source code
-│   │   ├── Be.php          # #[Be] attribute for transformation destiny
-│   │   ├── Becoming.php    # Core metamorphosis engine
-│   │   ├── BecomingArguments.php # Constructor argument resolution
-│   │   ├── Debug/          # Debug utilities
-│   │   └── Exception/      # Framework exceptions
-│   ├── tests/              # Unit tests
-│   │   ├── BecomingTest.php # Core framework tests
-│   │   └── Fake/           # Test fixtures and mocks
-│   └── composer.json       # Dependencies and scripts
-├── ts/                      # TypeScript implementation (AI-generated)
-│   ├── src/                # Framework source code
-│   ├── tests/              # Unit tests
-│   └── package.json        # Dependencies and scripts
-└── README.md               # POC completion summary
-
-docs/                        # Comprehensive documentation
-├── papers/                  # Academic papers and deep theory
-│   ├── philosophy/         # Ontological programming concepts
-│   ├── framework/          # Technical specifications
-│   └── patterns/           # Implementation patterns
-├── manual/                  # Tutorial-style manual
-│   ├── convention/         # Naming and coding standards
-│   └── (tutorial chapters)
-├── study/                   # Learning and exploration
-│   ├── podcast/            # Audio learning content
-│   └── (AI dialogue content)
-└── faq/                    # Frequently asked questions
-
-examples/                    # Working examples
-├── basic-demo.php          # Simple transformation example
-└── user-registration/      # Complete user registration implementation
+# Utilities
+composer clean                   # Clear analysis caches
+composer baseline                # Generate baselines for PHPStan and Psalm
+composer crc                     # Run composer require checker
+composer metrics                 # Generate code metrics report
 ```
 
-## Framework Philosophy
+## Forward Trace Debugging
 
-**"Be, Don't Do"** - Focus on what objects *are* rather than what they *do*:
-- Objects undergo metamorphosis through constructor injection
-- All state is immutable (`public readonly`)
-- Transformations are declarative via `#[Be]` attributes
-- Clear separation between Immanent (internal) and Transcendent (external) factors
+### Core Workflow
+1. **Always verify the command works first**:
+   ```bash
+   php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
+   ```
 
-**Constructor-Only Logic**: All business logic and validation occurs in constructors. No methods for data transformation.
+2. **Then add xdebug-debug for tracing**:
+   ```bash
+   ./vendor/bin/xdebug-debug --context="Debug context" \
+     --break="file.php:lineNumber" \
+     --exit-on-break \
+     --steps=10 \
+     --json \
+     -- php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
+   ```
 
-**Type Transparency**: No hidden state or mystery boxes. Everything is explicit and statically analyzable.
+### Best Practices
+- Use `--steps=10-20` for optimal signal-to-noise ratio
+- Target specific lines with breakpoints
+- Focus on `"recording_type": "diff"` entries in output
+- Use PHPUnit's `--filter` flag (not `::method` syntax)
 
-## Documentation
+## Testing Patterns
 
-The extensive documentation is organized in `docs/` with key starting points:
-- `docs/README.md` - Complete documentation guide
-- `docs/manual/index.md` - Tutorial-level framework manual
-- `docs/papers/framework/be-framework-whitepaper.md` - Technical overview
-- `docs/papers/philosophy/ontological-programming-paper.md` - Philosophical foundations
+### Running Tests
+```bash
+# Run all tests
+composer test
 
-## Testing
+# Run specific test class
+php vendor/bin/phpunit tests/SemanticLog/LoggerTest.php
 
-Tests are located in `poc/php/tests/` and follow the existing patterns:
-- Use fake objects in `tests/Fake/` directory for mocking
-- Test metamorphosis chains and transformations
-- Verify proper attribute handling and dependency injection
-- Run tests with `composer test` from the `poc/php/` directory
+# Run specific test method
+php vendor/bin/phpunit --filter testMultipleDestination
 
-TypeScript tests are in `poc/ts/tests/` with Jest framework.
+# Run tests matching pattern
+php vendor/bin/phpunit --filter "Semantic"
+```
 
-## Common Patterns
+### Test Organization
+- Unit tests in `tests/` mirror `src/` structure
+- Test fixtures in `tests/Fake/` for mock objects
+- Each test class tests a single production class
+- Schema compliance tests validate semantic log output
 
-**Basic Transformation**:
+## Code Style Requirements
+
+**CRITICAL**: After modifying PHP files, always run:
+```bash
+composer cs-fix
+```
+
+This ensures consistent code formatting following Doctrine Coding Standards.
+
+## Key Directories
+
+```
+src/
+├── Attribute/           # Framework attributes (#[Be], #[Validate], #[Message], #[SemanticTag])
+├── SemanticLog/        # Semantic logging infrastructure
+│   └── Context/        # Log context objects (destinations, metamorphosis)
+├── SemanticVariable/   # Semantic validation system
+├── Exception/          # Framework exceptions
+├── Becoming.php        # Core metamorphosis engine
+├── BecomingArguments.php # Constructor argument resolution
+├── Being.php           # Attribute extraction utility
+├── BecomingType.php    # Type matching and branching logic
+└── Types.php           # Type utilities
+
+tests/
+├── Fake/               # Test fixtures and mock objects
+├── FakeApp/            # Application test examples
+├── SemanticLog/        # Semantic logging tests
+└── SemanticVariable/   # Semantic validation tests
+
+docs/
+└── schemas/            # JSON schemas for log validation
+```
+
+## Common Development Tasks
+
+### Adding a New Transformation Class
+1. Create class with `#[Be]` attribute declaring next transformation
+2. Use `public readonly` properties for immutable state
+3. Put all logic in constructor
+4. Add corresponding test in `tests/`
+
+### Debugging Failed Tests
+1. Run the specific failing test:
+   ```bash
+   php vendor/bin/phpunit --filter testMethodName
+   ```
+2. Use xdebug-debug for detailed trace if needed
+3. Check semantic log output matches expected schema
+
+### Fixing Code Style Issues
+```bash
+composer cs-fix     # Auto-fix issues
+composer cs         # Check without fixing
+```
+
+## Important Notes
+
+- The framework follows "Be, Don't Do" philosophy - objects represent states, not behaviors
+- All business logic happens in constructors during metamorphosis
+- Properties must be `public readonly` for immutability
+- Transformations are irreversible and declarative via `#[Be]` attributes
+- Semantic logging captures complete transformation lifecycle for observability
+
+## Code Style Guidelines
+
+### Control Flow - Early Return Pattern
+**IMPORTANT**: Avoid `else` statements - use early returns for cleaner, more readable code.
+
+**❌ Avoid:**
 ```php
-#[Be(ProcessedData::class)]
-final class DataInput
+public function process(string $input): string
 {
-    public function __construct(
-        public readonly string $data  // Immanent
-    ) {}
-}
-
-final class ProcessedData  
-{
-    public function __construct(
-        #[Input] string $data,              // Immanent  
-        #[Inject] DataProcessor $processor  // Transcendent
-    ) {
-        $this->result = $processor->process($data);
+    if ($condition) {
+        return $this->handleCondition($input);
+    } else {
+        return $this->handleDefault($input);
     }
 }
 ```
 
-**Branching Transformation**:
+**✅ Prefer:**
 ```php
-#[Be([ValidUser::class, InvalidUser::class])]
-final class BeingUser
+public function process(string $input): string
 {
-    public function __construct(
-        public readonly string $email,           // Immanent
-        public readonly ValidUser|InvalidUser $being  // Result union type
-    ) {}
+    if ($condition) {
+        return $this->handleCondition($input);
+    }
+    
+    return $this->handleDefault($input);
 }
 ```
 
-**Execution**:
+**Multiple conditions:**
 ```php
-$becoming = new Becoming($injector);
-$result = $becoming(new DataInput('sample'));
+public function validate(array $data): bool
+{
+    if (empty($data)) {
+        return false;
+    }
+    
+    if (! $this->hasRequiredFields($data)) {
+        return false;
+    }
+    
+    return $this->performValidation($data);
+}
 ```
+
+**Benefits of Early Returns:**
+- Reduces nesting and cognitive load
+- Makes error conditions explicit
+- Eliminates else-related branching complexity
+- Improves readability and maintainability
+- Follows "fail fast" principle
