@@ -1,0 +1,197 @@
+---
+---
+
+@import "minima";
+
+/* Be Framework Custom Styles */
+/* Inspired by BEAR.Sunday's clean design with Be Framework's ontological philosophy */
+
+/* PHP Syntax Highlighting Fixes */
+.language-php .highlighter-rouge .highlight .err,
+.language-php .highlight .err {
+    color: #6f42c1; /* Purple color for PHP attributes like #[Be] */
+    background-color: transparent;
+    font-weight: normal;
+}
+
+/* Enhanced code blocks */
+.highlight {
+    background: #f8f8f8;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+/* Better code fonts and spacing */
+pre, code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9em;
+}
+
+/* Inline code styling */
+code {
+    background-color: rgba(175, 184, 193, 0.2);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+/* Headers with better spacing - inspired by BEAR.Sunday */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.5rem;
+    padding: 1.5rem 0 0.5rem;
+}
+
+h1:first-child {
+    padding-top: 2rem;
+}
+
+/* Clean link styling */
+a {
+    color: #4183c4;
+    text-decoration: none;
+}
+
+a:hover {
+    opacity: 0.7;
+}
+
+/* Quote styling for Be Framework philosophy */
+blockquote {
+    border-left: 4px solid #e1e5e9;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #6a737d;
+    background-color: #f6f8fa;
+    padding: 1rem 1rem 1rem 2rem;
+    border-radius: 0 6px 6px 0;
+}
+
+/* Four seasons emoji styling */
+.site-header {
+    border-bottom: 1px solid #e1e5e9;
+    background-color: #fff;
+}
+
+.site-title {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 54px;
+    letter-spacing: -1px;
+    margin-bottom: 0;
+    float: left;
+}
+
+/* Clean navigation */
+.site-nav {
+    float: right;
+    line-height: 54px;
+}
+
+.site-nav .nav-trigger {
+    display: none;
+}
+
+.site-nav .menu-icon {
+    display: none;
+}
+
+.site-nav .page-link {
+    color: #111;
+    line-height: 1.5;
+    margin-left: 20px;
+}
+
+.site-nav .page-link:hover {
+    opacity: 0.7;
+}
+
+/* Content styling */
+.post-content {
+    margin-bottom: 30px;
+}
+
+/* Table styling */
+table {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    width: 100%;
+}
+
+table th,
+table td {
+    border: 1px solid #d0d7de;
+    padding: 6px 13px;
+}
+
+table tr {
+    background-color: #fff;
+    border-top: 1px solid #d0d7de;
+}
+
+table tr:nth-child(2n) {
+    background-color: #f6f8fa;
+}
+
+/* Be Framework specific enhancements */
+.seasonal-structure {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.season {
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.season.spring {
+    border-left-color: #28a745;
+    background-color: #f0fff4;
+}
+
+.season.summer {
+    border-left-color: #ffc107;
+    background-color: #fffbf0;
+}
+
+.season.autumn {
+    border-left-color: #fd7e14;
+    background-color: #fff5f0;
+}
+
+.season.winter {
+    border-left-color: #6f42c1;
+    background-color: #f8f6ff;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 600px) {
+    .seasonal-structure {
+        grid-template-columns: 1fr;
+    }
+    
+    .site-nav {
+        position: absolute;
+        top: 9px;
+        right: 15px;
+        background-color: #fdfdfd;
+        border: 1px solid #e8e8e8;
+        border-radius: 5px;
+        text-align: right;
+    }
+    
+    .site-nav .nav-trigger {
+        display: block;
+        float: right;
+        width: 36px;
+        height: 36px;
+        line-height: 0;
+        padding-top: 10px;
+        text-align: center;
+        cursor: pointer;
+    }
+}

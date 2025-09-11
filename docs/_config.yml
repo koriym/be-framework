@@ -10,6 +10,7 @@ theme: minima
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+  - jekyll-seo-tag
 
 # Minimal, clean navigation
 header_pages:
