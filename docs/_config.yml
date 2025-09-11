@@ -1,7 +1,7 @@
 title: Be Framework
 description: Ontological programming framework where objects become what they are meant to be
-baseurl: ""
-url: "https://koriym.github.io/be-framework"
+baseurl: "/be-framework"
+url: "https://koriym.github.io"
 
 markdown: kramdown
 highlighter: rouge
@@ -13,8 +13,8 @@ plugins:
 
 # Minimal, clean navigation
 header_pages:
-  - manual/README.md
-  - manual/convention/README.md
+  - manual/index.md
+  - manual/convention/index.md
 
 exclude:
   - Gemfile

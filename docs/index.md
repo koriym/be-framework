@@ -11,9 +11,9 @@ Be Framework is an ontological programming framework that transforms how we thin
 
 ## Quick Start
 
-- **[Manual](/manual/)** - Complete learning guide from basics to advanced concepts
-- **[Conventions](/manual/convention/)** - Project organization and coding standards
-- **[Examples](/example/)** - Working code demonstrations
+- **[Manual]({{ '/manual/' | relative_url }})** - Complete learning guide from basics to advanced concepts
+- **[Conventions]({{ '/manual/convention/' | relative_url }})** - Project organization and coding standards
+- **[Examples]({{ '/example/' | relative_url }})** - Working code demonstrations
 
 ## Core Philosophy
 
