@@ -1,4 +1,10 @@
-じ# Be Framework Manual
+---
+layout: page
+title: Manual
+permalink: /manual/
+---
+
+# Be Framework Manual
 
 > Understanding existence through transformation
 

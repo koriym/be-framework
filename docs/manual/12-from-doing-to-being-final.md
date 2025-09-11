@@ -1,4 +1,9 @@
-# 11. From Doing to Being: The Bigger Picture
+---
+layout: page
+title: "12. From Doing to Being: The Bigger Picture"
+---
+
+# 12. From Doing to Being: The Bigger Picture
 
 > *"The real voyage of discovery consists not in seeking new landscapes, but in having new eyes."* — Marcel Proust
 

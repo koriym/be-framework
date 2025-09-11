@@ -1,3 +1,9 @@
+---
+layout: page
+title: Conventions
+permalink: /conventions/
+---
+
 # Be Framework Conventions
 
 > "Consistency enables clarity. Clear conventions create better code."

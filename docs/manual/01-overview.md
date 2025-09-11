@@ -1,3 +1,8 @@
+---
+layout: page
+title: "1. Overview: A Different Way to Think About Code"
+---
+
 # Overview: A Different Way to Think About Code
 
 ## First, Look at This

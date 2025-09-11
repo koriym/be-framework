@@ -1,4 +1,4 @@
-title: Be Framework Documentation
+title: Be Framework
 description: Ontological programming framework where objects become what they are meant to be
 baseurl: ""
 url: "https://koriym.github.io/be-framework"
@@ -11,14 +11,14 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
 
-navigation:
-  - title: Manual
-    url: /manual/
-  - title: Conventions
-    url: /manual/convention/
+# Minimal, clean navigation
+header_pages:
+  - manual/README.md
+  - manual/convention/README.md
 
 exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules
   - vendor
+  - "*.sh"
