@@ -6,12 +6,69 @@
 /* Be Framework Custom Styles */
 /* Inspired by BEAR.Sunday's clean design with Be Framework's ontological philosophy */
 
-/* PHP Syntax Highlighting Fixes */
-.language-php .highlighter-rouge .highlight .err,
-.language-php .highlight .err {
-    color: #6f42c1; /* Purple color for PHP attributes like #[Be] */
-    background-color: transparent;
-    font-weight: normal;
+/* PHP Syntax Highlighting - BEAR.Sunday Quality */
+/* Rouge PHP syntax highlighting - comprehensive rules */
+.highlight .k,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt { color: #0000ff; font-weight: bold; } /* Keywords */
+
+.highlight .nv,
+.highlight .vi,
+.highlight .vg { color: #19177c; } /* Variables */
+
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sx { color: #d14; } /* Strings */
+
+.highlight .nb,
+.highlight .bp { color: #0086b3; } /* Built-ins */
+
+/* Be Framework attributes - critical for #[Be] visibility */
+.highlight .na,
+.highlight .nd { color: #6f42c1; font-weight: bold; background: none !important; } /* Attributes */
+
+.highlight .nf { color: #990000; font-weight: bold; } /* Functions */
+.highlight .nc,
+.highlight .no { color: #445588; font-weight: bold; } /* Classes/constants */
+
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cs { color: #999988; font-style: italic; } /* Comments */
+
+.highlight .m,
+.highlight .mi,
+.highlight .mf,
+.highlight .mh,
+.highlight .mo { color: #009999; } /* Numbers */
+
+.highlight .o,
+.highlight .ow { color: #000000; font-weight: bold; } /* Operators */
+
+/* Remove error styling that might interfere */
+.highlight .err { 
+  color: inherit; 
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* PHP opening/closing tags */
+.highlight .cp { color: #999999; font-weight: bold; }
+
+/* Fix for PHP 8.0 attributes wrongly classified as comments */
+.highlight .c1 {
+  color: #999988;
+  font-style: italic;
 }
 
 /* Enhanced code blocks */
