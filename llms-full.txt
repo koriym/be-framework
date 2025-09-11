@@ -1,0 +1,811 @@
+# Be Framework - Complete AI Understanding Guide
+
+## Project Overview
+
+Be Framework is an **Ontological Programming Framework for PHP** that implements a revolutionary "Being-oriented" paradigm where objects represent immutable states that transform through constructor-driven metamorphosis.
+
+### Core Philosophy: "BE = Be, Everything"
+
+- **Focus on EXISTENCE (BE) rather than ACTIONS (DO)**
+- **Objects don't perform actions - they BECOME what they are meant to be**
+- **Programming as self-transformation and metamorphosis**
+
+## Fundamental Paradigm Shift
+
+### Traditional Programming (Action-Oriented)
+```php
+$user->validate();
+$user->save();
+$user->notify();
+```
+
+### Be Framework (Being-Oriented)
+```php
+$rawData = new UserInput($_POST);
+$validatedUser = new ValidatedUser($rawData);
+$savedUser = new SavedUser($validatedUser);
+```
+
+**Key Difference**: One tells objects what to DO. Be Framework defines what can BE.
+
+## Core Architecture Principles
+
+### 1. Constructor-Only Logic
+- ALL transformation logic occurs in constructors
+- Constructors are "workshops of transformation"
+- No methods for data transformation
+
+### 2. Immutable Being States
+- All properties are `public readonly`
+- Objects represent complete, unchangeable states
+- Once created, objects cannot be modified
+
+### 3. Metamorphosis Pattern
+- Objects undergo complete transformation (like caterpillar → butterfly)
+- Each stage is complete and functional, not partial
+- Transformations are irreversible
+
+### 4. Immanent + Transcendent = New Being
+- **Immanent**: What object already is (`#[Input]` - internal data)
+- **Transcendent**: External capabilities (`#[Inject]` - services from DI container)
+- **New Being**: Result of transformation
+
+## Key Attributes
+
+### #[Be] - Metamorphosis Declaration
+```php
+#[Be(NextClass::class)]
+final class CurrentClass { }
+
+// Multiple destinations (branching)
+#[Be([SuccessClass::class, ErrorClass::class])]
+final class ProcessingClass { }
+```
+
+### #[Input] - Immanent Data
+```php
+public function __construct(
+    #[Input] string $name,    // Data from previous transformation
+    #[Input] int $age         // Internal/essential properties
+) {}
+```
+
+### #[Inject] - Transcendent Services
+```php
+public function __construct(
+    #[Input] string $data,
+    #[Inject] DatabaseService $db,  // External capabilities
+    #[Inject] Logger $logger        // Services from DI container
+) {}
+```
+
+## Wu Wei Philosophy - "Actionless Action"
+
+Be Framework embodies the ancient Chinese principle of Wu Wei (無為):
+- Objects don't "do" anything - they naturally BECOME
+- Like water flowing downhill - transformation emerges from nature, not commands
+- No external orchestration - objects determine their own destiny
+
+## Type-Driven Metamorphosis - The Being Property
+
+Most advanced pattern using union types for self-determination:
+
+```php
+#[Be([Success::class, Failure::class])]
+final class DataProcessor {
+    public readonly Success|Failure $being;
+    
+    public function __construct(
+        #[Input] string $data,
+        DataValidator $validator
+    ) {
+        // Object discovers its own nature
+        $this->being = $validator->isValid($data)
+            ? new Success($data)
+            : new Failure($validator->getErrors());
+    }
+}
+```
+
+**Revolutionary aspect**: Objects carry their own destiny through typed properties, eliminating external control flow.
+
+## Semantic Variables & Validation
+
+Advanced type system for domain-specific validation:
+
+```php
+// Semantic variable definition
+final class Age
+{
+    public function __construct(
+        #[Validate(method: 'validateAge')]
+        public readonly int $value
+    ) {}
+    
+    private function validateAge(int $age): void
+    {
+        if ($age < 0) throw new NegativeAgeException();
+        if ($age > 150) throw new AgeTooHighException();
+    }
+}
+
+// Usage with semantic tags
+#[Teen, Adult, Senior]  // Semantic tags for context
+final class Person
+{
+    public function __construct(
+        public readonly Age $age
+    ) {}
+}
+```
+
+## Metamorphosis Patterns
+
+### 1. Linear Chain (Sequential Evolution)
+```
+A → B → C → D
+```
+Each stage builds upon the previous one.
+
+### 2. Parallel Assembly (Fork-Join)
+```
+    ↗ B ↘
+A →     → D
+    ↘ C ↗
+```
+Multiple parallel transformations converge into final result.
+
+### 3. Type-Driven Branching
+Objects discover their nature and choose their path:
+```php
+$this->being = $condition 
+    ? new SuccessPath($data)
+    : new ErrorPath($errors);
+```
+
+## Semantic Logging System
+
+Comprehensive logging that captures transformation lifecycle:
+
+### Log Contexts
+- **MetamorphosisOpenContext**: When transformation begins
+- **MetamorphosisCloseContext**: When transformation completes
+- **Destinations**: SingleDestination, MultipleDestination, FinalDestination
+
+### Schema Validation
+All logs validate against JSON schemas in `docs/schemas/`:
+- `metamorphosis-open.json`
+- `metamorphosis-close.json`
+
+## Streaming Architecture
+
+Natural infinite processing capability:
+```php
+// Traditional: Memory explosion with large datasets
+$users = $repository->findAll(); // 1 million = OOM
+
+// Be Framework: Constant memory usage
+$repository->processAll($processor); // 1M or 1B - same memory
+```
+
+**Insight**: When objects focus only on self-transformation, streaming emerges naturally.
+
+## Development Workflow
+
+### Code Style Requirements
+**CRITICAL**: Always run after modifications:
+```bash
+composer cs-fix    # Auto-fix code style issues
+```
+
+### Testing Commands
+```bash
+composer test                    # Run all tests
+composer coverage                # Generate coverage report
+composer cs                      # Check coding style
+composer sa                      # Static analysis (phpstan + psalm)
+composer tests                   # Full build: cs + sa + test
+```
+
+### Debugging Tools
+```bash
+./vendor/bin/xdebug-debug --context="Debug context" \
+    --break="file.php:lineNumber" \
+    --exit-on-break \
+    --steps=10 \
+    --json \
+    -- php vendor/bin/phpunit --filter testMethod
+```
+
+## Key Directories Structure
+
+```
+src/
+├── Attribute/          # Framework attributes (#[Be], #[Input], #[Inject])
+├── SemanticLog/        # Semantic logging infrastructure
+├── SemanticVariable/   # Advanced validation system
+├── Becoming.php        # Main metamorphosis engine
+├── Being.php           # Core transformation logic
+├── BecomingType.php    # Type compatibility checking
+└── Module/BeModule.php # Dependency injection configuration
+
+tests/
+├── Fake/               # Test fixtures and mock objects
+└── SemanticLog/        # Semantic logging tests
+
+concept/docs/
+├── manual/             # Complete framework philosophy and usage
+├── papers/             # Academic papers on ontological programming
+└── reference/          # Additional documentation
+
+example/
+└── hello-world.php     # Working example demonstrating framework
+```
+
+## Core Classes Deep Dive
+
+### Becoming.php - The Metamorphosis Engine
+```php
+final class Becoming implements BecomingInterface
+{
+    public function __invoke(object $input): object
+    {
+        $current = $input;
+        
+        // Continuous becoming until final form
+        while ($nextForm = $this->being->willBe($current)) {
+            $current = $this->being->metamorphose($current, $nextForm);
+        }
+        
+        return $current;
+    }
+}
+```
+
+### BecomingType.php - Type Compatibility System
+Key methods:
+- `match()`: Checks if object properties can satisfy constructor parameters
+- `getMismatchReasons()`: Provides detailed error information
+- Handles Union types (`int|string`), Intersection types (`A&B`), and complex object compatibility
+- **IMPORTANT**: Skips `#[Inject]` parameters during type matching (they're resolved by DI container)
+
+### BecomingArguments.php - Constructor Resolution
+Resolves constructor arguments by mapping object properties to parameter types.
+
+## Philosophical Foundations
+
+### Ontological Programming
+- Focus on "What can exist?" rather than "What should happen?"
+- Define forms of existence, let objects naturally become those forms
+- Influenced by phenomenology and existential philosophy
+
+### Subject-Object Unity
+Objects are their own subjects - they determine their own transformation rather than being commanded by external controllers.
+
+### Temporal Being
+Objects exist in time with:
+- Memory of past (Immanent properties)
+- Present being (current state)
+- Potential futures (union type being property)
+
+## Design Patterns Unique to Be Framework
+
+### 1. Metamorphosis Pattern
+Complete transformation at each stage, unlike incremental middleware patterns.
+
+### 2. Constructor Workshop Pattern
+Constructors as complete transformation workshops using tools (injected services) to transform materials (input data).
+
+### 3. Self-Determining Object Pattern
+Objects use union types to discover and declare their own nature.
+
+### 4. Transparent Type Pattern
+All dependencies explicitly declared in constructor signatures - no hidden magic.
+
+## Testing Philosophy
+
+### Type-Driven Testing
+```php
+// Test WHAT EXISTS, not what happens
+$this->assertInstanceOf(ExpectedType::class, $result->being);
+```
+
+### Semantic Testing
+Test semantic variables and validation rules:
+```php
+$this->expectException(InvalidAgeException::class);
+new Age(-5); // Should fail validation
+```
+
+## Real-World Example Patterns
+
+### User Registration Flow
+```php
+// Linear chain with type-driven branching
+RegistrationInput 
+→ ValidatedRegistration (being: NewUser|ConflictingUser)
+→ UnverifiedUser → VerificationEmailSent
+  OR UserConflict → JsonResponse
+```
+
+### Dashboard Assembly (Parallel)
+```php
+// Fork-join pattern
+DashboardRequest 
+→ [UserProfileFetcher, NotificationsFetcher, AnalyticsFetcher]
+→ DashboardAssembler
+```
+
+## Error Handling Philosophy
+
+### Semantic Variable Exceptions - Ontological Validation
+
+Be Framework's error handling embodies its existential philosophy - **invalid beings cannot exist**:
+
+```php
+// Application Entry Point (bin/app.php)
+$input = new HelloInput('World');
+try {
+    $hello = $becoming($input);
+    assert($hello instanceof Being\Hello);
+    echo $hello->greeting . PHP_EOL;
+} catch (SemanticVariableException $e) {
+    // Multilingual error handling
+    $errorMessage = $e->getErrors()->getMessages('ja')[0];
+    echo $errorMessage . PHP_EOL;
+}
+```
+
+#### Semantic Validation in Action
+
+**Name Semantic Variable** (`src/Semantic/Name.php`):
+```php
+final class Name
+{
+    #[Validate] 
+    public function validate(string $name): void
+    {
+        if (empty(trim($name))) {
+            throw new EmptyNameException();
+        }
+        
+        // Example of format validation
+        if (!preg_match('/^[a-zA-Z\s]+$/', $name)) {
+            throw new InvalidNameFormatException($name);
+        }
+    }
+}
+```
+
+**Localized Exception Messages** (`src/Exception/EmptyNameException.php`):
+```php
+#[Message([
+    'en' => 'Name cannot be empty.',
+    'ja' => '名前は空にできません。'
+])]
+final class EmptyNameException extends DomainException
+{
+}
+```
+
+#### Validation During Metamorphosis
+
+**Validation occurs during being construction**:
+```php
+final readonly class FormalGreeting
+{
+    public function __construct(
+        #[Input] #[English] public string $name,
+        #[Input] public FormalStyle $being
+    ) {
+        // Semantic validation during metamorphosis
+        $validator = new SemanticValidator('Be\\App\\Semantic');
+        $errors = $validator->validate('name', $name);
+        if ($errors->hasErrors()) {
+            throw new SemanticVariableException($errors);
+        }
+        
+        $this->greeting = $being->formalGreeting($name);
+        $this->businessCard = $being->formalBusinessCard($name);
+    }
+}
+```
+
+#### Key Features of Semantic Exceptions
+
+1. **Ontological Validation**: Ensures only valid beings can exist
+2. **Multilingual Messages**: `#[Message]` attribute supports internationalization
+3. **Domain-Specific**: Each semantic variable has specific validation rules
+4. **Constructor-Time**: Validation happens at moment of being creation
+5. **Fail-Fast**: Invalid transformations prevented at source
+
+**Philosophy**: "If a being cannot be validly constructed, it should not exist at all."
+
+### Type Mismatch Diagnostics
+`BecomingType::getMismatchReasons()` provides detailed information about why transformations fail.
+
+## AI Era Implications
+
+Be Framework suggests that while AI can generate implementations, humans retain the unique role of defining **what should exist** - the ontological design decisions that shape digital reality.
+
+## Code Style Guidelines
+
+### Early Return Pattern
+**IMPORTANT**: Avoid `else` statements - use early returns:
+```php
+// ✅ Preferred
+public function process(string $input): string
+{
+    if ($condition) {
+        return $this->handleCondition($input);
+    }
+    
+    return $this->handleDefault($input);
+}
+
+// ❌ Avoid
+public function process(string $input): string
+{
+    if ($condition) {
+        return $this->handleCondition($input);
+    } else {
+        return $this->handleDefault($input);
+    }
+}
+```
+
+## Package Structure & Installation
+
+Framework is structured as installable Composer package:
+- `composer.json` defines dependencies and autoloading
+- PSR-4 autoloading: `"Be\\Framework\\": "src/"`
+- Development dependencies include PHPUnit, PHPStan, Psalm
+- Code quality tools: phpcs, phpmd for maintaining standards
+
+## Version & Status
+
+Current version: **v0.x** (in development)
+- Production-ready architecture
+- Comprehensive test suite
+- Full type safety with static analysis
+- Complete documentation and examples
+
+## Comparison to Other Frameworks
+
+### DCI (Data-Context-Interaction) Pattern Comparison
+
+**Be Framework shows remarkable similarity to DCI pattern but with key philosophical differences:**
+
+#### DCI Pattern
+```php
+// データオブジェクト（Data）
+class Account { public $balance; }
+
+// コンテキスト（Context）によってロール（役割）が決まる
+class TransferContext {
+    public function transfer($source, $destination, $amount) {
+        $source->withdraw($amount);  // 送金者ロール
+        $destination->deposit($amount);  // 受取者ロール
+    }
+}
+```
+
+#### Be Framework - Context as Ontological Capability
+```php
+// コンテキスト（style）に基づいて異なる存在能力を獲得
+#[Be([FormalGreeting::class, CasualGreeting::class])]
+final readonly class BeGreeting
+{
+    public CasualStyle|FormalStyle $being;  // ← コンテキストによる能力決定
+
+    public function __construct(
+        #[Input] string $name,
+        #[Input] string $style    // ← コンテキスト
+    ) {
+        // コンテキストに応じて異なる存在様式を獲得
+        $this->being = $style == 'formal' ? new FormalStyle() : new CasualStyle();
+    }
+}
+```
+
+#### Key Differences
+
+| Aspect | DCI | Be Framework |
+|--------|-----|--------------|
+| **Role Assignment** | Runtime, dynamic method injection | Constructor-time, immutable capability acquisition |
+| **Temporal Behavior** | Temporary role assignment/removal | Permanent being state determination |
+| **Object Identity** | Same object, different behaviors | Different objects for different contexts |
+| **Mutability** | Mutable roles | Immutable being states |
+| **Philosophy** | Objects gain behaviors contextually | Objects discover their essential nature |
+
+**Be Framework = "Immutable DCI"** - Context determines being state permanently at construction time.
+
+### Traditional Framework Comparison
+
+Unlike traditional frameworks that focus on:
+- **Symfony/Laravel**: Action-oriented controllers and services
+- **Functional frameworks**: Pure functions and immutability
+- **Event-driven**: Reactive programming patterns
+- **DCI**: Runtime contextual role assignment
+
+Be Framework focuses on:
+- **Existential programming**: What can exist?
+- **Natural transformation**: Objects becoming what they are meant to be
+- **Constructor-centric**: All logic in moment of creation
+- **Type-driven flow**: Union types eliminate conditional complexity
+- **Immutable contextual determination**: Context shapes permanent being states
+
+## Key Insights for AI Understanding
+
+1. **Not MVC**: No controllers, models, or views - only immutable being states
+2. **Not CRUD**: No create, read, update, delete - only metamorphosis
+3. **Not API-first**: Being-first - existence precedes interface
+4. **Not dependency injection as service location**: DI as existential enablement
+5. **Not object-oriented in traditional sense**: Object-becoming oriented
+
+## Practical Development Tips
+
+1. **Think in transformations**: What does this data become?
+2. **Design by types**: Union types express all possibilities
+3. **Constructor as workshop**: Gather tools, transform materials, emerge complete
+4. **Embrace immutability**: Each stage is final and complete
+5. **Trust the type system**: Types are truth, not hope
+
+This framework represents a paradigm shift from programming as instruction-giving to programming as existence-definition, where developers become definers of digital possibilities rather than controllers of computational processes.
+
+## Application Skeleton Structure
+
+Be Framework provides a complete application skeleton (`be-framework/app`) that demonstrates proper project organization:
+
+### Directory Structure (Advanced Greeting Demo)
+```
+~/git/app/
+├── bin/app.php                         # Application entry point
+├── composer.json                       # Package configuration
+└── src/
+    ├── Being/                          # Metamorphosis states
+    │   ├── BeGreeting.php              # Self-determining hub (CasualStyle|FormalStyle)
+    │   ├── CasualGreeting.php          # Final casual being state
+    │   └── FormalGreeting.php          # Final formal being state
+    ├── Input/                          # Initial input states
+    │   └── GreetingInput.php           # Raw input (name + style)
+    ├── Reason/                         # Ontological capability ontologies
+    │   ├── CasualStyle.php             # Casual interaction ontology
+    │   └── FormalStyle.php             # Formal business ontology
+    ├── Semantic/                       # Domain validation rules
+    │   ├── Name.php                    # Name validation
+    │   ├── Style.php                   # Style validation ('formal'|'casual')
+    │   └── Being.php                   # Being validation
+    ├── Exception/                      # Domain exceptions
+    │   ├── EmptyNameException.php      # Empty name error
+    │   ├── InvalidNameFormatException.php  # Name format error
+    │   └── StyleException.php          # Invalid style error
+    └── Tag/                            # Semantic tags
+        └── English.php                 # English language tag
+```
+
+### Metamorphosis Flow Diagram
+```
+GreetingInput('Alice', 'casual')
+           ↓
+    BeGreeting (self-determines)
+    being: CasualStyle ←─────────── Reason/CasualStyle.php
+           ↓
+  CasualGreeting (final)
+    greeting: "Hey Alice! What's up?"
+    emoji: "🎉"
+```
+
+### Advanced Metamorphosis Flow (Greeting Demo)
+
+The application now demonstrates sophisticated **Type-Driven Metamorphosis** with **Being Property** pattern:
+
+```php
+// 1. Entry Point (bin/app.php)
+$becoming = new Becoming(new Injector(), __NAMESPACE__ . '\\Semantic');
+
+// 2. Initialize with Style Context
+$input = new GreetingInput('Alice', 'casual');
+
+// 3. Complex Metamorphosis Chain
+$greeting = $becoming($input); 
+// GreetingInput → BeGreeting (discovers: CasualStyle|FormalStyle) → CasualGreeting
+
+// 4. Final Result with Rich Context
+echo json_encode($greeting, JSON_PRETTY_PRINT);
+/* Output:
+{
+    "name": "Alice",
+    "being": { ... CasualStyle instance },
+    "greeting": "Hey Alice! What's up?",
+    "emoji": "🎉"
+}
+*/
+```
+
+### Metamorphosis Chain Analysis
+
+1. **GreetingInput**: Pure input data (`name` + `style`)
+2. **BeGreeting**: Self-determining object with `CasualStyle|FormalStyle $being` property
+3. **CasualGreeting/FormalGreeting**: Final being states that use Reason/ ontologies
+
+### Key Application Patterns
+
+#### 1. Input Layer (`src/Input/`)
+Pure data containers that declare their metamorphosis destination:
+
+```php
+#[Be([Hello::class])]
+final readonly class HelloInput
+{
+    public function __construct(
+        public string $name
+    ) {}
+}
+```
+
+#### 2. Being Layer (`src/Being/`) - Multiple Sophisticated States
+
+**BeGreeting - Self-Determining Metamorphosis Hub**:
+```php
+#[Be([FormalGreeting::class, CasualGreeting::class])]
+final readonly class BeGreeting
+{
+    public CasualStyle|FormalStyle $being;
+
+    public function __construct(
+        #[Input] #[English] public string $name,
+        #[Input] string $style
+    ) {
+        // Object discovers its own nature through union types
+        $this->being = $style == 'formal' ? new FormalStyle() : new CasualStyle();
+    }
+}
+```
+
+**CasualGreeting - Final Being Using Ontological Capabilities**:
+```php
+final readonly class CasualGreeting
+{
+    public string $greeting;
+    public string $emoji;
+
+    public function __construct(
+        #[Input] public string $name,
+        #[Input] public CasualStyle $being    // Reason/ ontology as input!
+    ) {
+        $this->greeting = $being->casualGreeting($name);
+        $this->emoji = $being->casualEmoji();
+    }
+}
+```
+
+**Key Innovation**: The `CasualStyle` from Reason/ becomes `#[Input]` for the final Being - **Ontological capabilities flow through the metamorphosis chain**.
+
+#### 3. Semantic Validation (`src/Semantic/`)
+Domain-specific validation rules:
+
+```php
+final class Name
+{
+    #[Validate] 
+    public function validate(string $name): void
+    {
+        if (empty(trim($name))) {
+            throw new EmptyNameException();
+        }
+    }
+}
+```
+
+#### 4. Localized Exceptions (`src/Exception/`)
+Domain exceptions with multilingual messages:
+
+```php
+#[Message([
+    'en' => 'Name cannot be empty.',
+    'ja' => '名前は空にできません。'
+])]
+final class EmptyNameException extends DomainException
+{
+}
+```
+
+#### 5. Injectable Services (`src/Reason/`) - Ontological Capabilities
+**Critical Insight**: Reason/ contains **ontological services** that provide domain-specific capabilities - not just generic services, but **ways of being and acting** in specific contexts.
+
+```php
+/**
+ * Casual communication style ontology defining informal interaction patterns
+ */
+final readonly class CasualStyle
+{
+    public function casualGreeting(string $name): string
+    {
+        return "Hey {$name}! What's up?";
+    }
+
+    public function casualEmoji(): string
+    {
+        return ['🎉', '😎', '🚀', '✨'][array_rand(['🎉', '😎', '🚀', '✨'])];
+    }
+}
+
+/**
+ * Formal communication style ontology defining business interaction patterns
+ */
+final readonly class FormalStyle  
+{
+    public function formalGreeting(string $name): string
+    {
+        return "Good day, Mr./Ms. {$name}. How may I assist you today?";
+    }
+
+    public function formalBusinessCard(string $name): string
+    {
+        return "┌─────────────────────────┐\n" .
+               "│ 📋 BUSINESS CARD        │\n" .
+               "│ Mr./Ms. {$name}         │\n" .
+               "│ Status: Professional    │\n" .
+               "└─────────────────────────┘";
+    }
+}
+```
+
+**Reason/ Philosophy**: These are not mere "utility classes" - they are **ontological style definitions** that encapsulate **ways of existing** in different social/business contexts. They provide the "reasons" (capabilities/modes) for being in specific ways.
+
+#### 6. DI Configuration (`src/Module/`)
+Ray.Di module configuration:
+
+```php
+final class AppModule extends AbstractModule
+{
+    protected function configure(): void
+    {
+        $this->bind(Greeting::class);
+    }
+}
+```
+
+### Application Skeleton Features
+
+1. **Complete Project Structure**: Ready-to-use directory organization
+2. **Working Example**: Functional Hello World application
+3. **Error Handling**: Semantic variable validation with localized messages
+4. **DI Integration**: Proper Ray.Di module configuration
+5. **Namespace Convention**: `Be\App` namespace following PSR-4
+6. **Entry Point**: Command-line application runner in `bin/app.php`
+
+### Development Workflow
+
+```bash
+# Install dependencies
+cd ~/git/app
+composer install
+
+# Run application
+php bin/app.php
+# Output: Hello World
+
+# Test error handling (empty name)
+# Modify app.php to use empty string, get localized error message
+```
+
+### Application Extension Patterns
+
+To extend the skeleton application:
+
+1. **Add Input Classes**: Create new input states in `src/Input/`
+2. **Define Beings**: Add transformation states in `src/Being/`
+3. **Implement Validation**: Add semantic variables in `src/Semantic/`
+4. **Create Services**: Add injectable services in `src/Reason/`
+5. **Configure DI**: Update `AppModule` for new dependencies
+6. **Add Exceptions**: Create domain exceptions with localized messages
+
+### Skeleton vs Framework Relationship
+
+- **Framework** (`be-framework/be`): Core metamorphosis engine and infrastructure
+- **Skeleton** (`be-framework/app`): Application template and example implementation
+- **Dependency**: Skeleton depends on framework (`"be-framework/be": "0.x-dev"`)
+
+The skeleton demonstrates how to structure real-world Be Framework applications following established conventions and patterns.
