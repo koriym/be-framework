@@ -1,3 +1,8 @@
+---
+layout: page
+title: "7. Type-Driven Metamorphosis"
+---
+
 # 6. Type-Driven Metamorphosis
 
 > "The object knows its own nature. We merely create the conditions for its becoming."
@@ -138,6 +143,6 @@ Objects **self-determine** their destiny based on their essential nature, not ex
 
 ---
 
-**Next**: Learn about [Reason Layer: Ontological Capabilities](07-reason-layer.md) where contextual capabilities shape transformation.
+**Next**: Learn about [Reason Layer: Ontological Capabilities](08-reason-layer.md) where contextual capabilities shape transformation.
 
 *"We don't decide what objects become—we discover what they already are, in their deepest nature."*

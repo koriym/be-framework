@@ -1,3 +1,8 @@
+---
+layout: page
+title: "9. Error Handling"
+---
+
 # 8. Error Handling & Validation
 
 > "What cannot be must be understood. Failure preserves meaning through clear language."
@@ -185,6 +190,6 @@ Errors are not obstacles—they are **valid beings** that guide users toward suc
 
 ---
 
-**Next**: Learn about [The Philosophy Behind](09-philosophy-behind.md) to understand the deeper principles.
+**Next**: Learn about [The Philosophy Behind](10-philosophy-behind.md) to understand the deeper principles.
 
 *"Semantic exceptions don't just report failure—they preserve the meaning of what cannot exist."*

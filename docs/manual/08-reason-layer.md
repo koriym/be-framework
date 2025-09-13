@@ -1,3 +1,8 @@
+---
+layout: page
+title: "8. Reason Layer"
+---
+
 # 7. Reason Layer: Ontological Capabilities
 
 > "Context is not decoration—it is the very condition of existence."
@@ -177,6 +182,6 @@ Objects don't just receive services—they receive **ways of being** appropriate
 
 ---
 
-**Next**: Learn about [Error Handling & Validation](08-error-handling.md) where semantic exceptions preserve meaning.
+**Next**: Learn about [Error Handling & Validation](09-error-handling.md) where semantic exceptions preserve meaning.
 
 *"The Reason Layer is where the world's capabilities meet the object's nature—as contextual condition for meaningful becoming."*

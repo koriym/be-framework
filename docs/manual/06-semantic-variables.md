@@ -1,3 +1,8 @@
+---
+layout: page
+title: "6. Semantic Variables"
+---
+
 # 5. Semantic Variables
 
 > "What should exist must be valid. What cannot exist will never be born."
@@ -136,6 +141,6 @@ function processOrder(ProductCode $product, PaymentAmount $amount, CustomerAge $
 
 ---
 
-**Next**: Learn about [Type-Driven Metamorphosis](06-type-driven-metamorphosis.md) where objects discover their own nature.
+**Next**: Learn about [Type-Driven Metamorphosis](07-type-driven-metamorphosis.md) where objects discover their own nature.
 
 *"Semantic Variables don't just validate data—they ensure only meaningful beings can exist."*
