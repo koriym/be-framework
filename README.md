@@ -1,55 +1,36 @@
-# Be Framework v0
+# Be Framework
+
+> "Be, Don't Do" - A paradigm where objects represent states of being, not collections of behaviors.
 
 **The Ontological Programming Framework for PHP**
 
 Be Framework implements Ontological Programming - focusing on *what things are* rather than *what they do*. Objects represent immutable states that transform through constructor-driven metamorphosis.
 
-## Core Concepts
+## Key Features
 
-- **Pure Being States**: Immutable objects with `public readonly` properties
-- **Constructor-Only Logic**: All transformation logic in constructors
-- **Be Attributes**: Declare transformation destinations
-- **Input / Inject**: Separate internal vs external dependencies
+* **New Paradigm** - Shift from "what to do" to "what to be"
+* **Semantic Variables** - Variable names carry meaning and constraints
+* **AI Native** - Define meaning and constraints, let AI optimize implementation
+* **No Invalid States** - Objects can't exist in broken states
+* **Temporal Existence** - Time and domain are inseparable; objects exist in time
+* **Natural Testing** - Each state is independently verifiable
 
-## Quick Start
+## Documentation
 
-```php
-#[Be(ProcessedOrder::class)]
-final class OrderInput
-{
-    public function __construct(
-        public readonly string $productId,
-        public readonly int $quantity
-    ) {}
-}
+* [Full Documentation](https://be-framework.github.io/)
 
-final class ProcessedOrder
-{
-    public readonly float $total;
-    public readonly string $status;
-    
-    public function __construct(
-        #[Input] string $productId,      // Immanent
-        #[Input] int $quantity,          // Immanent
-        #[Inject] PriceCalculator $calc  // Transcendent
-    ) {
-        $this->total = $calc->calculate($productId, $quantity);
-        $this->status = 'processed';
-    }
-}
+## Demo
 
-$becoming = new Becoming($injector);
-$result = $becoming(new OrderInput('PROD-123', 2));
-```
-
-## Development Commands
+Run the hello-world example to see Be Framework in action:
 
 ```bash
-composer test                   # Run tests
-composer coverage               # Test coverage report
-composer cs-fix                 # Fix code style
-composer sa                     # Static analysis
-composer tests                  # Full quality checks
-./vendor/bin/xdebug-debug       # Forward trace debugging
-./vendor/bin/xdebug-profile     # Performance profiling
+php example/hello-world.php
 ```
+
+This demonstrates:
+
+- Constructor-driven metamorphosis
+- Type-driven branching (formal vs casual styles)
+- Semantic validation with meaningful error messages
+- Automatic transformation through `#[Be]` attributes
+
