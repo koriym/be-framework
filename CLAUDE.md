@@ -4,31 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Be Framework v0 - Production implementation of Ontological Programming paradigm where data transformations occur through constructor-driven metamorphosis with comprehensive semantic logging.
+Be Framework v0 - The Ontological Programming Framework for PHP implementing "Be, Don't Do" philosophy. Objects represent immutable states that undergo constructor-driven metamorphosis through `#[Be]` attributes.
+
+**Documentation**: https://be-framework.github.io/
 
 ## Core Architecture
 
 ### Metamorphosis Engine
-The `Becoming` class (`src/Becoming.php`) is the central engine that processes objects through continuous transformations:
-- Takes an input object and follows `#[Be]` attributes to determine transformation paths
-- Supports linear transformations (`#[Be(NextClass::class)]`) and branching (`#[Be([ClassA::class, ClassB::class])]`)
-- All transformation logic resides in constructors - no methods for data transformation
-- Properties are `public readonly` ensuring immutability
+The `Becoming` class (`src/Becoming.php`) processes objects through continuous transformations:
+- Follows `#[Be]` attributes to determine transformation paths
+- Linear: `#[Be(NextClass::class)]` or Branching: `#[Be([ClassA::class, ClassB::class])]`
+- All business logic in constructors - no methods for data transformation
+- Properties must be `public readonly` for immutability
+
+### Constructor Argument Resolution
+- **`#[Input]`**: Immanent data from source object properties
+- **`#[Inject]`**: Transcendent dependencies from DI container (Ray.Di)
+- Arguments resolved by `BecomingArguments` class during metamorphosis
 
 ### Key Components
-- **`src/Attribute/Be.php`**: Declares transformation destinations for objects
-- **`src/BecomingArguments.php`**: Resolves constructor arguments during metamorphosis
-- **`src/Being.php`**: Utility to extract next transformation class from attributes
-- **`src/BecomingType.php`**: Type matching and branching logic for transformations
-- **`src/SemanticLog/`**: Comprehensive logging infrastructure capturing transformation lifecycle
-- **`src/SemanticVariable/`**: Semantic validation system for constructor parameters
-
-### Semantic Logging System
-The framework includes sophisticated semantic logging that tracks:
-- **Open Context**: Logs when a transformation begins (immanent/transcendent sources)
-- **Close Context**: Logs transformation completion with resulting properties
-- **Destinations**: SingleDestination, MultipleDestination, FinalDestination, or DestinationNotFound
-- Schema validation via `docs/schemas/` JSON schemas
+- **`src/Attribute/`**: Framework attributes (`Be`, `Validate`, `Message`, `SemanticTag`)
+- **`src/BecomingArguments.php`**: Constructor argument resolution
+- **`src/BecomingType.php`**: Type matching for branching transformations
+- **`src/SemanticLog/`**: Transformation lifecycle logging
+- **`src/SemanticVariable/`**: Semantic validation for constructor parameters
 
 ## Development Commands
 
@@ -36,14 +35,12 @@ The framework includes sophisticated semantic logging that tracks:
 # Testing
 composer test                    # Run all unit tests
 php vendor/bin/phpunit --filter testMethodName   # Run specific test method
-php vendor/bin/phpunit path/to/TestFile.php      # Run specific test file
+php vendor/bin/phpunit tests/TestFile.php        # Run specific test file
 
-# Code Quality
-composer cs                      # Check coding style (phpcs)
-composer cs-fix                  # Auto-fix coding style issues
+# Code Quality (ALWAYS run after modifying PHP files)
+composer cs-fix                  # Auto-fix coding style issues (Doctrine standards)
+composer cs                      # Check coding style without fixing
 composer sa                      # Run static analysis (phpstan + psalm)
-composer phpstan                 # Run PHPStan only
-composer psalm                   # Run Psalm only
 composer phpmd                   # Analyze PHP code for potential issues
 
 # Coverage
@@ -62,165 +59,92 @@ composer crc                     # Run composer require checker
 composer metrics                 # Generate code metrics report
 ```
 
-## Forward Trace Debugging
+## Debugging Tools
 
-### Core Workflow
-1. **Always verify the command works first**:
-   ```bash
-   php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
-   ```
-
-2. **Then add xdebug-debug for tracing**:
-   ```bash
-   ./vendor/bin/xdebug-debug --context="Debug context" \
-     --break="file.php:lineNumber" \
-     --exit-on-break \
-     --steps=10 \
-     --json \
-     -- php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
-   ```
-
-### Best Practices
-- Use `--steps=10-20` for optimal signal-to-noise ratio
-- Target specific lines with breakpoints
-- Focus on `"recording_type": "diff"` entries in output
-- Use PHPUnit's `--filter` flag (not `::method` syntax)
-
-## Testing Patterns
-
-### Running Tests
+### Forward Trace Debugging (xdebug-debug)
 ```bash
-# Run all tests
-composer test
+# Always verify test works first
+php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
 
-# Run specific test class
+# Then add tracing
+./vendor/bin/xdebug-debug --context="Debug context" \
+  --break="file.php:lineNumber" \
+  --exit-on-break \
+  --steps=10 \
+  --json \
+  -- php vendor/bin/phpunit --filter testMethodName tests/TestFile.php
+```
+
+### Performance Profiling
+```bash
+./vendor/bin/xdebug-profile -- php vendor/bin/phpunit --filter testMethodName
+```
+
+## Testing
+
+```bash
+# Run specific test method (use --filter, not ::method)
+php vendor/bin/phpunit --filter testMethodName
+
+# Run specific test file
 php vendor/bin/phpunit tests/SemanticLog/LoggerTest.php
-
-# Run specific test method
-php vendor/bin/phpunit --filter testMultipleDestination
 
 # Run tests matching pattern
 php vendor/bin/phpunit --filter "Semantic"
 ```
 
-### Test Organization
-- Unit tests in `tests/` mirror `src/` structure
-- Test fixtures in `tests/Fake/` for mock objects
-- Each test class tests a single production class
-- Schema compliance tests validate semantic log output
+- Test fixtures in `tests/Fake/` and `tests/FakeApp/`
+- Schema validation tests verify semantic log output against `docs/schemas/*.json`
 
-## Code Style Requirements
+## Creating Transformation Classes
 
-**CRITICAL**: After modifying PHP files, always run:
-```bash
-composer cs-fix
-```
-
-This ensures consistent code formatting following Doctrine Coding Standards.
-
-## Key Directories
-
-```
-src/
-├── Attribute/           # Framework attributes (#[Be], #[Validate], #[Message], #[SemanticTag])
-├── SemanticLog/        # Semantic logging infrastructure
-│   └── Context/        # Log context objects (destinations, metamorphosis)
-├── SemanticVariable/   # Semantic validation system
-├── Exception/          # Framework exceptions
-├── Becoming.php        # Core metamorphosis engine
-├── BecomingArguments.php # Constructor argument resolution
-├── Being.php           # Attribute extraction utility
-├── BecomingType.php    # Type matching and branching logic
-└── Types.php           # Type utilities
-
-tests/
-├── Fake/               # Test fixtures and mock objects
-├── FakeApp/            # Application test examples
-├── SemanticLog/        # Semantic logging tests
-└── SemanticVariable/   # Semantic validation tests
-
-docs/
-└── schemas/            # JSON schemas for log validation
-```
-
-## Common Development Tasks
-
-### Adding a New Transformation Class
-1. Create class with `#[Be]` attribute declaring next transformation
-2. Use `public readonly` properties for immutable state
+1. Declare transformation with `#[Be]` attribute
+2. Use `public readonly` properties only
 3. Put all logic in constructor
-4. Add corresponding test in `tests/`
+4. Use `#[Input]` for data from source object
+5. Use `#[Inject]` for external dependencies
 
-### Debugging Failed Tests
-1. Run the specific failing test:
-   ```bash
-   php vendor/bin/phpunit --filter testMethodName
-   ```
-2. Use xdebug-debug for detailed trace if needed
-3. Check semantic log output matches expected schema
+```php
+#[Be(ProcessedData::class)]
+final class InputData
+{
+    public function __construct(
+        public readonly string $value
+    ) {}
+}
 
-### Fixing Code Style Issues
-```bash
-composer cs-fix     # Auto-fix issues
-composer cs         # Check without fixing
+final class ProcessedData
+{
+    public readonly string $result;
+
+    public function __construct(
+        #[Input] string $value,           // From InputData
+        #[Inject] ProcessorService $proc  // From DI container
+    ) {
+        $this->result = $proc->process($value);
+    }
+}
 ```
-
-## Important Notes
-
-- The framework follows "Be, Don't Do" philosophy - objects represent states, not behaviors
-- All business logic happens in constructors during metamorphosis
-- Properties must be `public readonly` for immutability
-- Transformations are irreversible and declarative via `#[Be]` attributes
-- Semantic logging captures complete transformation lifecycle for observability
 
 ## Code Style Guidelines
 
-### Control Flow - Early Return Pattern
-**IMPORTANT**: Avoid `else` statements - use early returns for cleaner, more readable code.
+### Early Return Pattern (No Else)
+Avoid `else` statements - use early returns:
 
-**❌ Avoid:**
 ```php
-public function process(string $input): string
-{
-    if ($condition) {
-        return $this->handleCondition($input);
-    } else {
-        return $this->handleDefault($input);
-    }
+// ✅ Good
+if ($condition) {
+    return $this->handleCondition();
+}
+return $this->handleDefault();
+
+// ❌ Avoid
+if ($condition) {
+    return $this->handleCondition();
+} else {
+    return $this->handleDefault();
 }
 ```
 
-**✅ Prefer:**
-```php
-public function process(string $input): string
-{
-    if ($condition) {
-        return $this->handleCondition($input);
-    }
-    
-    return $this->handleDefault($input);
-}
-```
-
-**Multiple conditions:**
-```php
-public function validate(array $data): bool
-{
-    if (empty($data)) {
-        return false;
-    }
-    
-    if (! $this->hasRequiredFields($data)) {
-        return false;
-    }
-    
-    return $this->performValidation($data);
-}
-```
-
-**Benefits of Early Returns:**
-- Reduces nesting and cognitive load
-- Makes error conditions explicit
-- Eliminates else-related branching complexity
-- Improves readability and maintainability
-- Follows "fail fast" principle
+### After Modifying PHP Files
+**ALWAYS** run: `composer cs-fix`
