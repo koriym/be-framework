@@ -19,6 +19,11 @@ Be Framework implements Ontological Programming - focusing on *what things are* 
 
 * [Full Documentation](https://be-framework.github.io/)
 
+## Quick Learning
+
+* [Video](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=a44a5867-1a9e-49ff-b78e-cff94447106a)
+* [Podcast](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=3d724e12-8f96-414a-907d-16c72fc8930f)
+
 ## Demo
 
 Run the hello-world example to see Be Framework in action:
