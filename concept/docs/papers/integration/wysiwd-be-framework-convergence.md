@@ -370,7 +370,7 @@ As we stand at this convergence, we invite both communities to see not competiti
 ## Call for Collaboration
 
 Interested in exploring these connections further? 
-- WYSIWD community: [Link to WYSIWD resources]
+- WYSIWD community: [WYSIWD resources](https://arxiv.org/html/2508.14511v2)
 - Be Framework community: https://github.com/beframework
 - Joint discussion: [Proposed forum/channel for cross-pollination]
 
