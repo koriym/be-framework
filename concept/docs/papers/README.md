@@ -50,6 +50,7 @@ This collection presents the academic and theoretical foundations of Be Framewor
 
 ### External System Integration
 - **[ALPS and Be Framework: Bidirectional Generation](integration/alps-be-bidirectional-generation.md)** - Protocol-agnostic design and code generation
+- **[Understanding WYSIWD from Be Framework Perspective](integration/wysiwd-be-framework-convergence.md)** - Convergence of orchestration and metamorphosis paradigms
 
 ---
 

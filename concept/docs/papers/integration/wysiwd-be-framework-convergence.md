@@ -158,13 +158,13 @@ Be Log: Password validation failed - needs special char (WHY)
 Together: Complete causality - mechanical + intentional
 ```
 
-This dual perspective provides unparalleled debugging capability. WYSIWD tells you the exact execution path, Be Framework tells you the semantic reason. Together, they eliminate the guesswork that plagues traditional debugging.
+This dual perspective offers powerful debugging insights. WYSIWD tells you the exact execution path, Be Framework tells you the semantic reason. Together, they significantly reduce the guesswork that plagues traditional debugging.
 
 ## 4. Solving the Same Problem
 
 ### 4.1 The Complexity Wall
 
-Both frameworks address what WYSIWD aptly terms "vibe coding"—the practice where developers iteratively prompt AI for code, quickly hitting a wall where each addition breaks existing features. The paper provides striking evidence: in analyzing the SWE-Bench benchmark, researchers found that when accounting for test accuracy and training data contamination, LLM success rates dropped from apparent 30-40% to less than 5% on real-world tasks [1].
+Both frameworks address what WYSIWD aptly terms "vibe coding"—the practice where developers iteratively prompt AI for code, quickly hitting a wall where each addition breaks existing features. The paper references research on the SWE-Bench benchmark showing that when accounting for test accuracy and training data contamination, many apparent LLM successes were due to solution code appearing in problem descriptions or incorrect test evaluations [5].
 
 Traditional systems fail because hidden dependencies create exponential complexity growth. When modifying a class method, developers must understand not just that method but all related methods, subclasses, callers, and implicit dependencies—a context requirement that grows as O(n²) with system size.
 
@@ -172,14 +172,13 @@ WYSIWD solves this through radical independence: an AI can generate a complete P
 
 ### 4.2 Empirical Validation
 
-WYSIWD provides compelling evidence through its RealWorld benchmark implementation—a Medium-clone comprising ~2,300 GitHub issues. The paper reports remarkable success rates:
+WYSIWD demonstrates its approach through a complete RealWorld benchmark implementation—a specification for a Medium-clone with over 100 implementations across different technologies [4]. The authors report their experience with LLM-assisted development:
 
-- **Concept Generation**: 90%+ generated correctly in single LLM prompt
-- **Concept Implementation**: Generated from specifications with one-shot success
-- **Synchronization Rules**: Required average of 2-3 iterations to perfect
-- **Debugging Time**: Reduced from hours to minutes using provenance graphs
+- **Concept Generation**: The paper states that concept specifications and code generation "almost all completed successfully in a single shot" with the LLM
+- **Synchronization Rules**: Required "some iteration" to perfect, with errors revealed through running the automated Postman test suite
+- **Debugging**: The paper's case study demonstrates how examining synchronization provenance graphs enabled quick diagnosis of a registration bug
 
-The paper's debugging case study (Section 7.4) demonstrates the power of transparent causality: a registration bug that would traditionally require stepping through multiple classes was diagnosed and fixed by examining just the relevant synchronizations—the LLM identified the issue immediately when given only the problematic sync rules.
+The authors note they "first built a full RealWorld backend implementation...written by hand" and "then used an LLM to generate a complete, second version," successfully passing the provided automated test suite. While specific quantitative metrics are not provided, the qualitative success of generating a working implementation demonstrates the viability of the approach.
 
 Be Framework's semantic logging approach offers complementary benefits in debugging and understanding transformation failures. The rich contextual information in semantic logs enables developers to understand not just the execution path but the semantic meaning of failures. However, systematic empirical validation of these benefits remains an important area for future research.
 
@@ -221,9 +220,9 @@ Be: NewUser → RegisteredUser → ActiveUser (separate immutable classes)
     Each transformation is type-safe and irreversible
 ```
 
-### 5.2 Mathematical Isomorphism
+### 5.2 Structural Correspondence
 
-Despite philosophical differences, both implement identical mathematical structures. Here's the precise correspondence:
+Despite philosophical differences, both systems exhibit striking structural similarities. When viewed through the lens of state machine theory, a natural correspondence emerges:
 
 | Mathematical Element | WYSIWD | Be Framework |
 |---------------------|---------|--------------|
@@ -235,7 +234,7 @@ Despite philosophical differences, both implement identical mathematical structu
 | **Transition Atomicity** | Transaction semantics | Immutable objects |
 | **Error States** | `action => [error: string]` | `Success\|Failure` types |
 
-Both systems can be formally described as:
+Both systems can be conceptually modeled as state machines:
 ```
 M = (Q, Σ, δ, q₀, F) where:
 - Q is finite (bounded state space)
@@ -243,7 +242,7 @@ M = (Q, Σ, δ, q₀, F) where:
 - Transitions are atomic and logged
 ```
 
-This isn't mere similarity—it's mathematical equivalence. Any WYSIWD system can be mechanically translated to Be Framework and vice versa, preserving behavior exactly:
+This structural similarity suggests that concepts from one framework can often be translated to the other. Here's a conceptual mapping:
 
 ```
 // WYSIWD to Be translation
@@ -251,13 +250,13 @@ sync Rule                    →  #[Be(NextState::class)]
 when {action: [] => [...]}   →  constructor parameters
 then {action: [...]}         →  transformation result
 
-// Be to WYSIWD translation  
+// Be to WYSIWD translation
 #[Be(Target::class)]         →  sync Transformation
 #[Input] params              →  when {trigger: params}
 transformation logic         →  then {create: Target}
 ```
 
-This isomorphism proves both systems are discovering the same computational truth from different angles.
+This structural correspondence suggests both systems are converging on similar computational patterns from different philosophical starting points.
 
 ## 6. Implications and Synthesis
 
