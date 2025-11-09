@@ -21,8 +21,8 @@ Be Framework implements Ontological Programming - focusing on *what things are* 
 
 ## Quick Learning
 
-* [Video](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=9c29a99d-a2ca-4047-926e-104d55f6aeba)
-* [Podcast](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=3d724e12-8f96-414a-907d-16c72fc8930f) [JA🇯🇵](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=f722825c-8c43-4de7-8610-50ed32a0194b)
+* [Video](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=9c29a99d-a2ca-4047-926e-104d55f6aeba) [日本語版](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=59ed27f9-16da-4143-8144-f0afca6a39c0)
+* [Podcast](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=3d724e12-8f96-414a-907d-16c72fc8930f) [日本語版](https://notebooklm.google.com/notebook/9295e6d1-4e4c-4e21-b666-f922b3a6dc3c?artifactId=f722825c-8c43-4de7-8610-50ed32a0194b)
 
 
 ## Demo
