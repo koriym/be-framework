@@ -100,6 +100,7 @@ final class BecomingType
                 if (! $param->isDefaultValueAvailable() && ! $param->isOptional()) {
                     $reasons[$paramName] = 'Property missing from source object';
                 }
+
                 continue;
             }
 
