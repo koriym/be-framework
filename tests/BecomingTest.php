@@ -670,13 +670,11 @@ final class BecomingTestInfrastructureErrorTarget
 {
     public function __construct(
         #[Input]
-        string $value,
+        string $value, // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
     ) {
         // Simulate infrastructure error (DB, network, etc.)
         throw new RuntimeException('Database connection failed');
     }
-
-    public readonly string $processedValue;
 }
 
 // This fallback should never be reached when infrastructure error occurs

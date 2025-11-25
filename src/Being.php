@@ -115,12 +115,10 @@ final class Being
             } catch (SemanticVariableException $e) {
                 throw $e; // Do not retry on SemanticVariableException
             } catch (BecomingRejectionException $e) {
-                // Constructor intentionally rejected this transformation - try next candidate
+                // Constructor intentionally rejected this transformation - try next candidate;
+                // any other unexpected errors will naturally bubble up.
                 $unmatches[] = new Unmatch($class, UnmatchReason::Constructor, $e->getMessage());
                 continue;
-            } catch (Throwable $e) {
-                // Infrastructure or unexpected errors should propagate immediately
-                throw $e;
             }
         }
 
