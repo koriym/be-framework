@@ -6,11 +6,11 @@ namespace Be\Framework;
 
 use Be\Framework\Attribute\Be;
 use Be\Framework\Attribute\Validate;
-use Be\Framework\Exception\BecomingRejectionException;
 use Be\Framework\Exception\BeMatchException;
 use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
 use Be\Framework\Exception\SemanticVariableException;
+use Be\Framework\Exception\UnbecomingException;
 use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use InvalidArgumentException;
@@ -196,9 +196,9 @@ final class BecomingTest extends TestCase
         $this->assertEquals(42, $result->intValue);
     }
 
-    public function testBecomingRejectionExceptionTriesNextCandidate(): void
+    public function testUnbecomingExceptionTriesNextCandidate(): void
     {
-        // When constructor throws BecomingRejectionException, framework should try next candidate
+        // When constructor throws UnbecomingException, framework should try next candidate
         $input = new BecomingTestRejectionInput('fallback-value');
         $result = ($this->becoming)($input);
 
@@ -238,7 +238,7 @@ final class BecomingTestFailingTarget
         string $value,
     ) {
         if ($value === 'test') {
-            throw new BecomingRejectionException('Intentional constructor rejection for coverage test');
+            throw new UnbecomingException('I am not this');
         }
 
         $this->processedValue = $value;
@@ -415,7 +415,7 @@ final class BecomingTestSuccessPath
         public readonly int $value,
     ) {
         if ($type !== 'success' || $value < 100) {
-            throw new BecomingRejectionException('Invalid success conditions');
+            throw new UnbecomingException('Invalid success conditions');
         }
 
         $this->status = 'success';
@@ -455,7 +455,7 @@ final class BecomingTestImpossible1
         #[Input]
         string $data,
     ) {
-        throw new BecomingRejectionException('Always rejects');
+        throw new UnbecomingException('Always rejects');
     }
 }
 
@@ -465,7 +465,7 @@ final class BecomingTestImpossible2
         #[Input]
         string $data,
     ) {
-        throw new BecomingRejectionException('Also always rejects');
+        throw new UnbecomingException('Also always rejects');
     }
 }
 
@@ -614,7 +614,7 @@ final class BecomingTestSemanticTarget
     }
 }
 
-// BecomingRejectionException test fixtures
+// UnbecomingException test fixtures
 #[Be([BecomingTestRejectionTarget::class, BecomingTestRejectionFallback::class])]
 final class BecomingTestRejectionInput
 {
@@ -633,7 +633,7 @@ final class BecomingTestRejectionTarget
     ) {
         // Constructor logic determines this transformation should be rejected
         if ($value === 'fallback-value') {
-            throw new BecomingRejectionException('This transformation path is not appropriate');
+            throw new UnbecomingException('This transformation path is not appropriate');
         }
 
         $this->processedValue = $value;

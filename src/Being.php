@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Be\Framework;
 
 use Be\Framework\Attribute\Be;
-use Be\Framework\Exception\BecomingRejectionException;
 use Be\Framework\Exception\BeMatchException;
 use Be\Framework\Exception\SemanticVariableException;
+use Be\Framework\Exception\UnbecomingException;
 use Be\Framework\Exception\Unmatch;
 use Be\Framework\Exception\UnmatchReason;
 use Be\Framework\SemanticLog\LoggerInterface;
@@ -114,8 +114,8 @@ final class Being
                 return $this->performSingleTransformation($current, $class);
             } catch (SemanticVariableException $e) {
                 throw $e; // Do not retry on SemanticVariableException
-            } catch (BecomingRejectionException $e) {
-                // Constructor intentionally rejected this transformation - try next candidate;
+            } catch (UnbecomingException $e) {
+                // Constructor declared "I am not this" - continue the journey to next candidate;
                 // any other unexpected errors will naturally bubble up.
                 $unmatches[] = new Unmatch($class, UnmatchReason::Constructor, $e->getMessage());
                 continue;
