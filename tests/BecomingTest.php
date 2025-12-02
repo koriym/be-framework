@@ -10,9 +10,9 @@ use Be\Framework\Exception\BeMatchException;
 use Be\Framework\Exception\ConflictingParameterAttributes;
 use Be\Framework\Exception\MissingParameterAttribute;
 use Be\Framework\Exception\SemanticVariableException;
+use Be\Framework\Exception\UnbecomingException;
 use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
-use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
@@ -195,6 +195,27 @@ final class BecomingTest extends TestCase
         $this->assertEquals('test-string', $result->stringValue);
         $this->assertEquals(42, $result->intValue);
     }
+
+    public function testUnbecomingExceptionTriesNextCandidate(): void
+    {
+        // When constructor throws UnbecomingException, framework should try next candidate
+        $input = new BecomingTestRejectionInput('fallback-value');
+        $result = ($this->becoming)($input);
+
+        // Should use the fallback class after rejection
+        $this->assertInstanceOf(BecomingTestRejectionFallback::class, $result);
+        $this->assertEquals('fallback-value-processed', $result->processedValue);
+    }
+
+    public function testInfrastructureExceptionPropagatesImmediately(): void
+    {
+        // Infrastructure errors should propagate immediately, not be masked as type mismatches
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Database connection failed');
+
+        $input = new BecomingTestInfrastructureErrorInput('test');
+        ($this->becoming)($input);
+    }
 }
 
 // Test fixtures for coverage testing
@@ -217,7 +238,7 @@ final class BecomingTestFailingTarget
         string $value,
     ) {
         if ($value === 'test') {
-            throw new RuntimeException('Intentional constructor failure for coverage test');
+            throw new UnbecomingException('I am not this');
         }
 
         $this->processedValue = $value;
@@ -394,7 +415,7 @@ final class BecomingTestSuccessPath
         public readonly int $value,
     ) {
         if ($type !== 'success' || $value < 100) {
-            throw new InvalidArgumentException('Invalid success conditions');
+            throw new UnbecomingException('Invalid success conditions');
         }
 
         $this->status = 'success';
@@ -434,7 +455,7 @@ final class BecomingTestImpossible1
         #[Input]
         string $data,
     ) {
-        throw new Exception('Always fails');
+        throw new UnbecomingException('Always rejects');
     }
 }
 
@@ -444,7 +465,7 @@ final class BecomingTestImpossible2
         #[Input]
         string $data,
     ) {
-        throw new Exception('Also always fails');
+        throw new UnbecomingException('Also always rejects');
     }
 }
 
@@ -591,4 +612,80 @@ final class BecomingTestSemanticTarget
         public readonly string $email,  // This will trigger semantic validation for email
     ) {
     }
+}
+
+// UnbecomingException test fixtures
+#[Be([BecomingTestRejectionTarget::class, BecomingTestRejectionFallback::class])]
+final class BecomingTestRejectionInput
+{
+    public function __construct(
+        public readonly string $value,
+    ) {
+    }
+}
+
+// This class intentionally rejects the transformation
+final class BecomingTestRejectionTarget
+{
+    public function __construct(
+        #[Input]
+        string $value,
+    ) {
+        // Constructor logic determines this transformation should be rejected
+        if ($value === 'fallback-value') {
+            throw new UnbecomingException('This transformation path is not appropriate');
+        }
+
+        $this->processedValue = $value;
+    }
+
+    public readonly string $processedValue;
+}
+
+// Fallback class that accepts the input
+final class BecomingTestRejectionFallback
+{
+    public function __construct(
+        #[Input]
+        string $value,
+    ) {
+        $this->processedValue = $value . '-processed';
+    }
+
+    public readonly string $processedValue;
+}
+
+// Infrastructure error test fixtures
+#[Be([BecomingTestInfrastructureErrorTarget::class, BecomingTestInfrastructureErrorFallback::class])]
+final class BecomingTestInfrastructureErrorInput
+{
+    public function __construct(
+        public readonly string $value,
+    ) {
+    }
+}
+
+// This class throws infrastructure error that should propagate immediately
+final class BecomingTestInfrastructureErrorTarget
+{
+    public function __construct(
+        #[Input]
+        string $value, // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+    ) {
+        // Simulate infrastructure error (DB, network, etc.)
+        throw new RuntimeException('Database connection failed');
+    }
+}
+
+// This fallback should never be reached when infrastructure error occurs
+final class BecomingTestInfrastructureErrorFallback
+{
+    public function __construct(
+        #[Input]
+        string $value,
+    ) {
+        $this->processedValue = $value . '-fallback';
+    }
+
+    public readonly string $processedValue;
 }
