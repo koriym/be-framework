@@ -24,26 +24,37 @@ final class MetamorphosisCloseContext extends AbstractContext implements JsonSer
     public const string SCHEMA_URL = 'https://be-framework.org/docs/schemas/metamorphosis-close.json';
 
     /**
-     * @param ObjectProperties                                                           $properties Object properties after construction
-     * @param SingleDestination|MultipleDestination|DestinationNotFound|FinalDestination $be         Next metamorphosis destination
+     * @param string                                                                     $fromClass   Class that was transformed from
+     * @param string                                                                     $toClass     Class that was transformed to
+     * @param string                                                                     $beAttribute The #[Be] attribute that triggered transformation
+     * @param ObjectProperties                                                           $properties  Object properties after construction
+     * @param SingleDestination|MultipleDestination|DestinationNotFound|FinalDestination $be          Next metamorphosis destination
      */
     public function __construct(
+        public readonly string $fromClass,
+        public readonly string $toClass,
+        public readonly string $beAttribute,
         public readonly array $properties,
         public readonly SingleDestination|MultipleDestination|FinalDestination|DestinationNotFound $be,
     ) {
     }
 
-    /** @return ObjectProperties */
+    /** @return array{fromClass: string, toClass: string, beAttribute: string, resultProperties: stdClass|object, success: bool, error?: string} */
     #[Override]
     public function jsonSerialize(): array
     {
-        // For now, create a simplified structure that matches schema
-        return [
-            'fromClass' => 'Unknown',
-            'toClass' => 'Unknown',
-            'beAttribute' => 'Unknown',
+        $result = [
+            'fromClass' => $this->fromClass,
+            'toClass' => $this->toClass,
+            'beAttribute' => $this->beAttribute,
             'resultProperties' => empty($this->properties) ? new stdClass() : (object) $this->properties,
-            'success' => true, // Simplified for now
+            'success' => ! $this->be instanceof DestinationNotFound,
         ];
+
+        if ($this->be instanceof DestinationNotFound) {
+            $result['error'] = $this->be->error;
+        }
+
+        return $result;
     }
 }

@@ -134,11 +134,17 @@ final class LoggerErrorPathTest extends TestCase
         $destination = new SingleDestination('TargetClass');
 
         $closeContext = new MetamorphosisCloseContext(
+            fromClass: 'SourceClass',
+            toClass: 'TargetClass',
+            beAttribute: '#[Be(TargetClass::class)]',
             properties: ['result' => 'success'],
             be: $destination,
         );
 
         $this->assertInstanceOf(MetamorphosisCloseContext::class, $closeContext);
+        $this->assertSame('SourceClass', $closeContext->fromClass);
+        $this->assertSame('TargetClass', $closeContext->toClass);
+        $this->assertSame('#[Be(TargetClass::class)]', $closeContext->beAttribute);
         $this->assertSame(['result' => 'success'], $closeContext->properties);
         $this->assertInstanceOf(SingleDestination::class, $closeContext->be);
     }

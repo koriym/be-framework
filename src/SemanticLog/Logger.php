@@ -49,6 +49,9 @@ final class Logger implements LoggerInterface
 {
     private Being $being;
 
+    /** @var array<string, array{fromClass: string, beAttribute: string}> */
+    private array $openContexts = [];
+
     public function __construct(
         private SemanticLoggerInterface $logger,
         private BecomingArgumentsInterface $becomingArguments,
@@ -74,24 +77,38 @@ final class Logger implements LoggerInterface
             $immanentSources = $this->extractImmanentSources($current, $args);
             $transcendentSources = $this->extractTranscendentSources($args, $becoming);
 
-            return $this->logger->open(new MetamorphosisOpenContext(
+            $openId = $this->logger->open(new MetamorphosisOpenContext(
                 fromClass: $fromClass,
                 beAttribute: $beAttribute,
                 immanentSources: $immanentSources,
                 transcendentSources: $transcendentSources,
             ));
+
+            $this->openContexts[$openId] = [
+                'fromClass' => $fromClass,
+                'beAttribute' => $beAttribute,
+            ];
+
+            return $openId;
         }
 
         // Array transformation case - log the attempt with all candidate classes
         $classNames = implode(', ', array_map(static fn ($class) => $class . '::class', $becoming));
         $beAttribute = "#[Be([{$classNames}])]";
 
-        return $this->logger->open(new MetamorphosisOpenContext(
+        $openId = $this->logger->open(new MetamorphosisOpenContext(
             fromClass: $fromClass,
             beAttribute: $beAttribute,
             immanentSources: [],
             transcendentSources: [],
         ));
+
+        $this->openContexts[$openId] = [
+            'fromClass' => $fromClass,
+            'beAttribute' => $beAttribute,
+        ];
+
+        return $openId;
     }
 
     /**
@@ -105,9 +122,16 @@ final class Logger implements LoggerInterface
             return;
         }
 
+        // Retrieve and remove stored context
+        $context = $this->openContexts[$openId] ?? ['fromClass' => 'Unknown', 'beAttribute' => 'Unknown'];
+        unset($this->openContexts[$openId]);
+
         if ($result === null) {
             // Error case
             $this->logger->close(new MetamorphosisCloseContext(
+                fromClass: $context['fromClass'],
+                toClass: 'Unknown',
+                beAttribute: $context['beAttribute'],
                 properties: [],
                 be: new DestinationNotFound(
                     error: $error ?? 'Unknown error',
@@ -123,6 +147,9 @@ final class Logger implements LoggerInterface
         $destination = $this->determineDestination($result);
 
         $this->logger->close(new MetamorphosisCloseContext(
+            fromClass: $context['fromClass'],
+            toClass: $result::class,
+            beAttribute: $context['beAttribute'],
             properties: $properties,
             be: $destination,
         ), $openId);

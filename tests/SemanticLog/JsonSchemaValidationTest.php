@@ -118,6 +118,9 @@ final class JsonSchemaValidationTest extends TestCase
     public function testMetamorphosisCloseContextWithSingleDestinationValidates(): void
     {
         $context = new MetamorphosisCloseContext(
+            fromClass: 'Be\Framework\Test\UserInput',
+            toClass: 'Be\Framework\Test\ValidatedUser',
+            beAttribute: '#[Be(ValidatedUser::class)]',
             properties: [
                 'email' => 'user@example.com',
                 'validated' => true,
@@ -137,6 +140,9 @@ final class JsonSchemaValidationTest extends TestCase
     public function testMetamorphosisCloseContextWithFinalDestinationValidates(): void
     {
         $context = new MetamorphosisCloseContext(
+            fromClass: 'Be\Framework\Test\ProcessingData',
+            toClass: 'Be\Framework\Test\FinalResult',
+            beAttribute: '#[Be(FinalResult::class)]',
             properties: [
                 'result' => 'success',
                 'data' => ['key' => 'value'],
