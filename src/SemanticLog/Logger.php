@@ -231,17 +231,50 @@ final class Logger implements LoggerInterface
     }
 
     /**
+     * Extract object properties safely, handling uninitialized properties
+     *
+     * Handles both declared properties (with uninitialized property checks)
+     * and dynamic properties (stdClass, objects with __set).
+     *
      * @return ObjectProperties
      * @phpstan-return array<string, mixed>
      */
     private function extractProperties(object $result): array
     {
-        // @todo Handle uninitialized properties in Accept pattern objects
-        // @todo Privacy/Security: Consider extracting shape-only metadata instead of actual values
-        //       For production use, should emit property names + types only, not raw values
-        //       e.g., ['email' => 'string', 'validated' => 'bool'] instead of actual data
-        // For now, get_object_vars() covers all realistic Be Framework objects
-        return get_object_vars($result);
+        /** @var array<string, mixed> $properties */
+        $properties = [];
+        $reflection = new ReflectionClass($result);
+        $declaredProps = $reflection->getProperties();
+
+        // For objects with declared properties, use reflection for safe access
+        foreach ($declaredProps as $property) {
+            if (! $property->isPublic()) {
+                continue;
+            }
+
+            $name = $property->getName();
+
+            // Handle uninitialized properties (Accept pattern objects may have these)
+            if (! $property->isInitialized($result)) {
+                $properties[$name] = null;
+                continue;
+            }
+
+            /** @psalm-suppress MixedAssignment */
+            $properties[$name] = $property->getValue($result);
+        }
+
+        // For dynamic properties (stdClass, etc.), merge with get_object_vars
+        $dynamicProps = get_object_vars($result);
+        /** @var mixed $value */
+        foreach ($dynamicProps as $name => $value) {
+            if (! isset($properties[$name])) {
+                /** @psalm-suppress MixedAssignment */
+                $properties[$name] = $value;
+            }
+        }
+
+        return $properties;
     }
 
     private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination

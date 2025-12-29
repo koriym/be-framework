@@ -84,8 +84,12 @@ final class BecomingArguments implements BecomingArgumentsInterface
     /**
      * Resolves #[Inject] parameters from DI container
      *
-     * Supports #[Named] attributes for named bindings.
-     * Scalar types require #[Named] or default values (Ray.Di historical compatibility).
+     * Resolution rules:
+     * - Class/Interface types: Resolved by type name from container
+     * - Scalar types (int, string, etc.): Require #[Named('binding_name')] attribute
+     * - Union/Intersection types: Not supported, require #[Named] attribute
+     *
+     * @throws \Ray\Di\Exception\Unbound When binding cannot be resolved
      */
     private function getInjectParameter(ReflectionParameter $param): mixed
     {
