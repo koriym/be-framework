@@ -27,8 +27,8 @@ final readonly class FormalGreeting
         #[Input] #[English] public string $name,         // Immanent
         #[Input] public FormalStyle $being    // Transcendent
     ) {
-        // Semantic validartion during metamorphosis
-        $validator = new SemanticValidator('Be\\Example\\Ontology');
+        // Semantic validation during metamorphosis
+        $validator = new SemanticValidator('Be\\Example\\Semantic');
         $errors = $validator->validate('name', $name);
         if ($errors->hasErrors()) {
             throw new SemanticVariableException($errors);
