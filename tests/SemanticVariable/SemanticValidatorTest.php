@@ -212,4 +212,71 @@ final class SemanticValidatorTest extends TestCase
         $this->expectException(TypeError::class);
         $this->validator->validateArgs($method, ['email' => null]);
     }
+
+    public function testCrossFieldValidationMatchingEmails(): void
+    {
+        $testClass = new class ('', '') {
+            public function __construct(
+                string $email,
+                string $confirmation,
+            ) {
+            }
+        };
+
+        $reflection = new ReflectionClass($testClass);
+        $constructor = $reflection->getConstructor();
+        $this->assertNotNull($constructor);
+
+        $errors = $this->validator->validateArgs($constructor, [
+            'email' => 'john@example.com',
+            'confirmation' => 'john@example.com',
+        ]);
+
+        $this->assertInstanceOf(NullErrors::class, $errors);
+    }
+
+    public function testCrossFieldValidationMismatchingEmails(): void
+    {
+        $testClass = new class ('', '') {
+            public function __construct(
+                string $email,
+                string $confirmation,
+            ) {
+            }
+        };
+
+        $reflection = new ReflectionClass($testClass);
+        $constructor = $reflection->getConstructor();
+        $this->assertNotNull($constructor);
+
+        $errors = $this->validator->validateArgs($constructor, [
+            'email' => 'john@example.com',
+            'confirmation' => 'jane@example.com',
+        ]);
+
+        $this->assertTrue($errors->hasErrors());
+    }
+
+    public function testCrossFieldValidationSkippedWhenParamNameMissing(): void
+    {
+        $testClass = new class ('', '') {
+            public function __construct(
+                string $email,
+                string $other,
+            ) {
+            }
+        };
+
+        $reflection = new ReflectionClass($testClass);
+        $constructor = $reflection->getConstructor();
+        $this->assertNotNull($constructor);
+
+        $errors = $this->validator->validateArgs($constructor, [
+            'email' => 'john@example.com',
+            'other' => 'some-value',
+        ]);
+
+        // validateEmailConfirmation needs $confirmation, not $other — should be skipped
+        $this->assertFalse($errors->hasErrors());
+    }
 }

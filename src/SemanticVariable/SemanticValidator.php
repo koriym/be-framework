@@ -110,6 +110,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     {
         $allErrors = [];
 
+        // First pass: single-field validation
         foreach ($method->getParameters() as $parameter) {
             // Skip #[Inject] parameters
             if ($this->hasInjectAttribute($parameter)) {
@@ -125,7 +126,87 @@ final class SemanticValidator implements SemanticValidatorInterface
             }
         }
 
+        // Second pass: cross-field validation for multi-parameter #[Validate] methods
+        $crossFieldErrors = $this->validateCrossFieldArgs($method, $args);
+        $allErrors = [...$allErrors, ...$crossFieldErrors];
+
         return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+    }
+
+    /**
+     * Validate cross-field constraints using multi-parameter #[Validate] methods
+     *
+     * For each semantic class resolved from constructor parameters, finds #[Validate]
+     * methods with 2+ non-#[Inject] parameters whose names ALL exist in $allArgs.
+     *
+     * @param ReflectionMethod     $method  Constructor with parameter definitions
+     * @param ConstructorArguments $allArgs All constructor argument values
+     *
+     * @return list<DomainException>
+     */
+    private function validateCrossFieldArgs(ReflectionMethod $method, array $allArgs): array
+    {
+        $exceptions = [];
+        $checkedClasses = [];
+
+        foreach ($method->getParameters() as $parameter) {
+            if ($this->hasInjectAttribute($parameter)) {
+                continue;
+            }
+
+            $semanticClass = $this->resolveSemanticClass($parameter->getName());
+            if ($semanticClass === null) {
+                continue;
+            }
+
+            $className = $semanticClass::class;
+            if (in_array($className, $checkedClasses, true)) {
+                continue;
+            }
+
+            $checkedClasses[] = $className;
+
+            $reflection = new ReflectionClass($semanticClass);
+            foreach ($reflection->getMethods() as $validateMethod) {
+                if (empty($validateMethod->getAttributes(Validate::class))) {
+                    continue;
+                }
+
+                $nonInjectParams = array_values(array_filter(
+                    $validateMethod->getParameters(),
+                    static fn (ReflectionParameter $p) => empty($p->getAttributes(Inject::class)),
+                ));
+
+                if (count($nonInjectParams) < 2) {
+                    continue;
+                }
+
+                // Name-based matching: all parameter names must exist in $allArgs
+                $methodArgs = [];
+                $allParamsAvailable = true;
+                foreach ($nonInjectParams as $param) {
+                    if (! array_key_exists($param->getName(), $allArgs)) {
+                        $allParamsAvailable = false;
+                        break;
+                    }
+
+                    /** @psalm-suppress MixedAssignment */
+                    $methodArgs[] = $allArgs[$param->getName()];
+                }
+
+                if (! $allParamsAvailable) {
+                    continue;
+                }
+
+                try {
+                    $validateMethod->invoke($semanticClass, ...$methodArgs);
+                } catch (DomainException $exception) {
+                    $exceptions[] = $exception;
+                }
+            }
+        }
+
+        return $exceptions;
     }
 
     /**
