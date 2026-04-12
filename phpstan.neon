@@ -12,4 +12,6 @@ parameters:
     - identifier: missingType.iterableValue
     # ReflectionMethod::invoke() throws exceptions from invoked methods,
     # but PHPStan cannot trace through reflection calls
-    - identifier: catch.neverThrown
+    -
+        identifier: catch.neverThrown
+        path: src/SemanticVariable/SemanticValidator.php

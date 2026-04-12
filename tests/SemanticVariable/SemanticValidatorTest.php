@@ -7,7 +7,10 @@ namespace Be\Framework\SemanticVariable;
 use Be\Framework\Exception\SemanticVariableException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionMethod;
 use TypeError;
+
+use function assert;
 
 final class SemanticValidatorTest extends TestCase
 {
@@ -216,18 +219,12 @@ final class SemanticValidatorTest extends TestCase
     public function testCrossFieldValidationMatchingEmails(): void
     {
         $testClass = new class ('', '') {
-            public function __construct(
-                string $email,
-                string $confirmation,
-            ) {
+            public function __construct(string $email, string $confirmation)
+            {
             }
         };
 
-        $reflection = new ReflectionClass($testClass);
-        $constructor = $reflection->getConstructor();
-        $this->assertNotNull($constructor);
-
-        $errors = $this->validator->validateArgs($constructor, [
+        $errors = $this->validateArgsOf($testClass, [
             'email' => 'john@example.com',
             'confirmation' => 'john@example.com',
         ]);
@@ -238,18 +235,12 @@ final class SemanticValidatorTest extends TestCase
     public function testCrossFieldValidationMismatchingEmails(): void
     {
         $testClass = new class ('', '') {
-            public function __construct(
-                string $email,
-                string $confirmation,
-            ) {
+            public function __construct(string $email, string $confirmation)
+            {
             }
         };
 
-        $reflection = new ReflectionClass($testClass);
-        $constructor = $reflection->getConstructor();
-        $this->assertNotNull($constructor);
-
-        $errors = $this->validator->validateArgs($constructor, [
+        $errors = $this->validateArgsOf($testClass, [
             'email' => 'john@example.com',
             'confirmation' => 'jane@example.com',
         ]);
@@ -260,23 +251,27 @@ final class SemanticValidatorTest extends TestCase
     public function testCrossFieldValidationSkippedWhenParamNameMissing(): void
     {
         $testClass = new class ('', '') {
-            public function __construct(
-                string $email,
-                string $other,
-            ) {
+            public function __construct(string $email, string $other)
+            {
             }
         };
 
-        $reflection = new ReflectionClass($testClass);
-        $constructor = $reflection->getConstructor();
-        $this->assertNotNull($constructor);
-
-        $errors = $this->validator->validateArgs($constructor, [
+        $errors = $this->validateArgsOf($testClass, [
             'email' => 'john@example.com',
             'other' => 'some-value',
         ]);
 
         // validateEmailConfirmation needs $confirmation, not $other — should be skipped
         $this->assertFalse($errors->hasErrors());
+    }
+
+    /** @param array<string, mixed> $args */
+    private function validateArgsOf(object $testClass, array $args): Errors
+    {
+        $reflection = new ReflectionClass($testClass);
+        $constructor = $reflection->getConstructor();
+        assert($constructor instanceof ReflectionMethod);
+
+        return $this->validator->validateArgs($constructor, $args);
     }
 }
