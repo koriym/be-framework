@@ -70,9 +70,9 @@ echo $greeting->message; // hello world
 
 **[Full Documentation](https://be-framework.github.io/)**
 
-## Demos
+## Patterns
 
-**[be-demos](https://github.com/be-framework/be-demos)** — Working examples of Be Framework in action
+**[be-patterns](https://github.com/be-framework/be-patterns)** — Working examples of Be Framework in action
 
 ## Philosophical Roots
 
