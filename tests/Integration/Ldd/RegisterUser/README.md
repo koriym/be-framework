@@ -9,13 +9,13 @@ written first, from which the PHP classes are generated.
 
 One metamorphosis step:
 
-```
+```text
 UnverifiedEmail  --#[Be(RegisteredUser::class)]-->  RegisteredUser
 ```
 
 Along the way, two pieces of evidence are recorded as semantic events:
 
-1. `email_format_asserted` — the email was checked against a pattern.
+1. `email_format_asserted` — the email format was validated.
 2. `user_inserted` — a row was created in the user store and received id `42`.
 
 The final object `RegisteredUser` carries these events on `public readonly Been

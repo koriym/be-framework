@@ -34,7 +34,6 @@ final class RegisteredUser
         $this->been = $been
             ->with(new EmailFormatAssertedContext(
                 email: $value,
-                pattern: '/^[^@]+@[^@]+$/',
             ))
             ->with(new UserInsertedContext(
                 userId: $this->userId,

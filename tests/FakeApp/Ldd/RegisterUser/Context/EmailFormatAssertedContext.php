@@ -13,7 +13,6 @@ final class EmailFormatAssertedContext extends AbstractContext
 
     public function __construct(
         public readonly string $email,
-        public readonly string $pattern,
     ) {
     }
 }

@@ -23,8 +23,7 @@
             "type": "email_format_asserted",
             "schemaUrl": "https://myvendor.example.com/schemas/email-format-asserted.json",
             "context": {
-                "email": "alice@example.com",
-                "pattern": "/^[^@]+@[^@]+$/"
+                "email": "alice@example.com"
             },
             "openId": "metamorphosis_open_1"
         },
