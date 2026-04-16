@@ -20,6 +20,7 @@ use Ray\Di\Di\Inject;
 use ReflectionClass;
 use Throwable;
 
+use function array_filter;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
@@ -213,8 +214,14 @@ final class Logger implements LoggerInterface
         // @todo Privacy/Security: Consider extracting shape-only metadata instead of actual values
         //       For production use, should emit property names + types only, not raw values
         //       e.g., ['email' => 'string', 'validated' => 'bool'] instead of actual data
-        // For now, get_object_vars() covers all realistic Be Framework objects
-        return get_object_vars($result);
+        // For now, get_object_vars() covers all realistic Be Framework objects.
+        //
+        // Exclude any `Been` property: it carries this very log and would
+        // embed the event stream recursively inside the close context.
+        return array_filter(
+            get_object_vars($result),
+            static fn (mixed $value): bool => ! ($value instanceof Been),
+        );
     }
 
     private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination

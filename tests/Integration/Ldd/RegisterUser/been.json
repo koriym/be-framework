@@ -1,0 +1,57 @@
+{
+    "$schema": "https://koriym.github.io/Koriym.SemanticLogger/schemas/combined.json",
+    "open": {
+        "id": "metamorphosis_open_1",
+        "type": "metamorphosis_open",
+        "schemaUrl": "https://be-framework.org/docs/schemas/metamorphosis-open.json",
+        "context": {
+            "fromClass": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
+            "beAttribute": "#[Be(MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser::class)]",
+            "immanentSources": {
+                "value": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail::value"
+            },
+            "transcendentSources": {
+                "verifier": "MyVendor\\MyApp\\Ldd\\RegisterUser\\EmailVerifier",
+                "users": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UserRepository",
+                "been": "Be\\Framework\\SemanticLog\\Been"
+            }
+        }
+    },
+    "events": [
+        {
+            "id": "email_format_asserted_1",
+            "type": "email_format_asserted",
+            "schemaUrl": "https://myvendor.example.com/schemas/email-format-asserted.json",
+            "context": {
+                "email": "alice@example.com",
+                "pattern": "/^[^@]+@[^@]+$/"
+            },
+            "openId": "metamorphosis_open_1"
+        },
+        {
+            "id": "user_inserted_1",
+            "type": "user_inserted",
+            "schemaUrl": "https://myvendor.example.com/schemas/user-inserted.json",
+            "context": {
+                "userId": 42,
+                "email": "alice@example.com"
+            },
+            "openId": "metamorphosis_open_1"
+        }
+    ],
+    "close": {
+        "id": "metamorphosis_close_1",
+        "type": "metamorphosis_close",
+        "schemaUrl": "https://be-framework.org/docs/schemas/metamorphosis-close.json",
+        "context": {
+            "properties": {
+                "userId": 42,
+                "value": "alice@example.com"
+            },
+            "be": {
+                "finalClass": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser"
+            }
+        },
+        "openId": "metamorphosis_open_1"
+    }
+}
