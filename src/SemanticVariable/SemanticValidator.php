@@ -110,6 +110,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     {
         $allErrors = [];
 
+        // First pass: single-field validation
         foreach ($method->getParameters() as $parameter) {
             // Skip #[Inject] parameters
             if ($this->hasInjectAttribute($parameter)) {
@@ -125,7 +126,115 @@ final class SemanticValidator implements SemanticValidatorInterface
             }
         }
 
+        // Second pass: cross-field validation for multi-parameter #[Validate] methods
+        $crossFieldErrors = $this->validateCrossFieldArgs($method, $args);
+        $allErrors = [...$allErrors, ...$crossFieldErrors];
+
         return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+    }
+
+    /**
+     * Validate cross-field constraints using multi-parameter #[Validate] methods
+     *
+     * For each semantic class resolved from constructor parameters, finds #[Validate]
+     * methods with 2+ non-#[Inject] parameters whose names ALL exist in $allArgs.
+     *
+     * @param ReflectionMethod     $method  Constructor with parameter definitions
+     * @param ConstructorArguments $allArgs All constructor argument values
+     *
+     * @return list<DomainException>
+     */
+    private function validateCrossFieldArgs(ReflectionMethod $method, array $allArgs): array
+    {
+        $exceptions = [];
+        $checkedClasses = [];
+
+        foreach ($method->getParameters() as $parameter) {
+            if ($this->hasInjectAttribute($parameter)) {
+                continue;
+            }
+
+            $semanticClass = $this->resolveSemanticClass($parameter->getName());
+            if ($semanticClass === null) {
+                continue;
+            }
+
+            $className = $semanticClass::class;
+            if (in_array($className, $checkedClasses, true)) {
+                continue;
+            }
+
+            $checkedClasses[] = $className;
+            $exceptions = [...$exceptions, ...$this->invokeCrossFieldMethods($semanticClass, $allArgs)];
+        }
+
+        return $exceptions;
+    }
+
+    /**
+     * Invoke multi-parameter #[Validate] methods whose parameter names match available args
+     *
+     * @param ConstructorArguments $allArgs All constructor argument values
+     *
+     * @return list<DomainException>
+     */
+    private function invokeCrossFieldMethods(object $semanticClass, array $allArgs): array
+    {
+        $exceptions = [];
+        $reflection = new ReflectionClass($semanticClass);
+
+        foreach ($reflection->getMethods() as $validateMethod) {
+            if (empty($validateMethod->getAttributes(Validate::class))) {
+                continue;
+            }
+
+            $methodArgs = $this->matchArgsByName($validateMethod, $allArgs);
+            if ($methodArgs === null) {
+                continue;
+            }
+
+            try {
+                $validateMethod->invoke($semanticClass, ...$methodArgs);
+            } catch (DomainException $exception) {
+                $exceptions[] = $exception;
+            }
+        }
+
+        return $exceptions;
+    }
+
+    /**
+     * Match method parameters to available args by name
+     *
+     * Returns ordered argument values if all non-Inject parameters with 2+ params
+     * have matching names in $allArgs, or null if not matched.
+     *
+     * @param ConstructorArguments $allArgs All constructor argument values
+     *
+     * @return ValidationArguments|null
+     */
+    private function matchArgsByName(ReflectionMethod $method, array $allArgs): array|null
+    {
+        $nonInjectParams = array_values(array_filter(
+            $method->getParameters(),
+            static fn (ReflectionParameter $p) => empty($p->getAttributes(Inject::class)),
+        ));
+
+        if (count($nonInjectParams) < 2) {
+            return null;
+        }
+
+        $methodArgs = [];
+        foreach ($nonInjectParams as $param) {
+            if (! array_key_exists($param->getName(), $allArgs)) {
+                return null;
+            }
+
+            /** @psalm-suppress MixedAssignment */
+            $methodArgs[] = $allArgs[$param->getName()];
+        }
+
+        return $methodArgs;
     }
 
     /**
