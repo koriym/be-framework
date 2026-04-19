@@ -7,23 +7,21 @@ namespace Be\Framework\SemanticLog;
 use Be\Framework\BecomingArgumentsInterface;
 use Be\Framework\BecomingType;
 use Be\Framework\Being;
-use Be\Framework\SemanticLog\Context\DestinationNotFound;
-use Be\Framework\SemanticLog\Context\FinalDestination;
-use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
-use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
-use Be\Framework\SemanticLog\Context\MultipleDestination;
-use Be\Framework\SemanticLog\Context\SingleDestination;
+use Be\Framework\SemanticLog\Context\BecomingBeingContext;
+use Be\Framework\SemanticLog\Context\BecomingErrorContext;
+use Be\Framework\SemanticLog\Context\BecomingFinalContext;
+use Be\Framework\SemanticLog\Context\BecomingOpenContext;
 use JsonException;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
 use Ray\Di\Di\Inject;
+use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use Throwable;
 
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function array_map;
 use function get_debug_type;
 use function get_object_vars;
 use function gettype;
@@ -70,28 +68,24 @@ final class Logger implements LoggerInterface
 
         if (is_string($becoming)) {
             // Single transformation case
-            $beAttribute = "#[Be({$becoming}::class)]";
             $args = $this->becomingArguments->be($current, $becoming);
-            $immanentSources = $this->extractImmanentSources($current, $args);
-            $transcendentSources = $this->extractTranscendentSources($args, $becoming);
+            $input = $this->extractImmanentSources($current, $args, $becoming);
+            $inject = $this->extractTranscendentSources($args, $becoming);
 
-            return $this->logger->open(new MetamorphosisOpenContext(
-                fromClass: $fromClass,
-                beAttribute: $beAttribute,
-                immanentSources: $immanentSources,
-                transcendentSources: $transcendentSources,
+            return $this->logger->open(new BecomingOpenContext(
+                from: $fromClass,
+                be: $becoming,
+                input: $input,
+                inject: $inject,
             ));
         }
 
-        // Array transformation case - log the attempt with all candidate classes
-        $classNames = implode(', ', array_map(static fn ($class) => $class . '::class', $becoming));
-        $beAttribute = "#[Be([{$classNames}])]";
-
-        return $this->logger->open(new MetamorphosisOpenContext(
-            fromClass: $fromClass,
-            beAttribute: $beAttribute,
-            immanentSources: [],
-            transcendentSources: [],
+        // Array transformation case — log the attempt with pipe-joined candidate classes
+        return $this->logger->open(new BecomingOpenContext(
+            from: $fromClass,
+            be: implode('|', $becoming),
+            input: [],
+            inject: [],
         ));
     }
 
@@ -99,53 +93,88 @@ final class Logger implements LoggerInterface
      * Log transformation completion
      */
     #[Override]
-    public function close(object|null $result, string $openId, string|null $error = null): void
+    public function close(object|null $result, string $openId, Throwable|null $exception = null): void
     {
-        // Skip if no open ID
         if ($openId === '') {
             return;
         }
 
-        if ($result === null) {
-            // Error case
-            $this->logger->close(new MetamorphosisCloseContext(
-                properties: [],
-                be: new DestinationNotFound(
-                    error: $error ?? 'Unknown error',
-                    attemptedClasses: [],
-                ),
+        if ($exception !== null) {
+            $this->logger->close(new BecomingErrorContext(
+                error: $exception::class,
+                message: $exception->getMessage(),
             ), $openId);
 
             return;
         }
 
-        // Success case
-        $properties = $this->extractProperties($result);
-        $destination = $this->determineDestination($result);
+        if ($result === null) {
+            // Legacy safety net: null result without an exception still ends the open entry.
+            $this->logger->close(new BecomingErrorContext(
+                error: 'UnknownError',
+                message: 'Unknown error',
+            ), $openId);
 
-        $this->logger->close(new MetamorphosisCloseContext(
-            properties: $properties,
-            be: $destination,
+            return;
+        }
+
+        $prop = $this->extractProperties($result);
+        $nextBecoming = $this->being->willBe($result);
+
+        if ($nextBecoming === null) {
+            $this->logger->close(new BecomingFinalContext(
+                prop: $prop,
+                final: $result::class,
+            ), $openId);
+
+            return;
+        }
+
+        $this->logger->close(new BecomingBeingContext(
+            prop: $prop,
+            being: $result::class,
         ), $openId);
     }
 
     /**
+     * Extract #[Input] parameter sources by inspecting the target constructor.
+     *
+     * A parameter belongs in immanent sources only when it carries `#[Input]` and the
+     * current being exposes a property of the same name — mirroring extractTranscendentSources'
+     * attribute-driven approach so non-input arguments that happen to share a name with a public
+     * property don't leak in.
+     *
      * @param ConstructorArguments $args
      * @phpstan-param array<string, mixed> $args
      *
      * @return ImmanentSources
      * @phpstan-return array<string, string>
      */
-    private function extractImmanentSources(object $current, array $args): array
+    private function extractImmanentSources(object $current, array $args, string $becoming): array
     {
-        $immanentSources = [];
-        $properties = get_object_vars($current);
+        /** @var class-string $becoming */
+        $constructor = (new ReflectionClass($becoming))->getConstructor();
+        if ($constructor === null) {
+            return [];
+        }
 
-        // Use parameter names for reliable mapping (BecomingArguments ensures parameter names match property names for #[Input])
-        foreach (array_keys($args) as $paramName) {
-            if (array_key_exists($paramName, $properties)) {
-                $immanentSources[$paramName] = $current::class . '::' . $paramName;
+        $properties = get_object_vars($current);
+        $immanentSources = [];
+        foreach ($constructor->getParameters() as $param) {
+            $paramName = $param->getName();
+            if (! array_key_exists($paramName, $args)) {
+                continue;
             }
+
+            if (empty($param->getAttributes(Input::class))) {
+                continue;
+            }
+
+            if (! array_key_exists($paramName, $properties)) {
+                continue;
+            }
+
+            $immanentSources[$paramName] = $current::class . '::' . $paramName;
         }
 
         return $immanentSources;
@@ -253,22 +282,6 @@ final class Logger implements LoggerInterface
         }
 
         return $properties;
-    }
-
-    private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination
-    {
-        $nextBecoming = $this->being->willBe($result);
-
-        if ($nextBecoming === null) {
-            return new FinalDestination($result::class);
-        }
-
-        if (is_string($nextBecoming)) {
-            return new SingleDestination($nextBecoming);
-        }
-
-        /** @var array<class-string> $nextBecoming */
-        return new MultipleDestination($nextBecoming);
     }
 
     /**

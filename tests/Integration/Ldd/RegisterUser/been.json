@@ -1,16 +1,16 @@
 {
     "$schema": "https://koriym.github.io/Koriym.SemanticLogger/schemas/combined.json",
     "open": {
-        "id": "metamorphosis_open_1",
-        "type": "metamorphosis_open",
-        "schemaUrl": "https://be-framework.org/docs/schemas/metamorphosis-open.json",
+        "id": "becoming_open_1",
+        "type": "becoming_open",
+        "schemaUrl": "https://be-framework.org/schemas/becoming-open.json",
         "context": {
-            "fromClass": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
-            "beAttribute": "#[Be(MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser::class)]",
-            "immanentSources": {
+            "from": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
+            "be": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
+            "input": {
                 "value": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail::value"
             },
-            "transcendentSources": {
+            "inject": {
                 "verifier": "MyVendor\\MyApp\\Ldd\\RegisterUser\\EmailVerifier",
                 "users": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UserRepository",
                 "been": "Be\\Framework\\SemanticLog\\Been"
@@ -25,7 +25,7 @@
             "context": {
                 "email": "alice@example.com"
             },
-            "openId": "metamorphosis_open_1"
+            "openId": "becoming_open_1"
         },
         {
             "id": "user_inserted_1",
@@ -35,22 +35,20 @@
                 "userId": 42,
                 "email": "alice@example.com"
             },
-            "openId": "metamorphosis_open_1"
+            "openId": "becoming_open_1"
         }
     ],
     "close": {
-        "id": "metamorphosis_close_1",
-        "type": "metamorphosis_close",
-        "schemaUrl": "https://be-framework.org/docs/schemas/metamorphosis-close.json",
+        "id": "becoming_final_1",
+        "type": "becoming_final",
+        "schemaUrl": "https://be-framework.org/schemas/becoming-final.json",
         "context": {
-            "properties": {
+            "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
+            "prop": {
                 "userId": 42,
                 "value": "alice@example.com"
-            },
-            "be": {
-                "finalClass": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser"
             }
         },
-        "openId": "metamorphosis_open_1"
+        "openId": "becoming_open_1"
     }
 }

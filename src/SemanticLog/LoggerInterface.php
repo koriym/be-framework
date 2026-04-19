@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticLog;
 
 use Be\Framework\Types;
+use Throwable;
 
 /**
  * Interface for logging Be Framework transformations
@@ -31,9 +32,9 @@ interface LoggerInterface
     /**
      * Log transformation completion
      *
-     * @param object|null $result Resulting object (null if failed)
-     * @param string      $openId Open ID from corresponding open call
-     * @param string|null $error  Error message if transformation failed
+     * @param object|null    $result    Resulting object on success; null when the transformation failed
+     * @param string         $openId    Open ID from corresponding open call
+     * @param Throwable|null $exception Exception thrown when the transformation failed
      */
-    public function close(object|null $result, string $openId, string|null $error = null): void;
+    public function close(object|null $result, string $openId, Throwable|null $exception = null): void;
 }

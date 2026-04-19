@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog;
 
-use Be\Framework\SemanticLog\Context\FinalDestination;
-use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
-use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
-use Be\Framework\SemanticLog\Context\SingleDestination;
+use Be\Framework\SemanticLog\Context\BecomingBeingContext;
+use Be\Framework\SemanticLog\Context\BecomingErrorContext;
+use Be\Framework\SemanticLog\Context\BecomingFinalContext;
+use Be\Framework\SemanticLog\Context\BecomingOpenContext;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 use function array_map;
 use function file_get_contents;
@@ -28,65 +27,52 @@ final class JsonSchemaValidationTest extends TestCase
 {
     private Validator $validator;
     private object $openSchema;
-    private object $closeSchema;
+    private object $beingSchema;
+    private object $finalSchema;
+    private object $errorSchema;
 
     protected function setUp(): void
     {
         $this->validator = new Validator();
 
-        // Load actual JSON schemas from files
-        $openSchemaContent = file_get_contents(__DIR__ . '/../../docs/schemas/metamorphosis-open.json');
-        $closeSchemaContent = file_get_contents(__DIR__ . '/../../docs/schemas/metamorphosis-close.json');
-
-        $this->openSchema = json_decode($openSchemaContent);
-        $this->closeSchema = json_decode($closeSchemaContent);
+        $this->openSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-open.json'));
+        $this->beingSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-being.json'));
+        $this->finalSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-final.json'));
+        $this->errorSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-error.json'));
     }
 
-    public function testMetamorphosisOpenContextValidatesAgainstSchema(): void
+    public function testBecomingOpenContextValidatesAgainstSchema(): void
     {
-        // Create a context with all possible fields
-        $context = new MetamorphosisOpenContext(
-            fromClass: 'Be\Framework\Test\UserInput',
-            beAttribute: '#[Be(ValidatedUser::class)]',
-            immanentSources: [
+        $context = new BecomingOpenContext(
+            from: 'Be\Framework\Test\UserInput',
+            be: 'Be\Framework\Test\ValidatedUser',
+            input: [
                 'email' => 'UserInput::email',
                 'name' => 'UserInput::name',
             ],
-            transcendentSources: [
+            inject: [
                 'validator' => 'ValidatorInterface',
                 'logger' => 'LoggerInterface',
             ],
         );
 
-        // Convert context to JSON-compatible format
         $contextData = json_decode(json_encode($context), false);
 
-        // Ensure empty arrays are treated as objects for schema validation
-        if (empty($contextData->immanentSources)) {
-            $contextData->immanentSources = new stdClass();
-        }
-
-        if (empty($contextData->transcendentSources)) {
-            $contextData->transcendentSources = new stdClass();
-        }
-
-        // Validate against schema
         $this->validator->validate($contextData, $this->openSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'MetamorphosisOpenContext should validate against schema. Errors: ' . json_encode($this->validator->getErrors()),
+            'BecomingOpenContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testMetamorphosisOpenContextWithArrayBeAttributeValidates(): void
+    public function testBecomingOpenContextWithPipeJoinedBeValidates(): void
     {
-        // Test with array of possible transformations
-        $context = new MetamorphosisOpenContext(
-            fromClass: 'Be\Framework\Test\ProcessingData',
-            beAttribute: '#[Be([Success::class, Failure::class])]',
-            immanentSources: ['data' => 'ProcessingData::data'],
-            transcendentSources: [],
+        $context = new BecomingOpenContext(
+            from: 'Be\Framework\Test\ProcessingData',
+            be: 'Be\Framework\Test\Success|Be\Framework\Test\Failure',
+            input: ['data' => 'ProcessingData::data'],
+            inject: [],
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -94,16 +80,15 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Array Be attribute should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'Pipe-joined be should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testMetamorphosisOpenContextMinimalValidates(): void
+    public function testBecomingOpenContextMinimalValidates(): void
     {
-        // Test with only required fields
-        $context = new MetamorphosisOpenContext(
-            fromClass: 'Be\Framework\Test\SimpleInput',
-            beAttribute: '#[Be(SimpleOutput::class)]',
+        $context = new BecomingOpenContext(
+            from: 'Be\Framework\Test\SimpleInput',
+            be: 'Be\Framework\Test\SimpleOutput',
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -111,72 +96,85 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Minimal context should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'Minimal open context should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testMetamorphosisCloseContextWithSingleDestinationValidates(): void
+    public function testBecomingBeingContextValidates(): void
     {
-        $context = new MetamorphosisCloseContext(
-            properties: [
+        $context = new BecomingBeingContext(
+            prop: [
                 'email' => 'user@example.com',
                 'validated' => true,
             ],
-            be: new SingleDestination('NextTransformation'),
+            being: 'Be\Framework\Test\NextTransformation',
         );
 
         $contextData = json_decode(json_encode($context), false);
-        $this->validator->validate($contextData, $this->closeSchema, Constraint::CHECK_MODE_NORMAL);
+        $this->validator->validate($contextData, $this->beingSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Close context with SingleDestination should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'BecomingBeingContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testMetamorphosisCloseContextWithFinalDestinationValidates(): void
+    public function testBecomingFinalContextValidates(): void
     {
-        $context = new MetamorphosisCloseContext(
-            properties: [
+        $context = new BecomingFinalContext(
+            prop: [
                 'result' => 'success',
                 'data' => ['key' => 'value'],
             ],
-            be: new FinalDestination('FinalClass'),
+            final: 'Be\Framework\Test\FinalClass',
         );
 
         $contextData = json_decode(json_encode($context), false);
-        $this->validator->validate($contextData, $this->closeSchema, Constraint::CHECK_MODE_NORMAL);
+        $this->validator->validate($contextData, $this->finalSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Close context with FinalDestination should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'BecomingFinalContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testInvalidContextFailsValidation(): void
+    public function testBecomingErrorContextValidates(): void
     {
-        // Create invalid context (missing required field)
+        $context = new BecomingErrorContext(
+            error: 'RuntimeException',
+            message: 'Something went wrong',
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->errorSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BecomingErrorContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testInvalidOpenContextFailsValidation(): void
+    {
         $invalidData = (object) [
-            'beAttribute' => '#[Be(SomeClass::class)]',
-            // Missing required 'fromClass'
+            'be' => 'SomeClass',
+            // Missing required 'from'
         ];
 
         $this->validator->validate($invalidData, $this->openSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertFalse(
             $this->validator->isValid(),
-            'Invalid context should fail validation',
+            'Missing-required open should fail validation',
         );
 
         $errors = $this->validator->getErrors();
-        $this->assertNotEmpty($errors, 'Should have validation errors');
+        $this->assertNotEmpty($errors);
 
-        // Check that the error is about missing required field
         $errorMessages = array_map(static fn ($error) => $error['message'], $errors);
         $this->assertContains(
-            'The property fromClass is required',
+            'The property from is required',
             $errorMessages,
-            'Should report missing required field',
         );
     }
 }

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.org/schemas/becoming-final.json",
+  "title": "Becoming Final Context",
+  "description": "Close context for a metamorphosis that reached a terminal being — no further #[Be] attribute.",
+  "type": "object",
+  "required": ["final", "prop"],
+  "properties": {
+    "final": {
+      "type": "string",
+      "description": "Fully-qualified class name of the terminal being."
+    },
+    "prop": {
+      "type": "object",
+      "description": "Public readonly properties of the terminal being.",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

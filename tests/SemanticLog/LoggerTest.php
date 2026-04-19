@@ -9,10 +9,6 @@ use Be\Framework\BecomingArguments;
 use Be\Framework\ClassWithInjectObject;
 use Be\Framework\FakeProcessedData;
 use Be\Framework\NoConstructorClass;
-use Be\Framework\SemanticLog\Context\DestinationNotFound;
-use Be\Framework\SemanticLog\Context\FinalDestination;
-use Be\Framework\SemanticLog\Context\MultipleDestination;
-use Be\Framework\SemanticLog\Context\SingleDestination;
 use Be\Framework\SemanticVariable\NullValidator;
 use Be\Framework\TestInputWithDependency;
 use Be\Framework\TestMultipleDestination;
@@ -21,10 +17,10 @@ use Koriym\SemanticLogger\SemanticLogger;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use ReflectionClass;
+use RuntimeException;
 use stdClass;
 
 use function assert;
-use function get_class;
 use function is_array;
 
 #[Be(FakeProcessedData::class)]
@@ -59,50 +55,47 @@ final class LoggerTest extends TestCase
     {
         $input = new TestInput('test data');
 
-        // Test open logging
         $openId = $this->logger->open($input, FakeProcessedData::class);
         $this->assertNotEmpty($openId);
 
-        // Simulate successful transformation result
         $result = new stdClass();
         $result->processedData = 'test result';
         $this->logger->close($result, $openId);
 
-        // Verify semantic logger captured data
         $logData = $this->semanticLogger->toArray();
         $this->assertArrayHasKey('open', $logData);
         $this->assertArrayHasKey('close', $logData);
 
-        // Verify open log structure
+        // Verify open log structure — short keys
         $openData = $logData['open'];
         assert(is_array($openData) && is_array($openData['context']));
-        $this->assertEquals(TestInput::class, $openData['context']['fromClass']);
-        $this->assertEquals('#[Be(Be\Framework\FakeProcessedData::class)]', $openData['context']['beAttribute']);
+        $this->assertEquals(TestInput::class, $openData['context']['from']);
+        $this->assertEquals(FakeProcessedData::class, $openData['context']['be']);
 
-        // Verify close log structure
+        // Verify close log structure — result has no further #[Be] so it's final.
         $closeData = $logData['close'];
         assert(is_array($closeData) && is_array($closeData['context']));
-        $this->assertArrayHasKey('properties', $closeData['context']);
+        $this->assertArrayHasKey('prop', $closeData['context']);
+        $this->assertArrayHasKey('final', $closeData['context']);
     }
 
     public function testArrayBecomingLogging(): void
     {
         $input = new TestInput('test data');
 
-        // Array becoming should now return openId (logging enabled)
+        // Array becoming — be is pipe-joined
         $openId = $this->logger->open($input, ['Class1', 'Class2']);
         $this->assertNotEmpty($openId);
 
-        // Close the session to complete the log
         $this->logger->close(new stdClass(), $openId);
 
-        // Verify array becoming is logged correctly
         $logData = $this->semanticLogger->toArray();
         $openData = $logData['open'];
         assert(is_array($openData) && is_array($openData['context']));
-        $this->assertEquals('#[Be([Class1::class, Class2::class])]', $openData['context']['beAttribute']);
-        $this->assertEquals([], $openData['context']['immanentSources']); // Empty for array case
-        $this->assertEquals([], $openData['context']['transcendentSources']); // Empty for array case
+        $this->assertEquals('Class1|Class2', $openData['context']['be']);
+        // Empty maps are emitted as stdClass so the JSON form is "{}" rather than "[]".
+        $this->assertEquals(new \stdClass(), $openData['context']['input']);
+        $this->assertEquals(new \stdClass(), $openData['context']['inject']);
     }
 
     public function testErrorLogging(): void
@@ -111,55 +104,47 @@ final class LoggerTest extends TestCase
 
         $openId = $this->logger->open($input, FakeProcessedData::class);
 
-        // Test error case with null result
-        $this->logger->close(null, $openId, 'Test error message');
+        $exception = new RuntimeException('Test error message');
+        $this->logger->close(null, $openId, $exception);
 
         $logData = $this->semanticLogger->toArray();
         $closeData = $logData['close'];
         assert(is_array($closeData) && is_array($closeData['context']));
-        $this->assertInstanceOf(DestinationNotFound::class, $closeData['context']['be']);
-        /** @var DestinationNotFound $be */
-        $be = $closeData['context']['be'];
-        $this->assertEquals('Test error message', $be->error);
+        $this->assertEquals('becoming_error', $closeData['type']);
+        $this->assertEquals(RuntimeException::class, $closeData['context']['error']);
+        $this->assertEquals('Test error message', $closeData['context']['message']);
     }
 
-    public function testErrorLoggingWithoutMessage(): void
+    public function testErrorLoggingWithoutException(): void
     {
         $input = new TestInput('test data');
 
         $openId = $this->logger->open($input, FakeProcessedData::class);
 
-        // Test error case without error message (triggers 'Unknown error')
+        // Null result without exception — still closes as error with 'Unknown error'
         $this->logger->close(null, $openId);
 
         $logData = $this->semanticLogger->toArray();
         $closeData = $logData['close'];
-        $destinationNotFound = $closeData['context']['be'];
-        $this->assertInstanceOf(DestinationNotFound::class, $destinationNotFound);
-        $this->assertEquals('Unknown error', $destinationNotFound->error);
+        $this->assertEquals('becoming_error', $closeData['type']);
+        $this->assertEquals('Unknown error', $closeData['context']['message']);
     }
 
     public function testEmptyOpenIdSkip(): void
     {
-        // Test that close() with empty openId returns early without causing errors
-        // This simulates the array becoming case where openId is empty
-
-        // Should not throw exception or create any logs
+        // close() with empty openId returns early without error
         $this->logger->close(new stdClass(), '');
-
-        // Test passes if no exception is thrown - early return works correctly
         $this->assertTrue(true);
     }
 
     public function testComplexTransformationWithDependency(): void
     {
-        // Create input with dependency injection to test extractTranscendentSources
         $injector = new Injector();
         $input = new TestInputWithDependency('test data', $injector);
 
         $openId = $this->logger->open($input, FakeProcessedData::class);
 
-        // Use FakeProcessedData result to test determineDestination as FinalDestination
+        // FakeProcessedData has no further #[Be] → final close
         $result = new FakeProcessedData('processed');
         $this->logger->close($result, $openId);
 
@@ -167,35 +152,27 @@ final class LoggerTest extends TestCase
         $openData = $logData['open'];
         $closeData = $logData['close'];
 
-        // Verify transcendent sources are captured
-        $this->assertArrayHasKey('transcendentSources', $openData['context']);
+        $this->assertArrayHasKey('inject', $openData['context']);
 
-        // Verify destination determination
-        $this->assertInstanceOf(FinalDestination::class, $closeData['context']['be']);
-        $this->assertEquals(FakeProcessedData::class, $closeData['context']['be']->finalClass);
+        $this->assertEquals('becoming_final', $closeData['type']);
+        $this->assertEquals(FakeProcessedData::class, $closeData['context']['final']);
     }
 
     public function testExtractTranscendentSourcesDirectly(): void
     {
-        // Test the private extractTranscendentSources method directly using reflection
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractTranscendentSources');
         $method->setAccessible(true);
 
-        // Create args for a class with #[Inject] parameter (use BecomingTestWithUnion from main tests)
         $args = [
-            'data' => 'test data', // #[Input] parameter - should not appear in transcendent sources
-            'unionParam' => 'test-union-value', // #[Inject] parameter - should appear in transcendent sources
+            'data' => 'test data',
+            'unionParam' => 'test-union-value',
         ];
 
-        // Use a simple class name that exists - let's use FakeProcessedData but expect no transcendent sources
-        // since it only has #[Input] parameters
         $result = $method->invoke($this->logger, $args, FakeProcessedData::class);
 
         // FakeProcessedData only has #[Input] parameters, so no transcendent sources expected
-        $expected = [];
-
-        $this->assertEquals($expected, $result);
+        $this->assertEquals([], $result);
     }
 
     public function testMultipleDestination(): void
@@ -203,16 +180,15 @@ final class LoggerTest extends TestCase
         $input = new TestInput('test data');
         $openId = $this->logger->open($input, FakeProcessedData::class);
 
-        // Create result with multiple destinations
+        // TestMultipleDestination has #[Be([A, B])] — next step is "being" (continuing)
         $result = new TestMultipleDestination();
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
         $closeData = $logData['close'];
 
-        // Debug: check what type of destination was actually created
-        $actualType = get_class($closeData['context']['be']);
-        $this->assertInstanceOf(MultipleDestination::class, $closeData['context']['be'], "Expected MultipleDestination, got: $actualType");
+        $this->assertEquals('becoming_being', $closeData['type']);
+        $this->assertEquals(TestMultipleDestination::class, $closeData['context']['being']);
     }
 
     public function testSingleDestination(): void
@@ -220,36 +196,31 @@ final class LoggerTest extends TestCase
         $input = new TestInput('test data');
         $openId = $this->logger->open($input, FakeProcessedData::class);
 
-        // Create result with single destination
+        // TestSingleDestination has #[Be(FakeProcessedData::class)] — next step is "being"
         $result = new TestSingleDestination('test');
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
         $closeData = $logData['close'];
 
-        $this->assertInstanceOf(SingleDestination::class, $closeData['context']['be']);
-        $this->assertEquals(FakeProcessedData::class, $closeData['context']['be']->nextClass);
+        $this->assertEquals('becoming_being', $closeData['type']);
+        $this->assertEquals(TestSingleDestination::class, $closeData['context']['being']);
     }
 
     public function testExtractTranscendentSourcesWithNoConstructor(): void
     {
-        // Test the case where target class has no constructor
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractTranscendentSources');
         $method->setAccessible(true);
 
         $args = ['data' => 'test'];
-
-        // Use NoConstructorClass which has no constructor
         $result = $method->invoke($this->logger, $args, NoConstructorClass::class);
 
-        // Should return empty array when no constructor exists
         $this->assertEquals([], $result);
     }
 
     public function testExtractPropertiesDirectly(): void
     {
-        // Test the private extractProperties method directly
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractProperties');
         $method->setAccessible(true);
@@ -289,7 +260,6 @@ final class LoggerTest extends TestCase
 
     public function testExtractTranscendentSourcesWithInjectObject(): void
     {
-        // Test uncovered lines: continue and object case
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractTranscendentSources');
         $method->setAccessible(true);
@@ -297,20 +267,15 @@ final class LoggerTest extends TestCase
         $injectedObject = new stdClass();
         $injectedObject->test = 'value';
 
-        // Args with object injection (covers line 149) and missing param (covers line 140)
         $args = [
             'data' => 'test data',
             'injectedObject' => $injectedObject,
-            // 'missingParam' is intentionally missing to trigger continue (line 140)
         ];
 
         $result = $method->invoke($this->logger, $args, ClassWithInjectObject::class);
 
-        // Should contain the injected object class name
         $this->assertArrayHasKey('injectedObject', $result);
         $this->assertSame('stdClass', $result['injectedObject']);
-
-        // Missing param should not be in result due to continue
         $this->assertArrayNotHasKey('missingParam', $result);
     }
 }

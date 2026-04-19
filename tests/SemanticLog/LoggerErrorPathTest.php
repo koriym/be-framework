@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticLog;
 
 use Be\Framework\BecomingArgumentsInterface;
-use Be\Framework\SemanticLog\Context\DestinationNotFound;
-use Be\Framework\SemanticLog\Context\FinalDestination;
-use Be\Framework\SemanticLog\Context\MetamorphosisCloseContext;
-use Be\Framework\SemanticLog\Context\MetamorphosisOpenContext;
-use Be\Framework\SemanticLog\Context\MultipleDestination;
-use Be\Framework\SemanticLog\Context\SingleDestination;
+use Be\Framework\SemanticLog\Context\BecomingBeingContext;
+use Be\Framework\SemanticLog\Context\BecomingErrorContext;
+use Be\Framework\SemanticLog\Context\BecomingFinalContext;
+use Be\Framework\SemanticLog\Context\BecomingOpenContext;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
+use RuntimeException;
 use stdClass;
 
 use function is_string;
@@ -40,7 +39,6 @@ final class LoggerErrorPathTest extends TestCase
         $openId = $this->logger->open($input, stdClass::class);
 
         $this->assertIsString($openId);
-        // The openId might be empty if no transformation is possible, which is valid
         $this->assertTrue(is_string($openId));
     }
 
@@ -52,13 +50,11 @@ final class LoggerErrorPathTest extends TestCase
         // This should handle gracefully without throwing exceptions
         $this->logger->close($result, $invalidOpenId);
 
-        // If no exception is thrown, the test passes
         $this->expectNotToPerformAssertions();
     }
 
     public function testDetermineDestinationWithObjectHavingNoBeAttribute(): void
     {
-        // Create an object without #[Be] attribute to trigger DestinationNotFound
         $objectWithoutBeAttribute = new class {
             public string $data = 'test';
         };
@@ -71,7 +67,6 @@ final class LoggerErrorPathTest extends TestCase
 
     public function testExtractTranscendentSourcesWithComplexObject(): void
     {
-        // Test extractTranscendentSources with various object types
         $complexObject = new class {
             public function __construct(
                 public string $data = 'test',
@@ -91,19 +86,35 @@ final class LoggerErrorPathTest extends TestCase
         $input = new stdClass();
         $openId = $this->logger->open($input, stdClass::class);
 
-        // Close with null result to test null handling
+        // Close with null result (no exception) — legacy path, still closes
         $this->logger->close(null, $openId);
 
         $this->expectNotToPerformAssertions();
     }
 
+    public function testLoggerWithException(): void
+    {
+        // Use a real SemanticLogger so we can inspect the emitted becoming_error payload.
+        $semanticLogger = new \Koriym\SemanticLogger\SemanticLogger();
+        $becomingArguments = $this->createMock(BecomingArgumentsInterface::class);
+        $logger = new Logger($semanticLogger, $becomingArguments);
+
+        $input = new stdClass();
+        $openId = $logger->open($input, stdClass::class);
+
+        $logger->close(null, $openId, new RuntimeException('boom'));
+
+        $logData = $semanticLogger->toArray();
+        $this->assertSame('becoming_error', $logData['close']['type']);
+        $this->assertSame(RuntimeException::class, $logData['close']['context']['error']);
+        $this->assertSame('boom', $logData['close']['context']['message']);
+    }
+
     public function testLoggerContextsCreation(): void
     {
-        // Test that different context types are created properly
         $input = new stdClass();
         $openId = $this->logger->open($input, stdClass::class);
 
-        // Test with different result types to trigger different destination contexts
         $result = new class {
             public string $output = 'result';
         };
@@ -113,58 +124,56 @@ final class LoggerErrorPathTest extends TestCase
         $this->expectNotToPerformAssertions();
     }
 
-    public function testMetamorphosisOpenContextCreation(): void
+    public function testBecomingOpenContextCreation(): void
     {
-        // Test MetamorphosisOpenContext creation with edge cases
-        $openContext = new MetamorphosisOpenContext(
-            fromClass: 'TestSource',
-            beAttribute: 'TestDestination',
-            immanentSources: ['prop1' => 'value1'],
-            transcendentSources: ['service' => 'injected'],
+        $openContext = new BecomingOpenContext(
+            from: 'TestSource',
+            be: 'TestDestination',
+            input: ['prop1' => 'value1'],
+            inject: ['service' => 'injected'],
         );
 
-        $this->assertInstanceOf(MetamorphosisOpenContext::class, $openContext);
-        $this->assertSame('TestSource', $openContext->fromClass);
-        $this->assertSame('TestDestination', $openContext->beAttribute);
+        $this->assertSame('TestSource', $openContext->from);
+        $this->assertSame('TestDestination', $openContext->be);
+        $this->assertSame(['prop1' => 'value1'], $openContext->input);
+        $this->assertSame(['service' => 'injected'], $openContext->inject);
     }
 
-    public function testMetamorphosisCloseContextCreation(): void
+    public function testBecomingBeingContextCreation(): void
     {
-        // Test MetamorphosisCloseContext creation
-        $destination = new SingleDestination('TargetClass');
-
-        $closeContext = new MetamorphosisCloseContext(
-            properties: ['result' => 'success'],
-            be: $destination,
+        $ctx = new BecomingBeingContext(
+            prop: ['result' => 'success'],
+            being: 'TargetClass',
         );
 
-        $this->assertInstanceOf(MetamorphosisCloseContext::class, $closeContext);
-        $this->assertSame(['result' => 'success'], $closeContext->properties);
-        $this->assertInstanceOf(SingleDestination::class, $closeContext->be);
+        $this->assertSame(['result' => 'success'], $ctx->prop);
+        $this->assertSame('TargetClass', $ctx->being);
     }
 
-    public function testAllDestinationTypes(): void
+    public function testBecomingFinalContextCreation(): void
     {
-        // Test all destination context types
-        $singleDest = new SingleDestination('SingleClass');
-        $multipleDest = new MultipleDestination(['Class1', 'Class2']);
-        $finalDest = new FinalDestination('FinalClass');
-        $notFoundDest = new DestinationNotFound('Error message', ['Class1', 'Class2']);
+        $ctx = new BecomingFinalContext(
+            prop: ['value' => 42],
+            final: 'TerminalClass',
+        );
 
-        $this->assertInstanceOf(SingleDestination::class, $singleDest);
-        $this->assertInstanceOf(MultipleDestination::class, $multipleDest);
-        $this->assertInstanceOf(FinalDestination::class, $finalDest);
-        $this->assertInstanceOf(DestinationNotFound::class, $notFoundDest);
+        $this->assertSame(['value' => 42], $ctx->prop);
+        $this->assertSame('TerminalClass', $ctx->final);
+    }
 
-        $this->assertSame('SingleClass', $singleDest->nextClass);
-        $this->assertSame(['Class1', 'Class2'], $multipleDest->possibleClasses);
-        $this->assertSame('FinalClass', $finalDest->finalClass);
-        $this->assertSame('Error message', $notFoundDest->error);
+    public function testBecomingErrorContextCreation(): void
+    {
+        $ctx = new BecomingErrorContext(
+            error: 'RuntimeException',
+            message: 'boom',
+        );
+
+        $this->assertSame('RuntimeException', $ctx->error);
+        $this->assertSame('boom', $ctx->message);
     }
 
     public function testLoggerWithInjectorParameter(): void
     {
-        // Test with object that has Injector parameter
         $injectorObject = new class {
             public function __construct(
                 public string $data = 'test',

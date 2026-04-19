@@ -85,7 +85,7 @@ final class Being
 
             return $result;
         } catch (Throwable $e) {
-            $this->logger->close(null, $openId, $e->getMessage());
+            $this->logger->close(null, $openId, $e);
 
             throw $e;
         }

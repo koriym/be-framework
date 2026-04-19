@@ -67,7 +67,7 @@ final class LddLoopTest extends TestCase
 
     /**
      * Round-trip through json_encode/decode to flatten nested value objects
-     * (`FinalDestination`, etc.) into plain arrays for structural comparison.
+     * into plain arrays for structural comparison.
      *
      * @param  array<string, mixed> $data
      *
