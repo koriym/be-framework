@@ -205,23 +205,54 @@ final class Logger implements LoggerInterface
     }
 
     /**
+     * Extract object properties safely, handling uninitialized properties
+     *
+     * Handles both declared properties (with uninitialized property checks)
+     * and dynamic properties (stdClass, objects with __set).
+     *
      * @return ObjectProperties
      * @phpstan-return array<string, mixed>
      */
     private function extractProperties(object $result): array
     {
-        // @todo Handle uninitialized properties in Accept pattern objects
-        // @todo Privacy/Security: Consider extracting shape-only metadata instead of actual values
-        //       For production use, should emit property names + types only, not raw values
-        //       e.g., ['email' => 'string', 'validated' => 'bool'] instead of actual data
-        // For now, get_object_vars() covers all realistic Be Framework objects.
-        //
         // Exclude any `Been` property: it carries this very log and would
         // embed the event stream recursively inside the close context.
-        return array_filter(
+        // Start with dynamic properties (stdClass, objects with __set) which
+        // already come back with string keys via get_object_vars().
+        $properties = array_filter(
             get_object_vars($result),
             static fn (mixed $value): bool => ! ($value instanceof Been),
         );
+
+        // Override/supplement with declared properties via reflection so
+        // Accept-pattern objects with uninitialized properties are included.
+        foreach ((new ReflectionClass($result))->getProperties() as $property) {
+            if (! $property->isPublic() || $property->isStatic()) {
+                continue;
+            }
+
+            $name = $property->getName();
+
+            // Handle uninitialized properties (Accept pattern objects may have these)
+            if (! $property->isInitialized($result)) {
+                $properties[$name] = null;
+                continue;
+            }
+
+            /**
+             * @psalm-suppress MixedAssignment
+             * @var mixed $value
+             */
+            $value = $property->getValue($result);
+            if ($value instanceof Been) {
+                unset($properties[$name]);
+                continue;
+            }
+
+            $properties[$name] = $value;
+        }
+
+        return $properties;
     }
 
     private function determineDestination(object $result): SingleDestination|MultipleDestination|FinalDestination

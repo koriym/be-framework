@@ -264,6 +264,29 @@ final class LoggerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testExtractPropertiesWithUninitializedDeclaredProperty(): void
+    {
+        // Accept-pattern objects leave some typed public properties uninitialized;
+        // extractProperties must surface them as null rather than throw or omit them,
+        // and must ignore public static properties entirely.
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractProperties');
+        $method->setAccessible(true);
+
+        $acceptLike = new class {
+            public static string $shared = 'class-level';
+            public string $initialized = 'ready';
+            public string $pending;
+        };
+
+        $result = $method->invoke($this->logger, $acceptLike);
+
+        $this->assertArrayHasKey('pending', $result);
+        $this->assertNull($result['pending']);
+        $this->assertSame('ready', $result['initialized']);
+        $this->assertArrayNotHasKey('shared', $result);
+    }
+
     public function testExtractTranscendentSourcesWithInjectObject(): void
     {
         // Test uncovered lines: continue and object case

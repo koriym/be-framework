@@ -11,11 +11,11 @@ use Be\Framework\Types;
  *
  * @psalm-import-type QualifiedClasses from Types
  */
-final class MultipleDestination
+final readonly class MultipleDestination
 {
     /** @param QualifiedClasses $possibleClasses */
     public function __construct(
-        public readonly array $possibleClasses,
+        public array $possibleClasses,
     ) {
     }
 }

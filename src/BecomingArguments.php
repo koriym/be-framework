@@ -11,6 +11,7 @@ use Be\Framework\SemanticVariable\SemanticValidatorInterface;
 use Override;
 use Ray\Di\Di\Inject;
 use Ray\Di\Di\Named;
+use Ray\Di\Exception\Unbound;
 use Ray\Di\InjectorInterface;
 use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
@@ -84,8 +85,12 @@ final class BecomingArguments implements BecomingArgumentsInterface
     /**
      * Resolves #[Inject] parameters from DI container
      *
-     * Supports #[Named] attributes for named bindings.
-     * Scalar types require #[Named] or default values (Ray.Di historical compatibility).
+     * Resolution rules:
+     * - Class/Interface types: Resolved by type name from container
+     * - Scalar types (int, string, etc.): Require #[Named('binding_name')] attribute
+     * - Union/Intersection types: Not supported, require #[Named] attribute
+     *
+     * @throws Unbound When binding cannot be resolved.
      */
     private function getInjectParameter(ReflectionParameter $param): mixed
     {
