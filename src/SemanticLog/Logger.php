@@ -227,7 +227,7 @@ final class Logger implements LoggerInterface
         // Override/supplement with declared properties via reflection so
         // Accept-pattern objects with uninitialized properties are included.
         foreach ((new ReflectionClass($result))->getProperties() as $property) {
-            if (! $property->isPublic()) {
+            if (! $property->isPublic() || $property->isStatic()) {
                 continue;
             }
 
