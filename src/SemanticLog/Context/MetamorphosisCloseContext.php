@@ -33,17 +33,13 @@ final class MetamorphosisCloseContext extends AbstractContext implements JsonSer
     ) {
     }
 
-    /** @return ObjectProperties */
+    /** @return array{properties: object, be: SingleDestination|MultipleDestination|FinalDestination|DestinationNotFound} */
     #[Override]
     public function jsonSerialize(): array
     {
-        // For now, create a simplified structure that matches schema
         return [
-            'fromClass' => 'Unknown',
-            'toClass' => 'Unknown',
-            'beAttribute' => 'Unknown',
-            'resultProperties' => empty($this->properties) ? new stdClass() : (object) $this->properties,
-            'success' => true, // Simplified for now
+            'properties' => empty($this->properties) ? new stdClass() : (object) $this->properties,
+            'be' => $this->be,
         ];
     }
 }
