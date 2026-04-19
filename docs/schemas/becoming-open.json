@@ -1,31 +1,31 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://be-framework.org/schemas/metamorphosis-open.json",
-  "title": "Metamorphosis Open Context",
-  "description": "Arguments captured at the start of a metamorphosis — just before the next being is instantiated.",
+  "$id": "https://be-framework.org/schemas/becoming-open.json",
+  "title": "Becoming Open Context",
+  "description": "Captured when a metamorphosis starts — what we are trying to become and which inputs/injects feed it.",
   "type": "object",
-  "required": ["fromClass", "beAttribute"],
+  "required": ["from", "be"],
   "properties": {
-    "fromClass": {
+    "from": {
       "type": "string",
       "description": "Fully-qualified class name of the being being transformed from."
     },
-    "beAttribute": {
+    "be": {
       "type": "string",
-      "description": "Stringified #[Be(...)] attribute declaring the next destination.",
+      "description": "Target class for the next metamorphosis. Single FQCN, or pipe-joined FQCNs when the attribute declares multiple candidates.",
       "examples": [
-        "#[Be(ValidatedUser::class)]",
-        "#[Be([Success::class, Failure::class])]"
+        "App\\Being\\ValidatedUser",
+        "App\\Being\\Success|App\\Being\\Failure"
       ]
     },
-    "immanentSources": {
+    "input": {
       "type": "object",
       "description": "Map of #[Input] parameter names to their origin path on the previous being.",
       "additionalProperties": {
         "type": "string"
       }
     },
-    "transcendentSources": {
+    "inject": {
       "type": "object",
       "description": "Map of #[Inject] parameter names to the interface / service identifier resolved from the DI container.",
       "additionalProperties": {

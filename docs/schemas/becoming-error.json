@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.org/schemas/becoming-error.json",
+  "title": "Becoming Error Context",
+  "description": "Close context for a metamorphosis that failed with a thrown exception.",
+  "type": "object",
+  "required": ["error", "message"],
+  "properties": {
+    "error": {
+      "type": "string",
+      "description": "Fully-qualified class name of the thrown exception."
+    },
+    "message": {
+      "type": "string",
+      "description": "Exception message."
+    }
+  },
+  "additionalProperties": false
+}
