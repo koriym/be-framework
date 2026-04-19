@@ -22,7 +22,7 @@ final class BecomingBeingContext extends AbstractContext implements JsonSerializ
 {
     public const string TYPE = 'becoming_being';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/docs/schemas/becoming-being.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-being.json';
 
     /**
      * @param class-string     $being Class FQCN of the new being (the instantiated result)

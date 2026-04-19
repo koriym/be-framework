@@ -15,6 +15,7 @@ use JsonException;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
 use Ray\Di\Di\Inject;
+use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use Throwable;
 
@@ -68,7 +69,7 @@ final class Logger implements LoggerInterface
         if (is_string($becoming)) {
             // Single transformation case
             $args = $this->becomingArguments->be($current, $becoming);
-            $input = $this->extractImmanentSources($current, $args);
+            $input = $this->extractImmanentSources($current, $args, $becoming);
             $inject = $this->extractTranscendentSources($args, $becoming);
 
             return $this->logger->open(new BecomingOpenContext(
@@ -136,22 +137,44 @@ final class Logger implements LoggerInterface
     }
 
     /**
+     * Extract #[Input] parameter sources by inspecting the target constructor.
+     *
+     * A parameter belongs in immanent sources only when it carries `#[Input]` and the
+     * current being exposes a property of the same name — mirroring extractTranscendentSources'
+     * attribute-driven approach so non-input arguments that happen to share a name with a public
+     * property don't leak in.
+     *
      * @param ConstructorArguments $args
      * @phpstan-param array<string, mixed> $args
      *
      * @return ImmanentSources
      * @phpstan-return array<string, string>
      */
-    private function extractImmanentSources(object $current, array $args): array
+    private function extractImmanentSources(object $current, array $args, string $becoming): array
     {
-        $immanentSources = [];
-        $properties = get_object_vars($current);
+        /** @var class-string $becoming */
+        $constructor = (new ReflectionClass($becoming))->getConstructor();
+        if ($constructor === null) {
+            return [];
+        }
 
-        // Use parameter names for reliable mapping (BecomingArguments ensures parameter names match property names for #[Input])
-        foreach (array_keys($args) as $paramName) {
-            if (array_key_exists($paramName, $properties)) {
-                $immanentSources[$paramName] = $current::class . '::' . $paramName;
+        $properties = get_object_vars($current);
+        $immanentSources = [];
+        foreach ($constructor->getParameters() as $param) {
+            $paramName = $param->getName();
+            if (! array_key_exists($paramName, $args)) {
+                continue;
             }
+
+            if (empty($param->getAttributes(Input::class))) {
+                continue;
+            }
+
+            if (! array_key_exists($paramName, $properties)) {
+                continue;
+            }
+
+            $immanentSources[$paramName] = $current::class . '::' . $paramName;
         }
 
         return $immanentSources;

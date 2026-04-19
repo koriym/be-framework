@@ -94,12 +94,20 @@ final class LoggerErrorPathTest extends TestCase
 
     public function testLoggerWithException(): void
     {
+        // Use a real SemanticLogger so we can inspect the emitted becoming_error payload.
+        $semanticLogger = new \Koriym\SemanticLogger\SemanticLogger();
+        $becomingArguments = $this->createMock(BecomingArgumentsInterface::class);
+        $logger = new Logger($semanticLogger, $becomingArguments);
+
         $input = new stdClass();
-        $openId = $this->logger->open($input, stdClass::class);
+        $openId = $logger->open($input, stdClass::class);
 
-        $this->logger->close(null, $openId, new RuntimeException('boom'));
+        $logger->close(null, $openId, new RuntimeException('boom'));
 
-        $this->expectNotToPerformAssertions();
+        $logData = $semanticLogger->toArray();
+        $this->assertSame('becoming_error', $logData['close']['type']);
+        $this->assertSame(RuntimeException::class, $logData['close']['context']['error']);
+        $this->assertSame('boom', $logData['close']['context']['message']);
     }
 
     public function testLoggerContextsCreation(): void

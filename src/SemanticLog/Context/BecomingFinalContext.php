@@ -19,7 +19,7 @@ final class BecomingFinalContext extends AbstractContext implements JsonSerializ
 {
     public const string TYPE = 'becoming_final';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/docs/schemas/becoming-final.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-final.json';
 
     /**
      * @param class-string     $final Class FQCN of the terminal being

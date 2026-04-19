@@ -15,7 +15,7 @@ final class BecomingErrorContext extends AbstractContext implements JsonSerializ
 {
     public const string TYPE = 'becoming_error';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/docs/schemas/becoming-error.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-error.json';
 
     /**
      * @param string $error   Fully-qualified class name of the thrown exception

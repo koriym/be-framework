@@ -4,7 +4,7 @@
   "title": "Becoming Open Context",
   "description": "Captured when a metamorphosis starts — what we are trying to become and which inputs/injects feed it.",
   "type": "object",
-  "required": ["from", "be"],
+  "required": ["from", "be", "input", "inject"],
   "properties": {
     "from": {
       "type": "string",

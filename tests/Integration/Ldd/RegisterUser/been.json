@@ -3,7 +3,7 @@
     "open": {
         "id": "becoming_open_1",
         "type": "becoming_open",
-        "schemaUrl": "https://be-framework.org/docs/schemas/becoming-open.json",
+        "schemaUrl": "https://be-framework.org/schemas/becoming-open.json",
         "context": {
             "from": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
             "be": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
@@ -41,7 +41,7 @@
     "close": {
         "id": "becoming_final_1",
         "type": "becoming_final",
-        "schemaUrl": "https://be-framework.org/docs/schemas/becoming-final.json",
+        "schemaUrl": "https://be-framework.org/schemas/becoming-final.json",
         "context": {
             "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
             "prop": {

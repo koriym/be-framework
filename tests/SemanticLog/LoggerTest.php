@@ -93,8 +93,9 @@ final class LoggerTest extends TestCase
         $openData = $logData['open'];
         assert(is_array($openData) && is_array($openData['context']));
         $this->assertEquals('Class1|Class2', $openData['context']['be']);
-        $this->assertEquals([], $openData['context']['input']);
-        $this->assertEquals([], $openData['context']['inject']);
+        // Empty maps are emitted as stdClass so the JSON form is "{}" rather than "[]".
+        $this->assertEquals(new \stdClass(), $openData['context']['input']);
+        $this->assertEquals(new \stdClass(), $openData['context']['inject']);
     }
 
     public function testErrorLogging(): void
