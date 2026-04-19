@@ -2,45 +2,36 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://be-framework.org/schemas/metamorphosis-open.json",
   "title": "Metamorphosis Open Context",
-  "description": "Schema for transformation start - constructor arguments BEFORE instantiation",
+  "description": "Arguments captured at the start of a metamorphosis — just before the next being is instantiated.",
   "type": "object",
   "required": ["fromClass", "beAttribute"],
   "properties": {
     "fromClass": {
       "type": "string",
-      "description": "Class being transformed from",
-      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
+      "description": "Fully-qualified class name of the being being transformed from."
     },
     "beAttribute": {
       "type": "string",
-      "description": "The #[Be] attribute triggering this transformation",
-      "examples": ["#[Be(ValidatedUser::class)]", "#[Be([Success::class, Failure::class])]"]
+      "description": "Stringified #[Be(...)] attribute declaring the next destination.",
+      "examples": [
+        "#[Be(ValidatedUser::class)]",
+        "#[Be([Success::class, Failure::class])]"
+      ]
     },
     "immanentSources": {
       "type": "object",
-      "description": "#[Input] parameter values from previous object",
-      "additionalProperties": true
+      "description": "Map of #[Input] parameter names to their origin path on the previous being.",
+      "additionalProperties": {
+        "type": "string"
+      }
     },
     "transcendentSources": {
       "type": "object",
-      "description": "#[Inject] interface/service names from DI container",
+      "description": "Map of #[Inject] parameter names to the interface / service identifier resolved from the DI container.",
       "additionalProperties": {
         "type": "string"
       }
     }
   },
-  "links": [
-    {
-      "anchor": "#/properties/beAttribute",
-      "rel": "describedby",
-      "href": "https://be-framework.org/docs/be-attribute",
-      "title": "Be Attribute Documentation"
-    },
-    {
-      "anchor": "#/properties/immanentSources",
-      "rel": "describedby",
-      "href": "https://be-framework.org/docs/immanent-transcendent",
-      "title": "Immanent and Transcendent Factors"
-    }
-  ]
+  "additionalProperties": false
 }

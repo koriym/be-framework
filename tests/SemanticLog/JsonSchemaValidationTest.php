@@ -179,20 +179,4 @@ final class JsonSchemaValidationTest extends TestCase
             'Should report missing required field',
         );
     }
-
-    public function testInvalidClassNamePatternFailsValidation(): void
-    {
-        // Create context with invalid class name pattern
-        $invalidData = (object) [
-            'fromClass' => '123InvalidClassName', // Class names can't start with numbers
-            'beAttribute' => '#[Be(ValidClass::class)]',
-        ];
-
-        $this->validator->validate($invalidData, $this->openSchema, Constraint::CHECK_MODE_NORMAL);
-
-        $this->assertFalse(
-            $this->validator->isValid(),
-            'Invalid class name pattern should fail validation',
-        );
-    }
 }

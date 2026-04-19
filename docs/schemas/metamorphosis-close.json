@@ -2,61 +2,78 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://be-framework.org/schemas/metamorphosis-close.json",
   "title": "Metamorphosis Close Context",
-  "description": "Schema for transformation completion - object properties AFTER instantiation",
+  "description": "Result captured at the end of a metamorphosis: the constructed being's public properties and its next destination.",
   "type": "object",
-  "required": ["fromClass", "toClass", "beAttribute", "resultProperties", "success"],
+  "required": ["properties", "be"],
   "properties": {
-    "fromClass": {
-      "type": "string",
-      "description": "Class that was transformed from",
-      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
-    },
-    "toClass": {
-      "type": "string",
-      "description": "Class that was transformed to",
-      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$"
-    },
-    "beAttribute": {
-      "type": "string",
-      "description": "The #[Be] attribute that triggered transformation",
-      "examples": ["#[Be(ValidatedUser::class)]", "#[Be([Success::class, Failure::class])]"]
-    },
-    "resultProperties": {
+    "properties": {
       "type": "object",
-      "description": "Object properties after construction",
+      "description": "Public readonly properties of the constructed being (excluding the Been log carrier).",
       "additionalProperties": true
     },
-    "success": {
-      "type": "boolean",
-      "description": "Whether the transformation succeeded"
-    },
-    "error": {
-      "type": ["string", "null"],
-      "description": "Error message if transformation failed"
-    },
-    "duration": {
-      "type": "number",
-      "description": "Time taken for this transformation in seconds",
-      "minimum": 0
-    },
-    "memoryUsage": {
-      "type": "integer",
-      "description": "Memory used during transformation in bytes",
-      "minimum": 0
+    "be": {
+      "description": "Next metamorphosis destination — a single class, a branch of candidate classes, a terminal class, or a not-found record.",
+      "oneOf": [
+        {
+          "title": "SingleDestination",
+          "type": "object",
+          "required": ["nextClass"],
+          "properties": {
+            "nextClass": {
+              "type": "string",
+              "description": "Fully-qualified class name of the next being."
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "title": "MultipleDestination",
+          "type": "object",
+          "required": ["possibleClasses"],
+          "properties": {
+            "possibleClasses": {
+              "type": "array",
+              "description": "Candidate class names considered for the next being.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "title": "FinalDestination",
+          "type": "object",
+          "required": ["finalClass"],
+          "properties": {
+            "finalClass": {
+              "type": "string",
+              "description": "Fully-qualified class name of the terminal being."
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "title": "DestinationNotFound",
+          "type": "object",
+          "required": ["error"],
+          "properties": {
+            "error": {
+              "type": "string",
+              "description": "Reason the destination could not be resolved."
+            },
+            "attemptedClasses": {
+              "type": "array",
+              "description": "Class names that were tried and rejected.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     }
   },
-  "links": [
-    {
-      "anchor": "#/properties/resultProperties",
-      "rel": "describedby",
-      "href": "https://be-framework.org/docs/being-classes",
-      "title": "Being Classes Documentation"
-    },
-    {
-      "anchor": "#/properties/error",
-      "rel": "related",
-      "href": "https://be-framework.org/docs/error-handling",
-      "title": "Error Handling in Be Framework"
-    }
-  ]
+  "additionalProperties": false
 }
