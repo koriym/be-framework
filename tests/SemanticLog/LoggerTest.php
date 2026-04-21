@@ -14,6 +14,7 @@ use Be\Framework\TestInputWithDependency;
 use Be\Framework\TestMultipleDestination;
 use Be\Framework\TestSingleDestination;
 use Koriym\SemanticLogger\SemanticLogger;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use ReflectionClass;
@@ -142,6 +143,16 @@ final class LoggerTest extends TestCase
         // close() with empty openId returns early without error
         $this->logger->close(new stdClass(), '');
         $this->assertTrue(true);
+    }
+
+    public function testCloseChainRejectsNullFinalWithoutException(): void
+    {
+        // closeChain(null, $id) with no exception has no valid close-payload shape
+        // under the becoming-close oneOf schema — refuse rather than emit empty {}.
+        $chainId = $this->logger->openChain(new TestInput('data'));
+
+        $this->expectException(LogicException::class);
+        $this->logger->closeChain(null, $chainId);
     }
 
     public function testComplexTransformationWithDependency(): void

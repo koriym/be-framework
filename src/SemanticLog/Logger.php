@@ -18,6 +18,7 @@ use Be\Framework\SemanticLog\Context\BeingOpenContext;
 use JsonException;
 use Koriym\SemanticLogger\AbstractContext;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
+use LogicException;
 use Override;
 use Ray\Di\Di\Inject;
 use Ray\InputQuery\Attribute\Input;
@@ -71,6 +72,11 @@ final class Logger implements LoggerInterface
 
     /**
      * Close the outer chain span.
+     *
+     * @throws LogicException When called with neither a terminal being nor an
+     *                        exception — the close payload has no valid shape
+     *                        under the `oneOf` constraint in
+     *                        `becoming-close.json`, so we refuse to emit one.
      */
     #[Override]
     public function closeChain(object|null $final, string $openId, Throwable|null $exception = null): void
@@ -88,8 +94,14 @@ final class Logger implements LoggerInterface
             return;
         }
 
+        if ($final === null) {
+            throw new LogicException(
+                'Logger::closeChain() requires a terminal being on success; got null with no exception.',
+            );
+        }
+
         $this->logger->close(new BecomingCloseContext(
-            final: $final !== null ? $final::class : null,
+            final: $final::class,
         ), $openId);
     }
 
