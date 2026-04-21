@@ -16,6 +16,7 @@ use Be\Framework\SemanticVariable\SemanticValidator;
 use Be\Framework\SemanticVariable\SemanticValidatorInterface;
 use Koriym\SemanticLogger\SemanticLogger;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
+use Override;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 
@@ -26,6 +27,7 @@ final class BeModule extends AbstractModule
         parent::__construct($module);
     }
 
+    #[Override]
     public function configure(): void
     {
         $this->bind(BecomingArgumentsInterface::class)->to(BecomingArguments::class);

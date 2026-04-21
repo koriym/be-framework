@@ -13,21 +13,45 @@ use Throwable;
  * Simple open/close pattern for transformation logging.
  *
  * @psalm-import-type QualifiedClassName from Types
- * @psalm-import-type QualifiedClasses from Types
+ * @psalm-import-type ConstructorArguments from Types
  * @psalm-import-type LogContextId from Types
  */
 interface LoggerInterface
 {
     /**
+     * Log the start of a whole metamorphosis chain
+     *
+     * Opens an outer span that wraps every subsequent transformation so the
+     * resulting log tree has a single root with sibling children, rather than
+     * a forest of disconnected operations.
+     *
+     * @param object $input Initial input being that starts the chain
+     *
+     * @return string Open ID for correlating with closeChain
+     */
+    public function openChain(object $input): string;
+
+    /**
+     * Log the end of a whole metamorphosis chain
+     *
+     * @param object|null    $final     Terminal being reached on success; null if the chain failed
+     * @param string         $openId    Open ID from the corresponding openChain call
+     * @param Throwable|null $exception Exception that ended the chain, or null on success
+     */
+    public function closeChain(object|null $final, string $openId, Throwable|null $exception = null): void;
+
+    /**
      * Log transformation start
      *
-     * @param object                              $current  Current object being transformed
-     * @param QualifiedClassName|QualifiedClasses $becoming Target class(es) for transformation
-     * @phpstan-param string|array<string> $becoming
+     * @param object               $current  Current object being transformed
+     * @param QualifiedClassName   $becoming Target class for transformation
+     * @param ConstructorArguments $args     Pre-resolved constructor arguments for the target class
+     * @phpstan-param class-string $becoming
+     * @phpstan-param array<string, mixed> $args
      *
      * @return string Open ID for correlating with close
      */
-    public function open(object $current, string|array $becoming): string;
+    public function open(object $current, string $becoming, array $args): string;
 
     /**
      * Log transformation completion

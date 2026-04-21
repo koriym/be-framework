@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Be\Framework\SemanticLog;
 
 use Be\Framework\BecomingArgumentsInterface;
-use Be\Framework\SemanticLog\Context\BecomingBeingContext;
-use Be\Framework\SemanticLog\Context\BecomingErrorContext;
-use Be\Framework\SemanticLog\Context\BecomingFinalContext;
-use Be\Framework\SemanticLog\Context\BecomingOpenContext;
+use Be\Framework\SemanticLog\Context\BeingCloseContext;
+use Be\Framework\SemanticLog\Context\BeingErrorCloseContext;
+use Be\Framework\SemanticLog\Context\BeingFinalCloseContext;
+use Be\Framework\SemanticLog\Context\BeingOpenContext;
+use Koriym\SemanticLogger\SemanticLogger;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -36,7 +37,7 @@ final class LoggerErrorPathTest extends TestCase
     {
         $input = new stdClass();
 
-        $openId = $this->logger->open($input, stdClass::class);
+        $openId = $this->logger->open($input, stdClass::class, []);
 
         $this->assertIsString($openId);
         $this->assertTrue(is_string($openId));
@@ -59,7 +60,7 @@ final class LoggerErrorPathTest extends TestCase
             public string $data = 'test';
         };
 
-        $openId = $this->logger->open($objectWithoutBeAttribute, stdClass::class);
+        $openId = $this->logger->open($objectWithoutBeAttribute, stdClass::class, []);
         $this->logger->close($objectWithoutBeAttribute, $openId);
 
         $this->expectNotToPerformAssertions();
@@ -75,7 +76,7 @@ final class LoggerErrorPathTest extends TestCase
             }
         };
 
-        $openId = $this->logger->open($complexObject, stdClass::class);
+        $openId = $this->logger->open($complexObject, stdClass::class, []);
         $this->logger->close($complexObject, $openId);
 
         $this->expectNotToPerformAssertions();
@@ -84,7 +85,7 @@ final class LoggerErrorPathTest extends TestCase
     public function testLoggerWithNullResult(): void
     {
         $input = new stdClass();
-        $openId = $this->logger->open($input, stdClass::class);
+        $openId = $this->logger->open($input, stdClass::class, []);
 
         // Close with null result (no exception) — legacy path, still closes
         $this->logger->close(null, $openId);
@@ -94,26 +95,26 @@ final class LoggerErrorPathTest extends TestCase
 
     public function testLoggerWithException(): void
     {
-        // Use a real SemanticLogger so we can inspect the emitted becoming_error payload.
-        $semanticLogger = new \Koriym\SemanticLogger\SemanticLogger();
+        // Use a real SemanticLogger so we can inspect the emitted being_error_close payload.
+        $semanticLogger = new SemanticLogger();
         $becomingArguments = $this->createMock(BecomingArgumentsInterface::class);
         $logger = new Logger($semanticLogger, $becomingArguments);
 
         $input = new stdClass();
-        $openId = $logger->open($input, stdClass::class);
+        $openId = $logger->open($input, stdClass::class, []);
 
         $logger->close(null, $openId, new RuntimeException('boom'));
 
         $logData = $semanticLogger->toArray();
-        $this->assertSame('becoming_error', $logData['close']['type']);
-        $this->assertSame(RuntimeException::class, $logData['close']['context']['error']);
-        $this->assertSame('boom', $logData['close']['context']['message']);
+        $this->assertSame('being_error_close', $logData['close'][0]['type']);
+        $this->assertSame(RuntimeException::class, $logData['close'][0]['context']['error']);
+        $this->assertSame('boom', $logData['close'][0]['context']['message']);
     }
 
     public function testLoggerContextsCreation(): void
     {
         $input = new stdClass();
-        $openId = $this->logger->open($input, stdClass::class);
+        $openId = $this->logger->open($input, stdClass::class, []);
 
         $result = new class {
             public string $output = 'result';
@@ -124,9 +125,9 @@ final class LoggerErrorPathTest extends TestCase
         $this->expectNotToPerformAssertions();
     }
 
-    public function testBecomingOpenContextCreation(): void
+    public function testBeingOpenContextCreation(): void
     {
-        $openContext = new BecomingOpenContext(
+        $openContext = new BeingOpenContext(
             from: 'TestSource',
             be: 'TestDestination',
             input: ['prop1' => 'value1'],
@@ -139,9 +140,9 @@ final class LoggerErrorPathTest extends TestCase
         $this->assertSame(['service' => 'injected'], $openContext->inject);
     }
 
-    public function testBecomingBeingContextCreation(): void
+    public function testBeingCloseContextCreation(): void
     {
-        $ctx = new BecomingBeingContext(
+        $ctx = new BeingCloseContext(
             prop: ['result' => 'success'],
             being: 'TargetClass',
         );
@@ -150,9 +151,9 @@ final class LoggerErrorPathTest extends TestCase
         $this->assertSame('TargetClass', $ctx->being);
     }
 
-    public function testBecomingFinalContextCreation(): void
+    public function testBeingFinalCloseContextCreation(): void
     {
-        $ctx = new BecomingFinalContext(
+        $ctx = new BeingFinalCloseContext(
             prop: ['value' => 42],
             final: 'TerminalClass',
         );
@@ -161,9 +162,9 @@ final class LoggerErrorPathTest extends TestCase
         $this->assertSame('TerminalClass', $ctx->final);
     }
 
-    public function testBecomingErrorContextCreation(): void
+    public function testBeingErrorCloseContextCreation(): void
     {
-        $ctx = new BecomingErrorContext(
+        $ctx = new BeingErrorCloseContext(
             error: 'RuntimeException',
             message: 'boom',
         );
@@ -182,7 +183,7 @@ final class LoggerErrorPathTest extends TestCase
             }
         };
 
-        $openId = $this->logger->open($injectorObject, stdClass::class);
+        $openId = $this->logger->open($injectorObject, stdClass::class, []);
         $this->logger->close($injectorObject, $openId);
 
         $this->expectNotToPerformAssertions();

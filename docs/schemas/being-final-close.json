@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://be-framework.org/schemas/becoming-final.json",
-  "title": "Becoming Final Context",
+  "$id": "https://be-framework.org/schemas/being-final-close.json",
+  "title": "Being Final Close Context",
   "description": "Close context for a metamorphosis that reached a terminal being — no further #[Be] attribute.",
   "type": "object",
   "required": ["final", "prop"],
@@ -14,6 +14,13 @@
       "type": "object",
       "description": "Public readonly properties of the terminal being.",
       "additionalProperties": true
+    },
+    "been": {
+      "type": "array",
+      "description": "Ordered events the terminal being curated into its own `$been` carrier via `with()`. Each entry is a semantic-logger context (object). Omitted when the terminal being has no `$been` or curated nothing.",
+      "items": {
+        "type": "object"
+      }
     }
   },
   "additionalProperties": false

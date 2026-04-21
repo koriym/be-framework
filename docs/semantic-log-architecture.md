@@ -6,66 +6,62 @@ The Be Framework uses **koriym/semantic-logger** to provide transparent logging 
 
 ## Open-Close Pattern for Individual Transformations
 
-```
-MetamorphosisOpenContext (OPEN) - "About to transform UserInput using SemanticValidator"
+```text
+BeingOpenContext (OPEN)              - "About to transform UserInput using SemanticValidator"
     ↓ [Constructor execution happens here]
-MetamorphosisCloseContext (CLOSE) - "UserInput became ValidatedUser with properties {...}"
+BeingCloseContext / BeingFinalCloseContext / BeingErrorCloseContext (CLOSE)
+                                     - "UserInput became ValidatedUser with properties {...}"
 ```
+
+The open context comes in two forms, picked by whether the target class declares a `#[Be]` attribute:
+
+- `BeingOpenContext` — target carries `#[Be]`, the metamorphosis will continue.
+- `BeingFinalOpenContext` — target has no `#[Be]`, this step produces the terminal being.
+
+The close context comes in three forms, picked by the result state:
+
+- `BeingCloseContext` — result has a `#[Be]` attribute; pipeline will continue.
+- `BeingFinalCloseContext` — result has no `#[Be]`; chain ends here.
+- `BeingErrorCloseContext` — constructor threw; open-close could not complete.
 
 Each transformation gets its own open/close pair:
 
-```
+```text
 UserInput → ValidatedUser → RegisteredUser → ActiveUser
 
-1. OPEN: UserInput transformation intent
-   CLOSE: ValidatedUser result + next destination
-2. OPEN: ValidatedUser transformation intent  
-   CLOSE: RegisteredUser result + next destination
-3. OPEN: RegisteredUser transformation intent
-   CLOSE: ActiveUser result + final destination
+1. OPEN: UserInput transformation intent        (BeingOpenContext)
+   CLOSE: ValidatedUser result                  (BeingCloseContext)
+2. OPEN: ValidatedUser transformation intent    (BeingOpenContext)
+   CLOSE: RegisteredUser result                 (BeingCloseContext)
+3. OPEN: RegisteredUser transformation intent   (BeingFinalOpenContext)
+   CLOSE: ActiveUser result                     (BeingFinalCloseContext)
 ```
 
-## MetamorphosisOpenContext (Open)
+## BeingOpenContext / BeingFinalOpenContext (Open)
 **Purpose**: Captures constructor arguments BEFORE instantiation
 - **When**: Called immediately before each constructor call
 - **What it captures**:
-  - `fromClass`: Class being transformed from
-  - `beAttribute`: The `#[Be]` attribute string (e.g., `#[Be(ValidatedUser::class)]`)
-  - `immanentSources`: `#[Input]` parameter sources from previous object
-  - `transcendentSources`: `#[Inject]` service types from DI container
+  - `from`:        Class being transformed from
+  - `be` / `final`: Target class FQCN — `be` on `BeingOpenContext` (intent to continue), `final` on `BeingFinalOpenContext` (landing on the terminal being)
+  - `input`:       `#[Input]` parameter sources from previous object
+  - `inject`:      `#[Inject]` service types from DI container
 
-## MetamorphosisCloseContext (Close)  
+## BeingCloseContext / BeingFinalCloseContext / BeingErrorCloseContext (Close)
 **Purpose**: Captures transformation results AFTER instantiation
-- **When**: Called immediately after successful constructor completion
-- **What it captures**:
-  - `properties`: All public properties of the created object
-  - `be`: Next destination information (SingleDestination, MultipleDestination, FinalDestination, or DestinationNotFound)
+- **When**: Called immediately after successful constructor completion, or after a thrown exception
+- **Success close captures**:
+  - `prop`:   All public properties of the created object
+  - `being` / `final`: FQCN of the resulting being (new-becoming or terminal)
+  - `been` (BeingFinalCloseContext only): the events the terminal being curated into its own `$been` carrier via `with()`. Emitted only when the final being carries a `Been` that accumulated events — the logger reference itself is not included.
+- **Error close captures**:
+  - `error`:   Exception class name
+  - `message`: Exception message
 
-## Destination Types
+## Chain wrapper
 
-### SingleDestination
-Object has a single next transformation: `#[Be(SomeClass::class)]`
-```php
-new SingleDestination(nextClass: 'RegisteredUser');
-```
-
-### MultipleDestination  
-Object has branching possibilities: `#[Be([Success::class, Failure::class])]`
-```php
-new MultipleDestination(possibleClasses: ['Success', 'Failure']);
-```
-
-### FinalDestination
-Object has no `#[Be]` attribute - transformation chain ends here
-```php
-new FinalDestination(finalClass: 'ActiveUser');
-```
-
-### DestinationNotFound
-Transformation failed or type matching failed
-```php
-new DestinationNotFound(error: 'No matching constructor found', attemptedClasses: ['UserA', 'UserB']);
-```
+Each full metamorphosis chain is wrapped in a `BecomingOpenContext` / `BecomingCloseContext`
+pair. These are emitted once per top-level `Becoming::__invoke` call, giving the log a
+single root with every step-level open/close as sibling children.
 
 ## Real Implementation Example
 
@@ -73,51 +69,51 @@ new DestinationNotFound(error: 'No matching constructor found', attemptedClasses
 // User Registration Flow: UserInput → ValidatedUser → RegisteredUser → ActiveUser
 
 // 1. OPEN: About to transform UserInput
-$openId1 = $logger->open(new MetamorphosisOpenContext(
-    fromClass: 'UserInput',
-    beAttribute: '#[Be(ValidatedUser::class)]',
-    immanentSources: ['email' => 'UserInput::email', 'age' => 'UserInput::age'],
-    transcendentSources: ['validator' => 'SemanticValidator']
+$openId1 = $logger->open(new BeingOpenContext(
+    from:   'UserInput',
+    be:     'ValidatedUser',
+    input:  ['email' => 'UserInput::email', 'age' => 'UserInput::age'],
+    inject: ['validator' => 'SemanticValidator'],
 ));
 
 // [ValidatedUser constructor executes]
 
 // 1. CLOSE: UserInput became ValidatedUser
-$logger->close(new MetamorphosisCloseContext(
-    properties: ['email' => 'user@example.com', 'age' => 25, 'isValid' => true],
-    be: new SingleDestination('RegisteredUser')
+$logger->close(new BeingCloseContext(
+    being: 'ValidatedUser',
+    prop:  ['email' => 'user@example.com', 'age' => 25, 'isValid' => true],
 ), $openId1);
 
 // 2. OPEN: About to transform ValidatedUser
-$openId2 = $logger->open(new MetamorphosisOpenContext(
-    fromClass: 'ValidatedUser', 
-    beAttribute: '#[Be(RegisteredUser::class)]',
-    immanentSources: ['email' => 'ValidatedUser::email'],
-    transcendentSources: ['repository' => 'UserRepository']
+$openId2 = $logger->open(new BeingOpenContext(
+    from:   'ValidatedUser',
+    be:     'RegisteredUser',
+    input:  ['email' => 'ValidatedUser::email'],
+    inject: ['repository' => 'UserRepository'],
 ));
 
 // [RegisteredUser constructor executes]
 
 // 2. CLOSE: ValidatedUser became RegisteredUser
-$logger->close(new MetamorphosisCloseContext(
-    properties: ['userId' => '123', 'email' => 'user@example.com', 'createdAt' => '2024-01-01'],
-    be: new SingleDestination('ActiveUser')
+$logger->close(new BeingCloseContext(
+    being: 'RegisteredUser',
+    prop:  ['userId' => '123', 'email' => 'user@example.com', 'createdAt' => '2024-01-01'],
 ), $openId2);
 
-// 3. OPEN: About to transform RegisteredUser  
-$openId3 = $logger->open(new MetamorphosisOpenContext(
-    fromClass: 'RegisteredUser',
-    beAttribute: '#[Be(ActiveUser::class)]',
-    immanentSources: ['userId' => 'RegisteredUser::userId', 'email' => 'RegisteredUser::email'],
-    transcendentSources: ['emailService' => 'EmailService']
+// 3. OPEN: About to transform RegisteredUser (terminal target — no #[Be])
+$openId3 = $logger->open(new BeingFinalOpenContext(
+    from:   'RegisteredUser',
+    final:  'ActiveUser',
+    input:  ['userId' => 'RegisteredUser::userId', 'email' => 'RegisteredUser::email'],
+    inject: ['emailService' => 'EmailService'],
 ));
 
 // [ActiveUser constructor executes]
 
-// 3. CLOSE: RegisteredUser became ActiveUser (final destination)
-$logger->close(new MetamorphosisCloseContext(
-    properties: ['userId' => '123', 'email' => 'user@example.com', 'isActive' => true],
-    be: new FinalDestination('ActiveUser')  // No more transformations
+// 3. CLOSE: RegisteredUser became ActiveUser (final being)
+$logger->close(new BeingFinalCloseContext(
+    final: 'ActiveUser',
+    prop:  ['userId' => '123', 'email' => 'user@example.com', 'isActive' => true],
 ), $openId3);
 ```
 
@@ -126,32 +122,33 @@ $logger->close(new MetamorphosisCloseContext(
 ### Individual Transformation Focus
 Each constructor call gets its own complete open/close pair, providing granular visibility into every transformation step.
 
-### Source Tracking  
-- **immanentSources**: Maps each constructor parameter to its source property (e.g., `'email' => 'UserInput::email'`)
-- **transcendentSources**: Maps injected services to their types (e.g., `'validator' => 'SemanticValidator'`)
-
-### Destination Prediction
-The close context includes next destination information, allowing the logger to predict the transformation chain's future path without executing it.
+### Source Tracking
+- **input**:  Maps each `#[Input]` constructor parameter to its source property (e.g., `'email' => 'UserInput::email'`)
+- **inject**: Maps `#[Inject]` parameters to their resolved service class (e.g., `'validator' => 'SemanticValidator'`)
 
 ### Schema Compliance
 All contexts extend `AbstractContext` and have associated JSON schemas for validation:
-- `metamorphosis-open.json` - Validates MetamorphosisOpenContext
-- `metamorphosis-close.json` - Validates MetamorphosisCloseContext
+- `being-open.json`        — Validates `BeingOpenContext`
+- `being-final-open.json`  — Validates `BeingFinalOpenContext`
+- `being-close.json`       — Validates `BeingCloseContext`
+- `being-final-close.json` — Validates `BeingFinalCloseContext`
+- `being-error-close.json` — Validates `BeingErrorCloseContext`
+- `becoming-open.json`     — Validates `BecomingOpenContext` (chain wrapper)
+- `becoming-close.json`    — Validates `BecomingCloseContext` (chain wrapper)
 
 ## Implementation Notes
 
 ### Logger Integration
 The Be Framework's `Logger` class wraps `koriym/semantic-logger` and automatically:
-- Extracts constructor arguments before instantiation
-- Maps immanent sources from object properties
-- Detects transcendent sources from injected objects
-- Determines next destination from `#[Be]` attributes
-- Handles error cases with `DestinationNotFound`
+- Receives resolved constructor arguments from `Being::performSingleTransformation`
+- Maps immanent sources (`#[Input]`) by walking the target constructor
+- Detects transcendent sources (`#[Inject]`) from resolved argument objects
+- Picks `BeingOpenContext` vs `BeingFinalOpenContext` by reflecting on the target's `#[Be]` attribute
+- Picks the close context by reflecting on the produced result's `#[Be]` attribute
 
-### Limitations
-- @todo Currently only logs string-based single transformations 
-- @todo Array-based branching transformations (`#[Be([A::class, B::class])]`) are skipped
-- @todo Source mapping uses value equality, which may not work for complex objects
+Argument resolution runs **before** `logger->open`. If resolution throws
+(e.g. `SemanticVariableException`, `UnbecomingException`), no span is opened —
+a candidate that cannot open its span should not leave a ghost span behind.
 
 ### Log Output Structure
 The semantic logger produces a hierarchical JSON structure where each transformation appears as a nested open/close pair, providing complete traceability of the metamorphosis chain.

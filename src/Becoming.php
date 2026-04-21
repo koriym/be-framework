@@ -11,6 +11,7 @@ use Koriym\SemanticLogger\SemanticLogger;
 use Override;
 use Ray\Di\Di\Named;
 use Ray\Di\InjectorInterface;
+use Throwable;
 
 /**
  * The Be Framework - Metamorphic Programming Engine
@@ -20,6 +21,7 @@ use Ray\Di\InjectorInterface;
 final class Becoming implements BecomingInterface
 {
     private Being $being;
+    private LoggerInterface $logger;
 
     public function __construct(
         InjectorInterface $injector,
@@ -30,6 +32,7 @@ final class Becoming implements BecomingInterface
     ) {
         $becomingArguments ??= new BecomingArguments($injector, new SemanticValidator($semanticNamespace));
         $logger ??= new Logger(new SemanticLogger(), $becomingArguments);
+        $this->logger = $logger;
         $this->being = new Being($logger, $becomingArguments, new BecomingType());
     }
 
@@ -46,12 +49,29 @@ final class Becoming implements BecomingInterface
     #[Override]
     public function __invoke(object $input): object
     {
+        $chainId = $this->logger->openChain($input);
         $current = $input;
 
-        // Being reveals its becoming, then becomes it
-        while ($nextForm = $this->being->willBe($current)) {
-            $current = $this->being->metamorphose($current, $nextForm);
+        try {
+            // Being reveals its becoming, then becomes it
+            while ($nextForm = $this->being->willBe($current)) {
+                $current = $this->being->metamorphose($current, $nextForm);
+            }
+        } catch (Throwable $e) {
+            try {
+                $this->logger->closeChain(null, $chainId, $e);
+            } catch (Throwable) {
+                // A failure inside error logging must not mask the original
+                // metamorphosis exception. Swallow the logging error and
+                // rethrow the real one.
+            }
+
+            throw $e;
         }
+
+        // Success close is outside the try so a logging failure here is not
+        // mis-reported as a metamorphosis failure.
+        $this->logger->closeChain($current, $chainId);
 
         return $current;
     }

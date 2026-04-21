@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog;
 
+use Be\Framework\Attribute\Be;
 use Be\Framework\BecomingArgumentsInterface;
 use Be\Framework\BecomingType;
 use Be\Framework\Being;
-use Be\Framework\SemanticLog\Context\BecomingBeingContext;
-use Be\Framework\SemanticLog\Context\BecomingErrorContext;
-use Be\Framework\SemanticLog\Context\BecomingFinalContext;
+use Be\Framework\SemanticLog\Context\BecomingCloseContext;
 use Be\Framework\SemanticLog\Context\BecomingOpenContext;
+use Be\Framework\SemanticLog\Context\BeingCloseContext;
+use Be\Framework\SemanticLog\Context\BeingErrorCloseContext;
+use Be\Framework\SemanticLog\Context\BeingFinalCloseContext;
+use Be\Framework\SemanticLog\Context\BeingFinalOpenContext;
+use Be\Framework\SemanticLog\Context\BeingOpenContext;
 use JsonException;
+use Koriym\SemanticLogger\AbstractContext;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
+use LogicException;
 use Override;
 use Ray\Di\Di\Inject;
 use Ray\InputQuery\Attribute\Input;
@@ -21,11 +27,9 @@ use Throwable;
 
 use function array_filter;
 use function array_key_exists;
-use function array_keys;
 use function get_debug_type;
 use function get_object_vars;
 use function gettype;
-use function implode;
 use function is_array;
 use function is_bool;
 use function is_numeric;
@@ -56,23 +60,66 @@ final class Logger implements LoggerInterface
     }
 
     /**
-     * Log transformation start
-     *
-     * @param QualifiedClassName|QualifiedClasses $becoming
-     * @phpstan-param string|array<string> $becoming
+     * Open the outer span wrapping the whole metamorphosis chain.
      */
     #[Override]
-    public function open(object $current, string|array $becoming): string
+    public function openChain(object $input): string
+    {
+        return $this->logger->open(new BecomingOpenContext(
+            input: $input::class,
+        ));
+    }
+
+    /**
+     * Close the outer chain span.
+     *
+     * @throws LogicException When called with neither a terminal being nor an
+     *                        exception — the close payload has no valid shape
+     *                        under the `oneOf` constraint in
+     *                        `becoming-close.json`, so we refuse to emit one.
+     */
+    #[Override]
+    public function closeChain(object|null $final, string $openId, Throwable|null $exception = null): void
+    {
+        if ($openId === '') {
+            return;
+        }
+
+        if ($exception !== null) {
+            $this->logger->close(new BecomingCloseContext(
+                error: $exception::class,
+                message: $exception->getMessage(),
+            ), $openId);
+
+            return;
+        }
+
+        if ($final === null) {
+            throw new LogicException(
+                'Logger::closeChain() requires a terminal being on success; got null with no exception.',
+            );
+        }
+
+        $this->logger->close(new BecomingCloseContext(
+            final: $final::class,
+        ), $openId);
+    }
+
+    /**
+     * Log transformation start
+     *
+     * @param class-string         $becoming
+     * @param array<string, mixed> $args
+     */
+    #[Override]
+    public function open(object $current, string $becoming, array $args): string
     {
         $fromClass = $current::class;
+        $input = $this->extractImmanentSources($current, $args, $becoming);
+        $inject = $this->extractTranscendentSources($args, $becoming);
 
-        if (is_string($becoming)) {
-            // Single transformation case
-            $args = $this->becomingArguments->be($current, $becoming);
-            $input = $this->extractImmanentSources($current, $args, $becoming);
-            $inject = $this->extractTranscendentSources($args, $becoming);
-
-            return $this->logger->open(new BecomingOpenContext(
+        if ($this->targetHasBeAttribute($becoming)) {
+            return $this->logger->open(new BeingOpenContext(
                 from: $fromClass,
                 be: $becoming,
                 input: $input,
@@ -80,12 +127,11 @@ final class Logger implements LoggerInterface
             ));
         }
 
-        // Array transformation case — log the attempt with pipe-joined candidate classes
-        return $this->logger->open(new BecomingOpenContext(
+        return $this->logger->open(new BeingFinalOpenContext(
             from: $fromClass,
-            be: implode('|', $becoming),
-            input: [],
-            inject: [],
+            final: $becoming,
+            input: $input,
+            inject: $inject,
         ));
     }
 
@@ -100,7 +146,7 @@ final class Logger implements LoggerInterface
         }
 
         if ($exception !== null) {
-            $this->logger->close(new BecomingErrorContext(
+            $this->logger->close(new BeingErrorCloseContext(
                 error: $exception::class,
                 message: $exception->getMessage(),
             ), $openId);
@@ -110,7 +156,7 @@ final class Logger implements LoggerInterface
 
         if ($result === null) {
             // Legacy safety net: null result without an exception still ends the open entry.
-            $this->logger->close(new BecomingErrorContext(
+            $this->logger->close(new BeingErrorCloseContext(
                 error: 'UnknownError',
                 message: 'Unknown error',
             ), $openId);
@@ -122,18 +168,27 @@ final class Logger implements LoggerInterface
         $nextBecoming = $this->being->willBe($result);
 
         if ($nextBecoming === null) {
-            $this->logger->close(new BecomingFinalContext(
-                prop: $prop,
+            $this->logger->close(new BeingFinalCloseContext(
                 final: $result::class,
+                prop: $prop,
+                been: $this->extractBeenEvents($result),
             ), $openId);
 
             return;
         }
 
-        $this->logger->close(new BecomingBeingContext(
+        $this->logger->close(new BeingCloseContext(
             prop: $prop,
             being: $result::class,
         ), $openId);
+    }
+
+    /** @param class-string $becoming */
+    private function targetHasBeAttribute(string $becoming): bool
+    {
+        $reflection = new ReflectionClass($becoming);
+
+        return $reflection->getAttributes(Be::class) !== [];
     }
 
     /**
@@ -234,13 +289,48 @@ final class Logger implements LoggerInterface
     }
 
     /**
+     * Extract the event list curated by the terminal being into its own `Been`.
+     *
+     * A Final class may accept a `Been` via `#[Inject]` and grow it with `with()`
+     * calls inside its constructor. Those calls write to the live semantic logger
+     * AND accumulate on the returned `Been`. We reflect on the result to surface
+     * those curated events on the `being_final_close` span — the logger reference
+     * stays behind since only the events belong in the log payload.
+     *
+     * Returns `[]` when the result carries no `Been` property, or when the
+     * carrier is empty.
+     *
+     * @return list<AbstractContext>
+     */
+    private function extractBeenEvents(object $result): array
+    {
+        foreach ((new ReflectionClass($result))->getProperties() as $property) {
+            if (! $property->isPublic() || $property->isStatic()) {
+                continue;
+            }
+
+            if (! $property->isInitialized($result)) {
+                continue;
+            }
+
+            /** @psalm-suppress MixedAssignment */
+            $value = $property->getValue($result);
+            if ($value instanceof Been) {
+                return $value->events;
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * Extract object properties safely, handling uninitialized properties
      *
      * Handles both declared properties (with uninitialized property checks)
      * and dynamic properties (stdClass, objects with __set).
      *
      * @return ObjectProperties
-     * @phpstan-return array<string, mixed>
+     * @phpstan-return array<array-key, mixed>
      */
     private function extractProperties(object $result): array
     {
@@ -278,6 +368,7 @@ final class Logger implements LoggerInterface
                 continue;
             }
 
+            /** @psalm-suppress MixedAssignment */
             $properties[$name] = $value;
         }
 

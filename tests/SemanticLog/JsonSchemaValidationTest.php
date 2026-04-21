@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticLog;
 
-use Be\Framework\SemanticLog\Context\BecomingBeingContext;
-use Be\Framework\SemanticLog\Context\BecomingErrorContext;
-use Be\Framework\SemanticLog\Context\BecomingFinalContext;
+use Be\Framework\SemanticLog\Context\BecomingCloseContext;
 use Be\Framework\SemanticLog\Context\BecomingOpenContext;
+use Be\Framework\SemanticLog\Context\BeingCloseContext;
+use Be\Framework\SemanticLog\Context\BeingErrorCloseContext;
+use Be\Framework\SemanticLog\Context\BeingFinalCloseContext;
+use Be\Framework\SemanticLog\Context\BeingFinalOpenContext;
+use Be\Framework\SemanticLog\Context\BeingOpenContext;
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
@@ -26,24 +29,89 @@ use function json_encode;
 final class JsonSchemaValidationTest extends TestCase
 {
     private Validator $validator;
+    private object $becomingOpenSchema;
+    private object $becomingCloseSchema;
     private object $openSchema;
-    private object $beingSchema;
-    private object $finalSchema;
-    private object $errorSchema;
+    private object $finalOpenSchema;
+    private object $closeSchema;
+    private object $finalCloseSchema;
+    private object $errorCloseSchema;
 
     protected function setUp(): void
     {
         $this->validator = new Validator();
 
-        $this->openSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-open.json'));
-        $this->beingSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-being.json'));
-        $this->finalSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-final.json'));
-        $this->errorSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-error.json'));
+        $this->becomingOpenSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-open.json'));
+        $this->becomingCloseSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/becoming-close.json'));
+        $this->openSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-open.json'));
+        $this->finalOpenSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-final-open.json'));
+        $this->closeSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-close.json'));
+        $this->finalCloseSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-final-close.json'));
+        $this->errorCloseSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-error-close.json'));
     }
 
     public function testBecomingOpenContextValidatesAgainstSchema(): void
     {
         $context = new BecomingOpenContext(
+            input: 'Be\Framework\Test\UserInput',
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->becomingOpenSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BecomingOpenContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testBecomingCloseContextOnSuccessValidates(): void
+    {
+        $context = new BecomingCloseContext(
+            final: 'Be\Framework\Test\ActiveUser',
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->becomingCloseSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BecomingCloseContext (success) should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testBecomingCloseContextOnFailureValidates(): void
+    {
+        $context = new BecomingCloseContext(
+            error: 'RuntimeException',
+            message: 'chain failed',
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->becomingCloseSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BecomingCloseContext (failure) should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testBecomingCloseContextRejectsEmptyPayload(): void
+    {
+        // Empty or mixed success/error payloads must fail the oneOf constraint.
+        $empty = (object) [];
+
+        $this->validator->validate($empty, $this->becomingCloseSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertFalse(
+            $this->validator->isValid(),
+            'Empty becoming_close payload should not validate.',
+        );
+    }
+
+    public function testBeingOpenContextValidatesAgainstSchema(): void
+    {
+        $context = new BeingOpenContext(
             from: 'Be\Framework\Test\UserInput',
             be: 'Be\Framework\Test\ValidatedUser',
             input: [
@@ -62,31 +130,31 @@ final class JsonSchemaValidationTest extends TestCase
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'BecomingOpenContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'BeingOpenContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testBecomingOpenContextWithPipeJoinedBeValidates(): void
+    public function testBeingFinalOpenContextValidatesAgainstSchema(): void
     {
-        $context = new BecomingOpenContext(
+        $context = new BeingFinalOpenContext(
             from: 'Be\Framework\Test\ProcessingData',
-            be: 'Be\Framework\Test\Success|Be\Framework\Test\Failure',
+            final: 'Be\Framework\Test\TerminalResult',
             input: ['data' => 'ProcessingData::data'],
             inject: [],
         );
 
         $contextData = json_decode(json_encode($context), false);
-        $this->validator->validate($contextData, $this->openSchema, Constraint::CHECK_MODE_NORMAL);
+        $this->validator->validate($contextData, $this->finalOpenSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'Pipe-joined be should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'BeingFinalOpenContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testBecomingOpenContextMinimalValidates(): void
+    public function testBeingOpenContextMinimalValidates(): void
     {
-        $context = new BecomingOpenContext(
+        $context = new BeingOpenContext(
             from: 'Be\Framework\Test\SimpleInput',
             be: 'Be\Framework\Test\SimpleOutput',
         );
@@ -100,9 +168,9 @@ final class JsonSchemaValidationTest extends TestCase
         );
     }
 
-    public function testBecomingBeingContextValidates(): void
+    public function testBeingCloseContextValidates(): void
     {
-        $context = new BecomingBeingContext(
+        $context = new BeingCloseContext(
             prop: [
                 'email' => 'user@example.com',
                 'validated' => true,
@@ -111,46 +179,86 @@ final class JsonSchemaValidationTest extends TestCase
         );
 
         $contextData = json_decode(json_encode($context), false);
-        $this->validator->validate($contextData, $this->beingSchema, Constraint::CHECK_MODE_NORMAL);
+        $this->validator->validate($contextData, $this->closeSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'BecomingBeingContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'BeingCloseContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testBecomingFinalContextValidates(): void
+    public function testBeingFinalCloseContextValidates(): void
     {
-        $context = new BecomingFinalContext(
+        $context = new BeingFinalCloseContext(
+            final: 'Be\Framework\Test\FinalClass',
             prop: [
                 'result' => 'success',
                 'data' => ['key' => 'value'],
             ],
-            final: 'Be\Framework\Test\FinalClass',
         );
 
         $contextData = json_decode(json_encode($context), false);
-        $this->validator->validate($contextData, $this->finalSchema, Constraint::CHECK_MODE_NORMAL);
+        $this->validator->validate($contextData, $this->finalCloseSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'BecomingFinalContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'BeingFinalCloseContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
-    public function testBecomingErrorContextValidates(): void
+    public function testBeingFinalCloseContextOmitsBeenWhenEmpty(): void
     {
-        $context = new BecomingErrorContext(
+        $context = new BeingFinalCloseContext(
+            final: 'Be\Framework\Test\FinalClass',
+            prop: ['ok' => true],
+            been: [],
+        );
+
+        /** @var array<string, mixed> $payload */
+        $payload = json_decode(json_encode($context), true);
+
+        $this->assertArrayNotHasKey(
+            'been',
+            $payload,
+            'Empty been must be omitted from the serialized payload.',
+        );
+    }
+
+    public function testBeingFinalCloseContextWithBeenValidates(): void
+    {
+        $event = new BeingFinalCloseContext(
+            final: 'Stub\\Event',
+            prop: ['marker' => true],
+        );
+
+        $context = new BeingFinalCloseContext(
+            final: 'Be\Framework\Test\FinalClass',
+            prop: ['result' => 'success'],
+            been: [$event],
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->finalCloseSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BeingFinalCloseContext with been should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testBeingErrorCloseContextValidates(): void
+    {
+        $context = new BeingErrorCloseContext(
             error: 'RuntimeException',
             message: 'Something went wrong',
         );
 
         $contextData = json_decode(json_encode($context), false);
-        $this->validator->validate($contextData, $this->errorSchema, Constraint::CHECK_MODE_NORMAL);
+        $this->validator->validate($contextData, $this->errorCloseSchema, Constraint::CHECK_MODE_NORMAL);
 
         $this->assertTrue(
             $this->validator->isValid(),
-            'BecomingErrorContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+            'BeingErrorCloseContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
