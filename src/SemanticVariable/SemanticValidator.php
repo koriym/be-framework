@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
-use Be\Framework\Attribute\SemanticTag;
 use Be\Framework\Attribute\Validate;
 use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Types;

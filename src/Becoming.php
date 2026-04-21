@@ -57,14 +57,22 @@ final class Becoming implements BecomingInterface
             while ($nextForm = $this->being->willBe($current)) {
                 $current = $this->being->metamorphose($current, $nextForm);
             }
-
-            $this->logger->closeChain($current, $chainId);
-
-            return $current;
         } catch (Throwable $e) {
-            $this->logger->closeChain(null, $chainId, $e);
+            try {
+                $this->logger->closeChain(null, $chainId, $e);
+            } catch (Throwable) {
+                // A failure inside error logging must not mask the original
+                // metamorphosis exception. Swallow the logging error and
+                // rethrow the real one.
+            }
 
             throw $e;
         }
+
+        // Success close is outside the try so a logging failure here is not
+        // mis-reported as a metamorphosis failure.
+        $this->logger->closeChain($current, $chainId);
+
+        return $current;
     }
 }

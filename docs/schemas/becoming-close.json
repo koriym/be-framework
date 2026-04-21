@@ -4,6 +4,21 @@
   "title": "Becoming Close Context",
   "description": "Close context for the outer chain span. On success, carries the final being's FQCN; on failure, carries the exception that ended the chain.",
   "type": "object",
+  "oneOf": [
+    {
+      "required": ["final"],
+      "not": {
+        "anyOf": [
+          { "required": ["error"] },
+          { "required": ["message"] }
+        ]
+      }
+    },
+    {
+      "required": ["error", "message"],
+      "not": { "required": ["final"] }
+    }
+  ],
   "properties": {
     "final": {
       "type": "string",

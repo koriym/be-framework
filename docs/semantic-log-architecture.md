@@ -6,7 +6,7 @@ The Be Framework uses **koriym/semantic-logger** to provide transparent logging 
 
 ## Open-Close Pattern for Individual Transformations
 
-```
+```text
 BeingOpenContext (OPEN)              - "About to transform UserInput using SemanticValidator"
     ↓ [Constructor execution happens here]
 BeingCloseContext / BeingFinalCloseContext / BeingErrorCloseContext (CLOSE)
@@ -26,7 +26,7 @@ The close context comes in three forms, picked by the result state:
 
 Each transformation gets its own open/close pair:
 
-```
+```text
 UserInput → ValidatedUser → RegisteredUser → ActiveUser
 
 1. OPEN: UserInput transformation intent        (BeingOpenContext)
