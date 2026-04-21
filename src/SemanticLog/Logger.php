@@ -16,6 +16,7 @@ use Be\Framework\SemanticLog\Context\BeingFinalCloseContext;
 use Be\Framework\SemanticLog\Context\BeingFinalOpenContext;
 use Be\Framework\SemanticLog\Context\BeingOpenContext;
 use JsonException;
+use Koriym\SemanticLogger\AbstractContext;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
 use Override;
 use Ray\Di\Di\Inject;
@@ -116,7 +117,7 @@ final class Logger implements LoggerInterface
 
         return $this->logger->open(new BeingFinalOpenContext(
             from: $fromClass,
-            be: $becoming,
+            final: $becoming,
             input: $input,
             inject: $inject,
         ));
@@ -156,8 +157,9 @@ final class Logger implements LoggerInterface
 
         if ($nextBecoming === null) {
             $this->logger->close(new BeingFinalCloseContext(
-                prop: $prop,
                 final: $result::class,
+                prop: $prop,
+                been: $this->extractBeenEvents($result),
             ), $openId);
 
             return;
@@ -272,6 +274,41 @@ final class Logger implements LoggerInterface
         }
 
         return $transcendentSources;
+    }
+
+    /**
+     * Extract the event list curated by the terminal being into its own `Been`.
+     *
+     * A Final class may accept a `Been` via `#[Inject]` and grow it with `with()`
+     * calls inside its constructor. Those calls write to the live semantic logger
+     * AND accumulate on the returned `Been`. We reflect on the result to surface
+     * those curated events on the `being_final_close` span — the logger reference
+     * stays behind since only the events belong in the log payload.
+     *
+     * Returns `[]` when the result carries no `Been` property, or when the
+     * carrier is empty.
+     *
+     * @return list<AbstractContext>
+     */
+    private function extractBeenEvents(object $result): array
+    {
+        foreach ((new ReflectionClass($result))->getProperties() as $property) {
+            if (! $property->isPublic() || $property->isStatic()) {
+                continue;
+            }
+
+            if (! $property->isInitialized($result)) {
+                continue;
+            }
+
+            /** @psalm-suppress MixedAssignment */
+            $value = $property->getValue($result);
+            if ($value instanceof Been) {
+                return $value->events;
+            }
+        }
+
+        return [];
     }
 
     /**

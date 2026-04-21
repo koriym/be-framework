@@ -14,6 +14,13 @@
       "type": "object",
       "description": "Public readonly properties of the terminal being.",
       "additionalProperties": true
+    },
+    "been": {
+      "type": "array",
+      "description": "Ordered events the terminal being curated into its own `$been` carrier via `with()`. Each entry is a semantic-logger context (object). Omitted when the terminal being has no `$been` or curated nothing.",
+      "items": {
+        "type": "object"
+      }
     }
   },
   "additionalProperties": false

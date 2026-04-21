@@ -67,15 +67,15 @@ final class SchemaComplianceTest extends TestCase
 
         // Short keys — being-final-open schema
         $this->assertArrayHasKey('from', $openContext);
-        $this->assertArrayHasKey('be', $openContext);
+        $this->assertArrayHasKey('final', $openContext);
         $this->assertArrayHasKey('input', $openContext);
         $this->assertArrayHasKey('inject', $openContext);
 
         $this->assertIsString($openContext['from']);
-        $this->assertIsString($openContext['be']);
+        $this->assertIsString($openContext['final']);
 
         $this->assertEquals(TestInputForSchema::class, $openContext['from']);
-        $this->assertEquals(FakeProcessedData::class, $openContext['be']);
+        $this->assertEquals(FakeProcessedData::class, $openContext['final']);
         // jsonSerialize wraps assoc maps in stdClass so empty/nested values serialize as JSON objects.
         $this->assertEquals(
             (object) ['data' => 'Be\Framework\SemanticLog\TestInputForSchema::data'],

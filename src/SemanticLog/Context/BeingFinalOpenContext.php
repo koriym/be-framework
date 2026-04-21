@@ -29,13 +29,13 @@ final class BeingFinalOpenContext extends AbstractContext implements JsonSeriali
 
     /**
      * @param class-string        $from   Class being transformed from
-     * @param class-string        $be     Target class FQCN for the next metamorphosis
+     * @param class-string        $final  Target class FQCN — the terminal being this step lands on
      * @param ImmanentSources     $input  #[Input] parameter names mapped to their origin path on the previous being
      * @param TranscendentSources $inject #[Inject] parameter names mapped to the interface / service identifier from DI
      */
     public function __construct(
         public readonly string $from,
-        public readonly string $be,
+        public readonly string $final,
         public readonly array $input = [],
         public readonly array $inject = [],
     ) {
@@ -47,7 +47,7 @@ final class BeingFinalOpenContext extends AbstractContext implements JsonSeriali
     {
         return [
             'from' => $this->from,
-            'be' => $this->be,
+            'final' => $this->final,
             'input' => empty($this->input) ? new stdClass() : (object) $this->input,
             'inject' => empty($this->inject) ? new stdClass() : (object) $this->inject,
         ];

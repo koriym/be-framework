@@ -71,7 +71,7 @@ final class LoggerTest extends TestCase
         $openData = $logData['open'][0];
         assert(is_array($openData['context']));
         $this->assertEquals(TestInput::class, $openData['context']['from']);
-        $this->assertEquals(FakeProcessedData::class, $openData['context']['be']);
+        $this->assertEquals(FakeProcessedData::class, $openData['context']['final']);
         // FakeProcessedData has no #[Be] → terminal target → being_final_open
         $this->assertEquals('being_final_open', $openData['type']);
 
@@ -170,7 +170,6 @@ final class LoggerTest extends TestCase
     {
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractTranscendentSources');
-        $method->setAccessible(true);
 
         $args = [
             'data' => 'test data',
@@ -221,7 +220,6 @@ final class LoggerTest extends TestCase
     {
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractTranscendentSources');
-        $method->setAccessible(true);
 
         $args = ['data' => 'test'];
         $result = $method->invoke($this->logger, $args, NoConstructorClass::class);
@@ -233,7 +231,6 @@ final class LoggerTest extends TestCase
     {
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractProperties');
-        $method->setAccessible(true);
 
         $testObject = new stdClass();
         $testObject->prop1 = 'value1';
@@ -252,7 +249,6 @@ final class LoggerTest extends TestCase
         // and must ignore public static properties entirely.
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractProperties');
-        $method->setAccessible(true);
 
         $acceptLike = new class {
             public static string $shared = 'class-level';
@@ -272,7 +268,6 @@ final class LoggerTest extends TestCase
     {
         $reflection = new ReflectionClass($this->logger);
         $method = $reflection->getMethod('extractTranscendentSources');
-        $method->setAccessible(true);
 
         $injectedObject = new stdClass();
         $injectedObject->test = 'value';

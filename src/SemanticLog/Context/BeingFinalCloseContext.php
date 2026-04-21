@@ -22,22 +22,30 @@ final class BeingFinalCloseContext extends AbstractContext implements JsonSerial
     public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-final-close.json';
 
     /**
-     * @param class-string     $final Class FQCN of the terminal being
-     * @param ObjectProperties $prop  Properties of the terminal being
+     * @param class-string          $final Class FQCN of the terminal being
+     * @param ObjectProperties      $prop  Properties of the terminal being
+     * @param list<AbstractContext> $been  Events the terminal being curated into its own `$been` carrier (empty when it doesn't hold one)
      */
     public function __construct(
         public readonly string $final,
         public readonly array $prop,
+        public readonly array $been = [],
     ) {
     }
 
-    /** @return array{final: string, prop: object} */
+    /** @return array<string, mixed> */
     #[Override]
     public function jsonSerialize(): array
     {
-        return [
+        $payload = [
             'final' => $this->final,
             'prop' => empty($this->prop) ? new stdClass() : (object) $this->prop,
         ];
+
+        if ($this->been !== []) {
+            $payload['been'] = $this->been;
+        }
+
+        return $payload;
     }
 }

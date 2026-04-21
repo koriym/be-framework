@@ -138,7 +138,7 @@ final class JsonSchemaValidationTest extends TestCase
     {
         $context = new BeingFinalOpenContext(
             from: 'Be\Framework\Test\ProcessingData',
-            be: 'Be\Framework\Test\TerminalResult',
+            final: 'Be\Framework\Test\TerminalResult',
             input: ['data' => 'ProcessingData::data'],
             inject: [],
         );
@@ -190,11 +190,11 @@ final class JsonSchemaValidationTest extends TestCase
     public function testBeingFinalCloseContextValidates(): void
     {
         $context = new BeingFinalCloseContext(
+            final: 'Be\Framework\Test\FinalClass',
             prop: [
                 'result' => 'success',
                 'data' => ['key' => 'value'],
             ],
-            final: 'Be\Framework\Test\FinalClass',
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -203,6 +203,46 @@ final class JsonSchemaValidationTest extends TestCase
         $this->assertTrue(
             $this->validator->isValid(),
             'BeingFinalCloseContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testBeingFinalCloseContextOmitsBeenWhenEmpty(): void
+    {
+        $context = new BeingFinalCloseContext(
+            final: 'Be\Framework\Test\FinalClass',
+            prop: ['ok' => true],
+            been: [],
+        );
+
+        /** @var array<string, mixed> $payload */
+        $payload = json_decode(json_encode($context), true);
+
+        $this->assertArrayNotHasKey(
+            'been',
+            $payload,
+            'Empty been must be omitted from the serialized payload.',
+        );
+    }
+
+    public function testBeingFinalCloseContextWithBeenValidates(): void
+    {
+        $event = new BeingFinalCloseContext(
+            final: 'Stub\\Event',
+            prop: ['marker' => true],
+        );
+
+        $context = new BeingFinalCloseContext(
+            final: 'Be\Framework\Test\FinalClass',
+            prop: ['result' => 'success'],
+            been: [$event],
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->finalCloseSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BeingFinalCloseContext with been should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 

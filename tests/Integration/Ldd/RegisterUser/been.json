@@ -15,7 +15,7 @@
                     "schemaUrl": "https://be-framework.org/schemas/being-final-open.json",
                     "context": {
                         "from": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
-                        "be": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
+                        "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
                         "input": {
                             "value": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail::value"
                         },
@@ -69,7 +69,16 @@
                         "prop": {
                             "userId": 42,
                             "value": "alice@example.com"
-                        }
+                        },
+                        "been": [
+                            {
+                                "email": "alice@example.com"
+                            },
+                            {
+                                "userId": 42,
+                                "email": "alice@example.com"
+                            }
+                        ]
                     },
                     "openId": "being_final_open_1"
                 }

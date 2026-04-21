@@ -41,10 +41,10 @@ UserInput → ValidatedUser → RegisteredUser → ActiveUser
 **Purpose**: Captures constructor arguments BEFORE instantiation
 - **When**: Called immediately before each constructor call
 - **What it captures**:
-  - `from`:   Class being transformed from
-  - `be`:     Target class FQCN
-  - `input`:  `#[Input]` parameter sources from previous object
-  - `inject`: `#[Inject]` service types from DI container
+  - `from`:        Class being transformed from
+  - `be` / `final`: Target class FQCN — `be` on `BeingOpenContext` (intent to continue), `final` on `BeingFinalOpenContext` (landing on the terminal being)
+  - `input`:       `#[Input]` parameter sources from previous object
+  - `inject`:      `#[Inject]` service types from DI container
 
 ## BeingCloseContext / BeingFinalCloseContext / BeingErrorCloseContext (Close)
 **Purpose**: Captures transformation results AFTER instantiation
@@ -52,6 +52,7 @@ UserInput → ValidatedUser → RegisteredUser → ActiveUser
 - **Success close captures**:
   - `prop`:   All public properties of the created object
   - `being` / `final`: FQCN of the resulting being (new-becoming or terminal)
+  - `been` (BeingFinalCloseContext only): the events the terminal being curated into its own `$been` carrier via `with()`. Emitted only when the final being carries a `Been` that accumulated events — the logger reference itself is not included.
 - **Error close captures**:
   - `error`:   Exception class name
   - `message`: Exception message
@@ -102,7 +103,7 @@ $logger->close(new BeingCloseContext(
 // 3. OPEN: About to transform RegisteredUser (terminal target — no #[Be])
 $openId3 = $logger->open(new BeingFinalOpenContext(
     from:   'RegisteredUser',
-    be:     'ActiveUser',
+    final:  'ActiveUser',
     input:  ['userId' => 'RegisteredUser::userId', 'email' => 'RegisteredUser::email'],
     inject: ['emailService' => 'EmailService'],
 ));
