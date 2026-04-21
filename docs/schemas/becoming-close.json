@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.org/schemas/becoming-close.json",
+  "title": "Becoming Close Context",
+  "description": "Close context for the outer chain span. On success, carries the final being's FQCN; on failure, carries the exception that ended the chain.",
+  "type": "object",
+  "properties": {
+    "final": {
+      "type": "string",
+      "description": "Fully-qualified class name of the terminal being reached when the chain succeeded."
+    },
+    "error": {
+      "type": "string",
+      "description": "Fully-qualified class name of the thrown exception when the chain ended in failure."
+    },
+    "message": {
+      "type": "string",
+      "description": "Exception message when the chain ended in failure."
+    }
+  },
+  "additionalProperties": false
+}

@@ -104,10 +104,11 @@ final class BecomingTypeAdvancedTest extends TestCase
             public string|null $name = null; // Actual value is null
         };
 
+        // Not nullable
         $targetClass = new class ('') {
             public function __construct(public string $name)
             {
-            } // Not nullable
+            }
         };
 
         $result = $this->becomingType->match($input, $targetClass::class);
@@ -145,10 +146,11 @@ final class BecomingTypeAdvancedTest extends TestCase
             }
         };
 
+        // Different class
         $targetClass = new class (new Exception()) {
             public function __construct(public Throwable $obj)
             {
-            } // Different class
+            }
         };
 
         $result = $this->becomingType->match($input, $targetClass::class);
@@ -268,21 +270,21 @@ final class BecomingTypeAdvancedTest extends TestCase
             public function __construct()
             {
                 $this->value = new class implements ArrayAccess, Countable {
-                    public function offsetExists($offset): bool
+                    public function offsetExists(mixed $offset): bool
                     {
                         return false;
                     }
 
-                    public function offsetGet($offset): mixed
+                    public function offsetGet(mixed $offset): mixed
                     {
                         return null;
                     }
 
-                    public function offsetSet($offset, $value): void
+                    public function offsetSet(mixed $offset, mixed $value): void
                     {
                     }
 
-                    public function offsetUnset($offset): void
+                    public function offsetUnset(mixed $offset): void
                     {
                     }
 
@@ -315,21 +317,21 @@ final class BecomingTypeAdvancedTest extends TestCase
             {
                 // Create an object that only implements ArrayAccess but not Countable
                 $this->value = new class implements ArrayAccess {
-                    public function offsetExists($offset): bool
+                    public function offsetExists(mixed $offset): bool
                     {
                         return false;
                     }
 
-                    public function offsetGet($offset): mixed
+                    public function offsetGet(mixed $offset): mixed
                     {
                         return null;
                     }
 
-                    public function offsetSet($offset, $value): void
+                    public function offsetSet(mixed $offset, mixed $value): void
                     {
                     }
 
-                    public function offsetUnset($offset): void
+                    public function offsetUnset(mixed $offset): void
                     {
                     }
                 };
@@ -339,21 +341,21 @@ final class BecomingTypeAdvancedTest extends TestCase
         // Target class requires both ArrayAccess AND Countable
         // Use a dummy object that implements both interfaces for constructor
         $dummy = new class implements ArrayAccess, Countable {
-            public function offsetExists($offset): bool
+            public function offsetExists(mixed $offset): bool
             {
                 return false;
             }
 
-            public function offsetGet($offset): mixed
+            public function offsetGet(mixed $offset): mixed
             {
                 return null;
             }
 
-            public function offsetSet($offset, $value): void
+            public function offsetSet(mixed $offset, mixed $value): void
             {
             }
 
-            public function offsetUnset($offset): void
+            public function offsetUnset(mixed $offset): void
             {
             }
 

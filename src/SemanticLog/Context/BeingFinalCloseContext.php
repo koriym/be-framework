@@ -15,11 +15,11 @@ use stdClass;
  *
  * @psalm-import-type ObjectProperties from Types
  */
-final class BecomingFinalContext extends AbstractContext implements JsonSerializable
+final class BeingFinalCloseContext extends AbstractContext implements JsonSerializable
 {
-    public const string TYPE = 'becoming_final';
+    public const string TYPE = 'being_final_close';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-final.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-final-close.json';
 
     /**
      * @param class-string     $final Class FQCN of the terminal being

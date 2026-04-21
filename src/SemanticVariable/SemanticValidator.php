@@ -414,22 +414,6 @@ final class SemanticValidator implements SemanticValidatorInterface
     }
 
     /**
-     * Check if a class is marked with SemanticTag attribute
-     *
-     * @phpstan-ignore method.unused
-     */
-    private function isSemanticTagClass(string $className): bool
-    {
-        if (! class_exists($className)) {
-            return false;
-        }
-
-        $reflection = new ReflectionClass($className);
-
-        return ! empty($reflection->getAttributes(SemanticTag::class));
-    }
-
-    /**
      * Resolve method arguments by extracting only the arguments needed for this method
      *
      * @param ValidationArguments $inputArgs

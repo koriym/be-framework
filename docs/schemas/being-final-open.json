@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.org/schemas/being-final-open.json",
+  "title": "Being Final Open Context",
+  "description": "Captured when a terminal being starts — the target has no #[Be] attribute, so this step produces the final being of the chain.",
+  "type": "object",
+  "required": ["from", "be", "input", "inject"],
+  "properties": {
+    "from": {
+      "type": "string",
+      "description": "Fully-qualified class name of the being being transformed from."
+    },
+    "be": {
+      "type": "string",
+      "description": "Fully-qualified class name of the target terminal being.",
+      "examples": [
+        "App\\Being\\RegisteredUser"
+      ]
+    },
+    "input": {
+      "type": "object",
+      "description": "Map of #[Input] parameter names to their origin path on the previous being.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "inject": {
+      "type": "object",
+      "description": "Map of #[Inject] parameter names to the interface / service identifier resolved from the DI container.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

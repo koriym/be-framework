@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.org/schemas/being-open.json",
+  "title": "Being Open Context",
+  "description": "Captured when an intermediate being starts — the target carries a #[Be] attribute, so the metamorphosis will continue after this step.",
+  "type": "object",
+  "required": ["from", "be", "input", "inject"],
+  "properties": {
+    "from": {
+      "type": "string",
+      "description": "Fully-qualified class name of the being being transformed from."
+    },
+    "be": {
+      "type": "string",
+      "description": "Fully-qualified class name of the target being for the next metamorphosis.",
+      "examples": [
+        "App\\Being\\ValidatedUser"
+      ]
+    },
+    "input": {
+      "type": "object",
+      "description": "Map of #[Input] parameter names to their origin path on the previous being.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "inject": {
+      "type": "object",
+      "description": "Map of #[Inject] parameter names to the interface / service identifier resolved from the DI container.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

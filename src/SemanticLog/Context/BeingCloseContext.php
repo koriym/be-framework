@@ -18,11 +18,11 @@ use stdClass;
  *
  * @psalm-import-type ObjectProperties from Types
  */
-final class BecomingBeingContext extends AbstractContext implements JsonSerializable
+final class BeingCloseContext extends AbstractContext implements JsonSerializable
 {
-    public const string TYPE = 'becoming_being';
+    public const string TYPE = 'being_close';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-being.json';
+    public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-close.json';
 
     /**
      * @param class-string     $being Class FQCN of the new being (the instantiated result)

@@ -2,35 +2,13 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://be-framework.org/schemas/becoming-open.json",
   "title": "Becoming Open Context",
-  "description": "Captured when a metamorphosis starts — what we are trying to become and which inputs/injects feed it.",
+  "description": "Outer span that wraps an entire metamorphosis chain. Each being_open/being_*_close inside appears as a sibling child under this single root.",
   "type": "object",
-  "required": ["from", "be", "input", "inject"],
+  "required": ["input"],
   "properties": {
-    "from": {
-      "type": "string",
-      "description": "Fully-qualified class name of the being being transformed from."
-    },
-    "be": {
-      "type": "string",
-      "description": "Target class for the next metamorphosis. Single FQCN, or pipe-joined FQCNs when the attribute declares multiple candidates.",
-      "examples": [
-        "App\\Being\\ValidatedUser",
-        "App\\Being\\Success|App\\Being\\Failure"
-      ]
-    },
     "input": {
-      "type": "object",
-      "description": "Map of #[Input] parameter names to their origin path on the previous being.",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "inject": {
-      "type": "object",
-      "description": "Map of #[Inject] parameter names to the interface / service identifier resolved from the DI container.",
-      "additionalProperties": {
-        "type": "string"
-      }
+      "type": "string",
+      "description": "Fully-qualified class name of the initial input being that starts the chain."
     }
   },
   "additionalProperties": false

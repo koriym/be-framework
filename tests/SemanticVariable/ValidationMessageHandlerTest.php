@@ -276,7 +276,7 @@ final class ValidationMessageHandlerTest extends TestCase
             /** @var resource */
             public readonly mixed $resourceValue;
 
-            public function __construct($resource)
+            public function __construct(mixed $resource)
             {
                 $this->resourceValue = $resource;
 

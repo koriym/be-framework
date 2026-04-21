@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://be-framework.org/schemas/becoming-final.json",
-  "title": "Becoming Final Context",
+  "$id": "https://be-framework.org/schemas/being-final-close.json",
+  "title": "Being Final Close Context",
   "description": "Close context for a metamorphosis that reached a terminal being — no further #[Be] attribute.",
   "type": "object",
   "required": ["final", "prop"],

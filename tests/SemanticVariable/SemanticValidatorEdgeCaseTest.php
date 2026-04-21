@@ -116,7 +116,7 @@ final class SemanticValidatorEdgeCaseTest extends TestCase
             public function __construct(
                 public string $email,
                 public int $age,
-                public string $missing_prop,
+                public string $missingProp,
             ) {
             }
         };
@@ -195,7 +195,7 @@ final class SemanticValidatorEdgeCaseTest extends TestCase
     {
         // Test method matching logic to hit various uncovered branches
         $complexValidationClass = new class {
-            // Method with Inject attribute (should be skipped)
+            /** Method with Inject attribute (should be skipped) */
             public function validateWithInject(
                 string $value,
                 #[Inject]
@@ -204,7 +204,7 @@ final class SemanticValidatorEdgeCaseTest extends TestCase
                 return [];
             }
 
-            // Method with semantic tag attributes on parameters
+            /** Method with semantic tag attributes on parameters */
             public function validateWithSemanticTags(
                 #[Email]
                 string $email,
@@ -213,7 +213,7 @@ final class SemanticValidatorEdgeCaseTest extends TestCase
                 return empty($email) ? ['Email cannot be empty'] : [];
             }
 
-            // Method without attributes (should match non-attribute-specific)
+            /** Method without attributes (should match non-attribute-specific) */
             public function validateBasic(string $value): array
             {
                 return [];

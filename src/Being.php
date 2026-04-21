@@ -75,10 +75,14 @@ final class Being
      */
     private function performSingleTransformation(object $current, string $becoming): object
     {
-        $openId = $this->logger->open($current, $becoming);
+        // Resolve args BEFORE opening the span. If argument resolution throws
+        // (e.g. SemanticVariableException, UnbecomingException), no span is opened
+        // for this candidate — a candidate that cannot even open its span should
+        // not leave a ghost span in the log.
+        $args = $this->becomingArguments->be($current, $becoming);
+        $openId = $this->logger->open($current, $becoming, $args);
 
         try {
-            $args = $this->becomingArguments->be($current, $becoming);
             $result = (new ReflectionClass($becoming))->newInstanceArgs($args);
 
             $this->logger->close($result, $openId);

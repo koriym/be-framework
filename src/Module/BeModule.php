@@ -26,6 +26,7 @@ final class BeModule extends AbstractModule
         parent::__construct($module);
     }
 
+    #[\Override]
     public function configure(): void
     {
         $this->bind(BecomingArgumentsInterface::class)->to(BecomingArguments::class);
