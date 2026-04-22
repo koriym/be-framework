@@ -6,7 +6,10 @@
             "type": "becoming_open",
             "schemaUrl": "https://be-framework.org/schemas/becoming-open.json",
             "context": {
-                "input": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail"
+                "input": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
+                "prop": {
+                    "value": "alice@example.com"
+                }
             },
             "open": [
                 {
@@ -56,6 +59,7 @@
             "type": "becoming_close",
             "schemaUrl": "https://be-framework.org/schemas/becoming-close.json",
             "context": {
+                "exit": "success",
                 "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser"
             },
             "openId": "becoming_open_1",

@@ -21,18 +21,28 @@ final class BecomingOpenContext extends AbstractContext implements JsonSerializa
 
     public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-open.json';
 
-    /** @param class-string $input FQCN of the initial input being that starts the chain. */
+    /**
+     * @param class-string         $input FQCN of the initial input being that starts the chain.
+     * @param array<string, mixed> $prop  Public input properties captured at chain entry.
+     */
     public function __construct(
         public readonly string $input,
+        public readonly array $prop = [],
     ) {
     }
 
-    /** @return array{input: string} */
+    /** @return array{input: string, prop?: array<string, mixed>} */
     #[Override]
     public function jsonSerialize(): array
     {
-        return [
+        $payload = [
             'input' => $this->input,
         ];
+
+        if ($this->prop !== []) {
+            $payload['prop'] = $this->prop;
+        }
+
+        return $payload;
     }
 }

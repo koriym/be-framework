@@ -25,7 +25,6 @@ use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
 use Throwable;
 
-use function array_filter;
 use function array_key_exists;
 use function get_debug_type;
 use function get_object_vars;
@@ -51,12 +50,14 @@ use const JSON_UNESCAPED_UNICODE;
 final class Logger implements LoggerInterface
 {
     private Being $being;
+    private ObjectPropertyExtractor $propertyExtractor;
 
     public function __construct(
         private SemanticLoggerInterface $logger,
         private BecomingArgumentsInterface $becomingArguments,
     ) {
         $this->being = new Being($this, $this->becomingArguments, new BecomingType());
+        $this->propertyExtractor = new ObjectPropertyExtractor();
     }
 
     /**
@@ -67,6 +68,7 @@ final class Logger implements LoggerInterface
     {
         return $this->logger->open(new BecomingOpenContext(
             input: $input::class,
+            prop: $this->extractProperties($input),
         ));
     }
 
@@ -87,6 +89,7 @@ final class Logger implements LoggerInterface
 
         if ($exception !== null) {
             $this->logger->close(new BecomingCloseContext(
+                exit: BecomingCloseContext::EXIT_ERROR,
                 error: $exception::class,
                 message: $exception->getMessage(),
             ), $openId);
@@ -101,6 +104,7 @@ final class Logger implements LoggerInterface
         }
 
         $this->logger->close(new BecomingCloseContext(
+            exit: BecomingCloseContext::EXIT_SUCCESS,
             final: $final::class,
         ), $openId);
     }
@@ -330,49 +334,11 @@ final class Logger implements LoggerInterface
      * and dynamic properties (stdClass, objects with __set).
      *
      * @return ObjectProperties
-     * @phpstan-return array<array-key, mixed>
+     * @phpstan-return array<string, mixed>
      */
     private function extractProperties(object $result): array
     {
-        // Exclude any `Been` property: it carries this very log and would
-        // embed the event stream recursively inside the close context.
-        // Start with dynamic properties (stdClass, objects with __set) which
-        // already come back with string keys via get_object_vars().
-        $properties = array_filter(
-            get_object_vars($result),
-            static fn (mixed $value): bool => ! ($value instanceof Been),
-        );
-
-        // Override/supplement with declared properties via reflection so
-        // Accept-pattern objects with uninitialized properties are included.
-        foreach ((new ReflectionClass($result))->getProperties() as $property) {
-            if (! $property->isPublic() || $property->isStatic()) {
-                continue;
-            }
-
-            $name = $property->getName();
-
-            // Handle uninitialized properties (Accept pattern objects may have these)
-            if (! $property->isInitialized($result)) {
-                $properties[$name] = null;
-                continue;
-            }
-
-            /**
-             * @psalm-suppress MixedAssignment
-             * @var mixed $value
-             */
-            $value = $property->getValue($result);
-            if ($value instanceof Been) {
-                unset($properties[$name]);
-                continue;
-            }
-
-            /** @psalm-suppress MixedAssignment */
-            $properties[$name] = $value;
-        }
-
-        return $properties;
+        return $this->propertyExtractor->extract($result);
     }
 
     /**
