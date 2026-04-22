@@ -54,9 +54,9 @@ final class Logger implements LoggerInterface
 
     public function __construct(
         private SemanticLoggerInterface $logger,
-        private BecomingArgumentsInterface $becomingArguments,
+        BecomingArgumentsInterface $becomingArguments,
     ) {
-        $this->being = new Being($this, $this->becomingArguments, new BecomingType());
+        $this->being = new Being($this, $becomingArguments, new BecomingType());
         $this->propertyExtractor = new ObjectPropertyExtractor();
     }
 
