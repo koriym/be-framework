@@ -26,14 +26,14 @@ final class ObjectPropertyExtractor
      */
     public function extract(object $result): array
     {
-        $properties = $this->dynamicProperties($result);
+        $properties = $this->collectVisibleProperties($result);
         $this->mergeDeclaredProperties($properties, $result);
 
         return $properties;
     }
 
     /** @return array<string, mixed> */
-    private function dynamicProperties(object $result): array
+    private function collectVisibleProperties(object $result): array
     {
         $properties = [];
         $dynamicProperties = get_object_vars($result);
