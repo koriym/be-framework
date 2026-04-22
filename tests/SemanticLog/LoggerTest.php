@@ -155,6 +155,54 @@ final class LoggerTest extends TestCase
         $this->logger->closeChain(null, $chainId);
     }
 
+    public function testOpenChainLogsInputProps(): void
+    {
+        $chainId = $this->logger->openChain(new TestInput('data'));
+        $this->logger->closeChain(new FakeProcessedData('done'), $chainId);
+
+        $this->assertNotSame('', $chainId);
+
+        $logData = $this->semanticLogger->toArray();
+        assert(is_array($logData['open']));
+        $openData = $logData['open'][0];
+        assert(is_array($openData) && is_array($openData['context']));
+
+        $this->assertSame('becoming_open', $openData['type']);
+        $this->assertSame(TestInput::class, $openData['context']['input']);
+        $this->assertSame(['data' => 'data'], $openData['context']['prop']);
+    }
+
+    public function testCloseChainLogsSuccessExit(): void
+    {
+        $chainId = $this->logger->openChain(new TestInput('data'));
+        $this->logger->closeChain(new FakeProcessedData('done'), $chainId);
+
+        $logData = $this->semanticLogger->toArray();
+        assert(is_array($logData['close']));
+        $closeData = $logData['close'][0];
+        assert(is_array($closeData) && is_array($closeData['context']));
+
+        $this->assertSame('becoming_close', $closeData['type']);
+        $this->assertSame('success', $closeData['context']['exit']);
+        $this->assertSame(FakeProcessedData::class, $closeData['context']['final']);
+    }
+
+    public function testCloseChainLogsErrorExit(): void
+    {
+        $chainId = $this->logger->openChain(new TestInput('data'));
+        $this->logger->closeChain(null, $chainId, new RuntimeException('chain failed'));
+
+        $logData = $this->semanticLogger->toArray();
+        assert(is_array($logData['close']));
+        $closeData = $logData['close'][0];
+        assert(is_array($closeData) && is_array($closeData['context']));
+
+        $this->assertSame('becoming_close', $closeData['type']);
+        $this->assertSame('error', $closeData['context']['exit']);
+        $this->assertSame(RuntimeException::class, $closeData['context']['error']);
+        $this->assertSame('chain failed', $closeData['context']['message']);
+    }
+
     public function testComplexTransformationWithDependency(): void
     {
         $injector = new Injector();

@@ -12,9 +12,8 @@ use Override;
  * Close context for the whole metamorphosis chain.
  *
  * Emitted when the chain terminates — either because it reached a being with
- * no further #[Be], or because a transformation threw. Carries the final FQCN
- * (or null when the chain failed before reaching a terminal being) and, when
- * relevant, the exception that ended the chain.
+ * no further #[Be], or because a transformation threw. Carries the chain exit
+ * state plus either the terminal FQCN or the exception that ended the chain.
  */
 final class BecomingCloseContext extends AbstractContext implements JsonSerializable
 {
@@ -22,13 +21,19 @@ final class BecomingCloseContext extends AbstractContext implements JsonSerializ
 
     public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-close.json';
 
+    public const string EXIT_SUCCESS = 'success';
+
+    public const string EXIT_ERROR = 'error';
+
     /**
-     * @param class-string|null $final   FQCN of the terminal being, or null if the chain failed.
-     * @param string|null       $error   FQCN of the thrown exception, or null on success.
-     * @param string|null       $message Exception message, or null on success.
+     * @param class-string|null              $final   FQCN of the terminal being, or null if the chain failed.
+     * @param self::EXIT_SUCCESS|self::EXIT_ERROR|null $exit    Exit status for the chain.
+     * @param string|null                    $error   FQCN of the thrown exception, or null on success.
+     * @param string|null                    $message Exception message, or null on success.
      */
     public function __construct(
         public readonly string|null $final = null,
+        public readonly string|null $exit = null,
         public readonly string|null $error = null,
         public readonly string|null $message = null,
     ) {
@@ -39,6 +44,10 @@ final class BecomingCloseContext extends AbstractContext implements JsonSerializ
     public function jsonSerialize(): array
     {
         $payload = [];
+        if ($this->exit !== null) {
+            $payload['exit'] = $this->exit;
+        }
+
         if ($this->final !== null) {
             $payload['final'] = $this->final;
         }

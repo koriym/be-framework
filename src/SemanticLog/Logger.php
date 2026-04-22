@@ -67,6 +67,7 @@ final class Logger implements LoggerInterface
     {
         return $this->logger->open(new BecomingOpenContext(
             input: $input::class,
+            prop: $this->extractProperties($input),
         ));
     }
 
@@ -87,6 +88,7 @@ final class Logger implements LoggerInterface
 
         if ($exception !== null) {
             $this->logger->close(new BecomingCloseContext(
+                exit: BecomingCloseContext::EXIT_ERROR,
                 error: $exception::class,
                 message: $exception->getMessage(),
             ), $openId);
@@ -101,6 +103,7 @@ final class Logger implements LoggerInterface
         }
 
         $this->logger->close(new BecomingCloseContext(
+            exit: BecomingCloseContext::EXIT_SUCCESS,
             final: $final::class,
         ), $openId);
     }

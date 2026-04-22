@@ -2,11 +2,14 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://be-framework.org/schemas/becoming-close.json",
   "title": "Becoming Close Context",
-  "description": "Close context for the outer chain span. On success, carries the final being's FQCN; on failure, carries the exception that ended the chain.",
+  "description": "Close context for the outer chain span. Carries the chain exit state and either the final being's FQCN or the exception that ended the chain.",
   "type": "object",
   "oneOf": [
     {
-      "required": ["final"],
+      "required": ["exit", "final"],
+      "properties": {
+        "exit": { "const": "success" }
+      },
       "not": {
         "anyOf": [
           { "required": ["error"] },
@@ -15,11 +18,19 @@
       }
     },
     {
-      "required": ["error", "message"],
+      "required": ["exit", "error", "message"],
+      "properties": {
+        "exit": { "const": "error" }
+      },
       "not": { "required": ["final"] }
     }
   ],
   "properties": {
+    "exit": {
+      "type": "string",
+      "enum": ["success", "error"],
+      "description": "Terminal status of the metamorphosis chain."
+    },
     "final": {
       "type": "string",
       "description": "Fully-qualified class name of the terminal being reached when the chain succeeded."

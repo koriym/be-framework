@@ -54,6 +54,7 @@ final class JsonSchemaValidationTest extends TestCase
     {
         $context = new BecomingOpenContext(
             input: 'Be\Framework\Test\UserInput',
+            prop: ['email' => 'alice@example.com'],
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -68,6 +69,7 @@ final class JsonSchemaValidationTest extends TestCase
     public function testBecomingCloseContextOnSuccessValidates(): void
     {
         $context = new BecomingCloseContext(
+            exit: BecomingCloseContext::EXIT_SUCCESS,
             final: 'Be\Framework\Test\ActiveUser',
         );
 
@@ -83,6 +85,7 @@ final class JsonSchemaValidationTest extends TestCase
     public function testBecomingCloseContextOnFailureValidates(): void
     {
         $context = new BecomingCloseContext(
+            exit: BecomingCloseContext::EXIT_ERROR,
             error: 'RuntimeException',
             message: 'chain failed',
         );

@@ -9,6 +9,11 @@
     "input": {
       "type": "string",
       "description": "Fully-qualified class name of the initial input being that starts the chain."
+    },
+    "prop": {
+      "type": "object",
+      "description": "Snapshot of the initial input being's public properties at chain entry.",
+      "additionalProperties": true
     }
   },
   "additionalProperties": false
