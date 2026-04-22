@@ -26,10 +26,10 @@ final class BecomingCloseContext extends AbstractContext implements JsonSerializ
     public const string EXIT_ERROR = 'error';
 
     /**
-     * @param class-string|null              $final   FQCN of the terminal being, or null if the chain failed.
-     * @param self::EXIT_SUCCESS|self::EXIT_ERROR|null $exit    Exit status for the chain.
-     * @param string|null                    $error   FQCN of the thrown exception, or null on success.
-     * @param string|null                    $message Exception message, or null on success.
+     * @param class-string|null $final   FQCN of the terminal being, or null if the chain failed.
+     * @param string|null       $exit    Exit status for the chain.
+     * @param string|null       $error   FQCN of the thrown exception, or null on success.
+     * @param string|null       $message Exception message, or null on success.
      */
     public function __construct(
         public readonly string|null $final = null,
