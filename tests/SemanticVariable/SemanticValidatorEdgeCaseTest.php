@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Be\Framework\SemanticVariable;
 
-use Be\Framework\Attribute\Inject;
 use MyVendor\MyApp\SemanticVariables\Email;
 use PHPUnit\Framework\TestCase;
-use Ray\Di\Di\Injector;
+use Ray\Di\Di\Inject;
+use Ray\Di\Injector;
 use ReflectionClass;
 
 use function error_reporting;
@@ -32,6 +32,7 @@ final class SemanticValidatorEdgeCaseTest extends TestCase
         $testClass = new class {
             public function testMethod(
                 string $email,
+                #[Inject]
                 Injector $injector,
             ): void {
             }

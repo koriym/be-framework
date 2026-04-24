@@ -1,5 +1,5 @@
 {
-    "$schema": "https://koriym.github.io/Koriym.SemanticLogger/schemas/combined.json",
+    "$schema": "https://koriym.github.io/Koriym.SemanticLogger/schemas/semantic-log.json",
     "open": [
         {
             "id": "becoming_open_1",
@@ -27,66 +27,58 @@
                             "users": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UserRepository",
                             "been": "Be\\Framework\\SemanticLog\\Been"
                         }
-                    }
-                }
-            ]
-        }
-    ],
-    "events": [
-        {
-            "id": "email_format_asserted_1",
-            "type": "email_format_asserted",
-            "schemaUrl": "https://myvendor.example.com/schemas/email-format-asserted.json",
-            "context": {
-                "email": "alice@example.com"
-            },
-            "openId": "being_final_open_1"
-        },
-        {
-            "id": "user_inserted_1",
-            "type": "user_inserted",
-            "schemaUrl": "https://myvendor.example.com/schemas/user-inserted.json",
-            "context": {
-                "userId": 42,
-                "email": "alice@example.com"
-            },
-            "openId": "being_final_open_1"
-        }
-    ],
-    "close": [
-        {
-            "id": "becoming_close_1",
-            "type": "becoming_close",
-            "schemaUrl": "https://be-framework.org/schemas/becoming-close.json",
-            "context": {
-                "exit": "success",
-                "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser"
-            },
-            "openId": "becoming_open_1",
-            "close": [
-                {
-                    "id": "being_final_close_1",
-                    "type": "being_final_close",
-                    "schemaUrl": "https://be-framework.org/schemas/being-final-close.json",
-                    "context": {
-                        "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
-                        "prop": {
-                            "userId": 42,
-                            "value": "alice@example.com"
-                        },
-                        "been": [
-                            {
+                    },
+                    "events": [
+                        {
+                            "id": "email_format_asserted_1",
+                            "type": "email_format_asserted",
+                            "schemaUrl": "https://myvendor.example.com/schemas/email-format-asserted.json",
+                            "context": {
                                 "email": "alice@example.com"
-                            },
-                            {
+                            }
+                        },
+                        {
+                            "id": "user_inserted_1",
+                            "type": "user_inserted",
+                            "schemaUrl": "https://myvendor.example.com/schemas/user-inserted.json",
+                            "context": {
                                 "userId": 42,
                                 "email": "alice@example.com"
                             }
-                        ]
-                    },
-                    "openId": "being_final_open_1"
+                        }
+                    ],
+                    "close": {
+                        "id": "being_final_close_1",
+                        "type": "being_final_close",
+                        "schemaUrl": "https://be-framework.org/schemas/being-final-close.json",
+                        "context": {
+                            "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
+                            "prop": {
+                                "userId": 42,
+                                "value": "alice@example.com"
+                            },
+                            "been": [
+                                {
+                                    "email": "alice@example.com"
+                                },
+                                {
+                                    "userId": 42,
+                                    "email": "alice@example.com"
+                                }
+                            ]
+                        }
+                    }
                 }
-            ]
+            ],
+            "close": {
+                "id": "becoming_close_1",
+                "type": "becoming_close",
+                "schemaUrl": "https://be-framework.org/schemas/becoming-close.json",
+                "context": {
+                    "exit": "success",
+                    "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser"
+                }
+            }
         }
     ]
 }

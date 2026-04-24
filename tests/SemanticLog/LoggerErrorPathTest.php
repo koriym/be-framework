@@ -16,6 +16,8 @@ use Ray\Di\Injector;
 use RuntimeException;
 use stdClass;
 
+use function assert;
+use function is_array;
 use function is_string;
 
 /**
@@ -27,8 +29,8 @@ final class LoggerErrorPathTest extends TestCase
 
     protected function setUp(): void
     {
-        $semanticLogger = $this->createMock(SemanticLoggerInterface::class);
-        $becomingArguments = $this->createMock(BecomingArgumentsInterface::class);
+        $semanticLogger = $this->createStub(SemanticLoggerInterface::class);
+        $becomingArguments = $this->createStub(BecomingArgumentsInterface::class);
 
         $this->logger = new Logger($semanticLogger, $becomingArguments);
     }
@@ -97,7 +99,7 @@ final class LoggerErrorPathTest extends TestCase
     {
         // Use a real SemanticLogger so we can inspect the emitted being_error_close payload.
         $semanticLogger = new SemanticLogger();
-        $becomingArguments = $this->createMock(BecomingArgumentsInterface::class);
+        $becomingArguments = $this->createStub(BecomingArgumentsInterface::class);
         $logger = new Logger($semanticLogger, $becomingArguments);
 
         $input = new stdClass();
@@ -106,9 +108,15 @@ final class LoggerErrorPathTest extends TestCase
         $logger->close(null, $openId, new RuntimeException('boom'));
 
         $logData = $semanticLogger->toArray();
-        $this->assertSame('being_error_close', $logData['close'][0]['type']);
-        $this->assertSame(RuntimeException::class, $logData['close'][0]['context']['error']);
-        $this->assertSame('boom', $logData['close'][0]['context']['message']);
+        assert(is_array($logData['open']));
+        $openData = $logData['open'][0];
+        assert(is_array($openData));
+        $closeData = $openData['close'] ?? null;
+        assert(is_array($closeData) && is_array($closeData['context']));
+
+        $this->assertSame('being_error_close', $closeData['type']);
+        $this->assertSame(RuntimeException::class, $closeData['context']['error']);
+        $this->assertSame('boom', $closeData['context']['message']);
     }
 
     public function testLoggerContextsCreation(): void

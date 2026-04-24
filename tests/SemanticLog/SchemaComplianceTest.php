@@ -92,9 +92,9 @@ final class SchemaComplianceTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']) && is_array($logData['close'][0]) && is_array($logData['close'][0]['context']));
-        $closeData = $logData['close'][0];
+        $closeData = $this->firstOpenClose($logData);
         $closeContext = $closeData['context'];
+        assert(is_array($closeContext));
 
         // FakeProcessedData has no further #[Be] → being_final_close
         $this->assertEquals('being_final_close', $closeData['type']);
@@ -125,12 +125,29 @@ final class SchemaComplianceTest extends TestCase
         );
 
         $finalSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-final-close.json'));
-        $closeContext = json_decode(json_encode($logData['close'][0]['context']));
+        $closeData = $this->firstOpenClose($logData);
+        $closeContext = json_decode(json_encode($closeData['context']));
         $validator->reset();
         $validator->validate($closeContext, $finalSchema, Constraint::CHECK_MODE_NORMAL);
         $this->assertTrue(
             $validator->isValid(),
             'being_final_close context should validate. Errors: ' . json_encode($validator->getErrors()),
         );
+    }
+
+    /**
+     * @param array<string, mixed> $logData
+     *
+     * @return array<string, mixed>
+     */
+    private function firstOpenClose(array $logData): array
+    {
+        assert(is_array($logData['open']));
+        $openData = $logData['open'][0];
+        assert(is_array($openData));
+        $closeData = $openData['close'] ?? null;
+        assert(is_array($closeData));
+
+        return $closeData;
     }
 }
