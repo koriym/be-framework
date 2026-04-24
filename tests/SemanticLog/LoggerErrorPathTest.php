@@ -16,6 +16,8 @@ use Ray\Di\Injector;
 use RuntimeException;
 use stdClass;
 
+use function assert;
+use function is_array;
 use function is_string;
 
 /**
@@ -106,9 +108,13 @@ final class LoggerErrorPathTest extends TestCase
         $logger->close(null, $openId, new RuntimeException('boom'));
 
         $logData = $semanticLogger->toArray();
-        $this->assertSame('being_error_close', $logData['close'][0]['type']);
-        $this->assertSame(RuntimeException::class, $logData['close'][0]['context']['error']);
-        $this->assertSame('boom', $logData['close'][0]['context']['message']);
+        $this->assertArrayNotHasKey('close', $logData);
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+
+        $closeData = $logData['open'][0]['close'];
+        $this->assertSame('being_error_close', $closeData['type']);
+        $this->assertSame(RuntimeException::class, $closeData['context']['error']);
+        $this->assertSame('boom', $closeData['context']['message']);
     }
 
     public function testLoggerContextsCreation(): void

@@ -29,7 +29,6 @@ final class TestInputForSchema
     }
 }
 
-
 final class SchemaComplianceTest extends TestCase
 {
     private Logger $logger;
@@ -92,8 +91,13 @@ final class SchemaComplianceTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']) && is_array($logData['close'][0]) && is_array($logData['close'][0]['context']));
-        $closeData = $logData['close'][0];
+        assert(
+            is_array($logData['open']) &&
+            is_array($logData['open'][0]) &&
+            is_array($logData['open'][0]['close']) &&
+            is_array($logData['open'][0]['close']['context'])
+        );
+        $closeData = $logData['open'][0]['close'];
         $closeContext = $closeData['context'];
 
         // FakeProcessedData has no further #[Be] → being_final_close
@@ -125,7 +129,7 @@ final class SchemaComplianceTest extends TestCase
         );
 
         $finalSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-final-close.json'));
-        $closeContext = json_decode(json_encode($logData['close'][0]['context']));
+        $closeContext = json_decode(json_encode($logData['open'][0]['close']['context']));
         $validator->reset();
         $validator->validate($closeContext, $finalSchema, Constraint::CHECK_MODE_NORMAL);
         $this->assertTrue(
