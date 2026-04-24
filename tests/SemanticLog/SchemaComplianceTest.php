@@ -95,7 +95,7 @@ final class SchemaComplianceTest extends TestCase
             is_array($logData['open']) &&
             is_array($logData['open'][0]) &&
             is_array($logData['open'][0]['close']) &&
-            is_array($logData['open'][0]['close']['context'])
+            is_array($logData['open'][0]['close']['context']),
         );
         $closeData = $logData['open'][0]['close'];
         $closeContext = $closeData['context'];
