@@ -33,7 +33,6 @@ final class TestInput
     }
 }
 
-
 final class LoggerTest extends TestCase
 {
     private Logger $logger;
@@ -65,20 +64,21 @@ final class LoggerTest extends TestCase
 
         $logData = $this->semanticLogger->toArray();
         $this->assertArrayHasKey('open', $logData);
-        $this->assertArrayHasKey('close', $logData);
-        assert(is_array($logData['open']) && is_array($logData['close']));
+        $this->assertArrayNotHasKey('close', $logData);
 
         // Verify open log structure — short keys
+        assert(is_array($logData['open']) && is_array($logData['open'][0]));
         $openData = $logData['open'][0];
-        assert(is_array($openData['context']));
+        assert(is_array($openData) && is_array($openData['context']));
         $this->assertEquals(TestInput::class, $openData['context']['from']);
         $this->assertEquals(FakeProcessedData::class, $openData['context']['final']);
         // FakeProcessedData has no #[Be] → terminal target → being_final_open
         $this->assertEquals('being_final_open', $openData['type']);
 
         // Verify close log structure — result has no further #[Be] so it's final.
-        $closeData = $logData['close'][0];
-        assert(is_array($closeData['context']));
+        $this->assertArrayHasKey('close', $openData);
+        $closeData = $openData['close'];
+        assert(is_array($closeData) && is_array($closeData['context']));
         $this->assertArrayHasKey('prop', $closeData['context']);
         $this->assertArrayHasKey('final', $closeData['context']);
     }
@@ -94,9 +94,9 @@ final class LoggerTest extends TestCase
         $this->logger->close(new stdClass(), $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['open']));
+        assert(is_array($logData['open']) && is_array($logData['open'][0]));
         $openData = $logData['open'][0];
-        assert(is_array($openData['context']));
+        assert(is_array($openData) && is_array($openData['context']));
         $this->assertEquals('being_open', $openData['type']);
         $this->assertEquals(TestSingleDestination::class, $openData['context']['be']);
         // Empty maps are emitted as stdClass so the JSON form is "{}" rather than "[]".
@@ -114,8 +114,8 @@ final class LoggerTest extends TestCase
         $this->logger->close(null, $openId, $exception);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']));
-        $closeData = $logData['close'][0];
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        $closeData = $logData['open'][0]['close'];
         assert(is_array($closeData) && is_array($closeData['context']));
         $this->assertEquals('being_error_close', $closeData['type']);
         $this->assertEquals(RuntimeException::class, $closeData['context']['error']);
@@ -132,8 +132,8 @@ final class LoggerTest extends TestCase
         $this->logger->close(null, $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']));
-        $closeData = $logData['close'][0];
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        $closeData = $logData['open'][0]['close'];
         $this->assertEquals('being_error_close', $closeData['type']);
         $this->assertEquals('Unknown error', $closeData['context']['message']);
     }
@@ -163,7 +163,8 @@ final class LoggerTest extends TestCase
         $this->assertNotSame('', $chainId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['open']));
+        $this->assertArrayNotHasKey('close', $logData);
+        assert(is_array($logData['open']) && is_array($logData['open'][0]));
         $openData = $logData['open'][0];
         assert(is_array($openData) && is_array($openData['context']));
 
@@ -178,8 +179,9 @@ final class LoggerTest extends TestCase
         $this->logger->closeChain(new FakeProcessedData('done'), $chainId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']));
-        $closeData = $logData['close'][0];
+        $this->assertArrayNotHasKey('close', $logData);
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        $closeData = $logData['open'][0]['close'];
         assert(is_array($closeData) && is_array($closeData['context']));
 
         $this->assertSame('becoming_close', $closeData['type']);
@@ -193,8 +195,9 @@ final class LoggerTest extends TestCase
         $this->logger->closeChain(null, $chainId, new RuntimeException('chain failed'));
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']));
-        $closeData = $logData['close'][0];
+        $this->assertArrayNotHasKey('close', $logData);
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        $closeData = $logData['open'][0]['close'];
         assert(is_array($closeData) && is_array($closeData['context']));
 
         $this->assertSame('becoming_close', $closeData['type']);
@@ -215,9 +218,10 @@ final class LoggerTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['open']) && is_array($logData['close']));
+        assert(is_array($logData['open']) && is_array($logData['open'][0]));
         $openData = $logData['open'][0];
-        $closeData = $logData['close'][0];
+        assert(is_array($openData['close']));
+        $closeData = $openData['close'];
 
         $this->assertArrayHasKey('inject', $openData['context']);
 
@@ -251,8 +255,8 @@ final class LoggerTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']));
-        $closeData = $logData['close'][0];
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        $closeData = $logData['open'][0]['close'];
 
         $this->assertEquals('being_close', $closeData['type']);
         $this->assertEquals(TestMultipleDestination::class, $closeData['context']['being']);
@@ -268,8 +272,8 @@ final class LoggerTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['close']));
-        $closeData = $logData['close'][0];
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        $closeData = $logData['open'][0]['close'];
 
         $this->assertEquals('being_close', $closeData['type']);
         $this->assertEquals(TestSingleDestination::class, $closeData['context']['being']);
