@@ -299,6 +299,8 @@ final class SemanticValidator implements SemanticValidatorInterface
 
     /**
      * Legacy method: Validate semantic variable with given arguments (for backward compatibility)
+     *
+     * @deprecated Use validateArgs() or validateParam() instead
      */
     public function validate(string $variableName, mixed ...$args): Errors
     {
@@ -307,6 +309,8 @@ final class SemanticValidator implements SemanticValidatorInterface
 
     /**
      * Legacy method: Validate semantic variable with given arguments
+     *
+     * @deprecated Use validateArgs() or validateParam() instead
      */
     public function validateLegacy(string $variableName, mixed ...$args): Errors
     {
@@ -315,6 +319,8 @@ final class SemanticValidator implements SemanticValidatorInterface
 
     /**
      * Legacy method: Validate all semantic variables in an object
+     *
+     * @deprecated Use validateArgs() instead
      */
     public function validateObject(object $object): Errors
     {
@@ -326,7 +332,7 @@ final class SemanticValidator implements SemanticValidatorInterface
             $value = $property->getValue($object);
             $propertyName = $property->getName();
 
-            $errors = $this->validateLegacy($propertyName, $value);
+            $errors = $this->validateWithAttributes($propertyName, [], $value);
             if ($errors->hasErrors()) {
                 $allErrors = [...$allErrors, ...$errors->exceptions];
             }
@@ -337,10 +343,12 @@ final class SemanticValidator implements SemanticValidatorInterface
 
     /**
      * Legacy method: Validate semantic variables and throw exception if errors found
+     *
+     * @deprecated Use validateArgs() and check hasErrors() instead
      */
     public function validateAndThrow(string $variableName, mixed ...$args): void
     {
-        $errors = $this->validateLegacy($variableName, ...$args);
+        $errors = $this->validateWithAttributes($variableName, [], ...$args);
 
         if ($errors->hasErrors()) {
             throw new SemanticVariableException($errors);

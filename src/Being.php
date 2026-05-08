@@ -48,9 +48,7 @@ final class Being
             return null;
         }
 
-        $be = $beAttributes[0]->newInstance();
-
-        return $be->being;  // Returns what this object is becoming
+        return $beAttributes[0]->newInstance()->being;
     }
 
     /**
