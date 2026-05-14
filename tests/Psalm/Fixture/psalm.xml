@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="1"
+    phpVersion="8.3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="." />
+        <ignoreFiles>
+            <directory name="../../../vendor" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <plugins>
+        <pluginClass class="Be\Framework\Psalm\Plugin" />
+    </plugins>
+
+    <issueHandlers>
+        <!-- Suppress unrelated issues so the plugin issues stand alone. -->
+        <UnusedClass errorLevel="suppress" />
+        <UnusedMethod errorLevel="suppress" />
+        <PossiblyUnusedMethod errorLevel="suppress" />
+        <PossiblyUnusedProperty errorLevel="suppress" />
+        <UnusedParam errorLevel="suppress" />
+        <UnusedVariable errorLevel="suppress" />
+        <MissingConstructor errorLevel="suppress" />
+        <PropertyNotSetInConstructor errorLevel="suppress" />
+        <UndefinedAttributeClass errorLevel="suppress" />
+        <UndefinedClass errorLevel="suppress" />
+    </issueHandlers>
+</psalm>

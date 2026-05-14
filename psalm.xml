@@ -10,8 +10,14 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="vendor" />
+            <!-- Plugin source itself: avoid meta-circular self-analysis -->
+            <directory name="src/Psalm" />
         </ignoreFiles>
     </projectFiles>
+
+    <plugins>
+        <pluginClass class="Be\Framework\Psalm\Plugin" />
+    </plugins>
 
     <issueHandlers>
         <!-- Framework API elements that appear unused but are actually necessary -->
