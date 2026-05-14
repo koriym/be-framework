@@ -300,7 +300,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Legacy method: Validate semantic variable with given arguments (for backward compatibility)
      *
-     * @deprecated Use validateArgs() or validateParam() instead
+     * @deprecated Use validateArgs() or validateArg() instead
      */
     public function validate(string $variableName, mixed ...$args): Errors
     {
@@ -310,7 +310,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Legacy method: Validate semantic variable with given arguments
      *
-     * @deprecated Use validateArgs() or validateParam() instead
+     * @deprecated Use validateArgs() or validateArg() instead
      */
     public function validateLegacy(string $variableName, mixed ...$args): Errors
     {
@@ -320,7 +320,7 @@ final class SemanticValidator implements SemanticValidatorInterface
     /**
      * Legacy method: Validate all semantic variables in an object
      *
-     * @deprecated Use validateArgs() instead
+     * @deprecated Use validateProps() instead
      */
     public function validateObject(object $object): Errors
     {
