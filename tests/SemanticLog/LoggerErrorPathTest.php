@@ -11,6 +11,7 @@ use Be\Framework\SemanticLog\Context\BeingFinalCloseContext;
 use Be\Framework\SemanticLog\Context\BeingOpenContext;
 use Koriym\SemanticLogger\SemanticLogger;
 use Koriym\SemanticLogger\SemanticLoggerInterface;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 use RuntimeException;
@@ -84,15 +85,20 @@ final class LoggerErrorPathTest extends TestCase
         $this->expectNotToPerformAssertions();
     }
 
-    public function testLoggerWithNullResult(): void
+    public function testLoggerWithNullResultThrowsLogicException(): void
     {
+        // Use a real SemanticLogger so open() returns a non-empty id and close() reaches the null-result branch.
+        $semanticLogger = new SemanticLogger();
+        $becomingArguments = $this->createMock(BecomingArgumentsInterface::class);
+        $logger = new Logger($semanticLogger, $becomingArguments);
+
         $input = new stdClass();
-        $openId = $this->logger->open($input, stdClass::class, []);
+        $openId = $logger->open($input, stdClass::class, []);
 
-        // Close with null result (no exception) — legacy path, still closes
-        $this->logger->close(null, $openId);
-
-        $this->expectNotToPerformAssertions();
+        // Null result without exception is a programming error
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Logger::close() requires a result object on success');
+        $logger->close(null, $openId);
     }
 
     public function testLoggerWithException(): void

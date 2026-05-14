@@ -142,7 +142,7 @@ final class Logger implements LoggerInterface
     /**
      * Log transformation completion
      *
-     * @throws LogicException When result is null without an exception (programming error)
+     * @throws LogicException When result is null without an exception (programming error).
      */
     #[Override]
     public function close(object|null $result, string $openId, Throwable|null $exception = null): void

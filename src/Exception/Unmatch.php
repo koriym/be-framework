@@ -46,7 +46,7 @@ final readonly class Unmatch
         }
 
         if ($this->details instanceof Throwable) {
-            return $this->details->getMessage();
+            return sprintf('%s: %s', $this->details::class, $this->details->getMessage());
         }
 
         if (is_object($this->details) && method_exists($this->details, '__toString')) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Be\Framework;
 
+use LogicException;
 use Ray\Di\Di\Inject;
 use ReflectionClass;
 use ReflectionIntersectionType;
@@ -17,6 +18,7 @@ use function get_object_vars;
 use function gettype;
 use function implode;
 use function is_object;
+use function sprintf;
 
 /**
  * Type compatibility and resolution utilities for the Becoming framework
@@ -133,7 +135,7 @@ final class BecomingType
         }
 
         if (! $type instanceof ReflectionIntersectionType) {
-            return 'unknown';
+            throw new LogicException(sprintf('Unknown ReflectionType: %s', $type::class));
         }
 
         $types = array_map(fn (ReflectionType $t) => $this->getTypeDescription($t), $type->getTypes());
@@ -171,7 +173,7 @@ final class BecomingType
         }
 
         if (! $type instanceof ReflectionIntersectionType) {
-            return false;
+            throw new LogicException(sprintf('Unknown ReflectionType: %s', $type::class));
         }
 
         return $this->handleIntersectionType($value, $type);
