@@ -19,6 +19,7 @@ use function shell_exec;
 use function sprintf;
 use function str_contains;
 use function str_ends_with;
+use function str_replace;
 
 /**
  * Black-box integration test for the Psalm plugin
@@ -90,7 +91,10 @@ final class PluginIntegrationTest extends TestCase
     public function testValidFixturesProduceNoIssues(): void
     {
         $issues = self::issues();
-        $invalid = array_values(array_filter($issues, static fn (array $i): bool => str_contains((string) ($i['file_name'] ?? ''), 'Valid/')
+        $invalid = array_values(array_filter($issues, static function (array $i): bool {
+            $fileName = str_replace('\\', '/', (string) ($i['file_name'] ?? ''));
+
+            return str_contains($fileName, 'Valid/')
                 && in_array(
                     (string) ($i['type'] ?? ''),
                     [
@@ -99,7 +103,8 @@ final class PluginIntegrationTest extends TestCase
                         'InvalidValidateException',
                     ],
                     true,
-                )));
+                );
+        }));
         $this->assertSame([], $invalid, 'Valid fixtures should not produce plugin issues');
     }
 
@@ -149,7 +154,7 @@ final class PluginIntegrationTest extends TestCase
 
         $decoded = json_decode($stdout, true);
         if (! is_array($decoded)) {
-            $decoded = [];
+            self::fail('Failed to parse Psalm JSON output: ' . $stdout);
         }
 
         /** @var list<array<string, mixed>> $decoded */
