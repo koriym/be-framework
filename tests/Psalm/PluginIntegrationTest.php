@@ -50,6 +50,15 @@ final class PluginIntegrationTest extends TestCase
         );
     }
 
+    #[TestDox('ConflictingBeingParameterAttribute is reported when #[Input] and #[Inject] are both present')]
+    public function testConflictingInputAndInjectIsReported(): void
+    {
+        $this->assertIssue(
+            'ConflictingBeingParameterAttribute',
+            'BadBeingConflictingAttributes.php',
+        );
+    }
+
     #[TestDox('InvalidValidateException is reported on RuntimeException-based throws')]
     public function testValidatorThrowingRuntimeExceptionIsReported(): void
     {
@@ -84,7 +93,11 @@ final class PluginIntegrationTest extends TestCase
         $invalid = array_values(array_filter($issues, static fn (array $i): bool => str_contains((string) ($i['file_name'] ?? ''), 'Valid/')
                 && in_array(
                     (string) ($i['type'] ?? ''),
-                    ['MissingBeingParameterAttribute', 'InvalidValidateException'],
+                    [
+                        'MissingBeingParameterAttribute',
+                        'ConflictingBeingParameterAttribute',
+                        'InvalidValidateException',
+                    ],
                     true,
                 )));
         $this->assertSame([], $invalid, 'Valid fixtures should not produce plugin issues');

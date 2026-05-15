@@ -13,12 +13,15 @@ use SimpleXMLElement;
 /**
  * Psalm plugin entry point for Be Framework
  *
- * Registers static-analysis counterparts for two runtime errors:
+ * Registers static-analysis counterparts for three runtime errors:
  *
  * 1. {@see \Be\Framework\Psalm\Issue\MissingBeingParameterAttribute}
  *    Detects Being constructor parameters missing both #[Input] and #[Inject].
  *
- * 2. {@see \Be\Framework\Psalm\Issue\InvalidValidateException}
+ * 2. {@see \Be\Framework\Psalm\Issue\ConflictingBeingParameterAttribute}
+ *    Detects Being constructor parameters with both #[Input] and #[Inject].
+ *
+ * 3. {@see \Be\Framework\Psalm\Issue\InvalidValidateException}
  *    Detects #[Validate] methods that throw exceptions not extending DomainException.
  */
 final class Plugin implements PluginEntryPointInterface
@@ -30,6 +33,7 @@ final class Plugin implements PluginEntryPointInterface
         require_once __DIR__ . '/Internal/AttributeNodeUtil.php';
         require_once __DIR__ . '/Internal/ThrowCollectorVisitor.php';
         require_once __DIR__ . '/Issue/MissingBeingParameterAttribute.php';
+        require_once __DIR__ . '/Issue/ConflictingBeingParameterAttribute.php';
         require_once __DIR__ . '/Issue/InvalidValidateException.php';
         require_once __DIR__ . '/Handler/BeingParameterAttributeHandler.php';
         require_once __DIR__ . '/Handler/ValidateThrowHandler.php';

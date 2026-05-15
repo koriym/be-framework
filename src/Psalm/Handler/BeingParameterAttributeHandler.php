@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Be\Framework\Psalm\Handler;
 
 use Be\Framework\Psalm\Internal\AttributeNodeUtil;
+use Be\Framework\Psalm\Issue\ConflictingBeingParameterAttribute;
 use Be\Framework\Psalm\Issue\MissingBeingParameterAttribute;
 use PhpParser\Node;
 use Psalm\Aliases;
@@ -18,13 +19,12 @@ use function is_string;
 use function sprintf;
 
 /**
- * Detects Being constructor parameters missing #[Input] / #[Inject] attributes
+ * Detects invalid Being constructor parameter attributes
  *
  * Heuristic: a class is treated as a Being class if its constructor declares at
  * least one parameter annotated with #[Ray\InputQuery\Attribute\Input]. For such
- * classes, every constructor parameter must have either #[Input] or
- * #[Ray\Di\Di\Inject], otherwise {@see \Be\Framework\Exception\MissingParameterAttribute}
- * will be thrown at runtime by BecomingArguments.
+ * classes, every constructor parameter must have exactly one of #[Input] or
+ * #[Ray\Di\Di\Inject], otherwise BecomingArguments will throw at runtime.
  *
  * Skipped:
  *  - interfaces, traits, enums
@@ -48,8 +48,10 @@ final class BeingParameterAttributeHandler implements AfterClassLikeVisitInterfa
         $aliases = $source->getAliases();
         $className = (string) $event->getStorage()->name;
 
+        $suppressedIssues = $event->getStorage()->suppressed_issues;
+
         foreach ($ctor->params as $param) {
-            self::checkParam($param, $className, $source, $aliases);
+            self::checkParam($param, $className, $source, $aliases, $suppressedIssues);
         }
     }
 
@@ -90,19 +92,39 @@ final class BeingParameterAttributeHandler implements AfterClassLikeVisitInterfa
         return false;
     }
 
-    private static function checkParam(Node\Param $param, string $className, FileSource $source, Aliases $aliases): void
-    {
-        if (AttributeNodeUtil::hasAttribute($param->attrGroups, self::INPUT_FQCN, $aliases)) {
-            return;
-        }
-
-        if (AttributeNodeUtil::hasAttribute($param->attrGroups, self::INJECT_FQCN, $aliases)) {
-            return;
-        }
-
+    /** @param array<array-key, string> $suppressedIssues */
+    private static function checkParam(
+        Node\Param $param,
+        string $className,
+        FileSource $source,
+        Aliases $aliases,
+        array $suppressedIssues,
+    ): void {
+        $hasInput = AttributeNodeUtil::hasAttribute($param->attrGroups, self::INPUT_FQCN, $aliases);
+        $hasInject = AttributeNodeUtil::hasAttribute($param->attrGroups, self::INJECT_FQCN, $aliases);
         $paramName = $param->var instanceof Node\Expr\Variable && is_string($param->var->name)
             ? $param->var->name
             : 'unknown';
+
+        if ($hasInput && $hasInject) {
+            IssueBuffer::maybeAdd(
+                new ConflictingBeingParameterAttribute(
+                    sprintf(
+                        'Constructor parameter $%s of Being class %s has both #[Input] and #[Inject] attributes',
+                        $paramName,
+                        $className,
+                    ),
+                    new CodeLocation($source, $param),
+                ),
+                $suppressedIssues,
+            );
+
+            return;
+        }
+
+        if ($hasInput || $hasInject) {
+            return;
+        }
 
         IssueBuffer::maybeAdd(
             new MissingBeingParameterAttribute(
@@ -113,6 +135,7 @@ final class BeingParameterAttributeHandler implements AfterClassLikeVisitInterfa
                 ),
                 new CodeLocation($source, $param),
             ),
+            $suppressedIssues,
         );
     }
 }
