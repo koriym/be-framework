@@ -13,6 +13,7 @@ use ReflectionUnionType;
 
 use function array_key_exists;
 use function array_map;
+use function assert;
 use function get_object_vars;
 use function gettype;
 use function implode;
@@ -132,10 +133,7 @@ final class BecomingType
             return implode('|', $types);
         }
 
-        if (! $type instanceof ReflectionIntersectionType) {
-            return 'unknown';
-        }
-
+        assert($type instanceof ReflectionIntersectionType, 'Unknown ReflectionType encountered');
         $types = array_map(fn (ReflectionType $t) => $this->getTypeDescription($t), $type->getTypes());
 
         return implode('&', $types);
@@ -170,9 +168,7 @@ final class BecomingType
             return $this->handleUnionType($value, $type);
         }
 
-        if (! $type instanceof ReflectionIntersectionType) {
-            return false;
-        }
+        assert($type instanceof ReflectionIntersectionType, 'Unknown ReflectionType encountered');
 
         return $this->handleIntersectionType($value, $type);
     }
