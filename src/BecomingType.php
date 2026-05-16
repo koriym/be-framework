@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Be\Framework;
 
-use LogicException;
 use Ray\Di\Di\Inject;
 use ReflectionClass;
 use ReflectionIntersectionType;
@@ -14,11 +13,11 @@ use ReflectionUnionType;
 
 use function array_key_exists;
 use function array_map;
+use function assert;
 use function get_object_vars;
 use function gettype;
 use function implode;
 use function is_object;
-use function sprintf;
 
 /**
  * Type compatibility and resolution utilities for the Becoming framework
@@ -134,10 +133,7 @@ final class BecomingType
             return implode('|', $types);
         }
 
-        if (! $type instanceof ReflectionIntersectionType) {
-            throw new LogicException(sprintf('Unknown ReflectionType: %s', $type::class));
-        }
-
+        assert($type instanceof ReflectionIntersectionType, 'Unknown ReflectionType encountered');
         $types = array_map(fn (ReflectionType $t) => $this->getTypeDescription($t), $type->getTypes());
 
         return implode('&', $types);
@@ -172,9 +168,7 @@ final class BecomingType
             return $this->handleUnionType($value, $type);
         }
 
-        if (! $type instanceof ReflectionIntersectionType) {
-            throw new LogicException(sprintf('Unknown ReflectionType: %s', $type::class));
-        }
+        assert($type instanceof ReflectionIntersectionType, 'Unknown ReflectionType encountered');
 
         return $this->handleIntersectionType($value, $type);
     }
