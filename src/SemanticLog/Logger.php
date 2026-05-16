@@ -141,6 +141,8 @@ final class Logger implements LoggerInterface
 
     /**
      * Log transformation completion
+     *
+     * @throws LogicException When result is null without an exception (programming error).
      */
     #[Override]
     public function close(object|null $result, string $openId, Throwable|null $exception = null): void
@@ -159,13 +161,9 @@ final class Logger implements LoggerInterface
         }
 
         if ($result === null) {
-            // Legacy safety net: null result without an exception still ends the open entry.
-            $this->logger->close(new BeingErrorCloseContext(
-                error: 'UnknownError',
-                message: 'Unknown error',
-            ), $openId);
-
-            return;
+            throw new LogicException(
+                'Logger::close() requires a result object on success; got null with no exception.',
+            );
         }
 
         $prop = $this->extractProperties($result);

@@ -38,6 +38,12 @@ final class ValidationMessageHandler
 {
     /**
      * Generate localized message for validation exception
+     *
+     * @param Throwable $exception The validation exception with optional #[Message] attribute
+     * @param string    $locale    The desired locale (e.g., 'en', 'ja'). Falls back to 'en' if
+     *                             the requested locale is not defined in the Message attribute.
+     *
+     * @return string The localized message with placeholders interpolated
      */
     public function getMessage(Throwable $exception, string $locale = 'en'): string
     {

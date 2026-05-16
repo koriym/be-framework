@@ -17,11 +17,22 @@ use function is_string;
 
 /**
  * Safely extracts public object properties for semantic log payloads.
+ *
+ * Handles both declared and dynamic properties, with special handling for:
+ * - Uninitialized properties (returns null)
+ * - Been instances (excluded from output)
+ * - Non-storable values like resources (excluded)
  */
 final class ObjectPropertyExtractor
 {
     /**
-     * @return ObjectProperties
+     * Extract all public properties from an object for logging
+     *
+     * @param object $result The object to extract properties from
+     *
+     * @return ObjectProperties Key-value pairs of property names and their values.
+     *                          Uninitialized properties are returned as null.
+     *                          Been instances and non-JSON-serializable values are excluded.
      * @phpstan-return array<string, mixed>
      */
     public function extract(object $result): array

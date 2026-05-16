@@ -17,8 +17,9 @@ use function implode;
 final class BeMatchException extends RuntimeException
 {
     /**
-     * @param QualifiedClasses $candidates
-     * @param Unmatch[]        $unmatches
+     * @param QualifiedClasses $candidates List of candidate class names that were attempted.
+     *                                     Should not be empty in normal usage.
+     * @param Unmatch[]        $unmatches  Structured unmatch information for each candidate
      * @phpstan-param array<class-string> $candidates
      * @phpstan-param array<Unmatch> $unmatches
      */

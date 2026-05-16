@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Be\Framework\Exception;
 
+use Throwable;
+
+use function get_debug_type;
 use function is_object;
 use function is_string;
 use function method_exists;
@@ -42,10 +45,14 @@ final readonly class Unmatch
             return $this->details;
         }
 
+        if ($this->details instanceof Throwable) {
+            return sprintf('%s: %s', $this->details::class, $this->details->getMessage());
+        }
+
         if (is_object($this->details) && method_exists($this->details, '__toString')) {
             return (string) $this->details;
         }
 
-        return '[object details]';
+        return sprintf('[%s]', get_debug_type($this->details));
     }
 }

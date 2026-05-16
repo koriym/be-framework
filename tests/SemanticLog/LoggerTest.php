@@ -122,20 +122,16 @@ final class LoggerTest extends TestCase
         $this->assertEquals('Test error message', $closeData['context']['message']);
     }
 
-    public function testErrorLoggingWithoutException(): void
+    public function testErrorLoggingWithoutExceptionThrowsLogicException(): void
     {
         $input = new TestInput('test data');
 
         $openId = $this->logger->open($input, FakeProcessedData::class, []);
 
-        // Null result without exception — still closes as error with 'Unknown error'
+        // Null result without exception is a programming error
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Logger::close() requires a result object on success');
         $this->logger->close(null, $openId);
-
-        $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
-        $closeData = $logData['open'][0]['close'];
-        $this->assertEquals('being_error_close', $closeData['type']);
-        $this->assertEquals('Unknown error', $closeData['context']['message']);
     }
 
     public function testEmptyOpenIdSkip(): void
