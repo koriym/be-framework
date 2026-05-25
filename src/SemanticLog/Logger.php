@@ -23,6 +23,7 @@ use Override;
 use Ray\Di\Di\Inject;
 use Ray\InputQuery\Attribute\Input;
 use ReflectionClass;
+use SensitiveParameter;
 use Throwable;
 
 use function array_key_exists;
@@ -274,8 +275,10 @@ final class Logger implements LoggerInterface
                     continue;
                 }
 
+                $isSensitive = $param->getAttributes(SensitiveParameter::class) !== [];
+
                 // For scalar/other types, show the type information
-                $stringValue = match (true) {
+                $stringValue = $isSensitive ? ObjectPropertyExtractor::REDACTED : match (true) {
                     is_string($value) => $value,
                     is_numeric($value) => (string) $value,
                     is_bool($value) => $value ? 'true' : 'false',
