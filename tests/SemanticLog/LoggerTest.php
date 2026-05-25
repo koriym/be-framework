@@ -15,6 +15,7 @@ use Be\Framework\SensitiveInjectTarget;
 use Be\Framework\TestInputWithDependency;
 use Be\Framework\TestMultipleDestination;
 use Be\Framework\TestSingleDestination;
+use Be\Framework\UninitializedSensitiveInput;
 use Koriym\SemanticLogger\SemanticLogger;
 use LogicException;
 use PHPUnit\Framework\TestCase;
@@ -357,6 +358,22 @@ final class LoggerTest extends TestCase
 
         $this->assertSame('alice', $result['username']);
         $this->assertSame(ObjectPropertyExtractor::REDACTED, $result['password']);
+    }
+
+    public function testExtractPropertiesUninitializedSensitivePropertyStaysNull(): void
+    {
+        // Order contract: the uninitialized-property short-circuit runs before
+        // the sensitivity check, so a never-assigned sensitive property is
+        // surfaced as null rather than the misleading `[REDACTED]` placeholder
+        // (uninitialized leaks nothing; redacting would falsely imply a value).
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractProperties');
+
+        $input = new UninitializedSensitiveInput('alice');
+        $result = $method->invoke($this->logger, $input);
+
+        $this->assertSame('alice', $result['username']);
+        $this->assertNull($result['password']);
     }
 
     public function testExtractTranscendentSourcesRedactsSensitiveInject(): void

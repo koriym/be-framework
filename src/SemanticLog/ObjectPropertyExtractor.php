@@ -25,6 +25,17 @@ use function is_string;
  * - Non-storable values like resources (excluded)
  * - Constructor parameters marked with PHP's `#[\SensitiveParameter]`:
  *   the matching public property value is replaced with `self::REDACTED`.
+ *
+ * Redaction contract: a property is redacted when the object's constructor
+ * declares a parameter of the *same name* carrying `#[\SensitiveParameter]`.
+ * This matches Be Framework's idiomatic pattern (promoted `public readonly`
+ * properties that mirror constructor parameter names). Implications:
+ * - Classes with no constructor (e.g. `stdClass`) cannot opt in; dynamic
+ *   properties on such classes are never redacted.
+ * - A `public` property whose name does not match any constructor parameter
+ *   is never redacted, even if the class has other sensitive parameters.
+ * - Redaction is shallow: a nested object value is stored as-is and its
+ *   own sensitive sub-properties are not recursively masked.
  */
 final class ObjectPropertyExtractor
 {
