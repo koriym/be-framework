@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Be\Framework;
 
+use Be\Framework\Exception\InputSemanticVariableException;
+use Be\Framework\Exception\RuntimeSemanticVariableException;
+use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\SemanticLog\Logger;
 use Be\Framework\SemanticLog\LoggerInterface;
 use Be\Framework\SemanticVariable\SemanticValidator;
@@ -51,13 +54,24 @@ final class Becoming implements BecomingInterface
     {
         $chainId = $this->logger->openChain($input);
         $current = $input;
+        $isFirst = true;
 
         try {
             // Being reveals its becoming, then becomes it
             while ($nextForm = $this->being->willBe($current)) {
                 $current = $this->being->metamorphose($current, $nextForm);
+                $isFirst = false;
             }
         } catch (Throwable $e) {
+            // Refine semantic validation failures by their position in the chain:
+            // the first metamorphosis validates incoming input (input error),
+            // any later one validates already-validated state (runtime error).
+            if ($e instanceof SemanticVariableException) {
+                $e = $isFirst
+                    ? new InputSemanticVariableException($e->getErrors(), $e)
+                    : new RuntimeSemanticVariableException($e->getErrors(), $e);
+            }
+
             try {
                 $this->logger->closeChain(null, $chainId, $e);
             } catch (Throwable) {
