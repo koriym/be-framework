@@ -13,6 +13,7 @@ use Be\Framework\Exception\MissingParameterAttribute;
 use Be\Framework\Exception\RuntimeSemanticVariableException;
 use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Exception\UnbecomingException;
+use Be\Framework\SemanticLog\Context\BecomingCloseContext;
 use Be\Framework\SemanticLog\Logger;
 use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
@@ -249,17 +250,14 @@ final class BecomingTest extends TestCase
         }
     }
 
-    public function testChainCloseLogRecordsRefinedSubtype(): void
+    public function testChainCloseLogRecordsBaseErrorAndInputOrigin(): void
     {
-        // The chain-close log must record the refined subtype FQCN, which fixes the
-        // "refine BEFORE closeChain" ordering in Becoming::__invoke. Use a real
+        // The chain-close log records the ORIGINAL base exception class (consistent
+        // with the inner being_error_close span) and carries the input/runtime
+        // distinction via `origin` — not by swapping the class name. Use a real
         // SemanticLogger so the emitted becoming_close payload can be inspected.
-        $injector = new Injector(new BecomingTestModule());
-        $semanticValidator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
-        $becomingArguments = new BecomingArguments($injector, $semanticValidator);
         $semanticLogger = new SemanticLogger();
-        $logger = new Logger($semanticLogger, $becomingArguments);
-        $becoming = new Becoming($injector, 'MyVendor\\MyApp', $logger, $becomingArguments);
+        $becoming = $this->becomingWithLogger($semanticLogger);
 
         try {
             $becoming(new BecomingTestSemanticInvalid('invalid-email'));
@@ -268,14 +266,50 @@ final class BecomingTest extends TestCase
             // expected
         }
 
+        $context = $this->becomingCloseContext($semanticLogger);
+        $this->assertSame('error', $context['exit']);
+        $this->assertSame(SemanticVariableException::class, $context['error']);
+        $this->assertSame(BecomingCloseContext::ORIGIN_INPUT, $context['origin']);
+    }
+
+    public function testChainCloseLogRecordsRuntimeOrigin(): void
+    {
+        // A validation failure on a later metamorphosis is logged with origin=runtime.
+        $semanticLogger = new SemanticLogger();
+        $becoming = $this->becomingWithLogger($semanticLogger);
+
+        try {
+            $becoming(new BecomingTestRuntimeStart('seed'));
+            $this->fail('Expected RuntimeSemanticVariableException');
+        } catch (RuntimeSemanticVariableException) {
+            // expected
+        }
+
+        $context = $this->becomingCloseContext($semanticLogger);
+        $this->assertSame('error', $context['exit']);
+        $this->assertSame(SemanticVariableException::class, $context['error']);
+        $this->assertSame(BecomingCloseContext::ORIGIN_RUNTIME, $context['origin']);
+    }
+
+    private function becomingWithLogger(SemanticLogger $semanticLogger): Becoming
+    {
+        $injector = new Injector(new BecomingTestModule());
+        $semanticValidator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
+        $becomingArguments = new BecomingArguments($injector, $semanticValidator);
+        $logger = new Logger($semanticLogger, $becomingArguments);
+
+        return new Becoming($injector, 'MyVendor\\MyApp', $logger, $becomingArguments);
+    }
+
+    /** @return array<string, mixed> */
+    private function becomingCloseContext(SemanticLogger $semanticLogger): array
+    {
         $logData = $semanticLogger->toArray();
         assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
         $closeData = $logData['open'][0]['close'];
-        assert(is_array($closeData) && is_array($closeData['context']));
+        assert(is_array($closeData) && $closeData['type'] === 'becoming_close' && is_array($closeData['context']));
 
-        $this->assertSame('becoming_close', $closeData['type']);
-        $this->assertSame('error', $closeData['context']['exit']);
-        $this->assertSame(InputSemanticVariableException::class, $closeData['context']['error']);
+        return $closeData['context'];
     }
 
     public function testTypeMatchingFailureWithFallback(): void

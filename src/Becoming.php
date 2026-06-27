@@ -7,6 +7,7 @@ namespace Be\Framework;
 use Be\Framework\Exception\InputSemanticVariableException;
 use Be\Framework\Exception\RuntimeSemanticVariableException;
 use Be\Framework\Exception\SemanticVariableException;
+use Be\Framework\SemanticLog\Context\BecomingCloseContext;
 use Be\Framework\SemanticLog\Logger;
 use Be\Framework\SemanticLog\LoggerInterface;
 use Be\Framework\SemanticVariable\SemanticValidator;
@@ -66,14 +67,22 @@ final class Becoming implements BecomingInterface
             // Refine semantic validation failures by their position in the chain:
             // the first metamorphosis validates incoming input (input error),
             // any later one validates already-validated state (runtime error).
+            // Callers receive the refined subtype, while the chain-close log keeps
+            // the original error class (consistent with the inner span) and carries
+            // the input/runtime distinction as `origin`.
+            $loggedException = $e;
+            $origin = null;
             if ($e instanceof SemanticVariableException) {
+                $origin = $isFirst
+                    ? BecomingCloseContext::ORIGIN_INPUT
+                    : BecomingCloseContext::ORIGIN_RUNTIME;
                 $e = $isFirst
                     ? new InputSemanticVariableException($e->getErrors(), $e)
                     : new RuntimeSemanticVariableException($e->getErrors(), $e);
             }
 
             try {
-                $this->logger->closeChain(null, $chainId, $e);
+                $this->logger->closeChain(null, $chainId, $loggedException, $origin);
             } catch (Throwable) {
                 // A failure inside error logging must not mask the original
                 // metamorphosis exception. Swallow the logging error and

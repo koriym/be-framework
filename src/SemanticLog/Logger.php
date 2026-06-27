@@ -81,7 +81,7 @@ final class Logger implements LoggerInterface
      *                        `becoming-close.json`, so we refuse to emit one.
      */
     #[Override]
-    public function closeChain(object|null $final, string $openId, Throwable|null $exception = null): void
+    public function closeChain(object|null $final, string $openId, Throwable|null $exception = null, string|null $origin = null): void
     {
         if ($openId === '') {
             return;
@@ -92,6 +92,7 @@ final class Logger implements LoggerInterface
                 exit: BecomingCloseContext::EXIT_ERROR,
                 error: $exception::class,
                 message: $exception->getMessage(),
+                origin: $origin,
             ), $openId);
 
             return;
