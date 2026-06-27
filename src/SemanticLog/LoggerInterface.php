@@ -37,8 +37,10 @@ interface LoggerInterface
      * @param object|null    $final     Terminal being reached on success; null if the chain failed
      * @param string         $openId    Open ID from the corresponding openChain call
      * @param Throwable|null $exception Exception that ended the chain, or null on success
+     * @param string|null    $origin    Provenance of a semantic validation failure ('input'|'runtime'),
+     *                                  or null when the failure is not a semantic validation error
      */
-    public function closeChain(object|null $final, string $openId, Throwable|null $exception = null): void;
+    public function closeChain(object|null $final, string $openId, Throwable|null $exception = null, string|null $origin = null): void;
 
     /**
      * Log transformation start

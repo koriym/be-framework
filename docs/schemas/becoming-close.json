@@ -13,7 +13,8 @@
       "not": {
         "anyOf": [
           { "required": ["error"] },
-          { "required": ["message"] }
+          { "required": ["message"] },
+          { "required": ["origin"] }
         ]
       }
     },
@@ -42,6 +43,11 @@
     "message": {
       "type": "string",
       "description": "Exception message when the chain ended in failure."
+    },
+    "origin": {
+      "type": "string",
+      "enum": ["input", "runtime"],
+      "description": "Provenance of a semantic validation failure: 'input' when the first metamorphosis (incoming input) failed validation, 'runtime' when a later metamorphosis failed. Absent for non-semantic failures."
     }
   },
   "additionalProperties": false

@@ -8,12 +8,17 @@ use Be\Framework\Attribute\Be;
 use Be\Framework\Attribute\Validate;
 use Be\Framework\Exception\BeMatchException;
 use Be\Framework\Exception\ConflictingParameterAttributes;
+use Be\Framework\Exception\InputSemanticVariableException;
 use Be\Framework\Exception\MissingParameterAttribute;
+use Be\Framework\Exception\RuntimeSemanticVariableException;
 use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Exception\UnbecomingException;
+use Be\Framework\SemanticLog\Context\BecomingCloseContext;
+use Be\Framework\SemanticLog\Logger;
 use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use InvalidArgumentException;
+use Koriym\SemanticLogger\SemanticLogger;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Di\Inject;
@@ -22,7 +27,9 @@ use Ray\Di\Injector;
 use Ray\InputQuery\Attribute\Input;
 use RuntimeException;
 
+use function assert;
 use function filter_var;
+use function is_array;
 
 use const FILTER_VALIDATE_EMAIL;
 
@@ -181,6 +188,132 @@ final class BecomingTest extends TestCase
 
         $input = new BecomingTestSemanticInvalid('invalid-email');
         ($this->becoming)($input);
+    }
+
+    public function testFirstMetamorphosisFailsWithInputException(): void
+    {
+        // Validation failing on the first metamorphosis is an input error
+        $input = new BecomingTestSemanticInvalid('invalid-email');
+
+        try {
+            ($this->becoming)($input);
+            $this->fail('Expected InputSemanticVariableException');
+        } catch (InputSemanticVariableException $e) {
+            // The refined input subtype is still a SemanticVariableException
+            $this->assertInstanceOf(SemanticVariableException::class, $e);
+            $this->assertTrue($e->getErrors()->hasErrors());
+
+            // The original base exception is preserved as the cause so the real
+            // validation site stays reachable. Pin it on the Becoming rewrap path
+            // (not just in the direct-construction unit tests).
+            $previous = $e->getPrevious();
+            $this->assertInstanceOf(SemanticVariableException::class, $previous);
+            $this->assertNotInstanceOf(InputSemanticVariableException::class, $previous);
+            $this->assertSame($e->getErrors(), $previous->getErrors());
+        }
+    }
+
+    public function testLaterMetamorphosisFailsWithRuntimeException(): void
+    {
+        // The first transformation succeeds; the second fails validation,
+        // which is a runtime error rather than an input error.
+        $input = new BecomingTestRuntimeStart('seed');
+
+        try {
+            ($this->becoming)($input);
+            $this->fail('Expected RuntimeSemanticVariableException');
+        } catch (RuntimeSemanticVariableException $e) {
+            $this->assertInstanceOf(SemanticVariableException::class, $e);
+            $this->assertNotInstanceOf(InputSemanticVariableException::class, $e);
+            $this->assertTrue($e->getErrors()->hasErrors());
+
+            // Cause chain preserved through the rewrap, same Errors carried over.
+            $previous = $e->getPrevious();
+            $this->assertInstanceOf(SemanticVariableException::class, $previous);
+            $this->assertNotInstanceOf(RuntimeSemanticVariableException::class, $previous);
+            $this->assertSame($e->getErrors(), $previous->getErrors());
+        }
+    }
+
+    public function testBranchingFirstStepFailsWithInputException(): void
+    {
+        // The first metamorphosis through the array/branching path (performTypeMatching)
+        // must classify a validation failure as an input error, just like the linear path.
+        $input = new BecomingTestSemanticFailureInput('invalid-email');
+
+        try {
+            ($this->becoming)($input);
+            $this->fail('Expected InputSemanticVariableException');
+        } catch (InputSemanticVariableException $e) {
+            $this->assertNotInstanceOf(RuntimeSemanticVariableException::class, $e);
+            $this->assertTrue($e->getErrors()->hasErrors());
+        }
+    }
+
+    public function testChainCloseLogRecordsBaseErrorAndInputOrigin(): void
+    {
+        // The chain-close log records the ORIGINAL base exception class (consistent
+        // with the inner being_error_close span) and carries the input/runtime
+        // distinction via `origin` — not by swapping the class name. Use a real
+        // SemanticLogger so the emitted becoming_close payload can be inspected.
+        $semanticLogger = new SemanticLogger();
+        $becoming = $this->becomingWithLogger($semanticLogger);
+
+        try {
+            $becoming(new BecomingTestSemanticInvalid('invalid-email'));
+            $this->fail('Expected InputSemanticVariableException');
+        } catch (InputSemanticVariableException) {
+            // expected
+        }
+
+        $context = $this->becomingCloseContext($semanticLogger);
+        $this->assertSame('error', $context['exit']);
+        $this->assertSame(SemanticVariableException::class, $context['error']);
+        $this->assertSame(BecomingCloseContext::ORIGIN_INPUT, $context['origin']);
+    }
+
+    public function testChainCloseLogRecordsRuntimeOrigin(): void
+    {
+        // A validation failure on a later metamorphosis is logged with origin=runtime.
+        $semanticLogger = new SemanticLogger();
+        $becoming = $this->becomingWithLogger($semanticLogger);
+
+        try {
+            $becoming(new BecomingTestRuntimeStart('seed'));
+            $this->fail('Expected RuntimeSemanticVariableException');
+        } catch (RuntimeSemanticVariableException) {
+            // expected
+        }
+
+        $context = $this->becomingCloseContext($semanticLogger);
+        $this->assertSame('error', $context['exit']);
+        $this->assertSame(SemanticVariableException::class, $context['error']);
+        $this->assertSame(BecomingCloseContext::ORIGIN_RUNTIME, $context['origin']);
+    }
+
+    private function becomingWithLogger(SemanticLogger $semanticLogger): Becoming
+    {
+        $injector = new Injector(new BecomingTestModule());
+        $semanticValidator = new SemanticValidator('MyVendor\\MyApp\\SemanticVariables');
+        $becomingArguments = new BecomingArguments($injector, $semanticValidator);
+        $logger = new Logger($semanticLogger, $becomingArguments);
+
+        return new Becoming($injector, 'MyVendor\\MyApp', $logger, $becomingArguments);
+    }
+
+    /** @return array<string, mixed> */
+    private function becomingCloseContext(SemanticLogger $semanticLogger): array
+    {
+        $logData = $semanticLogger->toArray();
+        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        $closeData = $logData['open'][0]['close'];
+        assert(is_array($closeData) && is_array($closeData['context']));
+
+        // A real assertion (not assert()) so the shape check still holds when
+        // zend.assertions is disabled.
+        $this->assertSame('becoming_close', $closeData['type']);
+
+        return $closeData['context'];
     }
 
     public function testTypeMatchingFailureWithFallback(): void
@@ -610,6 +743,42 @@ final class BecomingTestSemanticTarget
         #[Input]
         #[Validate('Email')]
         public readonly string $email,  // This will trigger semantic validation for email
+    ) {
+    }
+}
+
+// Runtime semantic validation test fixtures: a two-step chain where the first
+// transformation passes validation and the second produces invalid data.
+#[Be(BecomingTestRuntimeMiddle::class)]
+final class BecomingTestRuntimeStart
+{
+    public function __construct(
+        public readonly string $value,  // no Value semantic class - first step passes
+    ) {
+    }
+}
+
+#[Be(BecomingTestRuntimeFailingTarget::class)]
+final class BecomingTestRuntimeMiddle
+{
+    public readonly string $email;
+
+    public function __construct(
+        #[Input]
+        string $value,
+    ) {
+        // Carry the seed forward as the email for the next step. The seed ('seed')
+        // is not a valid email, so the SECOND metamorphosis fails semantic validation.
+        $this->email = $value;
+    }
+}
+
+final class BecomingTestRuntimeFailingTarget
+{
+    public function __construct(
+        #[Input]
+        #[Validate('Email')]
+        public readonly string $email,  // fails semantic validation on the second step
     ) {
     }
 }
