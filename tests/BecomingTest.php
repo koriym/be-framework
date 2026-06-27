@@ -307,7 +307,11 @@ final class BecomingTest extends TestCase
         $logData = $semanticLogger->toArray();
         assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
         $closeData = $logData['open'][0]['close'];
-        assert(is_array($closeData) && $closeData['type'] === 'becoming_close' && is_array($closeData['context']));
+        assert(is_array($closeData) && is_array($closeData['context']));
+
+        // A real assertion (not assert()) so the shape check still holds when
+        // zend.assertions is disabled.
+        $this->assertSame('becoming_close', $closeData['type']);
 
         return $closeData['context'];
     }
@@ -761,10 +765,11 @@ final class BecomingTestRuntimeMiddle
 
     public function __construct(
         #[Input]
-        string $value, // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+        string $value,
     ) {
-        // Produce an invalid email for the next metamorphosis to validate
-        $this->email = 'invalid-email';
+        // Carry the seed forward as the email for the next step. The seed ('seed')
+        // is not a valid email, so the SECOND metamorphosis fails semantic validation.
+        $this->email = $value;
     }
 }
 
