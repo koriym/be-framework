@@ -10,9 +10,12 @@ use Be\Framework\ClassWithInjectObject;
 use Be\Framework\FakeProcessedData;
 use Be\Framework\NoConstructorClass;
 use Be\Framework\SemanticVariable\NullValidator;
+use Be\Framework\SensitiveCredentialInput;
+use Be\Framework\SensitiveInjectTarget;
 use Be\Framework\TestInputWithDependency;
 use Be\Framework\TestMultipleDestination;
 use Be\Framework\TestSingleDestination;
+use Be\Framework\UninitializedSensitiveInput;
 use Koriym\SemanticLogger\SemanticLogger;
 use LogicException;
 use PHPUnit\Framework\TestCase;
@@ -341,5 +344,54 @@ final class LoggerTest extends TestCase
         $this->assertArrayHasKey('injectedObject', $result);
         $this->assertSame('stdClass', $result['injectedObject']);
         $this->assertArrayNotHasKey('missingParam', $result);
+    }
+
+    public function testExtractPropertiesRedactsSensitiveParameter(): void
+    {
+        // A public readonly property whose matching constructor parameter is
+        // marked `#[\SensitiveParameter]` must not appear verbatim in the log.
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractProperties');
+
+        $input = new SensitiveCredentialInput('alice', 'super-secret-pw');
+        $result = $method->invoke($this->logger, $input);
+
+        $this->assertSame('alice', $result['username']);
+        $this->assertSame(ObjectPropertyExtractor::REDACTED, $result['password']);
+    }
+
+    public function testExtractPropertiesUninitializedSensitivePropertyStaysNull(): void
+    {
+        // Order contract: the uninitialized-property short-circuit runs before
+        // the sensitivity check, so a never-assigned sensitive property is
+        // surfaced as null rather than the misleading `[REDACTED]` placeholder
+        // (uninitialized leaks nothing; redacting would falsely imply a value).
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractProperties');
+
+        $input = new UninitializedSensitiveInput('alice');
+        $result = $method->invoke($this->logger, $input);
+
+        $this->assertSame('alice', $result['username']);
+        $this->assertNull($result['password']);
+    }
+
+    public function testExtractTranscendentSourcesRedactsSensitiveInject(): void
+    {
+        // `#[Inject]` parameters that also carry `#[\SensitiveParameter]` get
+        // their value replaced in the `inject` source map; the type stays.
+        $reflection = new ReflectionClass($this->logger);
+        $method = $reflection->getMethod('extractTranscendentSources');
+
+        $args = [
+            'username' => 'alice',
+            'apiToken' => 'token-abc-123',
+        ];
+
+        $result = $method->invoke($this->logger, $args, SensitiveInjectTarget::class);
+
+        $this->assertArrayHasKey('apiToken', $result);
+        $this->assertSame('string:' . ObjectPropertyExtractor::REDACTED, $result['apiToken']);
+        $this->assertArrayNotHasKey('username', $result, '#[Input] params do not appear in transcendent sources');
     }
 }
