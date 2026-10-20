@@ -4,30 +4,31 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74f63a1d38919b85a18b8f276762fde4",
+    "content-hash": "cbf826e6c9f0c719a7b57877318d70b9",
     "packages": [
         {
             "name": "justinrainbow/json-schema",
-            "version": "6.8.0",
+            "version": "6.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsonrainbow/json-schema.git",
-                "reference": "89ac92bcfe5d0a8a4433c7b89d394553ae7250cc"
+                "reference": "e54aacc4c0657b3a4af4f628428d2702146828c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/89ac92bcfe5d0a8a4433c7b89d394553ae7250cc",
-                "reference": "89ac92bcfe5d0a8a4433c7b89d394553ae7250cc",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/e54aacc4c0657b3a4af4f628428d2702146828c6",
+                "reference": "e54aacc4c0657b3a4af4f628428d2702146828c6",
                 "shasum": ""
             },
             "require": {
+                "ext-filter": "*",
                 "ext-json": "*",
                 "marc-mabe/php-enum": "^4.4",
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "3.3.0",
-                "json-schema/json-schema-test-suite": "^23.2",
+                "json-schema/json-schema-test-suite": "dev-main",
                 "marc-mabe/php-enum-phpstan": "^2.0",
                 "phpspec/prophecy": "^1.19",
                 "phpstan/phpstan": "^1.12",
@@ -53,20 +54,9 @@
             ],
             "authors": [
                 {
-                    "name": "Bruno Prieto Reis",
-                    "email": "bruno.p.reis@gmail.com"
-                },
-                {
-                    "name": "Justin Rainbow",
-                    "email": "justin.rainbow@gmail.com"
-                },
-                {
-                    "name": "Igor Wiedler",
-                    "email": "igor@wiedler.ch"
-                },
-                {
-                    "name": "Robert Schönthal",
-                    "email": "seroscho@googlemail.com"
+                    "name": "Danny van der Sluijs",
+                    "email": "danny.vandersluijs@icloud.com",
+                    "role": "Maintainer"
                 }
             ],
             "description": "A library to validate a json schema.",
@@ -77,9 +67,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jsonrainbow/json-schema/issues",
-                "source": "https://github.com/jsonrainbow/json-schema/tree/6.8.0"
+                "source": "https://github.com/jsonrainbow/json-schema/tree/6.13.1"
             },
-            "time": "2026-04-02T12:43:11+00:00"
+            "time": "2026-09-30T07:42:28+00:00"
         },
         {
             "name": "koriym/null-object",
@@ -137,16 +127,16 @@
         },
         {
             "name": "koriym/semantic-logger",
-            "version": "0.9.0",
+            "version": "0.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Koriym.SemanticLogger.git",
-                "reference": "5e427285bad04169e6d33162b2afd2611b3a52c1"
+                "reference": "b833164b7cffc8f91e5a1071b6b0f007e949d289"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Koriym.SemanticLogger/zipball/5e427285bad04169e6d33162b2afd2611b3a52c1",
-                "reference": "5e427285bad04169e6d33162b2afd2611b3a52c1",
+                "url": "https://api.github.com/repos/koriym/Koriym.SemanticLogger/zipball/b833164b7cffc8f91e5a1071b6b0f007e949d289",
+                "reference": "b833164b7cffc8f91e5a1071b6b0f007e949d289",
                 "shasum": ""
             },
             "require": {
@@ -187,9 +177,9 @@
             "description": "Type-safe structured logging with schema validation and meaningful context",
             "support": {
                 "issues": "https://github.com/koriym/Koriym.SemanticLogger/issues",
-                "source": "https://github.com/koriym/Koriym.SemanticLogger/tree/0.9.0"
+                "source": "https://github.com/koriym/Koriym.SemanticLogger/tree/0.10.0"
             },
-            "time": "2026-08-12T12:58:19+00:00"
+            "time": "2026-10-20T14:33:28+00:00"
         },
         {
             "name": "marc-mabe/php-enum",

@@ -115,9 +115,9 @@ final class LoggerErrorPathTest extends TestCase
 
         $logData = $semanticLogger->toArray();
         $this->assertArrayNotHasKey('close', $logData);
-        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
+        assert(is_array($logData['entries']) && is_array($logData['entries'][0]) && is_array($logData['entries'][0]['close']));
 
-        $closeData = $logData['open'][0]['close'];
+        $closeData = $logData['entries'][0]['close'];
         $this->assertSame('being_error_close', $closeData['type']);
         $this->assertSame(RuntimeException::class, $closeData['context']['error']);
         $this->assertSame('boom', $closeData['context']['message']);
