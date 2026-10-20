@@ -305,8 +305,8 @@ final class BecomingTest extends TestCase
     private function becomingCloseContext(SemanticLogger $semanticLogger): array
     {
         $logData = $semanticLogger->toArray();
-        assert(is_array($logData['open']) && is_array($logData['open'][0]) && is_array($logData['open'][0]['close']));
-        $closeData = $logData['open'][0]['close'];
+        assert(is_array($logData['entries']) && is_array($logData['entries'][0]) && is_array($logData['entries'][0]['close']));
+        $closeData = $logData['entries'][0]['close'];
         assert(is_array($closeData) && is_array($closeData['context']));
 
         // A real assertion (not assert()) so the shape check still holds when
