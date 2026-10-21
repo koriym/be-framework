@@ -114,13 +114,28 @@ final class LoggerErrorPathTest extends TestCase
         $logger->close(null, $openId, new RuntimeException('boom'));
 
         $logData = $semanticLogger->toArray();
-        $this->assertArrayNotHasKey('close', $logData);
-        assert(is_array($logData['entries']) && is_array($logData['entries'][0]) && is_array($logData['entries'][0]['close']));
+        $this->assertNoOrphanClose($logData);
+        assert(is_array($logData['log']) && is_array($logData['log'][0]) && is_array($logData['log'][0]['close']));
 
-        $closeData = $logData['entries'][0]['close'];
+        $closeData = $logData['log'][0]['close'];
         $this->assertSame('being_error_close', $closeData['type']);
         $this->assertSame(RuntimeException::class, $closeData['context']['error']);
         $this->assertSame('boom', $closeData['context']['message']);
+    }
+
+    /**
+     * No root record carries `openId` — i.e. no close was spliced in as an
+     * orphan (its matching open missing or already closed).
+     *
+     * @param array<string, mixed> $logData
+     */
+    private function assertNoOrphanClose(array $logData): void
+    {
+        assert(is_array($logData['log']));
+        foreach ($logData['log'] as $record) {
+            assert(is_array($record));
+            $this->assertArrayNotHasKey('openId', $record);
+        }
     }
 
     public function testLoggerContextsCreation(): void
