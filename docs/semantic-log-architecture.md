@@ -56,7 +56,7 @@ UserInput → ValidatedUser → RegisteredUser → ActiveUser
 - **Error close captures**:
   - `error`:   Exception class name
   - `message`: Exception message
-  - `errors` (optional): one entry per failed semantic variable when `error` is a `SemanticVariableException` (or subtype) — `variable` (name, or comma-joined names for a cross-field `#[Validate]` method), `error` (the failing `#[Validate]` method's exception class), `message`, `file` / `line` (where that exception was thrown), and an optional `value` (the rejected input, redacted to `[FILTERED]` for a `#[\SensitiveParameter]`-marked constructor parameter). Absent for any other exception type.
+  - `errors` (optional): one entry per failed semantic variable when `error` is a `SemanticVariableException` (or subtype) — `variable` (name, or comma-joined names for a cross-field `#[Validate]` method), `error` (the failing `#[Validate]` method's exception class), `message`, `file` / `line` (where that exception was thrown), and an optional `value` (the rejected input, redacted to `[FILTERED]` for a `#[\SensitiveParameter]`-marked constructor parameter). Absent for any other exception type. Redaction only covers `value`: a `#[Validate]` method that interpolates the rejected value into its own exception message leaks it through `message` regardless — keep validation messages for sensitive variables value-free.
   - `file` / `line`: where the exception was thrown. For a `SemanticVariableException` these are **not** the wrapper's own construction site (always the same fixed line inside the framework) — they are copied from `errors[0]`, the first failing `#[Validate]` method, which is the location that actually matters to a reader.
 
 ## Chain wrapper

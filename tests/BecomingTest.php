@@ -35,6 +35,7 @@ use function file;
 use function filter_var;
 use function is_array;
 use function is_int;
+use function json_encode;
 
 use const FILTER_VALIDATE_EMAIL;
 
@@ -391,12 +392,14 @@ final class BecomingTest extends TestCase
     public function testChainCloseRedactsSensitiveValidationValue(): void
     {
         // #[\SensitiveParameter] must redact the rejected value in errors[].value the same
-        // way it already redacts `prop` — a password must never reach the log verbatim.
+        // way it already redacts `prop` — a password must never reach the log verbatim,
+        // anywhere in the log, not just in the field we happen to assert on directly.
         $semanticLogger = new SemanticLogger();
         $becoming = $this->becomingWithLogger($semanticLogger);
+        $secret = 'sekret1'; // < 8 chars: fails Password::validatePassword()
 
         try {
-            $becoming(new BecomingTestSensitiveErrorInput('short'));
+            $becoming(new BecomingTestSensitiveErrorInput($secret));
             $this->fail('Expected InputSemanticVariableException');
         } catch (InputSemanticVariableException) {
             // expected
@@ -407,6 +410,8 @@ final class BecomingTest extends TestCase
         $entry = (array) $context['errors'][0];
         $this->assertSame('password', $entry['variable']);
         $this->assertSame(ObjectPropertyExtractor::FILTERED, $entry['value']);
+
+        $this->assertStringNotContainsString($secret, (string) json_encode($semanticLogger->toArray()));
     }
 
     public function testTypeMatchingFailureWithFallback(): void
@@ -866,6 +871,10 @@ final class BecomingTestErrorDetailTarget
 final class BecomingTestSensitiveErrorInput
 {
     public function __construct(
+        // Marked here too: becoming_open logs this object's own `prop`, independent of
+        // the target's #[SensitiveParameter] below — both must be marked for the secret
+        // to never reach the log at all, not just the validation-error detail.
+        #[SensitiveParameter]
         public readonly string $password,
     ) {
     }

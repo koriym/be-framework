@@ -69,7 +69,7 @@
           },
           "message": {
             "type": "string",
-            "description": "Message of the exception thrown by the failing #[Validate] method."
+            "description": "Message of the exception thrown by the failing #[Validate] method. NOT covered by #[\\SensitiveParameter] redaction: a #[Validate] method that interpolates the rejected value into its own exception message (e.g. \"Too short: {$password}\") leaks it here regardless of `value`. Validation methods for a sensitive variable must keep their message value-free."
           },
           "file": {
             "type": "string",
@@ -80,7 +80,7 @@
             "description": "Line number within `file` where this exception was thrown."
           },
           "value": {
-            "description": "Value rejected by validation. Omitted when not tracked (e.g. a cross-field failure spanning multiple values); redacted to '[FILTERED]' when the constructor parameter is marked #[\\SensitiveParameter]."
+            "description": "Value rejected by validation. Omitted when not tracked (e.g. a cross-field failure spanning multiple values); redacted to '[FILTERED]' when the constructor parameter is marked #[\\SensitiveParameter]. Only this field is redacted — see `message`."
           }
         },
         "additionalProperties": false
