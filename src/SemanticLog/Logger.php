@@ -51,6 +51,7 @@ final class Logger implements LoggerInterface
 {
     private Being $being;
     private ObjectPropertyExtractor $propertyExtractor;
+    private ValidationErrorExtractor $validationErrorExtractor;
 
     public function __construct(
         private SemanticLoggerInterface $logger,
@@ -58,6 +59,7 @@ final class Logger implements LoggerInterface
     ) {
         $this->being = new Being($this, $becomingArguments, new BecomingType());
         $this->propertyExtractor = new ObjectPropertyExtractor();
+        $this->validationErrorExtractor = new ValidationErrorExtractor();
     }
 
     /**
@@ -88,11 +90,15 @@ final class Logger implements LoggerInterface
         }
 
         if ($exception !== null) {
+            $site = $this->validationErrorExtractor->throwSite($exception);
             $this->logger->close(new BecomingCloseContext(
                 exit: BecomingCloseContext::EXIT_ERROR,
                 error: $exception::class,
                 message: $exception->getMessage(),
                 origin: $origin,
+                errors: $this->validationErrorExtractor->extract($exception),
+                file: $site['file'],
+                line: $site['line'],
             ), $openId);
 
             return;
@@ -153,9 +159,13 @@ final class Logger implements LoggerInterface
         }
 
         if ($exception !== null) {
+            $site = $this->validationErrorExtractor->throwSite($exception);
             $this->logger->close(new BeingErrorCloseContext(
                 error: $exception::class,
                 message: $exception->getMessage(),
+                errors: $this->validationErrorExtractor->extract($exception),
+                file: $site['file'],
+                line: $site['line'],
             ), $openId);
 
             return;

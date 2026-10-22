@@ -14,9 +14,12 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
+use function array_fill;
 use function array_key_exists;
 use function class_exists;
+use function count;
 use function get_object_vars;
+use function implode;
 use function in_array;
 use function is_array;
 use function str_replace;
@@ -76,6 +79,9 @@ final class SemanticValidator implements SemanticValidatorInterface
     public function validateProps(ReflectionMethod $constructor, object $object): Errors
     {
         $allErrors = [];
+        $allVariables = [];
+        $allValues = [];
+        $allSensitive = [];
         $objectProperties = get_object_vars($object);
 
         foreach ($constructor->getParameters() as $parameter) {
@@ -100,10 +106,13 @@ final class SemanticValidator implements SemanticValidatorInterface
 
             if ($errors->hasErrors()) {
                 $allErrors = [...$allErrors, ...$errors->exceptions];
+                $allVariables = [...$allVariables, ...$errors->variables];
+                $allValues = [...$allValues, ...$errors->values];
+                $allSensitive = [...$allSensitive, ...$errors->sensitive];
             }
         }
 
-        return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables, $allValues, $allSensitive);
     }
 
     /**
@@ -119,6 +128,9 @@ final class SemanticValidator implements SemanticValidatorInterface
     public function validateArgs(ReflectionMethod $method, array $args): Errors
     {
         $allErrors = [];
+        $allVariables = [];
+        $allValues = [];
+        $allSensitive = [];
 
         // First pass: single-field validation
         foreach ($method->getParameters() as $parameter) {
@@ -132,15 +144,21 @@ final class SemanticValidator implements SemanticValidatorInterface
                 $errors = $this->validateArg($parameter, $args[$name]);
                 if ($errors->hasErrors()) {
                     $allErrors = [...$allErrors, ...$errors->exceptions];
+                    $allVariables = [...$allVariables, ...$errors->variables];
+                    $allValues = [...$allValues, ...$errors->values];
+                    $allSensitive = [...$allSensitive, ...$errors->sensitive];
                 }
             }
         }
 
         // Second pass: cross-field validation for multi-parameter #[Validate] methods
         $crossFieldErrors = $this->validateCrossFieldArgs($method, $args);
-        $allErrors = [...$allErrors, ...$crossFieldErrors];
+        $allErrors = [...$allErrors, ...$crossFieldErrors->exceptions];
+        $allVariables = [...$allVariables, ...$crossFieldErrors->variables];
+        $allValues = [...$allValues, ...$crossFieldErrors->values];
+        $allSensitive = [...$allSensitive, ...$crossFieldErrors->sensitive];
 
-        return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables, $allValues, $allSensitive);
     }
 
     /**
@@ -152,12 +170,11 @@ final class SemanticValidator implements SemanticValidatorInterface
      * @param ReflectionMethod     $method  Constructor with parameter definitions
      * @param ConstructorArguments $allArgs All constructor argument values
      * @phpstan-param array<string, mixed> $allArgs
-     *
-     * @return list<DomainException>
      */
-    private function validateCrossFieldArgs(ReflectionMethod $method, array $allArgs): array
+    private function validateCrossFieldArgs(ReflectionMethod $method, array $allArgs): Errors
     {
         $exceptions = [];
+        $variables = [];
         $checkedClasses = [];
 
         foreach ($method->getParameters() as $parameter) {
@@ -176,10 +193,20 @@ final class SemanticValidator implements SemanticValidatorInterface
             }
 
             $checkedClasses[] = $className;
-            $exceptions = [...$exceptions, ...$this->invokeCrossFieldMethods($semanticClass, $allArgs)];
+            $crossFieldErrors = $this->invokeCrossFieldMethods($semanticClass, $allArgs);
+            $exceptions = [...$exceptions, ...$crossFieldErrors->exceptions];
+            $variables = [...$variables, ...$crossFieldErrors->variables];
         }
 
-        return $exceptions;
+        if (empty($exceptions)) {
+            return new NullErrors();
+        }
+
+        $count = count($exceptions);
+
+        // Cross-field failures span multiple values (e.g. email vs. confirmation); there is
+        // no single "the" rejected value, so values/sensitive stay untracked for these entries.
+        return new Errors($exceptions, $variables, [], array_fill(0, $count, false));
     }
 
     /**
@@ -187,12 +214,11 @@ final class SemanticValidator implements SemanticValidatorInterface
      *
      * @param ConstructorArguments $allArgs All constructor argument values
      * @phpstan-param array<string, mixed> $allArgs
-     *
-     * @return list<DomainException>
      */
-    private function invokeCrossFieldMethods(object $semanticClass, array $allArgs): array
+    private function invokeCrossFieldMethods(object $semanticClass, array $allArgs): Errors
     {
         $exceptions = [];
+        $variables = [];
         $reflection = new ReflectionClass($semanticClass);
 
         foreach ($reflection->getMethods() as $validateMethod) {
@@ -209,10 +235,30 @@ final class SemanticValidator implements SemanticValidatorInterface
                 $validateMethod->invoke($semanticClass, ...$methodArgs);
             } catch (DomainException $exception) {
                 $exceptions[] = $exception;
+                $variables[] = $this->crossFieldVariableName($validateMethod);
             }
         }
 
-        return $exceptions;
+        return empty($exceptions) ? new NullErrors() : new Errors($exceptions, $variables);
+    }
+
+    /**
+     * Comma-joined parameter names of a multi-parameter #[Validate] method, used as the
+     * `variable` label for a cross-field failure (e.g. "email,confirmation").
+     */
+    private function crossFieldVariableName(ReflectionMethod $validateMethod): string
+    {
+        $names = [];
+
+        foreach ($validateMethod->getParameters() as $parameter) {
+            if ($this->validationMethodResolver->hasInjectAttribute($parameter)) {
+                continue;
+            }
+
+            $names[] = $parameter->getName();
+        }
+
+        return implode(',', $names);
     }
 
     /**
@@ -266,7 +312,23 @@ final class SemanticValidator implements SemanticValidatorInterface
             }
         }
 
-        return empty($exceptions) ? new NullErrors() : new Errors($exceptions);
+        if (empty($exceptions)) {
+            return new NullErrors();
+        }
+
+        $count = count($exceptions);
+        // A single validated value is the "rejected value" worth recording; multi-arg calls
+        // (cross-field, handled separately) have no single value to point at.
+        /** @psalm-suppress MixedAssignment the rejected value is whatever the caller validated, not something we can narrow further */
+        $rejectedValue = count($args) === 1 ? $args[0] : null;
+        $isSensitive = in_array('SensitiveParameter', $parameterAttributes, true);
+
+        return new Errors(
+            $exceptions,
+            array_fill(0, $count, $variableName),
+            array_fill(0, $count, $rejectedValue),
+            array_fill(0, $count, $isSensitive),
+        );
     }
 
     /**
@@ -326,6 +388,9 @@ final class SemanticValidator implements SemanticValidatorInterface
     {
         $reflection = new ReflectionClass($object);
         $allErrors = [];
+        $allVariables = [];
+        $allValues = [];
+        $allSensitive = [];
 
         foreach ($reflection->getProperties() as $property) {
             /** @var mixed $value */
@@ -335,10 +400,13 @@ final class SemanticValidator implements SemanticValidatorInterface
             $errors = $this->validateWithAttributes($propertyName, [], $value);
             if ($errors->hasErrors()) {
                 $allErrors = [...$allErrors, ...$errors->exceptions];
+                $allVariables = [...$allVariables, ...$errors->variables];
+                $allValues = [...$allValues, ...$errors->values];
+                $allSensitive = [...$allSensitive, ...$errors->sensitive];
             }
         }
 
-        return empty($allErrors) ? new NullErrors() : new Errors($allErrors);
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables, $allValues, $allSensitive);
     }
 
     /**

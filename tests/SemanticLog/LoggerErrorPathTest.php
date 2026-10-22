@@ -179,10 +179,15 @@ final class LoggerErrorPathTest extends TestCase
         $ctx = new BeingErrorCloseContext(
             error: 'RuntimeException',
             message: 'boom',
+            file: '/app/src/Checkout.php',
+            line: 10,
         );
 
         $this->assertSame('RuntimeException', $ctx->error);
         $this->assertSame('boom', $ctx->message);
+        $this->assertNull($ctx->errors);
+        $this->assertSame('/app/src/Checkout.php', $ctx->file);
+        $this->assertSame(10, $ctx->line);
     }
 
     public function testLoggerWithInjectorParameter(): void

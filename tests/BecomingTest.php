@@ -15,10 +15,12 @@ use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Exception\UnbecomingException;
 use Be\Framework\SemanticLog\Context\BecomingCloseContext;
 use Be\Framework\SemanticLog\Logger;
+use Be\Framework\SemanticLog\ObjectPropertyExtractor;
 use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use InvalidArgumentException;
 use Koriym\SemanticLogger\SemanticLogger;
+use MyVendor\MyApp\SemanticVariables\AgeNegativeException;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\AbstractModule;
 use Ray\Di\Di\Inject;
@@ -26,10 +28,13 @@ use Ray\Di\Di\Named;
 use Ray\Di\Injector;
 use Ray\InputQuery\Attribute\Input;
 use RuntimeException;
+use SensitiveParameter;
 
 use function assert;
+use function file;
 use function filter_var;
 use function is_array;
+use function is_int;
 
 use const FILTER_VALIDATE_EMAIL;
 
@@ -314,6 +319,94 @@ final class BecomingTest extends TestCase
         $this->assertSame('becoming_close', $closeData['type']);
 
         return $closeData['context'];
+    }
+
+    public function testChainCloseLogRecordsValidationErrorDetail(): void
+    {
+        // A reader of the log must be able to tell WHICH variable failed and WHY — not
+        // just that a SemanticVariableException with a combined message was thrown.
+        $semanticLogger = new SemanticLogger();
+        $becoming = $this->becomingWithLogger($semanticLogger);
+
+        try {
+            $becoming(new BecomingTestErrorDetailInput(-5));
+            $this->fail('Expected InputSemanticVariableException');
+        } catch (InputSemanticVariableException) {
+            // expected
+        }
+
+        $context = $this->becomingCloseContext($semanticLogger);
+        assert(is_array($context['errors']));
+        $this->assertCount(1, $context['errors']);
+
+        // semantic-logger freezes nested associative arrays into stdClass objects.
+        $entry = (array) $context['errors'][0];
+        $this->assertSame('age', $entry['variable']);
+        $this->assertSame(AgeNegativeException::class, $entry['error']);
+        $this->assertSame('Age cannot be negative: -5', $entry['message']);
+        $this->assertSame(-5, $entry['value']);
+
+        // The validating semantic class actually threw it — not the fixed internal line
+        // in BecomingArguments::be() where the wrapping SemanticVariableException is built.
+        $validatorFile = __DIR__ . '/FakeApp/SemanticVariables/Age.php';
+        $this->assertSame($validatorFile, $entry['file']);
+
+        $validatorSource = file($validatorFile);
+        assert(is_array($validatorSource) && is_int($entry['line']));
+        $this->assertStringContainsString(
+            'throw new AgeNegativeException($age)',
+            $validatorSource[$entry['line'] - 1],
+        );
+
+        // The close-level file/line follow the same first-inner-error location.
+        $this->assertSame($entry['file'], $context['file']);
+        $this->assertSame($entry['line'], $context['line']);
+    }
+
+    public function testChainCloseLogRecordsThrowSiteFileAndLine(): void
+    {
+        // A plain domain exception (no semantic validation involved) must still let a log
+        // reader locate exactly where it was thrown, not just its class and message.
+        $semanticLogger = new SemanticLogger();
+        $becoming = $this->becomingWithLogger($semanticLogger);
+
+        try {
+            $becoming(new BecomingTestExceptionThrows('data'));
+            $this->fail('Expected InvalidArgumentException');
+        } catch (InvalidArgumentException) {
+            // expected
+        }
+
+        $context = $this->becomingCloseContext($semanticLogger);
+        $this->assertSame(__FILE__, $context['file']);
+
+        $sourceLines = file(__FILE__);
+        assert(is_array($sourceLines) && is_int($context['line']));
+        $this->assertStringContainsString(
+            "throw new InvalidArgumentException('Always throws exception')",
+            $sourceLines[$context['line'] - 1],
+        );
+    }
+
+    public function testChainCloseRedactsSensitiveValidationValue(): void
+    {
+        // #[\SensitiveParameter] must redact the rejected value in errors[].value the same
+        // way it already redacts `prop` — a password must never reach the log verbatim.
+        $semanticLogger = new SemanticLogger();
+        $becoming = $this->becomingWithLogger($semanticLogger);
+
+        try {
+            $becoming(new BecomingTestSensitiveErrorInput('short'));
+            $this->fail('Expected InputSemanticVariableException');
+        } catch (InputSemanticVariableException) {
+            // expected
+        }
+
+        $context = $this->becomingCloseContext($semanticLogger);
+        assert(is_array($context['errors']));
+        $entry = (array) $context['errors'][0];
+        $this->assertSame('password', $entry['variable']);
+        $this->assertSame(ObjectPropertyExtractor::FILTERED, $entry['value']);
     }
 
     public function testTypeMatchingFailureWithFallback(): void
@@ -743,6 +836,47 @@ final class BecomingTestSemanticTarget
         #[Input]
         #[Validate('Email')]
         public readonly string $email,  // This will trigger semantic validation for email
+    ) {
+    }
+}
+
+// Error-detail test fixtures: semantic validation failure must surface which variable
+// and exception rejected the input on the becoming_close log.
+#[Be(BecomingTestErrorDetailTarget::class)]
+final class BecomingTestErrorDetailInput
+{
+    public function __construct(
+        public readonly int $age,
+    ) {
+    }
+}
+
+final class BecomingTestErrorDetailTarget
+{
+    public function __construct(
+        #[Input]
+        public readonly int $age,  // fails semantic validation: Age::validateAge() rejects negative ages
+    ) {
+    }
+}
+
+// Sensitive-value test fixtures: a #[\SensitiveParameter] value that fails semantic
+// validation must be redacted in the log, not recorded verbatim.
+#[Be(BecomingTestSensitiveErrorTarget::class)]
+final class BecomingTestSensitiveErrorInput
+{
+    public function __construct(
+        public readonly string $password,
+    ) {
+    }
+}
+
+final class BecomingTestSensitiveErrorTarget
+{
+    public function __construct(
+        #[Input]
+        #[SensitiveParameter]
+        public readonly string $password,  // fails semantic validation: too short
     ) {
     }
 }
