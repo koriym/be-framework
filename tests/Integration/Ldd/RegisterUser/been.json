@@ -5,7 +5,7 @@
             "kind": "open",
             "id": "becoming_open_1",
             "type": "becoming_open",
-            "schemaUrl": "https://be-framework.org/schemas/becoming-open.json",
+            "schemaUrl": "https://be-framework.github.io/Be.Framework/schemas/becoming-open.json",
             "context": {
                 "input": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
                 "prop": {
@@ -17,7 +17,7 @@
                     "kind": "open",
                     "id": "being_final_open_1",
                     "type": "being_final_open",
-                    "schemaUrl": "https://be-framework.org/schemas/being-final-open.json",
+                    "schemaUrl": "https://be-framework.github.io/Be.Framework/schemas/being-final-open.json",
                     "context": {
                         "from": "MyVendor\\MyApp\\Ldd\\RegisterUser\\UnverifiedEmail",
                         "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
@@ -54,7 +54,7 @@
                     "close": {
                         "id": "being_final_close_1",
                         "type": "being_final_close",
-                        "schemaUrl": "https://be-framework.org/schemas/being-final-close.json",
+                        "schemaUrl": "https://be-framework.github.io/Be.Framework/schemas/being-final-close.json",
                         "context": {
                             "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser",
                             "prop": {
@@ -77,7 +77,7 @@
             "close": {
                 "id": "becoming_close_1",
                 "type": "becoming_close",
-                "schemaUrl": "https://be-framework.org/schemas/becoming-close.json",
+                "schemaUrl": "https://be-framework.github.io/Be.Framework/schemas/becoming-close.json",
                 "context": {
                     "exit": "success",
                     "final": "MyVendor\\MyApp\\Ldd\\RegisterUser\\RegisteredUser"

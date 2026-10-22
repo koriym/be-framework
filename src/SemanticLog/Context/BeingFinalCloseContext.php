@@ -19,7 +19,7 @@ final class BeingFinalCloseContext extends AbstractContext implements JsonSerial
 {
     public const string TYPE = 'being_final_close';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-final-close.json';
+    public const string SCHEMA_URL = 'https://be-framework.github.io/Be.Framework/schemas/being-final-close.json';
 
     /**
      * @param class-string          $final Class FQCN of the terminal being

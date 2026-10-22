@@ -15,7 +15,7 @@ final class BeingErrorCloseContext extends AbstractContext implements JsonSerial
 {
     public const string TYPE = 'being_error_close';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-error-close.json';
+    public const string SCHEMA_URL = 'https://be-framework.github.io/Be.Framework/schemas/being-error-close.json';
 
     /**
      * @param string $error   Fully-qualified class name of the thrown exception

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://be-framework.org/schemas/being-final-open.json",
+  "$id": "https://be-framework.github.io/Be.Framework/schemas/being-final-open.json",
   "title": "Being Final Open Context",
   "description": "Captured when a terminal being starts — the target has no #[Be] attribute, so this step produces the final being of the chain.",
   "type": "object",
