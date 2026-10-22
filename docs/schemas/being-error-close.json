@@ -4,7 +4,7 @@
   "title": "Being Error Close Context",
   "description": "Close context for a metamorphosis that failed with a thrown exception.",
   "type": "object",
-  "required": ["error", "message"],
+  "required": ["error", "message", "file", "line"],
   "properties": {
     "error": {
       "type": "string",

@@ -22,7 +22,7 @@
       }
     },
     {
-      "required": ["exit", "error", "message"],
+      "required": ["exit", "error", "message", "file", "line"],
       "properties": {
         "exit": { "const": "error" }
       },
