@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://be-framework.github.io/Be.Framework/schemas/becoming-close.json",
+  "title": "Becoming Close Context",
+  "description": "Close context for the outer chain span. Carries the chain exit state and either the final being's FQCN or the exception that ended the chain.",
+  "type": "object",
+  "oneOf": [
+    {
+      "required": ["exit", "final"],
+      "properties": {
+        "exit": { "const": "success" }
+      },
+      "not": {
+        "anyOf": [
+          { "required": ["error"] },
+          { "required": ["message"] },
+          { "required": ["origin"] }
+        ]
+      }
+    },
+    {
+      "required": ["exit", "error", "message"],
+      "properties": {
+        "exit": { "const": "error" }
+      },
+      "not": { "required": ["final"] }
+    }
+  ],
+  "properties": {
+    "exit": {
+      "type": "string",
+      "enum": ["success", "error"],
+      "description": "Terminal status of the metamorphosis chain."
+    },
+    "final": {
+      "type": "string",
+      "description": "Fully-qualified class name of the terminal being reached when the chain succeeded."
+    },
+    "error": {
+      "type": "string",
+      "description": "Fully-qualified class name of the thrown exception when the chain ended in failure."
+    },
+    "message": {
+      "type": "string",
+      "description": "Exception message when the chain ended in failure."
+    },
+    "origin": {
+      "type": "string",
+      "enum": ["input", "runtime"],
+      "description": "Provenance of a semantic validation failure: 'input' when the first metamorphosis (incoming input) failed validation, 'runtime' when a later metamorphosis failed. Absent for non-semantic failures."
+    }
+  },
+  "additionalProperties": false
+}
