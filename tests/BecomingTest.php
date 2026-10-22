@@ -15,7 +15,6 @@ use Be\Framework\Exception\SemanticVariableException;
 use Be\Framework\Exception\UnbecomingException;
 use Be\Framework\SemanticLog\Context\BecomingCloseContext;
 use Be\Framework\SemanticLog\Logger;
-use Be\Framework\SemanticLog\ObjectPropertyExtractor;
 use Be\Framework\SemanticVariable\Errors;
 use Be\Framework\SemanticVariable\SemanticValidator;
 use InvalidArgumentException;
@@ -345,7 +344,6 @@ final class BecomingTest extends TestCase
         $this->assertSame('age', $entry['variable']);
         $this->assertSame(AgeNegativeException::class, $entry['error']);
         $this->assertSame('Age cannot be negative: -5', $entry['message']);
-        $this->assertSame(-5, $entry['value']);
 
         // The validating semantic class actually threw it — not the fixed internal line
         // in BecomingArguments::be() where the wrapping SemanticVariableException is built.
@@ -389,11 +387,12 @@ final class BecomingTest extends TestCase
         );
     }
 
-    public function testChainCloseRedactsSensitiveValidationValue(): void
+    public function testChainCloseNeverLeaksSensitiveValidationInput(): void
     {
-        // #[\SensitiveParameter] must redact the rejected value in errors[].value the same
-        // way it already redacts `prop` — a password must never reach the log verbatim,
-        // anywhere in the log, not just in the field we happen to assert on directly.
+        // A #[\SensitiveParameter] value that fails semantic validation must never reach the
+        // log verbatim — not in `errors` (which only ever records variable/error/message/
+        // file/line, never the value) and not in `prop`, which already redacts it via the
+        // same mechanism `prop` payloads use elsewhere.
         $semanticLogger = new SemanticLogger();
         $becoming = $this->becomingWithLogger($semanticLogger);
         $secret = 'sekret1'; // < 8 chars: fails Password::validatePassword()
@@ -409,7 +408,6 @@ final class BecomingTest extends TestCase
         assert(is_array($context['errors']));
         $entry = (array) $context['errors'][0];
         $this->assertSame('password', $entry['variable']);
-        $this->assertSame(ObjectPropertyExtractor::FILTERED, $entry['value']);
 
         $this->assertStringNotContainsString($secret, (string) json_encode($semanticLogger->toArray()));
     }
@@ -866,7 +864,8 @@ final class BecomingTestErrorDetailTarget
 }
 
 // Sensitive-value test fixtures: a #[\SensitiveParameter] value that fails semantic
-// validation must be redacted in the log, not recorded verbatim.
+// validation must never reach the log — `errors` never records the value at all, and
+// `prop` must still redact it the same way it does on success.
 #[Be(BecomingTestSensitiveErrorTarget::class)]
 final class BecomingTestSensitiveErrorInput
 {

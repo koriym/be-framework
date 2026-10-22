@@ -80,8 +80,6 @@ final class SemanticValidator implements SemanticValidatorInterface
     {
         $allErrors = [];
         $allVariables = [];
-        $allValues = [];
-        $allSensitive = [];
         $objectProperties = get_object_vars($object);
 
         foreach ($constructor->getParameters() as $parameter) {
@@ -107,12 +105,10 @@ final class SemanticValidator implements SemanticValidatorInterface
             if ($errors->hasErrors()) {
                 $allErrors = [...$allErrors, ...$errors->exceptions];
                 $allVariables = [...$allVariables, ...$errors->variables];
-                $allValues = [...$allValues, ...$errors->values];
-                $allSensitive = [...$allSensitive, ...$errors->sensitive];
             }
         }
 
-        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables, $allValues, $allSensitive);
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables);
     }
 
     /**
@@ -129,8 +125,6 @@ final class SemanticValidator implements SemanticValidatorInterface
     {
         $allErrors = [];
         $allVariables = [];
-        $allValues = [];
-        $allSensitive = [];
 
         // First pass: single-field validation
         foreach ($method->getParameters() as $parameter) {
@@ -145,8 +139,6 @@ final class SemanticValidator implements SemanticValidatorInterface
                 if ($errors->hasErrors()) {
                     $allErrors = [...$allErrors, ...$errors->exceptions];
                     $allVariables = [...$allVariables, ...$errors->variables];
-                    $allValues = [...$allValues, ...$errors->values];
-                    $allSensitive = [...$allSensitive, ...$errors->sensitive];
                 }
             }
         }
@@ -155,10 +147,8 @@ final class SemanticValidator implements SemanticValidatorInterface
         $crossFieldErrors = $this->validateCrossFieldArgs($method, $args);
         $allErrors = [...$allErrors, ...$crossFieldErrors->exceptions];
         $allVariables = [...$allVariables, ...$crossFieldErrors->variables];
-        $allValues = [...$allValues, ...$crossFieldErrors->values];
-        $allSensitive = [...$allSensitive, ...$crossFieldErrors->sensitive];
 
-        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables, $allValues, $allSensitive);
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables);
     }
 
     /**
@@ -198,15 +188,7 @@ final class SemanticValidator implements SemanticValidatorInterface
             $variables = [...$variables, ...$crossFieldErrors->variables];
         }
 
-        if (empty($exceptions)) {
-            return new NullErrors();
-        }
-
-        $count = count($exceptions);
-
-        // Cross-field failures span multiple values (e.g. email vs. confirmation); there is
-        // no single "the" rejected value, so values/sensitive stay untracked for these entries.
-        return new Errors($exceptions, $variables, [], array_fill(0, $count, false));
+        return empty($exceptions) ? new NullErrors() : new Errors($exceptions, $variables);
     }
 
     /**
@@ -316,19 +298,7 @@ final class SemanticValidator implements SemanticValidatorInterface
             return new NullErrors();
         }
 
-        $count = count($exceptions);
-        // A single validated value is the "rejected value" worth recording; multi-arg calls
-        // (cross-field, handled separately) have no single value to point at.
-        /** @psalm-suppress MixedAssignment the rejected value is whatever the caller validated, not something we can narrow further */
-        $rejectedValue = count($args) === 1 ? $args[0] : null;
-        $isSensitive = in_array('SensitiveParameter', $parameterAttributes, true);
-
-        return new Errors(
-            $exceptions,
-            array_fill(0, $count, $variableName),
-            array_fill(0, $count, $rejectedValue),
-            array_fill(0, $count, $isSensitive),
-        );
+        return new Errors($exceptions, array_fill(0, count($exceptions), $variableName));
     }
 
     /**
@@ -389,8 +359,6 @@ final class SemanticValidator implements SemanticValidatorInterface
         $reflection = new ReflectionClass($object);
         $allErrors = [];
         $allVariables = [];
-        $allValues = [];
-        $allSensitive = [];
 
         foreach ($reflection->getProperties() as $property) {
             /** @var mixed $value */
@@ -401,12 +369,10 @@ final class SemanticValidator implements SemanticValidatorInterface
             if ($errors->hasErrors()) {
                 $allErrors = [...$allErrors, ...$errors->exceptions];
                 $allVariables = [...$allVariables, ...$errors->variables];
-                $allValues = [...$allValues, ...$errors->values];
-                $allSensitive = [...$allSensitive, ...$errors->sensitive];
             }
         }
 
-        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables, $allValues, $allSensitive);
+        return empty($allErrors) ? new NullErrors() : new Errors($allErrors, $allVariables);
     }
 
     /**

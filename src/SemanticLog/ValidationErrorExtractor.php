@@ -9,9 +9,6 @@ use Be\Framework\Types;
 use Throwable;
 
 use function array_values;
-use function get_debug_type;
-use function is_array;
-use function is_scalar;
 
 /**
  * Builds the per-variable `errors` list and throw-site location for an error close context.
@@ -29,6 +26,12 @@ final class ValidationErrorExtractor
      * subtype); null for any other exception, so an error close without semantic validation
      * context simply omits the `errors` key.
      *
+     * The rejected value itself is deliberately not recorded here: it is redundant with the
+     * `prop` payload the step that produced it already logged (subject to the same
+     * #[SensitiveParameter] filtering), and keeping a second, unredacted copy on
+     * SemanticVariableException::getErrors() would put raw secrets in memory wherever an
+     * error handler dumps the exception.
+     *
      * @return ValidationErrorList|null
      */
     public function extract(Throwable $exception): array|null
@@ -41,24 +44,16 @@ final class ValidationErrorExtractor
         $entries = [];
 
         // array_values(): $errors->exceptions is typed array<Exception>, but every producer
-        // in SemanticValidator builds it (and the parallel variables/values/sensitive arrays)
-        // as a list — forcing int keys here keeps $index usable against the other accessors.
+        // in SemanticValidator builds it (and the parallel variables array) as a list —
+        // forcing int keys here keeps $index usable against variableAt().
         foreach (array_values($errors->exceptions) as $index => $validationException) {
-            $entry = [
+            $entries[] = [
                 'variable' => $errors->variableAt($index) ?? 'unknown',
                 'error' => $validationException::class,
                 'message' => $validationException->getMessage(),
                 'file' => $validationException->getFile(),
                 'line' => $validationException->getLine(),
             ];
-
-            if ($errors->hasValueAt($index)) {
-                /** @psalm-suppress MixedAssignment the rejected value is validated-input shaped data, not something we can narrow further */
-                $value = $errors->isSensitiveAt($index) ? ObjectPropertyExtractor::FILTERED : $errors->valueAt($index);
-                $entry['value'] = $this->normalizeValue($value);
-            }
-
-            $entries[] = $entry;
         }
 
         return $entries === [] ? null : $entries;
@@ -86,19 +81,5 @@ final class ValidationErrorExtractor
         }
 
         return ['file' => $exception->getFile(), 'line' => $exception->getLine()];
-    }
-
-    /**
-     * Reduce a rejected value to a JSON-safe shape: scalars, null and arrays pass through
-     * unchanged; anything else (objects, resources) is recorded by its debug type, matching
-     * how #[Inject] object values are summarized in Logger::extractTranscendentSources().
-     */
-    private function normalizeValue(mixed $value): array|bool|float|int|string|null
-    {
-        if ($value === null || is_scalar($value) || is_array($value)) {
-            return $value;
-        }
-
-        return get_debug_type($value);
     }
 }

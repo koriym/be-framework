@@ -7,7 +7,6 @@ namespace Be\Framework\SemanticVariable;
 use Be\Framework\Types;
 use Exception;
 
-use function array_key_exists;
 use function count;
 
 /**
@@ -28,20 +27,11 @@ class Errors
      *                                         SemanticValidator; empty when a caller builds Errors
      *                                         directly without tracking provenance (legacy call sites,
      *                                         tests).
-     * @param list<mixed>         $values     Value rejected by validation for the exception at the same
-     *                                         index. Present only for single-value validations — an index
-     *                                         without a tracked value (e.g. cross-field validation spanning
-     *                                         multiple values) is simply absent; see {@see self::hasValueAt()}.
-     * @param list<bool>          $sensitive  Whether the value at the same index came from a constructor
-     *                                         parameter marked #[\SensitiveParameter]; true tells the log
-     *                                         layer to redact it instead of recording it verbatim.
      * @phpstan-param array<Exception> $exceptions
      */
     public function __construct(
         public readonly array $exceptions,
         public readonly array $variables = [],
-        public readonly array $values = [],
-        public readonly array $sensitive = [],
     ) {
     }
 
@@ -84,24 +74,6 @@ class Errors
         return $this->variables[$index] ?? null;
     }
 
-    /** Whether a rejected value was tracked for the exception at $index. */
-    public function hasValueAt(int $index): bool
-    {
-        return array_key_exists($index, $this->values);
-    }
-
-    /** Rejected value tracked for the exception at $index, or null when not tracked. */
-    public function valueAt(int $index): mixed
-    {
-        return $this->values[$index] ?? null;
-    }
-
-    /** Whether the value at $index came from a #[\SensitiveParameter] constructor parameter. */
-    public function isSensitiveAt(int $index): bool
-    {
-        return $this->sensitive[$index] ?? false;
-    }
-
     /**
      * Combine with another Errors instance
      */
@@ -110,8 +82,6 @@ class Errors
         return new self(
             [...$this->exceptions, ...$other->exceptions],
             [...$this->variables, ...$other->variables],
-            [...$this->values, ...$other->values],
-            [...$this->sensitive, ...$other->sensitive],
         );
     }
 }

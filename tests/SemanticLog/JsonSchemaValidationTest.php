@@ -112,10 +112,9 @@ final class JsonSchemaValidationTest extends TestCase
                 [
                     'variable' => 'quantity',
                     'error' => 'DomainException',
-                    'message' => 'Quantity must be positive: -5',
+                    'message' => 'Quantity must be positive',
                     'file' => '/app/src/SemanticVariables/Quantity.php',
                     'line' => 12,
-                    'value' => -5,
                 ],
             ],
             file: '/app/src/SemanticVariables/Quantity.php',
@@ -308,10 +307,9 @@ final class JsonSchemaValidationTest extends TestCase
                 [
                     'variable' => 'quantity',
                     'error' => 'DomainException',
-                    'message' => 'Quantity must be positive: -5',
+                    'message' => 'Quantity must be positive',
                     'file' => '/app/src/SemanticVariables/Quantity.php',
                     'line' => 12,
-                    'value' => -5,
                 ],
             ],
             file: '/app/src/SemanticVariables/Quantity.php',
