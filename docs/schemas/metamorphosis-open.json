@@ -33,13 +33,13 @@
     {
       "anchor": "#/properties/beAttribute",
       "rel": "describedby",
-      "href": "https://be-framework.org/docs/be-attribute",
+      "href": "https://be-framework.github.io/Be.Framework/manual/05-metamorphosis-patterns.html",
       "title": "Be Attribute Documentation"
     },
     {
       "anchor": "#/properties/immanentSources",
       "rel": "describedby",
-      "href": "https://be-framework.org/docs/immanent-transcendent",
+      "href": "https://be-framework.github.io/Be.Framework/manual/03-being-classes.html",
       "title": "Immanent and Transcendent Factors"
     }
   ]

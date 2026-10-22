@@ -49,13 +49,13 @@
     {
       "anchor": "#/properties/resultProperties",
       "rel": "describedby",
-      "href": "https://be-framework.org/docs/being-classes",
+      "href": "https://be-framework.github.io/Be.Framework/manual/03-being-classes.html",
       "title": "Being Classes Documentation"
     },
     {
       "anchor": "#/properties/error",
       "rel": "related",
-      "href": "https://be-framework.org/docs/error-handling",
+      "href": "https://be-framework.github.io/Be.Framework/manual/09-error-handling.html",
       "title": "Error Handling in Be Framework"
     }
   ]
