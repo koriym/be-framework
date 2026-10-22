@@ -58,11 +58,11 @@ final class SchemaComplianceTest extends TestCase
         $this->logger->close($result, $openId);
 
         $logData = $this->semanticLogger->toArray();
-        assert(is_array($logData['entries']) && is_array($logData['entries'][0]) && is_array($logData['entries'][0]['context']));
-        $openContext = $logData['entries'][0]['context'];
+        assert(is_array($logData['log']) && is_array($logData['log'][0]) && is_array($logData['log'][0]['context']));
+        $openContext = $logData['log'][0]['context'];
 
         // FakeProcessedData has no #[Be] → terminal target → being_final_open
-        $this->assertEquals('being_final_open', $logData['entries'][0]['type']);
+        $this->assertEquals('being_final_open', $logData['log'][0]['type']);
 
         // Short keys — being-final-open schema
         $this->assertArrayHasKey('from', $openContext);
@@ -92,12 +92,12 @@ final class SchemaComplianceTest extends TestCase
 
         $logData = $this->semanticLogger->toArray();
         assert(
-            is_array($logData['entries']) &&
-            is_array($logData['entries'][0]) &&
-            is_array($logData['entries'][0]['close']) &&
-            is_array($logData['entries'][0]['close']['context']),
+            is_array($logData['log']) &&
+            is_array($logData['log'][0]) &&
+            is_array($logData['log'][0]['close']) &&
+            is_array($logData['log'][0]['close']['context']),
         );
-        $closeData = $logData['entries'][0]['close'];
+        $closeData = $logData['log'][0]['close'];
         $closeContext = $closeData['context'];
 
         // FakeProcessedData has no further #[Be] → being_final_close
@@ -121,7 +121,7 @@ final class SchemaComplianceTest extends TestCase
 
         // FakeProcessedData has no #[Be], so the open context is the being-final-open form.
         $openSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-final-open.json'));
-        $openContext = json_decode(json_encode($logData['entries'][0]['context']));
+        $openContext = json_decode(json_encode($logData['log'][0]['context']));
         $validator->validate($openContext, $openSchema, Constraint::CHECK_MODE_NORMAL);
         $this->assertTrue(
             $validator->isValid(),
@@ -129,7 +129,7 @@ final class SchemaComplianceTest extends TestCase
         );
 
         $finalSchema = json_decode(file_get_contents(__DIR__ . '/../../docs/schemas/being-final-close.json'));
-        $closeContext = json_decode(json_encode($logData['entries'][0]['close']['context']));
+        $closeContext = json_decode(json_encode($logData['log'][0]['close']['context']));
         $validator->reset();
         $validator->validate($closeContext, $finalSchema, Constraint::CHECK_MODE_NORMAL);
         $this->assertTrue(
