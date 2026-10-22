@@ -61,4 +61,15 @@ final class ErrorsTest extends TestCase
         $this->assertCount(1, $combined->exceptions);
         $this->assertSame($exception, $combined->exceptions[0]);
     }
+
+    public function testCombineKeepsVariableNamesAlignedWithUnnamedErrors(): void
+    {
+        $unnamed = new Errors([new DomainException('legacy')]);
+        $named = new Errors([new DomainException('age')], ['age']);
+
+        $combined = $unnamed->combine($named);
+
+        $this->assertSame('unknown', $combined->variableAt(0));
+        $this->assertSame('age', $combined->variableAt(1));
+    }
 }

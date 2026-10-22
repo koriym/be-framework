@@ -71,11 +71,10 @@ final class ValidationErrorExtractor
     public function throwSite(Throwable $exception): array
     {
         if ($exception instanceof SemanticVariableException) {
-            $errors = $exception->getErrors();
-
-            if ($errors->hasErrors()) {
-                $first = $errors->exceptions[0];
-
+            // Same normalization as extract(): `exceptions` is array<Exception>, not a list, and
+            // this runs on the error path — a missing [0] here would replace the real failure.
+            $first = array_values($exception->getErrors()->exceptions)[0] ?? null;
+            if ($first !== null) {
                 return ['file' => $first->getFile(), 'line' => $first->getLine()];
             }
         }
