@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e1527c71db75d2f087c780b4752d3c3",
+    "content-hash": "68c5a3523dffc7d92a0c2fa553a5bffa",
     "packages": [
         {
             "name": "justinrainbow/json-schema",
@@ -127,16 +127,16 @@
         },
         {
             "name": "koriym/semantic-logger",
-            "version": "dev-log-format",
+            "version": "0.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koriym/Koriym.SemanticLogger.git",
-                "reference": "a1757002ad69f49422f63648a6b8e0599960de6c"
+                "reference": "54fa16b28c45461fc380e41d92f6bbd12afad345"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koriym/Koriym.SemanticLogger/zipball/a1757002ad69f49422f63648a6b8e0599960de6c",
-                "reference": "a1757002ad69f49422f63648a6b8e0599960de6c",
+                "url": "https://api.github.com/repos/koriym/Koriym.SemanticLogger/zipball/54fa16b28c45461fc380e41d92f6bbd12afad345",
+                "reference": "54fa16b28c45461fc380e41d92f6bbd12afad345",
                 "shasum": ""
             },
             "require": {
@@ -177,9 +177,9 @@
             "description": "Type-safe structured logging with schema validation and meaningful context",
             "support": {
                 "issues": "https://github.com/koriym/Koriym.SemanticLogger/issues",
-                "source": "https://github.com/koriym/Koriym.SemanticLogger/tree/log-format"
+                "source": "https://github.com/koriym/Koriym.SemanticLogger/tree/0.11.0"
             },
-            "time": "2026-10-21T23:53:28+00:00"
+            "time": "2026-10-23T01:01:57+00:00"
         },
         {
             "name": "marc-mabe/php-enum",
@@ -6606,7 +6606,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "doctrine/coding-standard": 20,
-        "koriym/semantic-logger": 20,
         "vimeo/psalm": 20
     },
     "prefer-stable": false,
