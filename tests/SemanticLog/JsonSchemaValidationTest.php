@@ -88,6 +88,8 @@ final class JsonSchemaValidationTest extends TestCase
             exit: BecomingCloseContext::EXIT_ERROR,
             error: 'RuntimeException',
             message: 'chain failed',
+            file: '/app/src/Checkout.php',
+            line: 42,
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -96,6 +98,35 @@ final class JsonSchemaValidationTest extends TestCase
         $this->assertTrue(
             $this->validator->isValid(),
             'BecomingCloseContext (failure) should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testBecomingCloseContextOnFailureWithValidationErrorsValidates(): void
+    {
+        $context = new BecomingCloseContext(
+            exit: BecomingCloseContext::EXIT_ERROR,
+            error: 'Be\Framework\Exception\InputSemanticVariableException',
+            message: 'Quantity must be positive: -5',
+            origin: BecomingCloseContext::ORIGIN_INPUT,
+            errors: [
+                [
+                    'variable' => 'quantity',
+                    'error' => 'DomainException',
+                    'message' => 'Quantity must be positive',
+                    'file' => '/app/src/SemanticVariables/Quantity.php',
+                    'line' => 12,
+                ],
+            ],
+            file: '/app/src/SemanticVariables/Quantity.php',
+            line: 12,
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->becomingCloseSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BecomingCloseContext (failure) with errors should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 
@@ -254,6 +285,8 @@ final class JsonSchemaValidationTest extends TestCase
         $context = new BeingErrorCloseContext(
             error: 'RuntimeException',
             message: 'Something went wrong',
+            file: '/app/src/Checkout.php',
+            line: 17,
         );
 
         $contextData = json_decode(json_encode($context), false);
@@ -262,6 +295,33 @@ final class JsonSchemaValidationTest extends TestCase
         $this->assertTrue(
             $this->validator->isValid(),
             'BeingErrorCloseContext should validate. Errors: ' . json_encode($this->validator->getErrors()),
+        );
+    }
+
+    public function testBeingErrorCloseContextWithValidationErrorsValidates(): void
+    {
+        $context = new BeingErrorCloseContext(
+            error: 'Be\Framework\Exception\InputSemanticVariableException',
+            message: 'Quantity must be positive: -5',
+            errors: [
+                [
+                    'variable' => 'quantity',
+                    'error' => 'DomainException',
+                    'message' => 'Quantity must be positive',
+                    'file' => '/app/src/SemanticVariables/Quantity.php',
+                    'line' => 12,
+                ],
+            ],
+            file: '/app/src/SemanticVariables/Quantity.php',
+            line: 12,
+        );
+
+        $contextData = json_decode(json_encode($context), false);
+        $this->validator->validate($contextData, $this->errorCloseSchema, Constraint::CHECK_MODE_NORMAL);
+
+        $this->assertTrue(
+            $this->validator->isValid(),
+            'BeingErrorCloseContext with errors should validate. Errors: ' . json_encode($this->validator->getErrors()),
         );
     }
 

@@ -56,12 +56,16 @@ UserInput → ValidatedUser → RegisteredUser → ActiveUser
 - **Error close captures**:
   - `error`:   Exception class name
   - `message`: Exception message
+  - `errors` (optional): one entry per failed semantic variable when `error` is a `SemanticVariableException` (or subtype) — `variable` (name, or comma-joined names for a cross-field `#[Validate]` method), `error` (the failing `#[Validate]` method's exception class), `message`, and `file` / `line` (where that exception was thrown). Absent for any other exception type. `message` is recorded as-is, not redacted: a `#[Validate]` method for a `#[\SensitiveParameter]`-marked variable must not interpolate the rejected value into its message. The rejected value itself is not recorded here — it is already in the `prop` payload the step that produced it logged, subject to the same `#[SensitiveParameter]` filtering.
+  - `file` / `line`: where the exception was thrown. For a `SemanticVariableException` these are **not** the wrapper's own construction site (always the same fixed line inside the framework) — they are copied from `errors[0]`, the first failing `#[Validate]` method, which is the location that actually matters to a reader.
 
 ## Chain wrapper
 
 Each full metamorphosis chain is wrapped in a `BecomingOpenContext` / `BecomingCloseContext`
 pair. These are emitted once per top-level `Becoming::__invoke` call, giving the log a
-single root with every step-level open/close as sibling children.
+single root with every step-level open/close as sibling children. On failure, `BecomingCloseContext`
+carries the same `errors` / `file` / `line` detail as `BeingErrorCloseContext` above, plus
+`origin` (`input` vs `runtime`) to say where in the chain the failure happened.
 
 ## Real Implementation Example
 

@@ -45,6 +45,8 @@ namespace Be\Framework;
  * @psalm-type ValidationArguments = array<ValidationArgumentValue>                    Arguments passed to semantic validation
  * @psalm-type ReflectionMethods = array<\ReflectionMethod>                            Collection of PHP reflection method objects
  * @psalm-type AttemptedClasses = array<ClassName>                                     Classes attempted during failed transformations
+ * @psalm-type ValidationErrorEntry = array{variable: string, error: string, message: string, file: string, line: int}  Per-variable semantic validation failure detail
+ * @psalm-type ValidationErrorList = list<ValidationErrorEntry>                        Collection of per-variable semantic validation failures attached to an error close
  */
 final class Types
 {
