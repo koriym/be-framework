@@ -25,7 +25,7 @@ final class BeingOpenContext extends AbstractContext implements JsonSerializable
 {
     public const string TYPE = 'being_open';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-open.json';
+    public const string SCHEMA_URL = 'https://be-framework.github.io/Be.Framework/schemas/being-open.json';
 
     /**
      * @param class-string        $from   Class being transformed from

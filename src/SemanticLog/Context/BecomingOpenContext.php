@@ -19,7 +19,7 @@ final class BecomingOpenContext extends AbstractContext implements JsonSerializa
 {
     public const string TYPE = 'becoming_open';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-open.json';
+    public const string SCHEMA_URL = 'https://be-framework.github.io/Be.Framework/schemas/becoming-open.json';
 
     /**
      * @param class-string         $input FQCN of the initial input being that starts the chain.

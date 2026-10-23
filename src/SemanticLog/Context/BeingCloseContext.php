@@ -22,7 +22,7 @@ final class BeingCloseContext extends AbstractContext implements JsonSerializabl
 {
     public const string TYPE = 'being_close';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-close.json';
+    public const string SCHEMA_URL = 'https://be-framework.github.io/Be.Framework/schemas/being-close.json';
 
     /**
      * @param class-string     $being Class FQCN of the new being (the instantiated result)

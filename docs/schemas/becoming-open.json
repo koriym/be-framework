@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://be-framework.org/schemas/becoming-open.json",
+  "$id": "https://be-framework.github.io/Be.Framework/schemas/becoming-open.json",
   "title": "Becoming Open Context",
   "description": "Outer span that wraps an entire metamorphosis chain. Each being_open/being_*_close inside appears as a sibling child under this single root.",
   "type": "object",

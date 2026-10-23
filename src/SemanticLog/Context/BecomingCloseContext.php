@@ -22,7 +22,7 @@ final class BecomingCloseContext extends AbstractContext implements JsonSerializ
 {
     public const string TYPE = 'becoming_close';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/becoming-close.json';
+    public const string SCHEMA_URL = 'https://be-framework.github.io/Be.Framework/schemas/becoming-close.json';
 
     public const string EXIT_SUCCESS = 'success';
 

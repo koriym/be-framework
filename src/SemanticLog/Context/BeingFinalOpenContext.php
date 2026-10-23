@@ -25,7 +25,7 @@ final class BeingFinalOpenContext extends AbstractContext implements JsonSeriali
 {
     public const string TYPE = 'being_final_open';
 
-    public const string SCHEMA_URL = 'https://be-framework.org/schemas/being-final-open.json';
+    public const string SCHEMA_URL = 'https://be-framework.github.io/Be.Framework/schemas/being-final-open.json';
 
     /**
      * @param class-string        $from   Class being transformed from
