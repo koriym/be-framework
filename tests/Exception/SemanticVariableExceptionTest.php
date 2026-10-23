@@ -21,6 +21,13 @@ final class SemanticVariableExceptionTest extends TestCase
         $this->assertSame($errors, $exception->getErrors());
     }
 
+    public function testSingleErrorUnderANonZeroKey(): void
+    {
+        $exception = new SemanticVariableException(new Errors([3 => new DomainException('Age must be positive')]));
+
+        $this->assertSame('Age must be positive', $exception->getMessage());
+    }
+
     public function testMultipleErrors(): void
     {
         $errors = new Errors([

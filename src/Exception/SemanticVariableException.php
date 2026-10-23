@@ -9,6 +9,7 @@ use DomainException;
 use Throwable;
 
 use function array_map;
+use function array_values;
 use function count;
 use function implode;
 
@@ -31,10 +32,10 @@ class SemanticVariableException extends DomainException
         private readonly Errors $errors,
         Throwable|null $previous = null,
     ) {
-        $errorMessages = array_map(
+        $errorMessages = array_values(array_map(
             static fn ($exception) => $exception->getMessage(),
             $errors->exceptions,
-        );
+        ));
 
         $message = count($errorMessages) === 1
             ? $errorMessages[0]

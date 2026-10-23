@@ -1,8 +1,7 @@
 {
     "$schema": "https://koriym.github.io/Koriym.SemanticLogger/schemas/semantic-log.json",
-    "entries": [
+    "log": [
         {
-            "kind": "open",
             "id": "becoming_open_1",
             "type": "becoming_open",
             "schemaUrl": "https://be-framework.github.io/Be.Framework/schemas/becoming-open.json",
@@ -12,9 +11,8 @@
                     "value": "alice@example.com"
                 }
             },
-            "children": [
+            "log": [
                 {
-                    "kind": "open",
                     "id": "being_final_open_1",
                     "type": "being_final_open",
                     "schemaUrl": "https://be-framework.github.io/Be.Framework/schemas/being-final-open.json",
@@ -30,9 +28,8 @@
                             "been": "Be\\Framework\\SemanticLog\\Been"
                         }
                     },
-                    "children": [
+                    "log": [
                         {
-                            "kind": "event",
                             "id": "email_format_asserted_1",
                             "type": "email_format_asserted",
                             "schemaUrl": "https://myvendor.example.com/schemas/email-format-asserted.json",
@@ -41,7 +38,6 @@
                             }
                         },
                         {
-                            "kind": "event",
                             "id": "user_inserted_1",
                             "type": "user_inserted",
                             "schemaUrl": "https://myvendor.example.com/schemas/user-inserted.json",
