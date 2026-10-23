@@ -4,7 +4,7 @@
   "title": "Being Error Close Context",
   "description": "Close context for a metamorphosis that failed with a thrown exception.",
   "type": "object",
-  "required": ["error", "message"],
+  "required": ["error", "message", "file", "line"],
   "properties": {
     "error": {
       "type": "string",
@@ -13,6 +13,45 @@
     "message": {
       "type": "string",
       "description": "Exception message."
+    },
+    "errors": {
+      "type": "array",
+      "description": "Per-variable semantic validation failures, present when `error` is a SemanticVariableException (or subtype). Absent for any other exception type.",
+      "items": {
+        "type": "object",
+        "required": ["variable", "error", "message", "file", "line"],
+        "properties": {
+          "variable": {
+            "type": "string",
+            "description": "Semantic variable (constructor parameter) name that failed validation, or comma-joined parameter names for a cross-field #[Validate] method."
+          },
+          "error": {
+            "type": "string",
+            "description": "Fully-qualified class name of the exception thrown by the failing #[Validate] method."
+          },
+          "message": {
+            "type": "string",
+            "description": "Message of the exception thrown by the failing #[Validate] method, recorded as-is (not redacted): a #[Validate] method for a #[\\SensitiveParameter] variable must not interpolate the rejected value into its message."
+          },
+          "file": {
+            "type": "string",
+            "description": "Absolute path to the file the #[Validate] method threw this exception from."
+          },
+          "line": {
+            "type": "integer",
+            "description": "Line number within `file` where this exception was thrown."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "file": {
+      "type": "string",
+      "description": "Absolute path to the file the exception was thrown from. When `errors` is present, this is the `file` of `errors[0]` — the first failing #[Validate] method — rather than the fixed internal location where the wrapping SemanticVariableException was constructed."
+    },
+    "line": {
+      "type": "integer",
+      "description": "Line number within `file` where the exception was thrown. When `errors` is present, this is the `line` of `errors[0]`."
     }
   },
   "additionalProperties": false
